@@ -16,22 +16,37 @@
 
 package org.springframework.credhub.support;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.util.Assert;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+import java.util.Arrays;
+
+/**
+ * The client-provided name of a credential. The name consists of one or more segments.
+ * When the value of each segment are combined the full name of the credential will be of
+ * the form
+ * {@literal /c/segment1/segment2/segment3}.
+ *
+ * Objects of this type are created by clients and included as part of requests.
+ *
+ * @author Scott Frederick
+ */
 public class SimpleCredentialName extends CredentialName {
-	@Builder
+	/**
+	 * Create a {@link SimpleCredentialName} from the provided segments.
+	 *
+	 * @param segments the credential name segments; must not be {@literal null} and must
+	 * contain at least one segment
+	 */
 	public SimpleCredentialName(String... segments) {
 		super(segments);
+		Assert.notNull(segments, "segments must not be null");
+		Assert.isTrue(segments.length > 0, "at least one segment must be provided");
 	}
 
-	public static class SimpleCredentialNameBuilder {
-		public SimpleCredentialNameBuilder segments(String... segments) {
-			this.segments = segments;
-			return this;
-		}
+	@Override
+	public String toString() {
+		return "SimpleCredentialName{"
+				+ "segments=" + Arrays.toString(segments)
+				+ "}";
 	}
 }

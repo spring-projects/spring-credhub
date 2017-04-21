@@ -18,26 +18,54 @@
 
 package org.springframework.credhub.support;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Setter;
-import lombok.Singular;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-@Data
-@Builder
+/**
+ * Access control requirements for a credential in CredHub. If provided when a
+ * credential is written, these values will control what actors can access update
+ * or retrieve the credential.
+ *
+ * This object of this type is typically constructed by the application and passed
+ * as part of a {@link WriteRequest}.
+ *
+ * @author Scott Frederick
+ */
 public class AccessControlEntry {
 	private static final String APP_ACTOR_PREFIX = "mtls-app:";
-	
-	@Setter(AccessLevel.PRIVATE)
-	private String actor;
 
-	@Singular
+	private String actor;
 	private List<Operation> operations;
 
+	/**
+	 * Create a set of access controls. Intended to be used internally for testing.
+	 * Clients should use {@link #builder()} to construct instances of this class.
+	 *
+	 * @param actor the ID of the entity that will be allowed to access the credential
+	 * @param operations the operations that the actor will be allowed to perform on the
+	 * credential
+	 */
+	AccessControlEntry(String actor, List<Operation> operations) {
+		this.actor = actor;
+		this.operations = operations;
+	}
+
+	/**
+	 * Get the ID of the entity that will be allowed to access the credential
+	 *
+	 * @return the ID
+	 */
+	public String getActor() {
+		return this.actor;
+	}
+
+	/**
+	 * Get the set of operations that the actor will be allowed to perform on
+	 * the credential.
+	 *
+	 * @return the operations
+	 */
 	public List<String> getOperations() {
 		List<String> operationValues = new ArrayList<String>(operations.size());
 		for (Operation operation : operations) {
@@ -46,13 +74,136 @@ public class AccessControlEntry {
 		return operationValues;
 	}
 
+	/**
+	 * Create a builder that provides a fluent API for providing the values required
+	 * to construct a {@link AccessControlEntry}.
+	 *
+	 * @return a builder
+	 */
+	public static AccessControlEntryBuilder builder() {
+		return new AccessControlEntryBuilder();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof AccessControlEntry))
+			return false;
+
+		AccessControlEntry that = (AccessControlEntry) o;
+
+		if (actor != null ? !actor.equals(that.actor) : that.actor != null)
+			return false;
+		return operations != null ? operations.equals(that.operations)
+				: that.operations == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = actor != null ? actor.hashCode() : 0;
+		result = 31 * result + (operations != null ? operations.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "AccessControlEntry{"
+				+ "actor='" + actor + '\''
+				+ ", operations=" + operations
+				+ '}';
+	}
+
+	/**
+	 * A builder that provides a fluent API for constructing {@link AccessControlEntry}
+	 * instances.
+	 */
 	public static class AccessControlEntryBuilder {
+		private String actor;
+		private ArrayList<Operation> operations;
+
+		AccessControlEntryBuilder() {
+		}
+
+		/**
+		 * Set the ID of an application that will be allowed to access a credential.
+		 * This will often be a Cloud Foundry application GUID.
+		 *
+		 * @param appId application ID
+		 * @return the builder
+		 */
 		public AccessControlEntryBuilder app(String appId) {
 			this.actor = APP_ACTOR_PREFIX + appId;
 			return this;
 		}
+
+		/**
+		 * Set the name of an actor that will be allowed to access the credential.
+		 *
+		 * @param actor actor name
+		 * @return the builder
+		 */
+		public AccessControlEntryBuilder actor(String actor) {
+			this.actor = actor;
+			return this;
+		}
+
+		/**
+		 * Set an {@link Operation} that the actor will be allowed to perform on
+		 * the credential. Multiple operations can be provided with consecutive calls to
+		 * this method.
+		 *
+		 * @param operation the {@link Operation}
+		 * @return the builder
+		 */
+		public AccessControlEntryBuilder operation(Operation operation) {
+			initOperations();
+			this.operations.add(operation);
+			return this;
+		}
+
+		/**
+		 * Specify a set of {@link Operation}s that the actor will be allowed to perform
+		 * on the credential.
+		 *
+		 * @param operations the {@link Operation}s
+		 * @return the builder
+		 */
+		public AccessControlEntryBuilder operations(Collection<? extends Operation> operations) {
+			initOperations();
+			this.operations.addAll(operations);
+			return this;
+		}
+
+		private void initOperations() {
+			if (this.operations == null) this.operations = new ArrayList<Operation>();
+		}
+
+		/**
+		 * Construct an {@link AccessControlEntry} with the provided values.
+		 *
+		 * @return an {@link AccessControlEntry}
+		 */
+		public AccessControlEntry build() {
+			List<Operation> operations;
+			switch (this.operations == null ? 0 : this.operations.size()) {
+				case 0:
+					operations = java.util.Collections.emptyList();
+					break;
+				case 1:
+					operations = java.util.Collections.singletonList(this.operations.get(0));
+					break;
+				default:
+					operations = java.util.Collections.unmodifiableList(new ArrayList<Operation>(this.operations));
+			}
+
+			return new AccessControlEntry(actor, operations);
+		}
 	}
 
+	/**
+	 * The set of operations that are allowed on a credential.
+	 */
 	public enum Operation {
 		READ("read"),
 		WRITE("write");

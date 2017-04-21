@@ -27,18 +27,53 @@ import org.springframework.credhub.support.ClientOptions;
 import org.springframework.credhub.support.SslConfiguration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 
+/**
+ * Configuration for the {@link CredHubTemplate} used to communicate with CredHub. This
+ * class is typically imported into Java-based Spring application configuration as in
+ * this example:
+ *
+ * <pre>
+ * {@code
+ * &#64;Configuration
+ * &#64;Import(CredHubConfiguration.class)
+ * public class MyConfiguration {
+ * }
+ * }
+ * </pre>
+ *
+ * @author Scott Frederick 
+ */
 @Configuration
 public class CredHubConfiguration {
+
+	/**
+	 * Create the {@link CredHubProperties} that contains information about the
+	 * CredHub server.
+	 *
+	 * @return the {@link CredHubProperties} bean
+	 */
 	@Bean
 	public CredHubProperties credHubProperties() {
 		return new CredHubProperties();
 	}
 
+	/**
+	 * Create the {@link CloudFoundryAppInstanceProperties} that contains information
+	 * about the application instance running on Cloud Foundry.
+	 *
+	 * @return the {@link CloudFoundryAppInstanceProperties} bean
+	 */
 	@Bean
 	public CloudFoundryAppInstanceProperties cloudFoundryAppInstanceProperties() {
 		return new CloudFoundryAppInstanceProperties();
 	}
 
+	/**
+	 * Create the {@link CredHubTemplate} that the application will use to interact
+	 * with CredHub.
+	 *
+	 * @return the {@link CredHubTemplate} bean
+	 */
 	@Bean
 	public CredHubTemplate credHubTemplate() {
 		return new CredHubTemplate(credHubProperties().getApiUriBase(),
@@ -46,11 +81,11 @@ public class CredHubConfiguration {
 	}
 
 	/**
-	 * Create a {@link ClientFactoryWrapper} containing a {@link ClientHttpRequestFactory}.
-	 * {@link ClientHttpRequestFactory} is not exposed as root bean because
-	 * {@link ClientHttpRequestFactory} is configured with {@link ClientOptions} and
-	 * {@link SslConfiguration} which are not necessarily applicable for the whole
-	 * application.
+	 * Create a {@link ClientFactoryWrapper} containing a
+	 * {@link ClientHttpRequestFactory}. {@link ClientHttpRequestFactory} is not exposed
+	 * as root bean because {@link ClientHttpRequestFactory} is configured with
+	 * {@link ClientOptions} and {@link SslConfiguration} which are not necessarily
+	 * applicable for the whole application.
 	 *
 	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
 	 * instance.
@@ -65,20 +100,26 @@ public class CredHubConfiguration {
 	}
 
 	/**
-	 * @return {@link ClientOptions} to configure communication parameters.
-	 * @see ClientOptions
+	 * Create the default {@link ClientOptions} to configure communication parameters.
+	 *
+	 * @return the default {@link ClientOptions}
 	 */
 	private ClientOptions clientOptions() {
 		return new ClientOptions();
 	}
 
 	/**
-	 * @return SSL configuration options.
-	 * @see SslConfiguration
+	 * Create the default {@link SslConfiguration} to configure SSL context parameters.
+	 * The default configuration uses a certificate and key supplied in the application
+	 * container to configure mutual SSL authentication between the client application
+	 * and the CredHub server.
+	 *
+	 * @return the default {@link SslConfiguration}
 	 */
 	private SslConfiguration sslConfiguration() {
 		CloudFoundryAppInstanceProperties properties = cloudFoundryAppInstanceProperties();
-		return SslConfiguration.forContainerCert(properties.getInstanceCertLocation(), properties.getInstanceKeyLocation());
+		return SslConfiguration.forContainerCert(properties.getInstanceCertLocation(),
+				properties.getInstanceKeyLocation());
 	}
 
 	/**

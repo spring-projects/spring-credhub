@@ -19,6 +19,7 @@ package org.springframework.credhub.configuration;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
+
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.credhub.support.SslConfiguration;
@@ -33,12 +34,14 @@ public class ClientHttpRequestFactoryFactoryTests {
 	@Test
 	public void httpComponentsClientCreated() throws Exception {
 
-		ClientHttpRequestFactory factory = ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents(
-				new ClientOptions(), new SslConfiguration());
+		ClientHttpRequestFactory factory =
+				ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents(
+						new ClientOptions(), new SslConfiguration());
 
 		assertThat(factory, instanceOf(HttpComponentsClientHttpRequestFactory.class));
 
-		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory).getHttpClient();
+		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory)
+				.getHttpClient();
 
 		assertThat(httpClient, instanceOf(CloseableHttpClient.class));
 

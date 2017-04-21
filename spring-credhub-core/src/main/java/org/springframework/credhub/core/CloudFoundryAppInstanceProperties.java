@@ -18,6 +18,12 @@ package org.springframework.credhub.core;
 
 import org.springframework.beans.factory.annotation.Value;
 
+/**
+ * Properties containing information about an application instance
+ * running on Cloud Foundry.
+ *
+ * @author Scott Frederick
+ */
 public class CloudFoundryAppInstanceProperties {
 	@Value("${CF_INSTANCE_CERT}")
 	private String instanceCertLocation;
@@ -25,18 +31,41 @@ public class CloudFoundryAppInstanceProperties {
 	@Value("${CF_INSTANCE_KEY}")
 	private String instanceKeyLocation;
 
+	/**
+	 * Create a new instance without initializing properties.
+	 */
 	public CloudFoundryAppInstanceProperties() {
 	}
 
-	public CloudFoundryAppInstanceProperties(String instanceCertLocation, String instanceKeyLocation) {
+	/**
+	 * Create a new instance from the provided property values. Intended to be used
+	 * internally for testing.
+	 *
+	 * @param instanceCertLocation the absolute path of the certificate file in the app
+	 * instance container
+	 * @param instanceKeyLocation the absolute path of the private key file in the app
+	 * instance container
+	 */
+	CloudFoundryAppInstanceProperties(String instanceCertLocation,
+			String instanceKeyLocation) {
 		this.instanceCertLocation = instanceCertLocation;
 		this.instanceKeyLocation = instanceKeyLocation;
 	}
 
+	/**
+	 * Get the absolute path of the certificate file in the app instance container.
+	 *
+	 * @return the certificate file path
+	 */
 	public String getInstanceCertLocation() {
 		return instanceCertLocation;
 	}
 
+	/**
+	 * Get the absolute path of the private key file in the app instance container.
+	 *
+	 * @return the key file path
+	 */
 	public String getInstanceKeyLocation() {
 		return instanceKeyLocation;
 	}

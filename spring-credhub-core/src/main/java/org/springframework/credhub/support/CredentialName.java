@@ -16,30 +16,75 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import org.springframework.util.StringUtils;
-
 import java.util.Arrays;
 
-@Data
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+/**
+ * The client-provided name of a credential stored in CredHub. Credential names are
+ * constructed of segments separated by the "/" character, like Unix paths.
+ *
+ * @author Scott Frederick
+ */
 public class CredentialName {
 	@JsonIgnore
-	private final String[] segments;
+	protected final String[] segments;
 
+	/**
+	 * Create a name from the provided value. The name must consist of segments
+	 * separated by the "/" character.
+	 *
+	 * @param name the credential name; must not be {@literal null}
+	 */
 	CredentialName(String name) {
+		Assert.notNull("name", "name must not be null");
+
 		String[] split = name.split("/");
+
+		Assert.isTrue(split.length > 2, "name must include at least one segment separated by '/'");
+
 		// remove the "/c/" prefix
 		this.segments = Arrays.copyOfRange(split, 2, split.length);
 	}
 
+	/**
+	 * Create a name from the provided segments.
+	 *
+	 * @param segments the list of name segments; must not be {@literal null}
+	 */
 	CredentialName(String... segments) {
+		Assert.notNull(segments, "segments must not be null");
 		this.segments = segments;
 	}
 
+	/**
+	 * Builds a name from the provided segments.
+	 *
+	 * @return the credential name
+	 */
 	@JsonInclude
 	public String getName() {
 		return "/c/" + StringUtils.arrayToDelimitedString(segments, "/");
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof CredentialName))
+			return false;
+
+		CredentialName that = (CredentialName) o;
+
+		return Arrays.equals(segments, that.segments);
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(segments);
 	}
 }

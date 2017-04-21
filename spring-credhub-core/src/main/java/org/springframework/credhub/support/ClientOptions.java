@@ -19,7 +19,7 @@ package org.springframework.credhub.support;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Client options for CredHubConnectivity.
+ * Client options for CredHub connectivity.
  *
  * @author Mark Paluch
  * @author Scott Frederick
@@ -46,7 +46,7 @@ public class ClientOptions {
 	}
 
 	/**
-	 * Create new {@link ClientOptions}.
+	 * Create a {@link ClientOptions} with the provided values.
 	 *
 	 * @param connectionTimeout connection timeout in {@link TimeUnit#MILLISECONDS}, must
 	 * be greater {@literal 0}.
@@ -59,14 +59,18 @@ public class ClientOptions {
 	}
 
 	/**
-	 * @return the connection timeout in {@link TimeUnit#MILLISECONDS}.
+	 * Gets the connection timeout in {@link TimeUnit#MILLISECONDS}.
+	 *
+	 * @return the connection timeout
 	 */
 	public int getConnectionTimeout() {
 		return connectionTimeout;
 	}
 
 	/**
-	 * @return the read timeout in {@link TimeUnit#MILLISECONDS}.
+	 * Gets the read timeout in {@link TimeUnit#MILLISECONDS}
+	 *
+	 * @return the read timeout
 	 */
 	public int getReadTimeout() {
 		return readTimeout;

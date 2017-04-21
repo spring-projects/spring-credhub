@@ -16,12 +16,18 @@
 
 package org.springframework.credhub.configuration;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
+
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.credhub.support.SslConfiguration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -29,17 +35,13 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 /**
  * Factory for {@link ClientHttpRequestFactory} that supports Apache HTTP Components,
  * OkHttp, Netty and the JDK HTTP client (in that order). This factory configures a
  * {@link ClientHttpRequestFactory} depending on the available dependencies.
  *
- * @author Scott Frederick
  * @author Mark Paluch
+ * @author Scott Frederick
  */
 public class ClientHttpRequestFactoryFactory {
 
@@ -51,13 +53,13 @@ public class ClientHttpRequestFactoryFactory {
 	 * Create a {@link ClientHttpRequestFactory} for the given {@link ClientOptions} and
 	 * {@link SslConfiguration}.
 	 *
-	 * @param options          must not be {@literal null}
+	 * @param options must not be {@literal null}
 	 * @param sslConfiguration must not be {@literal null}
 	 * @return a new {@link ClientHttpRequestFactory}. Lifecycle beans must be initialized
 	 * after obtaining.
 	 */
 	public static ClientHttpRequestFactory create(ClientOptions options,
-												  SslConfiguration sslConfiguration) {
+			SslConfiguration sslConfiguration) {
 
 		Assert.notNull(options, "ClientOptions must not be null");
 		Assert.notNull(sslConfiguration, "SslConfiguration must not be null");
@@ -66,9 +68,11 @@ public class ClientHttpRequestFactoryFactory {
 			if (HTTP_COMPONENTS_PRESENT) {
 				return HttpComponents.usingHttpComponents(options, sslConfiguration);
 			}
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new IllegalStateException(e);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
 
@@ -85,18 +89,22 @@ public class ClientHttpRequestFactoryFactory {
 	 */
 	static class HttpComponents {
 
-		static ClientHttpRequestFactory usingHttpComponents(ClientOptions options, SslConfiguration sslConfiguration)
+		static ClientHttpRequestFactory usingHttpComponents(ClientOptions options,
+				SslConfiguration sslConfiguration)
 				throws GeneralSecurityException, IOException {
 
 			HttpClientBuilder httpClientBuilder = HttpClients.custom();
 
 			if (hasSslConfiguration(sslConfiguration)) {
 				SSLContext sslContext = SSLContexts.custom()
-						.loadTrustMaterial(sslConfiguration.getKeyStore(), new TrustSelfSignedStrategy())
-						.loadKeyMaterial(sslConfiguration.getTrustStore(), sslConfiguration.getKeyPassword())
+						.loadTrustMaterial(sslConfiguration.getKeyStore(),
+								new TrustSelfSignedStrategy())
+						.loadKeyMaterial(sslConfiguration.getTrustStore(),
+								sslConfiguration.getKeyPassword())
 						.build();
 
-				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
+				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(
+						sslContext);
 				httpClientBuilder.setSSLSocketFactory(sslSocketFactory);
 				httpClientBuilder.setSSLContext(sslContext);
 			}

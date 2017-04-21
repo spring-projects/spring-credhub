@@ -20,17 +20,37 @@ package org.springframework.credhub.core;
 
 import org.springframework.beans.factory.annotation.Value;
 
+/**
+ * Properties containing information about a CredHub server.
+ *
+ * @author Scott Frederick
+ */
 public class CredHubProperties {
 	@Value("${CREDHUB_API}")
 	private String apiUriBase;
 
+	/**
+	 * Create a new instance without initializing properties.
+	 */
 	public CredHubProperties() {
 	}
 
-	public CredHubProperties(String apiUriBase) {
+	/**
+	 * Create a new instance with the provided properties. Intended to be used
+	 * internally for testing.
+	 *
+	 * @param apiUriBase the base URI for the CredHub server
+	 */
+	CredHubProperties(String apiUriBase) {
 		this.apiUriBase = apiUriBase;
 	}
 
+	/**
+	 * Get the base URI for the CredHub server (scheme, host, and port). This value
+	 * will be prepended to all requests to CredHub.
+	 *
+	 * @return the base URI
+	 */
 	public String getApiUriBase() {
 		return apiUriBase;
 	}

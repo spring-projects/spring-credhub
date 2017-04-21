@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.demo;
 
-import org.springframework.web.client.RestOperations;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * A callback for executing arbitrary operations on {@link RestOperations}.
- *
- * @author Mark Paluch
- */
-public interface RestOperationsCallback<T> {
+@SpringBootApplication
+public class Application {
 
-	/**
-	 * Callback method providing a {@link RestOperations} that is configured to interact
-	 * with the CredHub server.
-	 *
-	 * @param restOperations restOperations to use, must not be {@literal null}.
-	 * @return a result object or null if none.
-	 */
-	T doWithRestOperations(RestOperations restOperations);
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
 }

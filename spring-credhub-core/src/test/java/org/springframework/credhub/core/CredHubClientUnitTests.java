@@ -22,17 +22,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.client.ClientHttpRequestExecution;
+
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.AbstractUriTemplateHandler;
 
-import java.net.URI;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubClientUnitTests {
@@ -43,12 +40,14 @@ public class CredHubClientUnitTests {
 
 	@Test
 	public void restTemplateIsCreated() throws Exception {
-		RestTemplate restTemplate =
-				CredHubClient.createRestTemplate(CREDHUB_URI, clientHttpRequestFactory);
+		RestTemplate restTemplate = CredHubClient.createRestTemplate(CREDHUB_URI,
+				clientHttpRequestFactory);
 
-		assertThat(restTemplate.getUriTemplateHandler(), instanceOf(AbstractUriTemplateHandler.class));
+		assertThat(restTemplate.getUriTemplateHandler(),
+				instanceOf(AbstractUriTemplateHandler.class));
 
-		AbstractUriTemplateHandler uriTemplateHandler = (AbstractUriTemplateHandler) restTemplate.getUriTemplateHandler();
+		AbstractUriTemplateHandler uriTemplateHandler = (AbstractUriTemplateHandler) restTemplate
+				.getUriTemplateHandler();
 		assertThat(uriTemplateHandler.getBaseUrl(), equalTo(CREDHUB_URI));
 	}
 }

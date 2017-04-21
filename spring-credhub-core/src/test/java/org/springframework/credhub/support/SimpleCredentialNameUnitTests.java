@@ -18,42 +18,24 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import org.junit.Test;
 
-public class CredHubRequest {
-	private CredentialName name;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
-	CredHubRequest(CredentialName name) {
-		this.name = name;
+public class SimpleCredentialNameUnitTests {
+	@Test
+	public void simpleNameIsConstructed() {
+		CredentialName credentialName =
+				new SimpleCredentialName("myorg", "example", "credential-name");
+
+		assertThat(credentialName.getName(), equalTo("/c/myorg/example/credential-name"));
 	}
+	
+	@Test
+	public void simpleNameIsParsed() {
+		CredentialName credentialName = new CredentialName("/c/myorg/example/credential-name");
 
-	CredHubRequest() {
-	}
-
-	@JsonInclude
-	public String getName() {
-		return name.getName();
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof CredHubRequest)) return false;
-
-		CredHubRequest that = (CredHubRequest) o;
-
-		return name != null ? name.equals(that.name) : that.name == null;
-	}
-
-	@Override
-	public int hashCode() {
-		return name != null ? name.hashCode() : 0;
-	}
-
-	@Override
-	public String toString() {
-		return "CredHubRequest{" +
-				"name=" + name +
-				'}';
+		assertThat(credentialName.getName(), equalTo("/c/myorg/example/credential-name"));
 	}
 }

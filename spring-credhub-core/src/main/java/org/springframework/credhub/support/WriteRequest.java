@@ -18,94 +18,157 @@
 
 package org.springframework.credhub.support;
 
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Singular;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+import org.springframework.util.Assert;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static org.springframework.credhub.support.ValueType.JSON;
 
+/**
+ * The details of a request to write a new or update an existing credential in CredHub.
+ *
+ * @author Scott Frederick
+ */
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class WriteRequest extends CredHubRequest {
+public class WriteRequest {
 	private boolean overwrite;
-
+	private CredentialName name;
 	private ValueType valueType;
-
 	private Object value;
-
 	@JsonInclude(NON_EMPTY)
 	private List<AccessControlEntry> accessControlEntries;
 
-	private WriteRequest(CredentialName name, boolean overwrite, Object value, ValueType valueType,
-						 @Singular List<AccessControlEntry> accessControlEntries) {
-		super(name);
+	/**
+	 * Create a {@link WriteRequest} from the provided parameters. Intended for internal
+	 * use. Clients should use {@link #builder()} to construct instances of this class.
+	 *
+	 * @param name the name of the credential
+	 * @param overwrite {@literal false} to create a new credential, or
+	 * {@literal true} to update and existing credential
+	 * @param value the value of the credential
+	 * @param valueType the {@link ValueType} of the credential
+	 * @param accessControlEntries requirements for access control for the credential
+	 */
+	private WriteRequest(CredentialName name, boolean overwrite,
+						 Object value, ValueType valueType,
+						 List<AccessControlEntry> accessControlEntries) {
+		this.name = name;
 		this.overwrite = overwrite;
 		this.valueType = valueType;
 		this.value = value;
 		this.accessControlEntries = accessControlEntries;
 	}
 
+	/**
+	 * Get the value of the {@literal boolean} flag indicating whether the CredHub
+	 * should create a new credential or update an existing credential.
+	 *
+	 * @return the {@literal boolean} overwrite value
+	 */
+	public boolean isOverwrite() {
+		return this.overwrite;
+	}
+
+
+	/**
+	 * Get the {@link CredentialName} of the credential.
+	 *
+	 * @return the name of the credential
+	 */
+	@JsonInclude
+	public String getName() {
+		return name.getName();
+	}
+
+	/**
+	 * Get the value of the credential.
+	 *
+	 * @return the value of the credential
+	 */
+	public Object getValue() {
+		return this.value;
+	}
+
+	/**
+	 * Get the {@link ValueType} of the credential.
+	 *
+ 	 * @return the type of the credential
+	 */
+	public String getType() {
+		return valueType.type();
+	}
+
+	/**
+	 * Get the set of {@link AccessControlEntry} to assign to the credential.
+	 *
+	 * @return the set of {@link AccessControlEntry}
+	 */
+	public List<AccessControlEntry> getAccessControlEntries() {
+		return this.accessControlEntries;
+	}
+
+	/**
+	 * Create a builder that provides a fluent API for providing the values required
+	 * to construct a {@link WriteRequest}.
+	 *
+	 * @return a builder
+	 */
 	public static WriteRequestBuilder builder() {
 		return new WriteRequestBuilder();
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof WriteRequest)) return false;
-		if (!super.equals(o)) return false;
+		if (this == o)
+			return true;
+		if (!(o instanceof WriteRequest))
+			return false;
 
 		WriteRequest that = (WriteRequest) o;
 
-		if (overwrite != that.overwrite) return false;
-		if (valueType != that.valueType) return false;
-		if (value != null ? !value.equals(that.value) : that.value != null) return false;
-		return accessControlEntries != null ? accessControlEntries.equals(that.accessControlEntries) : that.accessControlEntries == null;
+		if (overwrite != that.overwrite)
+			return false;
+		if (!name.equals(that.name))
+			return false;
+		if (valueType != that.valueType)
+			return false;
+		if (!value.equals(that.value))
+			return false;
+		return accessControlEntries.equals(that.accessControlEntries);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = super.hashCode();
-		result = 31 * result + (overwrite ? 1 : 0);
-		result = 31 * result + (valueType != null ? valueType.hashCode() : 0);
-		result = 31 * result + (value != null ? value.hashCode() : 0);
-		result = 31 * result + (accessControlEntries != null ? accessControlEntries.hashCode() : 0);
+		int result = (overwrite ? 1 : 0);
+		result = 31 * result + name.hashCode();
+		result = 31 * result + valueType.hashCode();
+		result = 31 * result + value.hashCode();
+		result = 31 * result + accessControlEntries.hashCode();
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return "WriteRequest{" +
-				"overwrite=" + overwrite +
-				", valueType=" + valueType +
-				", value=" + value +
-				", accessControlEntries=" + accessControlEntries +
-				'}';
+		return "WriteRequest{"
+				+ "overwrite=" + overwrite
+				+ ", name=" + name
+				+ ", valueType=" + valueType
+				+ ", value=" + value
+				+ ", accessControlEntries=" + accessControlEntries
+				+ '}';
 	}
 
-	public boolean isOverwrite() {
-		return this.overwrite;
-	}
-
-	public Object getValue() {
-		return this.value;
-	}
-
-	public String getType() {
-		return valueType.type();
-	}
-
-	public List<AccessControlEntry> getAccessControlEntries() {
-		return this.accessControlEntries;
-	}
-
+	/**
+	 * A builder that provides a fluent API for constructing {@link WriteRequest}s.
+	 */
 	public static class WriteRequestBuilder {
 		private CredentialName name;
 		private boolean overwrite;
@@ -113,70 +176,124 @@ public class WriteRequest extends CredHubRequest {
 		private ValueType valueType;
 		private ArrayList<AccessControlEntry> accessControlEntries;
 
+		/**
+		 * Create a {@link WriteRequestBuilder}. Intended for internal use.
+		 */
 		WriteRequestBuilder() {
 		}
 
+		/**
+		 * Set the value of a password credential. A password credential consists of
+		 * a single string value. The type of the credential is set to {@link ValueType#PASSWORD}.
+		 *
+		 * @param value the password credential value; must not be {@literal null}
+		 * @return the builder
+		 */
 		public WriteRequestBuilder passwordValue(String value) {
+			Assert.notNull(value, "value must not be null");
 			this.valueType = ValueType.PASSWORD;
 			this.value = value;
 			return this;
 		}
 
+		/**
+		 * Set the value of a JSON credential. A JSON credential consists of
+		 * one or more fields in a JSON document. The provided {@literal Map} parameter.
+		 * will be converted to a JSON document before sending to CredHub. The type of
+		 * the credential is set to {@link ValueType#JSON}.
+		 *
+		 * @param value the json credential value; must not be {@literal null}
+		 * @return the builder
+		 */
 		public WriteRequestBuilder jsonValue(Map<String, Object> value) {
+			Assert.notNull(value, "value must not be null");
 			this.valueType = JSON;
 			this.value = value;
 			return this;
 		}
 
+		/**
+		 * Set the {@link CredentialName} for the credential.
+		 *
+		 * @param name the credential name; must not be {@literal null}
+		 * @return the builder
+		 */
 		public WriteRequestBuilder name(CredentialName name) {
+			Assert.notNull(name, "name must not be null");
 			this.name = name;
 			return this;
 		}
 
+		/**
+		 * Sets a {@literal boolean} value indicating whether CredHub should create a new
+		 * credential or update and existing credential.
+		 *
+		 * @param overwrite {@literal false} to create a new credential, or
+		 * {@literal true} to update and existing credential
+		 * @return the builder 
+		 */
 		public WriteRequestBuilder overwrite(boolean overwrite) {
 			this.overwrite = overwrite;
 			return this;
 		}
 
+		/**
+		 * Add an {@link AccessControlEntry} to the controls that will be assigned to the
+		 * credential.
+		 *
+		 * @param accessControlEntry an {@link AccessControlEntry} to assign to the
+		 * credential
+		 * @return the builder
+		 */
 		public WriteRequestBuilder accessControlEntry(AccessControlEntry accessControlEntry) {
-			if (this.accessControlEntries == null)
-				this.accessControlEntries = new ArrayList<AccessControlEntry>();
+			initAccessControls();
 			this.accessControlEntries.add(accessControlEntry);
 			return this;
 		}
 
+		/**
+		 * Add a collection of {@link AccessControlEntry}s to the controls that will be
+		 * assigned to the credential.
+		 *
+		 * @param accessControlEntries an collection of {@link AccessControlEntry}s to
+		 * assign to the credential
+		 * @return the builder
+		 */
 		public WriteRequestBuilder accessControlEntries(Collection<? extends AccessControlEntry> accessControlEntries) {
-			if (this.accessControlEntries == null)
-				this.accessControlEntries = new ArrayList<AccessControlEntry>();
+			initAccessControls();
 			this.accessControlEntries.addAll(accessControlEntries);
 			return this;
 		}
 
-		public WriteRequest build() {
-			List<AccessControlEntry> accessControlEntries;
-			switch (this.accessControlEntries == null ? 0 : this.accessControlEntries.size()) {
-				case 0:
-					accessControlEntries = java.util.Collections.emptyList();
-					break;
-				case 1:
-					accessControlEntries = java.util.Collections.singletonList(this.accessControlEntries.get(0));
-					break;
-				default:
-					accessControlEntries = java.util.Collections.unmodifiableList(new ArrayList<AccessControlEntry>(this.accessControlEntries));
+		private void initAccessControls() {
+			if (this.accessControlEntries == null) {
+				this.accessControlEntries = new ArrayList<AccessControlEntry>();
 			}
-
-			return new WriteRequest(name, overwrite, value, valueType, accessControlEntries);
 		}
 
-		@Override
-		public String toString() {
-			return "WriteRequestBuilder{" +
-					"name=" + name +
-					", overwrite=" + overwrite +
-					", value=" + value +
-					", valueType=" + valueType +
-					", accessControlEntries=" + accessControlEntries +
-					'}';
+		/**
+		 * Create a {@link WriteRequest} from the provided values.
+		 *
+		 * @return a {@link WriteRequest}
+		 */
+		public WriteRequest build() {
+			List<AccessControlEntry> accessControlEntries;
+			switch (this.accessControlEntries == null ? 0
+					: this.accessControlEntries.size()) {
+			case 0:
+				accessControlEntries = java.util.Collections.emptyList();
+				break;
+			case 1:
+				accessControlEntries = java.util.Collections
+						.singletonList(this.accessControlEntries.get(0));
+				break;
+			default:
+				accessControlEntries = java.util.Collections.unmodifiableList(
+						new ArrayList<AccessControlEntry>(this.accessControlEntries));
+			}
+
+			return new WriteRequest(name, overwrite, value, valueType,
+					accessControlEntries);
 		}
 	}
 

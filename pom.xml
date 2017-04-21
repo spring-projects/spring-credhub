@@ -15,6 +15,7 @@
 	<modules>
 		<module>spring-credhub-dependencies</module>
         <module>spring-credhub-core</module>
+        <module>spring-credhub-demo</module>
 	</modules>
 
 	<properties>

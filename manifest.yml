@@ -1,0 +1,8 @@
+---
+applications:
+- name: spring-credhub-demo
+  memory: 1G
+  path: spring-credhub-demo/target/spring-credhub-demo-1.0.0.BUILD-SNAPSHOT.jar
+  env:
+    logging.level.org.apache.http.wire: DEBUG
+

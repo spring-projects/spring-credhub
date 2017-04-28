@@ -77,14 +77,8 @@ public class CredHubDemoController {
 		try {
 			WriteRequest.WriteRequestBuilder requestBuilder = WriteRequest.builder()
 					.overwrite(true)
-					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"));
-
-			if (value instanceof String) {
-				requestBuilder.passwordValue((String) value);
-			}
-			else {
-				requestBuilder.jsonValue((Map<String, Object>) value);
-			}
+					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
+					.jsonValue((Map<String, Object>) value);
 
 			if (StringUtils.hasText(appId)) {
 				requestBuilder.accessControlEntry(

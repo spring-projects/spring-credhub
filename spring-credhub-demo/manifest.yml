@@ -1,0 +1,6 @@
+---
+applications:
+- name: spring-credhub-demo
+  memory: 1G
+  path: target/spring-credhub-demo-1.0.0.BUILD-SNAPSHOT.jar
+

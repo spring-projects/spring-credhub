@@ -1,0 +1,193 @@
+= Spring CredHub
+
+Spring CredHub provides client-side support for storing, retrieving, and deleting credentials from a https://github.com/cloudfoundry-incubator/credhub[CredHub] server running in a https://www.cloudfoundry.org/[Cloud Foundry] platform.
+
+== Quick Start
+
+=== Maven configuration
+
+Add the Maven dependency and the Spring snapshot repository:
+
+====
+[source,xml]
+----
+<dependency>
+  <groupId>org.springframework.credhub</groupId>
+  <artifactId>spring-credhub-core</artifactId>
+  <version>1.0.0.BUILD-SNAPSHOT</version>
+</dependency>
+
+<repository>
+  <id>spring-libs-snapshot</id>
+  <name>Spring Snapshot Repository</name>
+  <url>http://repo.spring.io/libs-snapshot</url>
+</repository>
+----
+====
+
+=== Using CredHubTemplate
+
+The class `org.springframework.credhub.core.CredHubTemplate` is the central class of Spring CredHub. The template offers convenience operations to write, retrieve, and delete credentials in CredHub and provides a mapping between client application domain objects and CredHub credentials.
+
+Spring CredHub is initialized by providing Java Spring config like the following:
+
+====
+[source,java]
+----
+@Configuration
+@Import(CredHubConfiguration.class)
+public class AppConfig {
+}
+----
+====
+
+This configuration will result in a `CredHubTemplate` bean being configured and added to the Spring application context. The `CredHubTemplate` will be configured for mutual TLS authentication using a certificate and private key. The certificate and key are provided by Cloud Foundry in the application container when an application is deployed to Cloud Foundry. This is currently the only supported authentication configuration. Support for https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/product-summary.md#authentication[OAuth2 authentication with CredHub] via Cloud Foundry UAA will be added in the future.
+
+The `CredHubTemplate` can be used through its `CredHubOperations` interface:
+
+====
+[source,java]
+----
+public class MyApp {
+
+    @Autowired
+    CredHubOperations credHubOperations;
+
+    public void writeAndDeleteCredentials() {
+
+        WriteRequest request = WriteRequest.builder()
+            .overwrite(true)
+            .name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
+            .passwordValue("secret")
+            .build();
+
+        CredentialDetails storedCredentials = credHubOperations.write(request);
+
+        CredentialDetails retrievedDetails = credHubOperations.getById(storedCredentials.getId());
+
+        credHubOperations.deleteByName(storedCredentials.getName());
+    }
+}
+----
+====
+
+=== Demo Application
+
+A simple application that demonstrates the use of Spring CredHub is available in link:/spring-credhub-demo/src/main/java/org/springframework/credhub/demo[this repository].
+
+This application can also be used to test CredHub connectivity by deploying it to a Cloud Foundry platform that has CredHub installed. The demo application subproject includes a deployment manifest that makes it simple to deploy the application. Use the http://docs.cloudfoundry.org/cf-cli/getting-started.html[`cf` CLI] to target and authenticate to a Cloud Foundry platform, and run the following commands:
+
+----
+$ ./mvnw package
+$ cf push -f spring-credhub-demo/manifest.yml
+----
+
+After deploying the application, send an HTTP request to the demo application with this command:
+
+----
+$ curl -X POST http://spring-credhub-demo.cf.example.com/test -d @spring-credhub-demo/demo.json -H "Content-type: application/json"
+----
+
+The application will write, retrieve, and delete a set of JSON credentials in CredHub and show the results of each request.
+
+== Building
+
+=== Basic Compile and Test
+
+To build the source you will need to install JDK 1.6.
+
+Spring CredHub uses Maven for most build-related activities, and you should be able to get off the ground quite quickly by cloning the project you are interested in and typing
+
+----
+$ ./mvnw install
+----
+
+NOTE: You can also install Maven (>=3.3.3) yourself and run the `mvn` command
+in place of `./mvnw` in the examples below. If you do that you also
+might need to add `-P spring` if your local Maven settings do not
+contain repository declarations for spring pre-release artifacts.
+
+NOTE: Be aware that you might need to increase the amount of memory
+available to Maven by setting a `MAVEN_OPTS` environment variable with
+a value like `-Xmx512m -XX:MaxPermSize=128m`. We try to cover this in
+the `.mvn` configuration, so if you find you have to do it to make a
+build succeed, please raise a ticket to get the settings added to
+source control.
+
+=== Working with the code
+If you don't have an IDE preference we would recommend that you use
+http://www.springsource.com/developer/sts[Spring Tools Suite] or
+http://eclipse.org[Eclipse] when working with the code. We use the
+http://eclipse.org/m2e/[m2eclipe] eclipse plugin for maven support. Other IDEs and tools
+should also work without issue as long as they use Maven 3.3.3 or better.
+
+==== Importing into eclipse with m2eclipse
+We recommend the http://eclipse.org/m2e/[m2eclipe] eclipse plugin when working with
+eclipse. If you don't already have m2eclipse installed it is available from the "eclipse
+marketplace".
+
+NOTE: Older versions of m2e do not support Maven 3.3, so once the
+projects are imported into Eclipse you will also need to tell
+m2eclipse to use the right profile for the projects.  If you
+see many different errors related to the POMs in the projects, check
+that you have an up to date installation.  If you can't upgrade m2e,
+add the "spring" profile to your `settings.xml`. Alternatively you can
+copy the repository settings from the "spring" profile of the parent
+pom into your `settings.xml`.
+
+==== Importing into eclipse without m2eclipse
+If you prefer not to use m2eclipse you can generate eclipse project metadata using the
+following command:
+
+[indent=0]
+----
+$ ./mvnw eclipse:eclipse
+----
+
+The generated eclipse projects can be imported by selecting `import existing projects`
+from the `file` menu.
+
+== Contributing
+
+Spring CredHub is released under the non-restrictive Apache 2.0 license,
+and follows a very standard Github development process, using Github
+tracker for issues and merging pull requests into master. If you want
+to contribute even something trivial please do not hesitate, but
+follow the guidelines below.
+
+=== Sign the Contributor License Agreement
+Before we accept a non-trivial patch or pull request we will need you to sign the
+https://cla.pivotal.io/sign/spring[Contributor License Agreement].
+Signing the contributor's agreement does not grant anyone commit rights to the main
+repository, but it does mean that we can accept your contributions, and you will get an
+author credit if we do.  Active contributors might be asked to join the core team, and
+given the ability to merge pull requests.
+
+=== Code of Conduct
+This project adheres to the Contributor Covenant link:/CODE_OF_CONDUCT.adoc[code of
+conduct]. By participating, you  are expected to uphold this code. Please report
+unacceptable behavior to spring-code-of-conduct@pivotal.io.
+
+=== Code Conventions and Housekeeping
+None of these is essential for a pull request, but they will all help.  They can also be
+added after the original pull request but before a merge.
+
+* Use the Spring Framework code format conventions. If you use Eclipse
+  you can import formatter settings using the
+  `eclipse-code-formatter.xml` file from the
+  link:/etc/ide/eclipse-code-formatter.xml[project]. If using IntelliJ, you can use the
+  http://plugins.jetbrains.com/plugin/6546[Eclipse Code Formatter
+  Plugin] to import the same file.
+* Make sure all new `.java` files to have a Javadoc class comment with at least an
+  `@author` tag identifying you, and preferably at least a paragraph on what the class is
+  for.
+* Add the ASF license header comment to all new `.java` files (copy from existing files
+  in the project)
+* Add yourself as an `@author` to the .java files that you modify substantially (more
+  than cosmetic changes).
+* Please include unit tests.
+* If no-one else is using your branch, please rebase it against the current master (or
+  other target branch in the main project).
+* When writing a commit message please follow http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html[these conventions],
+  if you are fixing an existing issue please add `Fixes gh-XXXX` at the end of the commit
+  message (where XXXX is the issue number).

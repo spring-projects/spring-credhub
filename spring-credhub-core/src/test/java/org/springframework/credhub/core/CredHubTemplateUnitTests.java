@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +27,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.ServiceInstanceCredentialName;
+import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -59,24 +59,24 @@ public class CredHubTemplateUnitTests extends CredHubTemplateUnitTestsBase {
 				.credentialName("credential_json")
 				.build();
 
-		Map<String, Object> request = buildVcap(credentialName.getName());
-		Map<String, Map<String, Object>> wrappedRequest = wrapVcap(request);
+		VcapServicesData vcapServices = buildVcapServices(credentialName.getName());
+		Map<String, VcapServicesData> wrappedVcapServices = wrapVcapServices(vcapServices);
 
-		Map<String, Map<String, Object>> expectedResponse = new HashMap<String, Map<String, Object>>();
+		Map<String, VcapServicesData> expectedResponse = new HashMap<String, VcapServicesData>();
 
-		ParameterizedTypeReference<Map<String, Map<String, Object>>> type =
-				new ParameterizedTypeReference<Map<String, Map<String, Object>>>() {};
+		ParameterizedTypeReference<Map<String, VcapServicesData>> type =
+				new ParameterizedTypeReference<Map<String, VcapServicesData>>() {};
 
 		when(restTemplate.exchange(INTERPOLATE_URL_PATH, HttpMethod.POST,
-				new HttpEntity<Map<String, Map<String, Object>>>(wrappedRequest), type))
-				.thenReturn(new ResponseEntity<Map<String, Map<String, Object>>>(expectedResponse, OK));
+				new HttpEntity<Map<String, VcapServicesData>>(wrappedVcapServices), type))
+				.thenReturn(new ResponseEntity<Map<String, VcapServicesData>>(expectedResponse, OK));
 
-		Map<String, Object> response = credHubTemplate.interpolateServiceData(request);
+		VcapServicesData response = credHubTemplate.interpolateServiceData(vcapServices);
 
 		assertThat(response, equalTo(expectedResponse.get(VCAP_SERVICES_KEY)));
 	}
 
-	private Map<String, Object> buildVcap(String credHubReferenceName) throws IOException {
+	private VcapServicesData buildVcapServices(String credHubReferenceName) throws IOException {
 		String vcapServices = "{" +
 				"  \"service-offering\": [" +
 				"   {" +
@@ -95,11 +95,11 @@ public class CredHubTemplateUnitTests extends CredHubTemplateUnitTestsBase {
 				"}";
 
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(vcapServices, new TypeReference<Map<String, Object>>() {});
+		return mapper.readValue(vcapServices, VcapServicesData.class);
 	}
 
-	private Map<String, Map<String, Object>> wrapVcap(final Map<String, Object> serviceData) {
-		return new HashMap<String, Map<String, Object>>() {{
+	private HashMap<String, VcapServicesData> wrapVcapServices(final VcapServicesData serviceData) {
+		return new HashMap<String, VcapServicesData>() {{
 			put(VCAP_SERVICES_KEY, serviceData);
 		}};
 	}

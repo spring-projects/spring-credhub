@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.credhub.core.CredHubTemplate;
@@ -31,6 +30,7 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -136,8 +136,8 @@ public class CredHubDemoController {
 
 	private void interpolateServiceData(CredentialName name, Results results) {
 		try {
-			Map<String, Object> request = buildVcapServicesData(name.getName());
-			Map<String, Object> interpolatedServiceData = credHubTemplate.interpolateServiceData(request);
+			VcapServicesData request = buildVcapServicesData(name.getName());
+			VcapServicesData interpolatedServiceData = credHubTemplate.interpolateServiceData(request);
 			saveResults(results, "Successfully interpolated service data: ", interpolatedServiceData);
 		} catch (Exception e) {
 			saveResults(results, "Error interpolating service data: ", e.getMessage());
@@ -153,7 +153,7 @@ public class CredHubDemoController {
 		}
 	}
 
-	private Map<String, Object> buildVcapServicesData(String credHubReferenceName) throws IOException {
+	private VcapServicesData buildVcapServicesData(String credHubReferenceName) throws IOException {
 		String vcapServices = "{" +
 				"  \"service-offering\": [" +
 				"   {" +
@@ -172,7 +172,7 @@ public class CredHubDemoController {
 				"}";
 
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(vcapServices, new TypeReference<Map<String, Object>>() {});
+		return mapper.readValue(vcapServices, VcapServicesData.class);
 	}
 
 	private void saveResults(Results results, String message) {

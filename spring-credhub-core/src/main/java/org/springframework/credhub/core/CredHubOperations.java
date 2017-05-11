@@ -17,11 +17,11 @@
 package org.springframework.credhub.core;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
+import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.web.client.RestTemplate;
 
@@ -167,7 +167,7 @@ public interface CredHubOperations {
 	 * @return the serviceData structure with CredHub references replaced by stored
 	 * credential values
 	 */
-	Map<String, Object> interpolateServiceData(Map<String, Object> serviceData);
+	VcapServicesData interpolateServiceData(VcapServicesData serviceData);
 
 	/**
 	 * Allow interaction with the configured {@link RestTemplate} not provided

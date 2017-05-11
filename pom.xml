@@ -14,8 +14,9 @@
 
 	<modules>
 		<module>spring-credhub-dependencies</module>
-        <module>spring-credhub-core</module>
-        <module>spring-credhub-demo</module>
+		<module>spring-credhub-core</module>
+		<module>spring-credhub-cloud-connector</module>
+		<module>spring-credhub-demo</module>
 	</modules>
 
 	<properties>
@@ -304,6 +305,15 @@
 		</pluginManagement>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>spring-libs-snapshot</id>
+			<url>https://repo.spring.io/libs-snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<profiles>
 		<profile>
@@ -409,7 +419,8 @@
 					<scope>provided</scope>
 					<type>zip</type>
 				</dependency>
-			</dependencies>-->
+			</dependencies>
+-->
 
 			<build>
 

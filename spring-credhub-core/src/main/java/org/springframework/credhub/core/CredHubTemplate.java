@@ -26,6 +26,7 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
+import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -214,17 +215,17 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public Map<String, Object> interpolateServiceData(final Map<String, Object> serviceData) {
+	public VcapServicesData interpolateServiceData(final VcapServicesData serviceData) {
 		Assert.notNull(serviceData, "serviceData must not be null");
 
-		return doWithRest(new RestOperationsCallback<Map<String, Object>>() {
+		return doWithRest(new RestOperationsCallback<VcapServicesData>() {
 			@Override
-			public Map<String, Object> doWithRestOperations(RestOperations restOperations) {
-				Map<String, Map<String, Object>> wrappedServiceData = wrapServiceDataRequest(serviceData);
+			public VcapServicesData doWithRestOperations(RestOperations restOperations) {
+				Map<String, VcapServicesData> wrappedServiceData = wrapServiceDataRequest(serviceData);
 
-				ResponseEntity<Map<String, Map<String, Object>>> response = restOperations
+				ResponseEntity<Map<String, VcapServicesData>> response = restOperations
 						.exchange(INTERPOLATE_URL_PATH, HttpMethod.POST,
-								new HttpEntity<Map<String, Map<String, Object>>>(wrappedServiceData), mapType());
+								new HttpEntity<Map<String, VcapServicesData>>(wrappedServiceData), mapType());
 
 				throwExceptionOnError(response);
 
@@ -252,8 +253,8 @@ public class CredHubTemplate implements CredHubOperations {
 	 * @param serviceData a {@literal Map} of services details
 	 * @return the provided {@literal serviceData} structure wrapped with the "VCAP_SERVICES" key
 	 */
-	private Map<String, Map<String, Object>> wrapServiceDataRequest(Map<String, Object> serviceData) {
-		Map<String, Map<String, Object>> wrappedServiceData = new HashMap<String, Map<String, Object>>();
+	private Map<String, VcapServicesData> wrapServiceDataRequest(VcapServicesData serviceData) {
+		Map<String, VcapServicesData> wrappedServiceData = new HashMap<String, VcapServicesData>();
 		wrappedServiceData.put(VCAP_SERVICES_KEY, serviceData);
 		return wrappedServiceData;
 	}
@@ -263,8 +264,8 @@ public class CredHubTemplate implements CredHubOperations {
 	 *
 	 * @return the type reference for a {@literal Map} type
 	 */
-	private ParameterizedTypeReference<Map<String, Map<String, Object>>> mapType() {
-		return new ParameterizedTypeReference<Map<String, Map<String, Object>>>() {};
+	private ParameterizedTypeReference<Map<String, VcapServicesData>> mapType() {
+		return new ParameterizedTypeReference<Map<String, VcapServicesData>>() {};
 	}
 
 	/**

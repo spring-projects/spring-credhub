@@ -33,6 +33,9 @@ public class CredHubProperties {
 	 * Create a new instance without initializing properties.
 	 */
 	public CredHubProperties() {
+		if (apiUriBase == null) {
+			apiUriBase = System.getenv("CREDHUB_API");
+		}
 	}
 
 	/**

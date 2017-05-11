@@ -35,6 +35,13 @@ public class CloudFoundryAppInstanceProperties {
 	 * Create a new instance without initializing properties.
 	 */
 	public CloudFoundryAppInstanceProperties() {
+		if (instanceCertLocation == null) {
+			instanceCertLocation = System.getenv("CF_INSTANCE_CERT");
+		}
+
+		if (instanceKeyLocation == null) {
+			instanceKeyLocation = System.getenv("CF_INSTANCE_KEY");
+		}
 	}
 
 	/**

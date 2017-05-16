@@ -29,8 +29,8 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.credhub.support.AccessControlEntry.Operation.READ;
-import static org.springframework.credhub.support.AccessControlEntry.Operation.WRITE;
+import static org.springframework.credhub.support.AdditionalPermission.Operation.READ;
+import static org.springframework.credhub.support.AdditionalPermission.Operation.WRITE;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
@@ -72,7 +72,7 @@ public class WriteRequestUnitTests {
 						hasJsonPath("$.value.data", equalTo("value")),
 						hasJsonPath("$.value.test", equalTo(true))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.access_control_entries"));
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test
@@ -87,44 +87,44 @@ public class WriteRequestUnitTests {
 						hasJsonPath("$.type", equalTo("password")),
 						hasJsonPath("$.value", equalTo("secret"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.access_control_entries"));
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test
-	public void serializationWithOneAccessControl() throws Exception {
-		requestBuilder.passwordValue("secret").accessControlEntry(
-				AccessControlEntry.builder().app("app-id").operation(READ).build());
+	public void serializationWithOnePermission() throws Exception {
+		requestBuilder.passwordValue("secret").additionalPermission(
+				AdditionalPermission.builder().app("app-id").operation(READ).build());
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.access_control_entries[0].actor",
+				allOf(hasJsonPath("$.additional_permissions[0].actor",
 						equalTo("mtls-app:app-id")),
-						hasJsonPath("$.access_control_entries[0].operations[0]",
+						hasJsonPath("$.additional_permissions[0].operations[0]",
 								equalTo("read"))));
 	}
 
 	@Test
-	public void serializationWithTwoAccessControls() throws Exception {
+	public void serializationWithTwoPermissions() throws Exception {
 		requestBuilder.passwordValue("secret")
-				.accessControlEntry(AccessControlEntry.builder().app("app1-id")
+				.additionalPermission(AdditionalPermission.builder().app("app1-id")
 						.operation(READ).operation(WRITE).build())
-				.accessControlEntry(AccessControlEntry.builder().app("app2-id")
+				.additionalPermission(AdditionalPermission.builder().app("app2-id")
 						.operation(WRITE).operation(READ).build());
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue, allOf(
-				hasJsonPath("$.access_control_entries[0].actor",
+				hasJsonPath("$.additional_permissions[0].actor",
 						equalTo("mtls-app:app1-id")),
-				hasJsonPath("$.access_control_entries[0].operations[0]", equalTo("read")),
-				hasJsonPath("$.access_control_entries[0].operations[1]",
+				hasJsonPath("$.additional_permissions[0].operations[0]", equalTo("read")),
+				hasJsonPath("$.additional_permissions[0].operations[1]",
 						equalTo("write")),
-				hasJsonPath("$.access_control_entries[1].actor",
+				hasJsonPath("$.additional_permissions[1].actor",
 						equalTo("mtls-app:app2-id")),
-				hasJsonPath("$.access_control_entries[1].operations[0]",
+				hasJsonPath("$.additional_permissions[1].operations[0]",
 						equalTo("write")),
-				hasJsonPath("$.access_control_entries[1].operations[1]",
+				hasJsonPath("$.additional_permissions[1].operations[1]",
 						equalTo("read"))));
 	}
 

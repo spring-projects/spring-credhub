@@ -44,7 +44,7 @@ public class WriteRequest {
 	private ValueType valueType;
 	private Object value;
 	@JsonInclude(NON_EMPTY)
-	private List<AccessControlEntry> accessControlEntries;
+	private List<AdditionalPermission> additionalPermissions;
 
 	/**
 	 * Create a {@link WriteRequest} from the provided parameters. Intended for internal
@@ -55,16 +55,16 @@ public class WriteRequest {
 	 * {@literal true} to update and existing credential
 	 * @param value the value of the credential
 	 * @param valueType the {@link ValueType} of the credential
-	 * @param accessControlEntries requirements for access control for the credential
+	 * @param additionalPermissions access control permissions for the credential
 	 */
 	private WriteRequest(CredentialName name, boolean overwrite,
 						 Object value, ValueType valueType,
-						 List<AccessControlEntry> accessControlEntries) {
+						 List<AdditionalPermission> additionalPermissions) {
 		this.name = name;
 		this.overwrite = overwrite;
 		this.valueType = valueType;
 		this.value = value;
-		this.accessControlEntries = accessControlEntries;
+		this.additionalPermissions = additionalPermissions;
 	}
 
 	/**
@@ -107,12 +107,12 @@ public class WriteRequest {
 	}
 
 	/**
-	 * Get the set of {@link AccessControlEntry} to assign to the credential.
+	 * Get the set of {@link AdditionalPermission} to assign to the credential.
 	 *
-	 * @return the set of {@link AccessControlEntry}
+	 * @return the set of {@link AdditionalPermission}
 	 */
-	public List<AccessControlEntry> getAccessControlEntries() {
-		return this.accessControlEntries;
+	public List<AdditionalPermission> getAdditionalPermissions() {
+		return this.additionalPermissions;
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class WriteRequest {
 			return false;
 		if (!value.equals(that.value))
 			return false;
-		return accessControlEntries.equals(that.accessControlEntries);
+		return additionalPermissions.equals(that.additionalPermissions);
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class WriteRequest {
 		result = 31 * result + name.hashCode();
 		result = 31 * result + valueType.hashCode();
 		result = 31 * result + value.hashCode();
-		result = 31 * result + accessControlEntries.hashCode();
+		result = 31 * result + additionalPermissions.hashCode();
 		return result;
 	}
 
@@ -162,7 +162,7 @@ public class WriteRequest {
 				+ ", name=" + name
 				+ ", valueType=" + valueType
 				+ ", value=" + value
-				+ ", accessControlEntries=" + accessControlEntries
+				+ ", additionalPermissions=" + additionalPermissions
 				+ '}';
 	}
 
@@ -174,7 +174,7 @@ public class WriteRequest {
 		private boolean overwrite;
 		private Object value;
 		private ValueType valueType;
-		private ArrayList<AccessControlEntry> accessControlEntries;
+		private ArrayList<AdditionalPermission> additionalPermissions;
 
 		/**
 		 * Create a {@link WriteRequestBuilder}. Intended for internal use.
@@ -238,36 +238,36 @@ public class WriteRequest {
 		}
 
 		/**
-		 * Add an {@link AccessControlEntry} to the controls that will be assigned to the
+		 * Add an {@link AdditionalPermission} to the permissions that will be assigned to the
 		 * credential.
 		 *
-		 * @param accessControlEntry an {@link AccessControlEntry} to assign to the
+		 * @param additionalPermission an {@link AdditionalPermission} to assign to the
 		 * credential
 		 * @return the builder
 		 */
-		public WriteRequestBuilder accessControlEntry(AccessControlEntry accessControlEntry) {
-			initAccessControls();
-			this.accessControlEntries.add(accessControlEntry);
+		public WriteRequestBuilder additionalPermission(AdditionalPermission additionalPermission) {
+			initPermissions();
+			this.additionalPermissions.add(additionalPermission);
 			return this;
 		}
 
 		/**
-		 * Add a collection of {@link AccessControlEntry}s to the controls that will be
+		 * Add a collection of {@link AdditionalPermission}s to the controls that will be
 		 * assigned to the credential.
 		 *
-		 * @param accessControlEntries an collection of {@link AccessControlEntry}s to
+		 * @param permissions an collection of {@link AdditionalPermission}s to
 		 * assign to the credential
 		 * @return the builder
 		 */
-		public WriteRequestBuilder accessControlEntries(Collection<? extends AccessControlEntry> accessControlEntries) {
-			initAccessControls();
-			this.accessControlEntries.addAll(accessControlEntries);
+		public WriteRequestBuilder additionalPermissions(Collection<? extends AdditionalPermission> permissions) {
+			initPermissions();
+			this.additionalPermissions.addAll(permissions);
 			return this;
 		}
 
-		private void initAccessControls() {
-			if (this.accessControlEntries == null) {
-				this.accessControlEntries = new ArrayList<AccessControlEntry>();
+		private void initPermissions() {
+			if (this.additionalPermissions == null) {
+				this.additionalPermissions = new ArrayList<AdditionalPermission>();
 			}
 		}
 
@@ -277,23 +277,23 @@ public class WriteRequest {
 		 * @return a {@link WriteRequest}
 		 */
 		public WriteRequest build() {
-			List<AccessControlEntry> accessControlEntries;
-			switch (this.accessControlEntries == null ? 0
-					: this.accessControlEntries.size()) {
+			List<AdditionalPermission> permissions;
+			switch (this.additionalPermissions == null ? 0
+					: this.additionalPermissions.size()) {
 			case 0:
-				accessControlEntries = java.util.Collections.emptyList();
+				permissions = java.util.Collections.emptyList();
 				break;
 			case 1:
-				accessControlEntries = java.util.Collections
-						.singletonList(this.accessControlEntries.get(0));
+				permissions = java.util.Collections
+						.singletonList(this.additionalPermissions.get(0));
 				break;
 			default:
-				accessControlEntries = java.util.Collections.unmodifiableList(
-						new ArrayList<AccessControlEntry>(this.accessControlEntries));
+				permissions = java.util.Collections.unmodifiableList(
+						new ArrayList<AdditionalPermission>(this.additionalPermissions));
 			}
 
 			return new WriteRequest(name, overwrite, value, valueType,
-					accessControlEntries);
+					permissions);
 		}
 	}
 

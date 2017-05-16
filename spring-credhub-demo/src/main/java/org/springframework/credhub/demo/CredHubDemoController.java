@@ -25,7 +25,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.credhub.core.CredHubTemplate;
-import org.springframework.credhub.support.AccessControlEntry;
+import org.springframework.credhub.support.AdditionalPermission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.credhub.support.AccessControlEntry.Operation.READ;
+import static org.springframework.credhub.support.AdditionalPermission.Operation.READ;
 
 @RestController
 public class CredHubDemoController {
@@ -81,8 +81,8 @@ public class CredHubDemoController {
 					.jsonValue((Map<String, Object>) value);
 
 			if (StringUtils.hasText(appId)) {
-				requestBuilder.accessControlEntry(
-						AccessControlEntry.builder().app(appId).operation(READ).build());
+				requestBuilder.additionalPermission(
+						AdditionalPermission.builder().app(appId).operation(READ).build());
 			}
 
 			WriteRequest request = requestBuilder.build();

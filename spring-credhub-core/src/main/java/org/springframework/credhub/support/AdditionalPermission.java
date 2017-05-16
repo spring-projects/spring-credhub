@@ -23,36 +23,36 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Access control requirements for a credential in CredHub. If provided when a
+ * Permissions applied to a credential in CredHub. If provided when a
  * credential is written, these values will control what actors can access update
  * or retrieve the credential.
  *
- * This object of this type is typically constructed by the application and passed
+ * Objects of this type are constructed by the application and passed
  * as part of a {@link WriteRequest}.
  *
  * @author Scott Frederick
  */
-public class AccessControlEntry {
+public class AdditionalPermission {
 	private static final String APP_ACTOR_PREFIX = "mtls-app:";
 
 	private String actor;
 	private List<Operation> operations;
 
 	/**
-	 * Create a set of access controls. Intended to be used internally for testing.
+	 * Create a set of permissions. Intended to be used internally for testing.
 	 * Clients should use {@link #builder()} to construct instances of this class.
 	 *
 	 * @param actor the ID of the entity that will be allowed to access the credential
 	 * @param operations the operations that the actor will be allowed to perform on the
 	 * credential
 	 */
-	AccessControlEntry(String actor, List<Operation> operations) {
+	AdditionalPermission(String actor, List<Operation> operations) {
 		this.actor = actor;
 		this.operations = operations;
 	}
 
 	/**
-	 * Get the ID of the entity that will be allowed to access the credential
+	 * Get the ID of the entity that will be allowed to access the credential.
 	 *
 	 * @return the ID
 	 */
@@ -76,22 +76,22 @@ public class AccessControlEntry {
 
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link AccessControlEntry}.
+	 * to construct a {@link AdditionalPermission}.
 	 *
 	 * @return a builder
 	 */
-	public static AccessControlEntryBuilder builder() {
-		return new AccessControlEntryBuilder();
+	public static AdditionalPermissionBuilder builder() {
+		return new AdditionalPermissionBuilder();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof AccessControlEntry))
+		if (!(o instanceof AdditionalPermission))
 			return false;
 
-		AccessControlEntry that = (AccessControlEntry) o;
+		AdditionalPermission that = (AdditionalPermission) o;
 
 		if (actor != null ? !actor.equals(that.actor) : that.actor != null)
 			return false;
@@ -108,21 +108,21 @@ public class AccessControlEntry {
 
 	@Override
 	public String toString() {
-		return "AccessControlEntry{"
+		return "AdditionalPermission{"
 				+ "actor='" + actor + '\''
 				+ ", operations=" + operations
 				+ '}';
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link AccessControlEntry}
+	 * A builder that provides a fluent API for constructing {@link AdditionalPermission}
 	 * instances.
 	 */
-	public static class AccessControlEntryBuilder {
+	public static class AdditionalPermissionBuilder {
 		private String actor;
 		private ArrayList<Operation> operations;
 
-		AccessControlEntryBuilder() {
+		AdditionalPermissionBuilder() {
 		}
 
 		/**
@@ -132,7 +132,7 @@ public class AccessControlEntry {
 		 * @param appId application ID
 		 * @return the builder
 		 */
-		public AccessControlEntryBuilder app(String appId) {
+		public AdditionalPermissionBuilder app(String appId) {
 			this.actor = APP_ACTOR_PREFIX + appId;
 			return this;
 		}
@@ -143,7 +143,7 @@ public class AccessControlEntry {
 		 * @param actor actor name
 		 * @return the builder
 		 */
-		public AccessControlEntryBuilder actor(String actor) {
+		public AdditionalPermissionBuilder actor(String actor) {
 			this.actor = actor;
 			return this;
 		}
@@ -156,7 +156,7 @@ public class AccessControlEntry {
 		 * @param operation the {@link Operation}
 		 * @return the builder
 		 */
-		public AccessControlEntryBuilder operation(Operation operation) {
+		public AdditionalPermissionBuilder operation(Operation operation) {
 			initOperations();
 			this.operations.add(operation);
 			return this;
@@ -169,7 +169,7 @@ public class AccessControlEntry {
 		 * @param operations the {@link Operation}s
 		 * @return the builder
 		 */
-		public AccessControlEntryBuilder operations(Collection<? extends Operation> operations) {
+		public AdditionalPermissionBuilder operations(Collection<? extends Operation> operations) {
 			initOperations();
 			this.operations.addAll(operations);
 			return this;
@@ -180,11 +180,11 @@ public class AccessControlEntry {
 		}
 
 		/**
-		 * Construct an {@link AccessControlEntry} with the provided values.
+		 * Construct an {@link AdditionalPermission} with the provided values.
 		 *
-		 * @return an {@link AccessControlEntry}
+		 * @return an {@link AdditionalPermission}
 		 */
-		public AccessControlEntry build() {
+		public AdditionalPermission build() {
 			List<Operation> operations;
 			switch (this.operations == null ? 0 : this.operations.size()) {
 				case 0:
@@ -197,7 +197,7 @@ public class AccessControlEntry {
 					operations = java.util.Collections.unmodifiableList(new ArrayList<Operation>(this.operations));
 			}
 
-			return new AccessControlEntry(actor, operations);
+			return new AdditionalPermission(actor, operations);
 		}
 	}
 

@@ -19,9 +19,9 @@
 package org.springframework.credhub.support;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.util.Assert;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static org.springframework.credhub.support.ValueType.JSON;
 
 /**
  * The details of a request to write a new or update an existing credential in CredHub.
@@ -38,17 +37,17 @@ import static org.springframework.credhub.support.ValueType.JSON;
  * @author Scott Frederick
  */
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class WriteRequest {
+public class WriteRequest<T> {
 	private boolean overwrite;
 	private CredentialName name;
 	private ValueType valueType;
-	private Object value;
+	private T value;
 	@JsonInclude(NON_EMPTY)
 	private List<AdditionalPermission> additionalPermissions;
 
 	/**
 	 * Create a {@link WriteRequest} from the provided parameters. Intended for internal
-	 * use. Clients should use {@link #builder()} to construct instances of this class.
+	 * use. 
 	 *
 	 * @param name the name of the credential
 	 * @param overwrite {@literal false} to create a new credential, or
@@ -57,9 +56,9 @@ public class WriteRequest {
 	 * @param valueType the {@link ValueType} of the credential
 	 * @param additionalPermissions access control permissions for the credential
 	 */
-	private WriteRequest(CredentialName name, boolean overwrite,
-						 Object value, ValueType valueType,
-						 List<AdditionalPermission> additionalPermissions) {
+	WriteRequest(CredentialName name, boolean overwrite,
+				 T value, ValueType valueType,
+				 List<AdditionalPermission> additionalPermissions) {
 		this.name = name;
 		this.overwrite = overwrite;
 		this.valueType = valueType;
@@ -93,7 +92,7 @@ public class WriteRequest {
 	 *
 	 * @return the value of the credential
 	 */
-	public Object getValue() {
+	public T getValue() {
 		return this.value;
 	}
 
@@ -113,16 +112,6 @@ public class WriteRequest {
 	 */
 	public List<AdditionalPermission> getAdditionalPermissions() {
 		return this.additionalPermissions;
-	}
-
-	/**
-	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link WriteRequest}.
-	 *
-	 * @return a builder
-	 */
-	public static WriteRequestBuilder builder() {
-		return new WriteRequestBuilder();
 	}
 
 	@Override
@@ -169,48 +158,38 @@ public class WriteRequest {
 	/**
 	 * A builder that provides a fluent API for constructing {@link WriteRequest}s.
 	 */
-	public static class WriteRequestBuilder {
+	@SuppressWarnings("unchecked")
+	public static abstract class WriteRequestBuilder<T, B extends WriteRequestBuilder<T, B>> {
+		private final B thisObj;
+		
 		private CredentialName name;
 		private boolean overwrite;
-		private Object value;
-		private ValueType valueType;
+		protected T value;
+		protected ValueType valueType;
 		private ArrayList<AdditionalPermission> additionalPermissions;
 
 		/**
 		 * Create a {@link WriteRequestBuilder}. Intended for internal use.
 		 */
 		WriteRequestBuilder() {
+			this.thisObj = getBuilder();
 		}
 
 		/**
-		 * Set the value of a password credential. A password credential consists of
-		 * a single string value. The type of the credential is set to {@link ValueType#PASSWORD}.
+		 * Provide the concrete builder.
 		 *
-		 * @param value the password credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public WriteRequestBuilder passwordValue(String value) {
-			Assert.notNull(value, "value must not be null");
-			this.valueType = ValueType.PASSWORD;
-			this.value = value;
-			return this;
-		}
+		protected abstract B getBuilder();
 
 		/**
-		 * Set the value of a JSON credential. A JSON credential consists of
-		 * one or more fields in a JSON document. The provided {@literal Map} parameter.
-		 * will be converted to a JSON document before sending to CredHub. The type of
-		 * the credential is set to {@link ValueType#JSON}.
+		 * Set the value of a credential. In concrete builders, this should set the value
+		 * and the value type. 
 		 *
-		 * @param value the json credential value; must not be {@literal null}
+		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public WriteRequestBuilder jsonValue(Map<String, Object> value) {
-			Assert.notNull(value, "value must not be null");
-			this.valueType = JSON;
-			this.value = value;
-			return this;
-		}
+		public abstract B value(T value);
 
 		/**
 		 * Set the {@link CredentialName} for the credential.
@@ -218,10 +197,10 @@ public class WriteRequest {
 		 * @param name the credential name; must not be {@literal null}
 		 * @return the builder
 		 */
-		public WriteRequestBuilder name(CredentialName name) {
+		public B name(CredentialName name) {
 			Assert.notNull(name, "name must not be null");
 			this.name = name;
-			return this;
+			return thisObj;
 		}
 
 		/**
@@ -232,9 +211,9 @@ public class WriteRequest {
 		 * {@literal true} to update and existing credential
 		 * @return the builder 
 		 */
-		public WriteRequestBuilder overwrite(boolean overwrite) {
+		public B overwrite(boolean overwrite) {
 			this.overwrite = overwrite;
-			return this;
+			return thisObj;
 		}
 
 		/**
@@ -245,10 +224,10 @@ public class WriteRequest {
 		 * credential
 		 * @return the builder
 		 */
-		public WriteRequestBuilder additionalPermission(AdditionalPermission additionalPermission) {
+		public B additionalPermission(AdditionalPermission additionalPermission) {
 			initPermissions();
 			this.additionalPermissions.add(additionalPermission);
-			return this;
+			return thisObj;
 		}
 
 		/**
@@ -259,10 +238,24 @@ public class WriteRequest {
 		 * assign to the credential
 		 * @return the builder
 		 */
-		public WriteRequestBuilder additionalPermissions(Collection<? extends AdditionalPermission> permissions) {
+		public B additionalPermissions(Collection<? extends AdditionalPermission> permissions) {
 			initPermissions();
 			this.additionalPermissions.addAll(permissions);
-			return this;
+			return thisObj;
+		}
+
+		/**
+		 * Add a collection of {@link AdditionalPermission}s to the controls that will be
+		 * assigned to the credential.
+		 *
+		 * @param permissions an collection of {@link AdditionalPermission}s to
+		 * assign to the credential
+		 * @return the builder
+		 */
+		public B additionalPermissions(AdditionalPermission... permissions) {
+			initPermissions();
+			this.additionalPermissions.addAll(Arrays.asList(permissions));
+			return thisObj;
 		}
 
 		private void initPermissions() {

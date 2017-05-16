@@ -16,14 +16,12 @@
 
 package org.springframework.credhub.support;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import org.springframework.util.Assert;
 
 /**
  * A collection of {@link CredentialSummary}s. Clients don't typically instantiate
@@ -50,8 +48,8 @@ public class CredentialSummaryData {
 	 *
 	 * @param credentials a collection of {@link CredentialSummary}s
 	 */
-	CredentialSummaryData(List<CredentialSummary> credentials) {
-		this.credentials = credentials;
+	public CredentialSummaryData(CredentialSummary... credentials) {
+		this.credentials = Arrays.asList(credentials);
 	}
 
 	/**
@@ -61,17 +59,6 @@ public class CredentialSummaryData {
 	 */
 	public List<CredentialSummary> getCredentials() {
 		return this.credentials;
-	}
-
-	/**
-	 * Create a builder for a {@link CredentialSummaryData} object. Intended for internal
-	 * use. Clients will get {@link CredentialSummaryData} objects populated from
-	 * CredHub responses.
-	 *
-	 * @return the builder
-	 */
-	public static CredentialSummaryDataBuilder builder() {
-		return new CredentialSummaryDataBuilder();
 	}
 
 	@Override
@@ -102,78 +89,4 @@ public class CredentialSummaryData {
 				+ "credentials=" + credentials
 				+ '}';
 	}
-
-	/**
-	 * Create a builder for a {@link CredentialSummaryData} object. Intended for internal
-	 * use. Clients will get {@link CredentialSummaryData} objects populated from
-	 * CredHub responses.
-	 *
-	 * @return the builder
-	 */
-	public static class CredentialSummaryDataBuilder {
-		private List<CredentialSummary> credentialSummaries;
-
-		CredentialSummaryDataBuilder() {
-		}
-
-		/**
-		 * Add a {@link CredentialSummary} to the collection of summaries.
-		 *
-		 * @param credential the {@link CredentialSummary} to add; must not be
-		 * {@literal null}
-		 * @return the builder
-		 */
-		public CredentialSummaryDataBuilder credential(CredentialSummary credential) {
-			Assert.notNull(credential, "credential must not be null");
-			initCredentials();
-			this.credentialSummaries.add(credential);
-			return this;
-		}
-
-		/**
-		 * Add a collection of {@link CredentialSummary}s to the collection of summaries.
-		 *
-		 * @param credentials the {@link CredentialSummary}s to add; must not be
-		 * {@literal null}
-		 * @return the builder
-		 */
-		public CredentialSummaryDataBuilder credentials(
-				Collection<? extends CredentialSummary> credentials) {
-			Assert.notNull(credentials, "credentials must not be null");
-			initCredentials();
-			this.credentialSummaries.addAll(credentials);
-			return this;
-		}
-
-		private void initCredentials() {
-			if (this.credentialSummaries == null) {
-				this.credentialSummaries = new ArrayList<CredentialSummary>();
-			}
-		}
-
-		/**
-		 * Construct a {@link CredentialSummaryData} from the provided values.
-		 *
-		 * @return a {@link CredentialSummaryData}
-		 */
-		public CredentialSummaryData build() {
-			List<CredentialSummary> credentialSummaries;
-			switch (this.credentialSummaries == null ? 0
-					: this.credentialSummaries.size()) {
-			case 0:
-				credentialSummaries = java.util.Collections.emptyList();
-				break;
-			case 1:
-				credentialSummaries = java.util.Collections
-						.singletonList(this.credentialSummaries.get(0));
-				break;
-			default:
-				credentialSummaries = java.util.Collections.unmodifiableList(
-						new ArrayList<CredentialSummary>(this.credentialSummaries));
-			}
-
-			return new CredentialSummaryData(credentialSummaries);
-		}
-	}
-
 }

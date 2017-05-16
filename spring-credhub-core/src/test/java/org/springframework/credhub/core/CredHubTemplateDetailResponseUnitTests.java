@@ -23,6 +23,8 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import org.springframework.credhub.support.CredentialDetails;
+import org.springframework.credhub.support.PasswordWriteRequest;
+import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -49,24 +51,19 @@ public class CredHubTemplateDetailResponseUnitTests extends CredHubTemplateUnitT
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialDetails> successfulResponse =
-			new ResponseEntity<CredentialDetails>(CredentialDetails.detailsBuilder()
-									.name(NAME)
-									.id(CREDENTIAL_ID)
-									.passwordValue(CREDENTIAL_VALUE)
-									.versionCreatedAt(new Date())
-									.build(),
+			new ResponseEntity<CredentialDetails>(
+					new CredentialDetails(CREDENTIAL_ID, NAME, ValueType.PASSWORD, CREDENTIAL_VALUE, new Date()),
 					OK);
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialDetails> httpErrorResponse =
-			new ResponseEntity<CredentialDetails>(CredentialDetails.detailsBuilder().build(),
-					UNAUTHORIZED);
+			new ResponseEntity<CredentialDetails>(new CredentialDetails(), UNAUTHORIZED);
 
 	@Theory
 	public void write(@FromDataPoints("responses") ResponseEntity<CredentialDetails> expectedResponse) {
-		WriteRequest request = WriteRequest.builder()
+		WriteRequest request = PasswordWriteRequest.builder()
 				.name(NAME)
-				.passwordValue("secret")
+				.value("secret")
 				.build();
 
 		when(restTemplate.exchange(BASE_URL_PATH, PUT,

@@ -45,19 +45,13 @@ public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnit
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> successfulResponse =
 			new ResponseEntity<CredentialSummaryData>(
-					CredentialSummaryData.builder()
-							.credential(CredentialSummary.summaryBuilder()
-									.name(NAME)
-									.versionCreatedAt(new Date())
-									.build())
-							.build(),
+					new CredentialSummaryData(new CredentialSummary(NAME, new Date())),
 					OK);
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> httpErrorResponse =
 			new ResponseEntity<CredentialSummaryData>(
-					CredentialSummaryData.builder()
-							.build(),
+					new CredentialSummaryData(),
 					UNAUTHORIZED);
 
 	@Theory

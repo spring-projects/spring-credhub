@@ -51,7 +51,7 @@ public class CredentialSummary {
 	 * @param versionCreatedAt the {@link Date} when this version of the credential was
 	 * created
 	 */
-	CredentialSummary(CredentialName name, Date versionCreatedAt) {
+	public CredentialSummary(CredentialName name, Date versionCreatedAt) {
 		this.name = name;
 		this.versionCreatedAt = versionCreatedAt;
 	}
@@ -72,17 +72,6 @@ public class CredentialSummary {
 	 */
 	public Date getVersionCreatedAt() {
 		return this.versionCreatedAt;
-	}
-
-	/**
-	 * Create a builder for a {@link CredentialSummary} object. Intended for internal
-	 * use in tests. Clients will get {@link CredentialSummary} objects populated from
-	 * CredHub responses.
-	 *
-	 * @return the builder
-	 */
-	public static CredentialSummaryBuilder summaryBuilder() {
-		return new CredentialSummaryBuilder();
 	}
 
 	@Override
@@ -114,50 +103,5 @@ public class CredentialSummary {
 				+ "name=" + name
 				+ ", versionCreatedAt='" + versionCreatedAt + '\''
 				+ '}';
-	}
-
-	/**
-	 * A builder that provides a fluent API for constructing {@link CredentialSummary}
-	 * instances. Intended to be used internally for testing.
-	 */
-	public static class CredentialSummaryBuilder {
-		protected CredentialName name;
-		protected Date versionCreatedAt;
-
-		CredentialSummaryBuilder() {
-		}
-
-		/**
-		 * Set the name of the credential.
-		 *
-		 * @param name the name; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialSummaryBuilder name(CredentialName name) {
-			Assert.notNull(name, "name must not be null");
-			this.name = name;
-			return this;
-		}
-
-		/**
-		 * Set a creation date for the credential.
-		 *
-		 * @param versionCreatedAt the creation date; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialSummaryBuilder versionCreatedAt(Date versionCreatedAt) {
-			Assert.notNull(versionCreatedAt, "versionCreatedAt must not be null");
-			this.versionCreatedAt = versionCreatedAt;
-			return this;
-		}
-
-		/**
-		 * Construct a {@link CredentialSummary} from the provided values.
-		 *
-		 * @return a {@link CredentialSummary}
-		 */
-		public CredentialSummary build() {
-			return new CredentialSummary(name, versionCreatedAt);
-		}
 	}
 }

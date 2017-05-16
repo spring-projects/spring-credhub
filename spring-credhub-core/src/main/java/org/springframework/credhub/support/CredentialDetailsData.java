@@ -18,13 +18,11 @@
 
 package org.springframework.credhub.support;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.util.Assert;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
@@ -53,8 +51,8 @@ public class CredentialDetailsData {
 	 *
 	 * @param data a collection of {@link CredentialDetails}
 	 */
-	CredentialDetailsData(List<CredentialDetails> data) {
-		this.data = data;
+	public CredentialDetailsData(CredentialDetails... data) {
+		this.data = Arrays.asList(data);
 	}
 
 	/**
@@ -64,17 +62,6 @@ public class CredentialDetailsData {
 	 */
 	public List<CredentialDetails> getData() {
 		return this.data;
-	}
-
-	/**
-	 * Create a builder for a {@link CredentialDetailsData} object. Intended for internal
-	 * use. Clients will get {@link CredentialDetailsData} objects populated from
-	 * CredHub responses.
-	 *
-	 * @return the builder
-	 */
-	public static CredentialDetailsDataBuilder builder() {
-		return new CredentialDetailsDataBuilder();
 	}
 
 	@Override
@@ -103,75 +90,5 @@ public class CredentialDetailsData {
 		return "CredentialDetailResponse{"
 				+ "data=" + data
 				+ '}';
-	}
-
-	/**
-	 * A builder that provides a fluent API for constructing {@link CredentialDetailsData}
-	 * instances. Intended to be used internally for testing.
-	 */
-	public static class CredentialDetailsDataBuilder {
-		private List<CredentialDetails> data;
-
-		/**
-		 * Create a {@link CredentialDetailsDataBuilder}.
-		 */
-		CredentialDetailsDataBuilder() {
-		}
-
-		/**
-		 * Add a {@link CredentialDetails} to the collection of details.
-		 *
-		 * @param datum a {@link CredentialDetails} to add; must not be
-		 * {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsDataBuilder datum(CredentialDetails datum) {
-			Assert.notNull(datum, "datum must not be null");
-			initData();
-			this.data.add(datum);
-			return this;
-		}
-
-		/**
-		 * Add a collection of {@link CredentialDetails} to the collection of details.
-		 *
-		 * @param data a collection of {@link CredentialDetails} to add;
-		 * must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsDataBuilder data(Collection<? extends CredentialDetails> data) {
-			Assert.notNull(data, "data must not be null");
-			initData();
-			this.data.addAll(data);
-			return this;
-		}
-
-		private void initData() {
-			if (this.data == null) {
-				this.data = new ArrayList<CredentialDetails>();
-			}
-		}
-
-		/**
-		 * Construct a {@link CredentialDetailsData} from the provided values.
-		 *
-		 * @return a {@link CredentialDetailsData}
-		 */
-		public CredentialDetailsData build() {
-			List<CredentialDetails> data;
-			switch (this.data == null ? 0 : this.data.size()) {
-			case 0:
-				data = java.util.Collections.emptyList();
-				break;
-			case 1:
-				data = java.util.Collections.singletonList(this.data.get(0));
-				break;
-			default:
-				data = java.util.Collections
-						.unmodifiableList(new ArrayList<CredentialDetails>(this.data));
-			}
-
-			return new CredentialDetailsData(data);
-		}
 	}
 }

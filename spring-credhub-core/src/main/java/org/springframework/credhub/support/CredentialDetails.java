@@ -17,14 +17,11 @@
 package org.springframework.credhub.support;
 
 import java.util.Date;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
-import org.springframework.util.Assert;
 
 /**
  * The details of a credential that has been written to CredHub. Clients don't
@@ -60,8 +57,8 @@ public class CredentialDetails extends CredentialSummary {
 	 * @param versionCreatedAt the {@link Date} when this version of the credential was
 	 * created
 	 */
-	CredentialDetails(String id, CredentialName name, ValueType valueType,
-					  Object value, Date versionCreatedAt) {
+	public CredentialDetails(String id, CredentialName name, ValueType valueType,
+			Object value, Date versionCreatedAt) {
 		super(name, versionCreatedAt);
 		this.id = id;
 		this.valueType = valueType;
@@ -93,17 +90,6 @@ public class CredentialDetails extends CredentialSummary {
 	 */
 	public Object getValue() {
 		return this.value;
-	}
-
-	/**
-	 * Create a builder for a {@link CredentialDetails} object. Intended for internal
-	 * use in tests. Clients will get {@link CredentialDetails} objects populated from
-	 * CredHub responses.
-	 *
-	 * @return the builder
-	 */
-	public static CredentialDetailsBuilder detailsBuilder() {
-		return new CredentialDetailsBuilder();
 	}
 
 	@Override
@@ -144,91 +130,5 @@ public class CredentialDetails extends CredentialSummary {
 				+ ", value=" + value
 				+ ", versionCreatedAt='" + versionCreatedAt + '\'' +
 				'}';
-	}
-
-	/**
-	 * A builder that provides a fluent API for constructing {@link CredentialDetails}
-	 * instances. Intended to be used internally for testing.
-	 */
-	public static class CredentialDetailsBuilder {
-		private String id;
-		private CredentialName name;
-		private ValueType valueType;
-		private Object value;
-		private Date versionCreatedAt;
-
-		CredentialDetailsBuilder() {
-		}
-
-		/**
-		 * Set the ID of the credential.
-		 *
-		 * @param id the ID; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsBuilder id(String id) {
-			Assert.notNull(id, "id must not be null");
-			this.id = id;
-			return this;
-		}
-
-		/**
-		 * Set the name of the credential.
-		 *
-		 * @param name the name; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsBuilder name(CredentialName name) {
-			Assert.notNull(name, "name must not be null");
-			this.name = name;
-			return this;
-		}
-
-		/**
-		 * Set a password value and {@link ValueType#PASSWORD} type for the credential.
-		 *
-		 * @param value the password value; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsBuilder passwordValue(String value) {
-			Assert.notNull(value, "value must not be null");
-			this.valueType = ValueType.PASSWORD;
-			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Set a JSON value and {@link ValueType#JSON} type for the credential.
-		 *
-		 * @param value the JSON value; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsBuilder jsonValue(Map<String, Object> value) {
-			Assert.notNull(value, "value must not be null");
-			this.valueType = ValueType.JSON;
-			this.value = value;
-			return this;
-		}
-
-		/**
-		 * Set a creation date for the credential.
-		 *
-		 * @param versionCreatedAt the creation date; must not be {@literal null}
-		 * @return the builder
-		 */
-		public CredentialDetailsBuilder versionCreatedAt(Date versionCreatedAt) {
-			Assert.notNull(versionCreatedAt, "versionCreatedAt must not be null");
-			this.versionCreatedAt = versionCreatedAt;
-			return this;
-		}
-
-		/**
-		 * Construct a {@link CredentialDetails} from the provided values.
-		 *
-		 * @return a {@link CredentialDetails}
-		 */
-		public CredentialDetails build() {
-			return new CredentialDetails(id, name, valueType, value, versionCreatedAt);
-		}
 	}
 }

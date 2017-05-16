@@ -29,9 +29,11 @@ import org.springframework.credhub.support.AdditionalPermission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
+import org.springframework.credhub.support.JsonWriteRequest;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.WriteRequest.WriteRequestBuilder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,12 +75,12 @@ public class CredHubDemoController {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> CredentialDetails writeCredentials(T value, Results results) {
+	private CredentialDetails writeCredentials(Map<String, Object> value, Results results) {
 		try {
-			WriteRequest.WriteRequestBuilder requestBuilder = WriteRequest.builder()
+			WriteRequestBuilder requestBuilder = JsonWriteRequest.builder()
 					.overwrite(true)
 					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
-					.jsonValue((Map<String, Object>) value);
+					.value(value);
 
 			if (StringUtils.hasText(appId)) {
 				requestBuilder.additionalPermission(

@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.core;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.experimental.theories.DataPoint;
@@ -26,6 +27,7 @@ import org.junit.runner.RunWith;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
+import org.springframework.credhub.support.ValueType;
 import org.springframework.http.ResponseEntity;
 
 import static org.hamcrest.Matchers.containsString;
@@ -46,20 +48,14 @@ public class CredHubTemplateDetailsResponseUnitTests extends CredHubTemplateUnit
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialDetailsData> successfulResponse =
 			new ResponseEntity<CredentialDetailsData>(
-					CredentialDetailsData.builder()
-							.datum(CredentialDetails.detailsBuilder()
-									.name(NAME)
-									.id(CREDENTIAL_ID)
-									.passwordValue(CREDENTIAL_VALUE)
-									.build())
-							.build(),
+					new CredentialDetailsData(
+							new CredentialDetails(CREDENTIAL_ID, NAME, ValueType.PASSWORD, CREDENTIAL_VALUE, new Date())),
 					OK);
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialDetailsData> httpErrorResponse =
 			new ResponseEntity<CredentialDetailsData>(
-					CredentialDetailsData.builder()
-							.build(),
+					new CredentialDetailsData(),
 					UNAUTHORIZED);
 
 	@Theory

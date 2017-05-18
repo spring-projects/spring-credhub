@@ -16,8 +16,6 @@
 
 package org.springframework.credhub.support;
 
-import java.util.HashMap;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +31,7 @@ public class JsonWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 	public void setUp() {
 		requestBuilder = JsonWriteRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
-				.value(new HashMap<String, Object>() {
+				.value(new JsonCredential() {
 					{
 						put("data", "value");
 						put("test", true);
@@ -42,7 +40,7 @@ public class JsonWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializationWithJsonValue() throws Exception {
+	public void serializeWithJsonValue() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,

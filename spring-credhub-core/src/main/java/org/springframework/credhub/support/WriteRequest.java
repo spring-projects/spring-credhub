@@ -46,24 +46,10 @@ public class WriteRequest<T> {
 	private List<AdditionalPermission> additionalPermissions;
 
 	/**
-	 * Create a {@link WriteRequest} from the provided parameters. Intended for internal
-	 * use. 
-	 *
-	 * @param name the name of the credential
-	 * @param overwrite {@literal false} to create a new credential, or
-	 * {@literal true} to update and existing credential
-	 * @param value the value of the credential
-	 * @param valueType the {@link ValueType} of the credential
-	 * @param additionalPermissions access control permissions for the credential
+	 * Initialize a {@link WriteRequest}.
 	 */
-	WriteRequest(CredentialName name, boolean overwrite,
-				 T value, ValueType valueType,
-				 List<AdditionalPermission> additionalPermissions) {
-		this.name = name;
-		this.overwrite = overwrite;
-		this.valueType = valueType;
-		this.value = value;
-		this.additionalPermissions = additionalPermissions;
+	WriteRequest() {
+		additionalPermissions = new ArrayList<AdditionalPermission>();
 	}
 
 	/**
@@ -76,6 +62,9 @@ public class WriteRequest<T> {
 		return this.overwrite;
 	}
 
+	void setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
+	}
 
 	/**
 	 * Get the {@link CredentialName} of the credential.
@@ -87,6 +76,10 @@ public class WriteRequest<T> {
 		return name.getName();
 	}
 
+	void setName(CredentialName name) {
+		this.name = name;
+	}
+
 	/**
 	 * Get the value of the credential.
 	 *
@@ -96,6 +89,10 @@ public class WriteRequest<T> {
 		return this.value;
 	}
 
+	void setValue(T value) {
+		this.value = value;
+	}
+
 	/**
 	 * Get the {@link ValueType} of the credential.
 	 *
@@ -103,6 +100,10 @@ public class WriteRequest<T> {
 	 */
 	public String getType() {
 		return valueType.type();
+	}
+
+	void setType(ValueType valueType) {
+		this.valueType = valueType;
 	}
 
 	/**
@@ -159,28 +160,31 @@ public class WriteRequest<T> {
 	 * A builder that provides a fluent API for constructing {@link WriteRequest}s.
 	 */
 	@SuppressWarnings("unchecked")
-	public static abstract class WriteRequestBuilder<T, B extends WriteRequestBuilder<T, B>> {
+	public static abstract class WriteRequestBuilder<T, R extends WriteRequest<T>, B extends WriteRequestBuilder<T, R, B>> {
 		private final B thisObj;
-		
-		private CredentialName name;
-		private boolean overwrite;
-		protected T value;
-		protected ValueType valueType;
-		private ArrayList<AdditionalPermission> additionalPermissions;
+		protected final R targetObj;
 
 		/**
 		 * Create a {@link WriteRequestBuilder}. Intended for internal use.
 		 */
 		WriteRequestBuilder() {
-			this.thisObj = getBuilder();
+			this.thisObj = createBuilder();
+			this.targetObj = createTarget();
 		}
+
+		/**
+		 * Provide the concrete object to build.
+		 *
+		 * @return the target object
+		 */
+		protected abstract R createTarget();
 
 		/**
 		 * Provide the concrete builder.
 		 *
 		 * @return the builder
 		 */
-		protected abstract B getBuilder();
+		protected abstract B createBuilder();
 
 		/**
 		 * Set the value of a credential. In concrete builders, this should set the value
@@ -199,7 +203,7 @@ public class WriteRequest<T> {
 		 */
 		public B name(CredentialName name) {
 			Assert.notNull(name, "name must not be null");
-			this.name = name;
+			targetObj.setName(name);
 			return thisObj;
 		}
 
@@ -212,7 +216,7 @@ public class WriteRequest<T> {
 		 * @return the builder 
 		 */
 		public B overwrite(boolean overwrite) {
-			this.overwrite = overwrite;
+			targetObj.setOverwrite(overwrite);
 			return thisObj;
 		}
 
@@ -220,13 +224,12 @@ public class WriteRequest<T> {
 		 * Add an {@link AdditionalPermission} to the permissions that will be assigned to the
 		 * credential.
 		 *
-		 * @param additionalPermission an {@link AdditionalPermission} to assign to the
+		 * @param permission an {@link AdditionalPermission} to assign to the
 		 * credential
 		 * @return the builder
 		 */
-		public B additionalPermission(AdditionalPermission additionalPermission) {
-			initPermissions();
-			this.additionalPermissions.add(additionalPermission);
+		public B additionalPermission(AdditionalPermission permission) {
+			targetObj.getAdditionalPermissions().add(permission);
 			return thisObj;
 		}
 
@@ -239,8 +242,7 @@ public class WriteRequest<T> {
 		 * @return the builder
 		 */
 		public B additionalPermissions(Collection<? extends AdditionalPermission> permissions) {
-			initPermissions();
-			this.additionalPermissions.addAll(permissions);
+			targetObj.getAdditionalPermissions().addAll(permissions);
 			return thisObj;
 		}
 
@@ -253,15 +255,8 @@ public class WriteRequest<T> {
 		 * @return the builder
 		 */
 		public B additionalPermissions(AdditionalPermission... permissions) {
-			initPermissions();
-			this.additionalPermissions.addAll(Arrays.asList(permissions));
+			targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));
 			return thisObj;
-		}
-
-		private void initPermissions() {
-			if (this.additionalPermissions == null) {
-				this.additionalPermissions = new ArrayList<AdditionalPermission>();
-			}
 		}
 
 		/**
@@ -269,24 +264,8 @@ public class WriteRequest<T> {
 		 *
 		 * @return a {@link WriteRequest}
 		 */
-		public WriteRequest build() {
-			List<AdditionalPermission> permissions;
-			switch (this.additionalPermissions == null ? 0
-					: this.additionalPermissions.size()) {
-			case 0:
-				permissions = java.util.Collections.emptyList();
-				break;
-			case 1:
-				permissions = java.util.Collections
-						.singletonList(this.additionalPermissions.get(0));
-				break;
-			default:
-				permissions = java.util.Collections.unmodifiableList(
-						new ArrayList<AdditionalPermission>(this.additionalPermissions));
-			}
-
-			return new WriteRequest(name, overwrite, value, valueType,
-					permissions);
+		public R build() {
+			return targetObj;
 		}
 	}
 

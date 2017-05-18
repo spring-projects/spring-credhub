@@ -16,10 +16,11 @@
 
 package org.springframework.credhub.support;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -33,11 +34,18 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class CredentialDetails extends CredentialSummary {
+public class CredentialDetails<T> extends CredentialSummary {
 	private String id;
+	
 	@JsonProperty("type")
 	private ValueType valueType;
-	private Object value;
+
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
+	@JsonSubTypes({
+			@Type(value = String.class, name = "password"),
+			@Type(value = JsonCredential.class, name = "json")
+	})
+	private T value;
 
 	/**
 	 * Create a {@link CredentialDetails}.
@@ -54,12 +62,10 @@ public class CredentialDetails extends CredentialSummary {
 	 * @param name the client-provided name of the credential
 	 * @param valueType the {@link ValueType} of the credential
 	 * @param value the client-provided value for the credential
-	 * @param versionCreatedAt the {@link Date} when this version of the credential was
 	 * created
 	 */
-	public CredentialDetails(String id, CredentialName name, ValueType valueType,
-			Object value, Date versionCreatedAt) {
-		super(name, versionCreatedAt);
+	public CredentialDetails(String id, CredentialName name, ValueType valueType, T value) {
+		super(name);
 		this.id = id;
 		this.valueType = valueType;
 		this.value = value;
@@ -88,7 +94,7 @@ public class CredentialDetails extends CredentialSummary {
 	 *
 	 * @return the credential value
 	 */
-	public Object getValue() {
+	public T getValue() {
 		return this.value;
 	}
 

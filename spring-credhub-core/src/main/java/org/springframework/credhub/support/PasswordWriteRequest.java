@@ -16,12 +16,12 @@
 
 package org.springframework.credhub.support;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import org.springframework.util.Assert;
+
+import static org.springframework.credhub.support.ValueType.PASSWORD;
 
 /**
  * The details of a request to write a new or update an existing password credential in CredHub.
@@ -30,21 +30,6 @@ import org.springframework.util.Assert;
  */
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PasswordWriteRequest extends WriteRequest<String> {
-	/**
-	 * Create a {@link PasswordWriteRequest} from the provided parameters. Intended for internal
-	 * use. Clients should use {@link #builder()} to construct instances of this class.
-	 *
-	 * @param name the name of the credential
-	 * @param overwrite {@literal false} to create a new credential, or
-	 * {@literal true} to update and existing credential
-	 * @param value the value of the credential
-	 * @param additionalPermissions access control permissions for the credential
-	 */
-	private PasswordWriteRequest(CredentialName name, boolean overwrite, String value,
-								 List<AdditionalPermission> additionalPermissions) {
-		super(name, overwrite, value, ValueType.PASSWORD, additionalPermissions);
-	}
-
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
 	 * to construct a {@link PasswordWriteRequest}.
@@ -58,15 +43,15 @@ public class PasswordWriteRequest extends WriteRequest<String> {
 	/**
 	 * A builder that provides a fluent API for constructing {@link PasswordWriteRequest}s.
 	 */
-	public static class PasswordWriteRequestBuilder extends WriteRequestBuilder<String, PasswordWriteRequestBuilder> {
-		/**
-		 * Create a {@link PasswordWriteRequestBuilder}. Intended for internal use.
-		 */
-		PasswordWriteRequestBuilder() {
+	public static class PasswordWriteRequestBuilder
+			extends WriteRequestBuilder<String, PasswordWriteRequest, PasswordWriteRequestBuilder> {
+		@Override
+		protected PasswordWriteRequest createTarget() {
+			return new PasswordWriteRequest();
 		}
 
 		@Override
-		protected PasswordWriteRequestBuilder getBuilder() {
+		protected PasswordWriteRequestBuilder createBuilder() {
 			return this;
 		}
 
@@ -79,8 +64,8 @@ public class PasswordWriteRequest extends WriteRequest<String> {
 		 */
 		public PasswordWriteRequestBuilder value(String value) {
 			Assert.notNull(value, "value must not be null");
-			this.valueType = ValueType.PASSWORD;
-			this.value = value;
+			targetObj.setType(PASSWORD);
+			targetObj.setValue(value);
 			return this;
 		}
 	}

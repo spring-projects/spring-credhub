@@ -29,11 +29,11 @@ import org.springframework.credhub.support.AdditionalPermission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
+import org.springframework.credhub.support.JsonCredential;
 import org.springframework.credhub.support.JsonWriteRequest;
+import org.springframework.credhub.support.JsonWriteRequest.JsonWriteRequestBuilder;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.VcapServicesData;
-import org.springframework.credhub.support.WriteRequest;
-import org.springframework.credhub.support.WriteRequest.WriteRequestBuilder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,7 +56,7 @@ public class CredHubDemoController {
 	public Results runTests(@RequestBody Map<String, Object> value) {
 		Results results = new Results();
 
-		CredentialDetails credentialDetails = writeCredentials(value, results);
+		CredentialDetails<JsonCredential> credentialDetails = writeCredentials(value, results);
 		CredentialName credentialName = credentialDetails.getName();
 
 		getCredentialsById(credentialDetails.getId(), results);
@@ -74,10 +74,9 @@ public class CredHubDemoController {
 		return results;
 	}
 
-	@SuppressWarnings("unchecked")
-	private CredentialDetails writeCredentials(Map<String, Object> value, Results results) {
+	private CredentialDetails<JsonCredential> writeCredentials(Map<String, Object> value, Results results) {
 		try {
-			WriteRequestBuilder requestBuilder = JsonWriteRequest.builder()
+			JsonWriteRequestBuilder requestBuilder = JsonWriteRequest.builder()
 					.overwrite(true)
 					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
 					.value(value);
@@ -87,9 +86,9 @@ public class CredHubDemoController {
 						AdditionalPermission.builder().app(appId).operation(READ).build());
 			}
 
-			WriteRequest request = requestBuilder.build();
+			JsonWriteRequest request = requestBuilder.build();
 
-			CredentialDetails credentialDetails = credHubTemplate.write(request);
+			CredentialDetails<JsonCredential> credentialDetails = credHubTemplate.write(request);
 			saveResults(results, "Successfully wrote credentials: ", credentialDetails);
 
 			return credentialDetails;
@@ -102,7 +101,8 @@ public class CredHubDemoController {
 
 	private void getCredentialsById(String id, Results results) {
 		try {
-			CredentialDetails retrievedDetails = credHubTemplate.getById(id);
+			CredentialDetails<JsonCredential> retrievedDetails =
+					credHubTemplate.getById(id, JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by ID: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error retrieving credentials by ID: ", e.getMessage());
@@ -111,7 +111,8 @@ public class CredHubDemoController {
 
 	private void getCredentialsByName(CredentialName name, Results results) {
 		try {
-			List<CredentialDetails> retrievedDetails = credHubTemplate.getByName(name);
+			List<CredentialDetails<JsonCredential>> retrievedDetails =
+					credHubTemplate.getByName(name, JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by name: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error retrieving credentials by name: ", e.getMessage());

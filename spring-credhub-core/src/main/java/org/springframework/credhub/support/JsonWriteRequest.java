@@ -16,13 +16,12 @@
 
 package org.springframework.credhub.support;
 
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import org.springframework.util.Assert;
+
+import java.util.Map;
 
 import static org.springframework.credhub.support.ValueType.JSON;
 
@@ -32,22 +31,7 @@ import static org.springframework.credhub.support.ValueType.JSON;
  * @author Scott Frederick
  */
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class JsonWriteRequest extends WriteRequest<Map<String, Object>> {
-	/**
-	 * Create a {@link JsonWriteRequest} from the provided parameters. Intended for internal
-	 * use. Clients should use {@link #builder()} to construct instances of this class.
-	 *
-	 * @param name the name of the credential
-	 * @param overwrite {@literal false} to create a new credential, or
-	 * {@literal true} to update and existing credential
-	 * @param value the value of the credential
-	 * @param additionalPermissions access control permissions for the credential
-	 */
-	private JsonWriteRequest(CredentialName name, boolean overwrite, Map<String, Object> value,
-							 List<AdditionalPermission> additionalPermissions) {
-		super(name, overwrite, value, ValueType.PASSWORD, additionalPermissions);
-	}
-
+public class JsonWriteRequest extends WriteRequest<JsonCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
 	 * to construct a {@link JsonWriteRequest}.
@@ -61,15 +45,16 @@ public class JsonWriteRequest extends WriteRequest<Map<String, Object>> {
 	/**
 	 * A builder that provides a fluent API for constructing {@link JsonWriteRequest}s.
 	 */
-	public static class JsonWriteRequestBuilder extends WriteRequestBuilder<Map<String, Object>, JsonWriteRequestBuilder> {
-		/**
-		 * Create a {@link JsonWriteRequestBuilder}. Intended for internal use.
-		 */
-		JsonWriteRequestBuilder() {
+	public static class JsonWriteRequestBuilder extends
+			WriteRequestBuilder<JsonCredential, JsonWriteRequest, JsonWriteRequestBuilder> {
+
+		@Override
+		protected JsonWriteRequest createTarget() {
+			return new JsonWriteRequest();
 		}
 
 		@Override
-		protected JsonWriteRequestBuilder getBuilder() {
+		protected JsonWriteRequestBuilder createBuilder() {
 			return this;
 		}
 
@@ -82,10 +67,15 @@ public class JsonWriteRequest extends WriteRequest<Map<String, Object>> {
 		 * @param value the json credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public JsonWriteRequestBuilder value(Map<String, Object> value) {
+		public JsonWriteRequestBuilder value(JsonCredential value) {
 			Assert.notNull(value, "value must not be null");
-			this.valueType = JSON;
-			this.value = value;
+			targetObj.setType(JSON);
+			targetObj.setValue(value);
+			return this;
+		}
+
+		public JsonWriteRequestBuilder value(Map<String, Object> value) {
+			value(new JsonCredential(value));
 			return this;
 		}
 	}

@@ -39,15 +39,16 @@ public interface CredHubOperations {
 	 * @param writeRequest the credential to write to CredHub; must not be {@literal null}
 	 * @return the details of the written credential
 	 */
-	CredentialDetails write(WriteRequest writeRequest);
+	<T> CredentialDetails<T> write(final WriteRequest<T> writeRequest);
 
 	/**
 	 * Retrieve a credential using its ID, as returned in a write request.
 	 *
 	 * @param id the ID of the credential; must not be {@literal null}
+	 * @param credentialType the type of the credential to be retrieved; must not be {@literal null}
 	 * @return the details of the retrieved credential
 	 */
-	CredentialDetails getById(String id);
+	<T> CredentialDetails<T> getById(final String id, Class<T> credentialType);
 
 	/**
 	 * Retrieve a credential using its name, as passed to a write request.
@@ -57,7 +58,7 @@ public interface CredHubOperations {
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return the details of the retrieved credential, including history
 	 */
-	List<CredentialDetails> getByName(String name);
+	<T> List<CredentialDetails<T>> getByName(final String name, Class<T> credentialType);
 
 	/**
 	 * Retrieve a credential using its name, as passed to a write request.
@@ -67,7 +68,7 @@ public interface CredHubOperations {
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return the details of the retrieved credential, including history
 	 */
-	List<CredentialDetails> getByName(CredentialName name);
+	<T> List<CredentialDetails<T>> getByName(final CredentialName name, Class<T> credentialType);
 
 	/**
 	 * Find a credential using a full or partial name.

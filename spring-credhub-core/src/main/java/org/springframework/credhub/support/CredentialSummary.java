@@ -21,7 +21,6 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import org.springframework.util.Assert;
 
 /**
  * A summary of a credential that has been written to CredHub. Clients don't typically
@@ -48,12 +47,10 @@ public class CredentialSummary {
 	 * CredHub responses.
 	 *
 	 * @param name the name of the credential
-	 * @param versionCreatedAt the {@link Date} when this version of the credential was
-	 * created
 	 */
-	public CredentialSummary(CredentialName name, Date versionCreatedAt) {
+	public CredentialSummary(CredentialName name) {
 		this.name = name;
-		this.versionCreatedAt = versionCreatedAt;
+		this.versionCreatedAt = new Date();
 	}
 
 	/**

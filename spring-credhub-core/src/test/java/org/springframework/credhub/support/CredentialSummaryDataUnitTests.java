@@ -31,20 +31,20 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 				"  \"credentials\": [\n" +
 				"    {\n" +
 				"      \"name\": \"/c/deploy123/example1\",\n" +
-				"      \"version_created_at\": \"" + testDateString + "\"\n" +
+				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
 				"    },\n" +
 				"    {\n" +
 				"      \"name\": \"/c/deploy123/example2\",\n" +
-				"      \"version_created_at\": \"" + testDateString + "\"\n" +
+				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
 				"    },\n" +
 				"    {\n" +
 				"      \"name\": \"/c/deploy123/example3\",\n" +
-				"      \"version_created_at\": \"" + testDateString + "\"\n" +
+				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
 				"    }\n" +
 				"  ]\n" +
 				"}";
 
-		CredentialSummaryData response = parseResponse(json);
+		CredentialSummaryData response = parseResponse(json, JsonCredential.class);
 
 		assertThat(response.getCredentials().size(), equalTo(3));
 
@@ -69,13 +69,13 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 				"  ]\n" +
 				"}";
 
-		CredentialSummaryData response = parseResponse(json);
+		CredentialSummaryData response = parseResponse(json, JsonCredential.class);
 
 		assertThat(response.getCredentials(), notNullValue());
 		assertThat(response.getCredentials().size(), equalTo(0));
 	}
 
-	private CredentialSummaryData parseResponse(String json)
+	private CredentialSummaryData parseResponse(String json, Class<JsonCredential> jsonCredentialClass)
 			throws java.io.IOException {
 		return objectMapper.readValue(json, CredentialSummaryData.class);
 	}

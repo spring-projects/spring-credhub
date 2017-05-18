@@ -44,18 +44,15 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnitTestsBase {
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> successfulResponse =
-			new ResponseEntity<CredentialSummaryData>(
-					new CredentialSummaryData(new CredentialSummary(NAME, new Date())),
-					OK);
+			new ResponseEntity<CredentialSummaryData>(new CredentialSummaryData(new CredentialSummary(NAME)), OK);
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> httpErrorResponse =
-			new ResponseEntity<CredentialSummaryData>(
-					new CredentialSummaryData(),
-					UNAUTHORIZED);
+			new ResponseEntity<CredentialSummaryData>(new CredentialSummaryData(), UNAUTHORIZED);
 
 	@Theory
-	public void findByNameWithString(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+	public void findByNameWithString(@FromDataPoints("responses")
+												 ResponseEntity<CredentialSummaryData> expectedResponse) {
 		when(restTemplate.getForEntity(NAME_LIKE_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
 				.thenReturn(expectedResponse);
 
@@ -76,7 +73,8 @@ public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnit
 	}
 
 	@Theory
-	public void findByNameWithCredentialName(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+	public void findByNameWithCredentialName(@FromDataPoints("responses")
+														 ResponseEntity<CredentialSummaryData> expectedResponse) {
 		when(restTemplate.getForEntity(NAME_LIKE_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
 				.thenReturn(expectedResponse);
 
@@ -97,7 +95,8 @@ public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnit
 	}
 
 	@Theory
-	public void findByPath(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+	public void findByPath(@FromDataPoints("responses")
+									   ResponseEntity<CredentialSummaryData> expectedResponse) {
 		when(restTemplate.getForEntity(PATH_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
 				.thenReturn(expectedResponse);
 
@@ -121,9 +120,7 @@ public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnit
 			ResponseEntity<CredentialSummaryData> expectedResponse,
 			List<CredentialSummary> response) {
 		assertThat(response, notNullValue());
-		assertThat(response.size(),
-				equalTo(expectedResponse.getBody().getCredentials().size()));
-		assertThat(response.get(0),
-				equalTo(expectedResponse.getBody().getCredentials().get(0)));
+		assertThat(response.size(), equalTo(expectedResponse.getBody().getCredentials().size()));
+		assertThat(response.get(0), equalTo(expectedResponse.getBody().getCredentials().get(0)));
 	}
 }

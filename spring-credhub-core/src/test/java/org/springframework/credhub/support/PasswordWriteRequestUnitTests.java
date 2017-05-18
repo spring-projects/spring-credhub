@@ -38,7 +38,7 @@ public class PasswordWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializationWithPasswordValue() throws Exception {
+	public void serializeWithPasswordValue() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,

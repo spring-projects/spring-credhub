@@ -35,8 +35,8 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  */
 @JsonInclude(NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CredentialDetailsData {
-	private List<CredentialDetails> data;
+public class CredentialDetailsData<T> {
+	private List<CredentialDetails<T>> data;
 
 	/**
 	 * Create a {@link CredentialDetailsData}.
@@ -51,7 +51,7 @@ public class CredentialDetailsData {
 	 *
 	 * @param data a collection of {@link CredentialDetails}
 	 */
-	public CredentialDetailsData(CredentialDetails... data) {
+	public CredentialDetailsData(CredentialDetails<T>... data) {
 		this.data = Arrays.asList(data);
 	}
 
@@ -60,7 +60,7 @@ public class CredentialDetailsData {
 	 *
 	 * @return the collection of {@link CredentialDetails}
 	 */
-	public List<CredentialDetails> getData() {
+	public List<CredentialDetails<T>> getData() {
 		return this.data;
 	}
 

@@ -22,6 +22,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.PasswordWriteRequest;
 import org.springframework.credhub.support.ValueType;
@@ -29,8 +30,6 @@ import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Date;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,6 +39,8 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
+import static org.springframework.credhub.core.TypeUtils.getDetailsReference;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -50,24 +51,25 @@ public class CredHubTemplateDetailResponseUnitTests extends CredHubTemplateUnitT
 	private static final String CREDENTIAL_VALUE = "secret";
 
 	@DataPoint("responses")
-	public static ResponseEntity<CredentialDetails> successfulResponse =
-			new ResponseEntity<CredentialDetails>(
-					new CredentialDetails(CREDENTIAL_ID, NAME, ValueType.PASSWORD, CREDENTIAL_VALUE, new Date()),
+	public static ResponseEntity<CredentialDetails<String>> successfulResponse =
+			new ResponseEntity<CredentialDetails<String>>(
+					new CredentialDetails<String>(CREDENTIAL_ID, NAME, ValueType.PASSWORD, CREDENTIAL_VALUE),
 					OK);
 
 	@DataPoint("responses")
-	public static ResponseEntity<CredentialDetails> httpErrorResponse =
-			new ResponseEntity<CredentialDetails>(new CredentialDetails(), UNAUTHORIZED);
+	public static ResponseEntity<CredentialDetails<String>> httpErrorResponse =
+			new ResponseEntity<CredentialDetails<String>>(new CredentialDetails<String>(), UNAUTHORIZED);
 
 	@Theory
-	public void write(@FromDataPoints("responses") ResponseEntity<CredentialDetails> expectedResponse) {
-		WriteRequest request = PasswordWriteRequest.builder()
+	public void write(@FromDataPoints("responses") ResponseEntity<CredentialDetails<String>> expectedResponse) {
+		PasswordWriteRequest request = PasswordWriteRequest.builder()
 				.name(NAME)
 				.value("secret")
 				.build();
 
-		when(restTemplate.exchange(BASE_URL_PATH, PUT,
-				new HttpEntity<WriteRequest>(request), CredentialDetails.class))
+		final ParameterizedTypeReference<CredentialDetails<String>> ref = getDetailsReference(String.class);
+
+		when(restTemplate.exchange(BASE_URL_PATH, PUT, new HttpEntity<WriteRequest<String>>(request), ref))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -80,20 +82,22 @@ public class CredHubTemplateDetailResponseUnitTests extends CredHubTemplateUnitT
 			}
 		}
 		else {
-			CredentialDetails response = credHubTemplate.write(request);
+			CredentialDetails<String> response = credHubTemplate.write(request);
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}
 	}
 
 	@Theory
-	public void getById(@FromDataPoints("responses") ResponseEntity<CredentialDetails> expectedResponse) {
-		when(restTemplate.getForEntity(ID_URL_PATH, CredentialDetails.class, CREDENTIAL_ID))
+	public void getById(@FromDataPoints("responses") ResponseEntity<CredentialDetails<String>> expectedResponse) {
+		final ParameterizedTypeReference<CredentialDetails<String>> ref = getDetailsReference(String.class);
+
+		when(restTemplate.exchange(ID_URL_PATH, GET, null, ref, CREDENTIAL_ID))
 				.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
-				credHubTemplate.getById(CREDENTIAL_ID);
+				credHubTemplate.getById(CREDENTIAL_ID, String.class);
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
@@ -101,14 +105,14 @@ public class CredHubTemplateDetailResponseUnitTests extends CredHubTemplateUnitT
 			}
 		}
 		else {
-			CredentialDetails response = credHubTemplate.getById(CREDENTIAL_ID);
+			CredentialDetails<String> response = credHubTemplate.getById(CREDENTIAL_ID, String.class);
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}
 	}
 
 	private void assertResponseContainsExpectedCredentials(
-			ResponseEntity<CredentialDetails> expectedResponse, CredentialDetails response) {
+			ResponseEntity<CredentialDetails<String>> expectedResponse, CredentialDetails<String> response) {
 		assertThat(response, notNullValue());
 		assertThat(response, equalTo(expectedResponse.getBody()));
 	}

@@ -18,10 +18,6 @@ package org.springframework.credhub.support;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
 /**
  * A summary of a credential that has been written to CredHub. Clients don't typically
  * instantiate objects of this type, but will receive them in response to write and
@@ -29,8 +25,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
  *
  * @author Scott Frederick
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CredentialSummary {
 	protected CredentialName name;
 	protected Date versionCreatedAt;

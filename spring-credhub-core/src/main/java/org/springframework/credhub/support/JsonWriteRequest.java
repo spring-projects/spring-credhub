@@ -16,9 +16,6 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
 import org.springframework.util.Assert;
 
 import java.util.Map;
@@ -30,7 +27,6 @@ import static org.springframework.credhub.support.ValueType.JSON;
  *
  * @author Scott Frederick
  */
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class JsonWriteRequest extends WriteRequest<JsonCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required

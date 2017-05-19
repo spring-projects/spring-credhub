@@ -19,10 +19,6 @@ package org.springframework.credhub.support;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
 /**
  * A collection of {@link CredentialSummary}s. Clients don't typically instantiate
  * objects of this type, but will receive them in response to write and retrieve
@@ -30,8 +26,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
  *
  * @author Scott Frederick
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CredentialSummaryData {
 	private List<CredentialSummary> credentials;
 

@@ -24,25 +24,19 @@ import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import org.springframework.util.Assert;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * The details of a request to write a new or update an existing credential in CredHub.
  *
  * @author Scott Frederick
  */
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class WriteRequest<T> {
 	private boolean overwrite;
 	private CredentialName name;
 	private ValueType valueType;
 	private T value;
-	@JsonInclude(NON_EMPTY)
 	private List<AdditionalPermission> additionalPermissions;
 
 	/**

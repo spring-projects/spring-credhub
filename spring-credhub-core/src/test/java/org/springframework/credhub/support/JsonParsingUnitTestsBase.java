@@ -16,12 +16,12 @@
 
 package org.springframework.credhub.support;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import org.junit.Before;
+import org.springframework.credhub.core.JsonUtils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -47,12 +47,9 @@ public abstract class JsonParsingUnitTestsBase {
 
 	@Before
 	public void setUpJsonParsing() throws Exception {
-		DateFormat dateFormat = new ISO8601DateFormat();
+		objectMapper = JsonUtils.buildObjectMapper();
 
-		objectMapper = new ObjectMapper();
-		objectMapper.setDateFormat(dateFormat);
-
-		testDate = dateFormat.parse(TEST_DATE_STRING);
+		testDate = new ISO8601DateFormat().parse(TEST_DATE_STRING);
 	}
 
 

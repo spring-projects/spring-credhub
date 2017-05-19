@@ -21,11 +21,6 @@ package org.springframework.credhub.support;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
 /**
  * A collection of {@link CredentialDetails}. Clients don't typically instantiate
  * objects of this type, but will receive them in response to write and retrieve
@@ -33,8 +28,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
  *
  * @author Scott Frederick
  */
-@JsonInclude(NON_EMPTY)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class CredentialDetailsData<T> {
 	private List<CredentialDetails<T>> data;
 

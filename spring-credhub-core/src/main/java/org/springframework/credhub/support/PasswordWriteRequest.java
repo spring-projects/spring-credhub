@@ -16,9 +16,6 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
 import org.springframework.util.Assert;
 
 import static org.springframework.credhub.support.ValueType.PASSWORD;
@@ -28,7 +25,6 @@ import static org.springframework.credhub.support.ValueType.PASSWORD;
  *
  * @author Scott Frederick
  */
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PasswordWriteRequest extends WriteRequest<String> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required

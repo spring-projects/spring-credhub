@@ -94,7 +94,7 @@ public class CredHubTemplateUnitTests extends CredHubTemplateUnitTestsBase {
 				"  ]" +
 				"}";
 
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonUtils.buildObjectMapper();
 		return mapper.readValue(vcapServices, VcapServicesData.class);
 	}
 

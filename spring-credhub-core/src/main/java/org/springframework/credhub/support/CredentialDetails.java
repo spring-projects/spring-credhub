@@ -16,13 +16,8 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 /**
  * The details of a credential that has been written to CredHub. Clients don't
@@ -32,8 +27,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
  *
  * @author Scott Frederick
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CredentialDetails<T> extends CredentialSummary {
 	private String id;
 	
@@ -41,10 +34,6 @@ public class CredentialDetails<T> extends CredentialSummary {
 	private ValueType valueType;
 
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
-	@JsonSubTypes({
-			@Type(value = String.class, name = "password"),
-			@Type(value = JsonCredential.class, name = "json")
-	})
 	private T value;
 
 	/**

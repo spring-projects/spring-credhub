@@ -21,9 +21,6 @@ package org.springframework.credhub.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
-
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -77,13 +74,10 @@ public class CredHubClient {
 	 * @return the list of {@link HttpMessageConverter}s
 	 */
 	private static List<HttpMessageConverter<?>> createMessageConverters() {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setDateFormat(new ISO8601DateFormat());
-
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>(3);
 		messageConverters.add(new ByteArrayHttpMessageConverter());
 		messageConverters.add(new StringHttpMessageConverter());
-		messageConverters.add(new MappingJackson2HttpMessageConverter(objectMapper));
+		messageConverters.add(new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper()));
 
 		return messageConverters;
 	}

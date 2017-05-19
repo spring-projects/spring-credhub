@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.credhub.core.JsonUtils;
 import org.springframework.credhub.support.WriteRequest.WriteRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
@@ -37,7 +38,7 @@ public abstract class WriteRequestUnitTestsBase {
 
 	@Before
 	public void setUpWriteRequestUnitTestsBase() {
-		mapper = new ObjectMapper();
+		mapper = JsonUtils.buildObjectMapper();
 	}
 
 	@Test

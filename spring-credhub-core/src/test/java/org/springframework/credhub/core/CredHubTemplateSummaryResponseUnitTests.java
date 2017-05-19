@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.core;
 
-import java.util.Date;
 import java.util.List;
 
 import org.junit.experimental.theories.DataPoint;

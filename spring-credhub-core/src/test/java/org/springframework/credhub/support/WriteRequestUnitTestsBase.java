@@ -33,7 +33,7 @@ import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
 
 public abstract class WriteRequestUnitTestsBase {
-	protected ObjectMapper mapper;
+	private ObjectMapper mapper;
 	protected WriteRequestBuilder requestBuilder;
 
 	@Before
@@ -91,7 +91,7 @@ public abstract class WriteRequestUnitTestsBase {
 						equalTo("read"))));
 	}
 
-	protected String serializeToJson(WriteRequestBuilder requestBuilder)
+	<T extends WriteRequestBuilder> String serializeToJson(T requestBuilder)
 			throws JsonProcessingException {
 		String jsonValue = mapper.writeValueAsString(requestBuilder.build());
 		assertThat(jsonValue, isJson());

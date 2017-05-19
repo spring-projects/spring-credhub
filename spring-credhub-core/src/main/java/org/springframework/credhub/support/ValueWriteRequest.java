@@ -18,49 +18,50 @@ package org.springframework.credhub.support;
 
 import org.springframework.util.Assert;
 
-import static org.springframework.credhub.support.ValueType.PASSWORD;
+import static org.springframework.credhub.support.ValueType.VALUE;
 
 /**
- * The details of a request to write a new or update an existing password credential in CredHub.
+ * The details of a request to write a new or update an existing value credential in CredHub.
  *
  * @author Scott Frederick
  */
-public class PasswordWriteRequest extends WriteRequest<PasswordCredential> {
+public class ValueWriteRequest extends WriteRequest<ValueCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link PasswordWriteRequest}.
+	 * to construct a {@link ValueWriteRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static PasswordWriteRequestBuilder builder() {
-		return new PasswordWriteRequestBuilder();
+	public static ValueWriteRequestBuilder builder() {
+		return new ValueWriteRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link PasswordWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link ValueWriteRequest}s.
 	 */
-	public static class PasswordWriteRequestBuilder
-			extends WriteRequestBuilder<PasswordCredential, PasswordWriteRequest, PasswordWriteRequestBuilder> {
+	public static class ValueWriteRequestBuilder
+			extends WriteRequestBuilder<ValueCredential, ValueWriteRequest, ValueWriteRequestBuilder> {
 		@Override
-		protected PasswordWriteRequest createTarget() {
-			return new PasswordWriteRequest();
+		protected ValueWriteRequest createTarget() {
+			return new ValueWriteRequest();
 		}
 
 		@Override
-		protected PasswordWriteRequestBuilder createBuilder() {
+		protected ValueWriteRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the value of a password credential. A password credential consists of
-		 * a single string value. The type of the credential is set to {@link ValueType#PASSWORD}.
+		 * Set the value of a {@literal value} credential. A {@literal value} credential
+		 * consists of a single string value. The type of the credential is set to
+		 * {@link ValueType#VALUE}.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public PasswordWriteRequestBuilder value(PasswordCredential value) {
+		public ValueWriteRequestBuilder value(ValueCredential value) {
 			Assert.notNull(value, "value must not be null");
-			targetObj.setType(PASSWORD);
+			targetObj.setType(VALUE);
 			targetObj.setValue(value);
 			return this;
 		}

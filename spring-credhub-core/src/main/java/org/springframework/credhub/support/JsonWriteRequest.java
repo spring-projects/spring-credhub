@@ -60,7 +60,7 @@ public class JsonWriteRequest extends WriteRequest<JsonCredential> {
 		 * will be converted to a JSON document before sending to CredHub. The type of
 		 * the credential is set to {@link ValueType#JSON}.
 		 *
-		 * @param value the json credential value; must not be {@literal null}
+		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
 		public JsonWriteRequestBuilder value(JsonCredential value) {

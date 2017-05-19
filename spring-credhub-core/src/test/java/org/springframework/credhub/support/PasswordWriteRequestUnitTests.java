@@ -34,7 +34,7 @@ public class PasswordWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 		requestBuilder = PasswordWriteRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
-				.value("secret");
+				.value(new PasswordCredential("secret"));
 	}
 
 	@Test

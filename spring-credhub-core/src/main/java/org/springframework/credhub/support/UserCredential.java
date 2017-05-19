@@ -16,39 +16,49 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
 /**
- * A container type for a credential that contains a single string {@literal password} value.
+ * Details of a {@literal user} credential.
  *
  * @author Scott Frederick
  */
-public class PasswordCredential extends StringCredential {
+public class UserCredential {
+	private final String username;
+	private final String password;
+
 	/**
-	 * Create an empty {@link PasswordCredential}. Intended to be used internally for deserialization of responses.
+	 * Create an empty {@link UserCredential}. Intended to be used internally for deserialization of responses.
 	 */
-	public PasswordCredential() {
-		super(null);
+	public UserCredential() {
+		username = null;
+		password = null;
 	}
 
 	/**
-	 * Create a {@link PasswordCredential} containing the specified password value.
+	 * Create a {@link UserCredential} with the specified values.
 	 *
-	 * @param value the password
+	 * @param username the name of the user
+	 * @param password the password of the user
 	 */
-	@JsonCreator
-	public PasswordCredential(String value) {
-		super(value);
+	public UserCredential(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
 
 	/**
-	 * Get the password value.
+	 * Get the user name.
 	 *
-	 * @return the password value
+	 * @return the user name
 	 */
-	@JsonValue
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * Get the user password.
+	 *
+	 * @return the user password
+	 */
 	public String getPassword() {
-		return value;
+		return password;
 	}
 }

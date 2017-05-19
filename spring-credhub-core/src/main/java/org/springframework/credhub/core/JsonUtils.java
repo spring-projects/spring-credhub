@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 import org.springframework.credhub.support.JsonCredential;
 import org.springframework.credhub.support.PasswordCredential;
+import org.springframework.credhub.support.UserCredential;
 import org.springframework.credhub.support.ValueCredential;
 import org.springframework.credhub.support.ValueType;
 
@@ -62,6 +63,7 @@ public class JsonUtils {
 		objectMapper.registerSubtypes(
 				new NamedType(PasswordCredential.class, ValueType.PASSWORD.type()),
 				new NamedType(ValueCredential.class, ValueType.VALUE.type()),
+				new NamedType(UserCredential.class, ValueType.USER.type()),
 				new NamedType(JsonCredential.class, ValueType.JSON.type())
 		);
 	}

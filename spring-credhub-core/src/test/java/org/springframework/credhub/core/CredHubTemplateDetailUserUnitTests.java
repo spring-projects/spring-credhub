@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.core;
 
+import java.util.List;
+
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
@@ -24,63 +26,61 @@ import org.junit.runner.RunWith;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
-import org.springframework.credhub.support.PasswordCredential;
-import org.springframework.credhub.support.PasswordWriteRequest;
+import org.springframework.credhub.support.UserCredential;
+import org.springframework.credhub.support.UserWriteRequest;
 import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 @RunWith(Theories.class)
-public class CredHubTemplateDetailPasswordUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<PasswordCredential> {
-	private static final PasswordCredential CREDENTIAL = new PasswordCredential("secret");
+public class CredHubTemplateDetailUserUnitTests
+		extends CredHubTemplateDetailUnitTestsBase<UserCredential> {
+	private static final UserCredential CREDENTIAL = new UserCredential("myname", "secret");
 
 	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<PasswordCredential>>> buildDetailResponses() {
-		return buildDetailResponses(ValueType.PASSWORD, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetails<UserCredential>>> buildDetailResponses() {
+		return buildDetailResponses(ValueType.USER, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<PasswordCredential>>> buildDataResponses() {
-		return buildDataResponses(ValueType.PASSWORD, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetailsData<UserCredential>>> buildDataResponses() {
+		return buildDataResponses(ValueType.USER, CREDENTIAL);
 	}
 
 	@Override
-	public WriteRequest<PasswordCredential> getRequest() {
-		return PasswordWriteRequest.builder()
+	public WriteRequest<UserCredential> getRequest() {
+		return UserWriteRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();
 	}
 
 	@Override
-	public Class<PasswordCredential> getType() {
-		return PasswordCredential.class;
+	public Class<UserCredential> getType() {
+		return UserCredential.class;
 	}
 
 	@Theory
 	public void write(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+					  ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@Theory
 	public void getById(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithString(@FromDataPoints("data-responses")
-									ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
+									ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByNameWithString(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithCredentialName(@FromDataPoints("data-responses")
-											ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
+											ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByNameWithCredentialName(expectedResponse);
 	}
 }

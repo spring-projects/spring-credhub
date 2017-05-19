@@ -26,12 +26,12 @@ import static org.junit.Assert.assertThat;
 
 public class CredentialDetailsJsonUnitTests extends JsonParsingUnitTestsBase {
 	private static final String JSON_CREDENTIALS =
-			"      \"type\": \"json\"," +
-			"      \"value\": {" +
-			"        \"client_id\": \"test-id\"," +
-			"        \"client_secret\": \"test-secret\"," +
-			"        \"uri\": \"https://example.com\"" +
-			"      }";
+			"  \"type\": \"json\"," +
+			"  \"value\": {" +
+			"    \"client_id\": \"test-id\"," +
+			"    \"client_secret\": \"test-secret\"," +
+			"    \"uri\": \"https://example.com\"" +
+			"  }";
 
 	@Test
 	public void deserializeDetails() throws Exception {

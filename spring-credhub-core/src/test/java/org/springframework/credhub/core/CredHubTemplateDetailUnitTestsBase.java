@@ -16,11 +16,13 @@
 
 package org.springframework.credhub.core;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
+import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -39,12 +41,34 @@ import static org.springframework.credhub.core.TypeUtils.getDetailsReference;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTemplateUnitTestsBase {
 	static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
 	public abstract WriteRequest<T> getRequest();
 	public abstract Class<T> getType();
+
+	public static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(ValueType type, T credential) {
+		return Arrays.asList(
+				new ResponseEntity<CredentialDetails<T>>(
+						new CredentialDetails<T>(CREDENTIAL_ID, NAME, type, credential),
+						OK),
+				new ResponseEntity<CredentialDetails<T>>(new CredentialDetails<T>(), UNAUTHORIZED)
+		);
+	}
+
+	public static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(ValueType type, T credential) {
+		return Arrays.asList(
+				new ResponseEntity<CredentialDetailsData<T>>(
+						new CredentialDetailsData<T>(
+								new CredentialDetails<T>(CREDENTIAL_ID, NAME,
+										type, credential)),
+						OK),
+				new ResponseEntity<CredentialDetailsData<T>>(
+						new CredentialDetailsData<T>(), UNAUTHORIZED)
+		);
+	}
 
 	void verifyWrite(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		WriteRequest<T> request = getRequest();

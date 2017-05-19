@@ -22,7 +22,7 @@ package org.springframework.credhub.support;
  * @author Scott Frederick
  */
 public class StringCredential {
-	protected String value;
+	protected final String value;
 
 	/**
 	 * Create a credential containing the specified value.

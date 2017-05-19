@@ -37,6 +37,12 @@ public enum ValueType {
 	VALUE("value"),
 
 	/**
+	 * A user credential consists of a username and password. The values
+	 * are provided by the client.
+	 */
+	USER("user"),
+
+	/**
 	 * A JSON credential consists of one or more fields in a JSON document. The keys and
 	 * values in the JSON document are determined by the client.
 	 */

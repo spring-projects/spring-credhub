@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.core;
 
-import org.junit.experimental.theories.DataPoint;
+import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -30,38 +30,23 @@ import org.springframework.credhub.support.ValueWriteRequest;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.ResponseEntity;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import java.util.List;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailValueUnitTests
 		extends CredHubTemplateDetailUnitTestsBase<ValueCredential> {
 	private static final ValueCredential CREDENTIAL = new ValueCredential("secret");
 
-	@DataPoint("detail-responses")
-	public static ResponseEntity<CredentialDetails<ValueCredential>> successfulDetailResponse =
-			new ResponseEntity<CredentialDetails<ValueCredential>>(
-			new CredentialDetails<ValueCredential>(CREDENTIAL_ID, NAME,
-					ValueType.VALUE, CREDENTIAL),
-			OK);
 
-	@DataPoint("detail-responses")
-	public static ResponseEntity<CredentialDetails<ValueCredential>> httpErrorDetailResponse =
-			new ResponseEntity<CredentialDetails<ValueCredential>>(
-			new CredentialDetails<ValueCredential>(), UNAUTHORIZED);
+	@DataPoints("detail-responses")
+	public static List<ResponseEntity<CredentialDetails<ValueCredential>>> buildDetailResponses() {
+		return buildDetailResponses(ValueType.VALUE, CREDENTIAL);
+	}
 
-	@DataPoint("data-responses")
-	public static ResponseEntity<CredentialDetailsData<ValueCredential>> successfulResponse =
-			new ResponseEntity<CredentialDetailsData<ValueCredential>>(
-			new CredentialDetailsData<ValueCredential>(
-					new CredentialDetails<ValueCredential>(CREDENTIAL_ID, NAME,
-							ValueType.VALUE, CREDENTIAL)),
-			OK);
-
-	@DataPoint("data-responses")
-	public static ResponseEntity<CredentialDetailsData<ValueCredential>> httpErrorResponse =
-			new ResponseEntity<CredentialDetailsData<ValueCredential>>(
-			new CredentialDetailsData<ValueCredential>(), UNAUTHORIZED);
+	@DataPoints("data-responses")
+	public static List<ResponseEntity<CredentialDetailsData<ValueCredential>>> buildDataResponses() {
+		return buildDataResponses(ValueType.VALUE, CREDENTIAL);
+	}
 
 	@Override
 	public WriteRequest<ValueCredential> getRequest() {

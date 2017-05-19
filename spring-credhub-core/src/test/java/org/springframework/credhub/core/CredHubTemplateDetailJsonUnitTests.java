@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.core;
 
-import org.junit.experimental.theories.DataPoint;
+import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -30,8 +30,7 @@ import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.WriteRequest;
 import org.springframework.http.ResponseEntity;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import java.util.List;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailJsonUnitTests
@@ -43,30 +42,15 @@ public class CredHubTemplateDetailJsonUnitTests
 		}
 	};
 
-	@DataPoint("detail-responses")
-	public static ResponseEntity<CredentialDetails<JsonCredential>> successfulDetailResponse =
-			new ResponseEntity<CredentialDetails<JsonCredential>>(
-			new CredentialDetails<JsonCredential>(CREDENTIAL_ID, NAME,
-					ValueType.JSON, CREDENTIAL),
-			OK);
+	@DataPoints("detail-responses")
+	public static List<ResponseEntity<CredentialDetails<JsonCredential>>> buildDetailResponses() {
+		return buildDetailResponses(ValueType.JSON, CREDENTIAL);
+	}
 
-	@DataPoint("detail-responses")
-	public static ResponseEntity<CredentialDetails<JsonCredential>> httpErrorDetailResponse =
-			new ResponseEntity<CredentialDetails<JsonCredential>>(
-			new CredentialDetails<JsonCredential>(), UNAUTHORIZED);
-
-	@DataPoint("data-responses")
-	public static ResponseEntity<CredentialDetailsData<JsonCredential>> successfulResponse =
-			new ResponseEntity<CredentialDetailsData<JsonCredential>>(
-			new CredentialDetailsData<JsonCredential>(
-					new CredentialDetails<JsonCredential>(CREDENTIAL_ID, NAME,
-							ValueType.JSON, CREDENTIAL)),
-			OK);
-
-	@DataPoint("data-responses")
-	public static ResponseEntity<CredentialDetailsData<JsonCredential>> httpErrorResponse =
-			new ResponseEntity<CredentialDetailsData<JsonCredential>>(
-			new CredentialDetailsData<JsonCredential>(), UNAUTHORIZED);
+	@DataPoints("data-responses")
+	public static List<ResponseEntity<CredentialDetailsData<JsonCredential>>> buildDataResponses() {
+		return buildDataResponses(ValueType.JSON, CREDENTIAL);
+	}
 
 	@Override
 	public WriteRequest<JsonCredential> getRequest() {

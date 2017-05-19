@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -26,11 +25,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public class ValueCredential extends StringCredential {
 	/**
+	 * Create an empty {@link ValueCredential}. Intended to be used internally for deserialization of responses.
+	 */
+	private ValueCredential() {
+		super(null);
+	}
+
+	/**
 	 * Create a {@link ValueCredential} containing the specified string value.
 	 *
 	 * @param value the value
 	 */
-	@JsonCreator
 	public ValueCredential(String value) {
 		super(value);
 	}

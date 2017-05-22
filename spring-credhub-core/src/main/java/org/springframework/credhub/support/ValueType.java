@@ -49,6 +49,12 @@ public enum ValueType {
 	RSA("rsa"),
 
 	/**
+	 * An SSH credential consists of a private key and/or public key. The values
+	 * are provided by the client.
+	 */
+	SSH("ssh"),
+
+	/**
 	 * A JSON credential consists of one or more fields in a JSON document. The keys and
 	 * values in the JSON document are determined by the client.
 	 */

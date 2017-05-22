@@ -25,10 +25,10 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class SshWriteRequestUnitTests extends WriteRequestUnitTestsBase {
+public class RsaCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
 	@Before
 	public void setUp() {
-		buildRequest(new SshCredential("public-key", "private-key"));
+		buildRequest(new RsaCredential("public-key", "private-key"));
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class SshWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("ssh")),
+						hasJsonPath("$.type", equalTo("rsa")),
 						hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
@@ -47,14 +47,14 @@ public class SshWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithPublicKey() throws Exception {
-		buildRequest(new SshCredential("public-key", null));
+		buildRequest(new RsaCredential("public-key", null));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("ssh")),
+						hasJsonPath("$.type", equalTo("rsa")),
 						hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasNoJsonPath("$.value.private_key")));
 
@@ -63,14 +63,14 @@ public class SshWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithPrivateKey() throws Exception {
-		buildRequest(new SshCredential(null, "private-key"));
+		buildRequest(new RsaCredential(null, "private-key"));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("ssh")),
+						hasJsonPath("$.type", equalTo("rsa")),
 						hasNoJsonPath("$.value.public_key"),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
@@ -79,13 +79,13 @@ public class SshWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void serializeWithNeitherKey() throws Exception {
-		buildRequest(new SshCredential(null, null));
+		buildRequest(new RsaCredential(null, null));
 
 		String jsonValue = serializeToJson(requestBuilder);
 	}
 
-	private void buildRequest(SshCredential value) {
-		requestBuilder = SshWriteRequest.builder()
+	private void buildRequest(RsaCredential value) {
+		requestBuilder = RsaCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.value(value);

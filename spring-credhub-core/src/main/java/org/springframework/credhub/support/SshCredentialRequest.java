@@ -18,59 +18,50 @@ package org.springframework.credhub.support;
 
 import org.springframework.util.Assert;
 
-import java.util.Map;
-
-import static org.springframework.credhub.support.ValueType.JSON;
+import static org.springframework.credhub.support.ValueType.SSH;
 
 /**
- * The details of a request to write a new or update an existing {@link JsonCredential} in CredHub.
+ * The details of a request to write a new or update an existing {@link SshCredential} in CredHub.
  *
  * @author Scott Frederick
  */
-public class JsonWriteRequest extends WriteRequest<JsonCredential> {
+public class SshCredentialRequest extends CredentialRequest<SshCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link JsonWriteRequest}.
+	 * to construct a {@link SshCredentialRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static JsonWriteRequestBuilder builder() {
-		return new JsonWriteRequestBuilder();
+	public static SshCredentialRequestBuilder builder() {
+		return new SshCredentialRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link JsonWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link SshCredentialRequest}s.
 	 */
-	public static class JsonWriteRequestBuilder extends
-			WriteRequestBuilder<JsonCredential, JsonWriteRequest, JsonWriteRequestBuilder> {
-
+	public static class SshCredentialRequestBuilder
+			extends CredentialRequestBuilder<SshCredential, SshCredentialRequest, SshCredentialRequestBuilder> {
 		@Override
-		protected JsonWriteRequest createTarget() {
-			return new JsonWriteRequest();
+		protected SshCredentialRequest createTarget() {
+			return new SshCredentialRequest();
 		}
 
 		@Override
-		protected JsonWriteRequestBuilder createBuilder() {
+		protected SshCredentialRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the value of a JSON credential.
+		 * Set the value of an SSH credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public JsonWriteRequestBuilder value(JsonCredential value) {
+		public SshCredentialRequestBuilder value(SshCredential value) {
 			Assert.notNull(value, "value must not be null");
-			targetObj.setType(JSON);
+			targetObj.setType(SSH);
 			targetObj.setValue(value);
 			return this;
 		}
-
-		public JsonWriteRequestBuilder value(Map<String, Object> value) {
-			value(new JsonCredential(value));
-			return this;
-		}
 	}
-
 }

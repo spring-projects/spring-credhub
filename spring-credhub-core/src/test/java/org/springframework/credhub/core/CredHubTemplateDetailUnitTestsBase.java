@@ -23,7 +23,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTemplateUnitTestsBase {
 	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
-	public abstract WriteRequest<T> getRequest();
+	public abstract CredentialRequest<T> getRequest();
 	public abstract Class<T> getType();
 
 	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(ValueType type, T credential) {
@@ -71,13 +71,13 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTempl
 	}
 
 	void verifyWrite(ResponseEntity<CredentialDetails<T>> expectedResponse) {
-		WriteRequest<T> request = getRequest();
+		CredentialRequest<T> request = getRequest();
 
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				getDetailsReference(getType());
 
 		when(restTemplate.exchange(BASE_URL_PATH, PUT,
-				new HttpEntity<WriteRequest<T>>(request), ref))
+				new HttpEntity<CredentialRequest<T>>(request), ref))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {

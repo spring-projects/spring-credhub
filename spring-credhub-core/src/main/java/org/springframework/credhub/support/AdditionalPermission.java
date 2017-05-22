@@ -28,7 +28,7 @@ import java.util.List;
  * or retrieve the credential.
  *
  * Objects of this type are constructed by the application and passed
- * as part of a {@link WriteRequest}.
+ * as part of a {@link CredentialRequest}.
  *
  * @author Scott Frederick
  */

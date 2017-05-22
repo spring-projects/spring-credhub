@@ -27,9 +27,9 @@ import org.junit.runner.RunWith;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.SshCredential;
-import org.springframework.credhub.support.SshWriteRequest;
+import org.springframework.credhub.support.SshCredentialRequest;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
@@ -48,8 +48,8 @@ public class CredHubTemplateDetailSshUnitTests
 	}
 
 	@Override
-	public WriteRequest<SshCredential> getRequest() {
-		return SshWriteRequest.builder()
+	public CredentialRequest<SshCredential> getRequest() {
+		return SshCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();

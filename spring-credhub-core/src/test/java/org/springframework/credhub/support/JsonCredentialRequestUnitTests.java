@@ -25,43 +25,30 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class ValueWriteRequestUnitTests extends WriteRequestUnitTestsBase {
+public class JsonCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
 
 	@Before
 	public void setUp() {
-		requestBuilder = ValueWriteRequest.builder()
+		requestBuilder = JsonCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true)
-				.value(new ValueCredential("somevalue"));
+				.value(new JsonCredential() {
+					{
+						put("data", "value");
+						put("test", true);
+					}
+				});
 	}
 
 	@Test
-	public void serializeWithValue() throws Exception {
+	public void serializeWithJsonValue() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
+				allOf(hasJsonPath("$.overwrite", equalTo(false)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("value")),
-						hasJsonPath("$.value", equalTo("somevalue"))));
-
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
-	}
-
-	@Test
-	public void serializeWithStringValue() throws Exception {
-		requestBuilder = ValueWriteRequest.builder()
-				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true)
-				.value("somevalue");
-
-		String jsonValue = serializeToJson(requestBuilder);
-
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("value")),
-						hasJsonPath("$.value", equalTo("somevalue"))));
+						hasJsonPath("$.type", equalTo("json")),
+						hasJsonPath("$.value.data", equalTo("value")),
+						hasJsonPath("$.value.test", equalTo(true))));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}

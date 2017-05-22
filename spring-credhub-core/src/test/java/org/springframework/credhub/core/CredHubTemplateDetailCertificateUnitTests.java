@@ -24,12 +24,12 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import org.springframework.credhub.support.CertificateWriteRequest;
+import org.springframework.credhub.support.CertificateCredentialRequest;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CertificateCredential;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
@@ -49,8 +49,8 @@ public class CredHubTemplateDetailCertificateUnitTests
 	}
 
 	@Override
-	public WriteRequest<CertificateCredential> getRequest() {
-		return CertificateWriteRequest.builder()
+	public CredentialRequest<CertificateCredential> getRequest() {
+		return CertificateCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();

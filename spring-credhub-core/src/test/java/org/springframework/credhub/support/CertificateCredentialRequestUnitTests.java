@@ -25,67 +25,70 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class RsaWriteRequestUnitTests extends WriteRequestUnitTestsBase {
+public class CertificateCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
 	@Before
 	public void setUp() {
-		buildRequest(new RsaCredential("public-key", "private-key"));
+		buildRequest(new CertificateCredential("cert", "ca", "private-key"));
 	}
 
 	@Test
-	public void serializeWithPublicAndPrivateKey() throws Exception {
+	public void serializeWithAllValues() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("rsa")),
-						hasJsonPath("$.value.public_key", equalTo("public-key")),
+						hasJsonPath("$.type", equalTo("certificate")),
+						hasJsonPath("$.value.certificate", equalTo("cert")),
+						hasJsonPath("$.value.ca", equalTo("ca")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test
-	public void serializeWithPublicKey() throws Exception {
-		buildRequest(new RsaCredential("public-key", null));
+	public void serializeWithCertOnly() throws Exception {
+		buildRequest(new CertificateCredential("cert", null, null));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("rsa")),
-						hasJsonPath("$.value.public_key", equalTo("public-key")),
+						hasJsonPath("$.type", equalTo("certificate")),
+						hasJsonPath("$.value.certificate", equalTo("cert")),
+						hasNoJsonPath("$.value.ca"),
 						hasNoJsonPath("$.value.private_key")));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test
-	public void serializeWithPrivateKey() throws Exception {
-		buildRequest(new RsaCredential(null, "private-key"));
+	public void serializeWithNoCert() throws Exception {
+		buildRequest(new CertificateCredential(null, "ca", "private-key"));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("rsa")),
-						hasNoJsonPath("$.value.public_key"),
+						hasJsonPath("$.type", equalTo("certificate")),
+						hasNoJsonPath("$.value.certificate"),
+						hasJsonPath("$.value.ca", equalTo("ca")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void serializeWithNeitherKey() throws Exception {
-		buildRequest(new RsaCredential(null, null));
+	public void serializeWithNoValues() throws Exception {
+		buildRequest(new CertificateCredential(null, null, null));
 
 		String jsonValue = serializeToJson(requestBuilder);
 	}
 
-	private void buildRequest(RsaCredential value) {
-		requestBuilder = RsaWriteRequest.builder()
+	private void buildRequest(CertificateCredential value) {
+		requestBuilder = CertificateCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.value(value);

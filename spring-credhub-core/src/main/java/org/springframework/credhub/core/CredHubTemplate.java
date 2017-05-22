@@ -27,7 +27,7 @@ import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
 import org.springframework.credhub.support.VcapServicesData;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -92,10 +92,10 @@ public class CredHubTemplate implements CredHubOperations {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> CredentialDetails<T> write(final WriteRequest<T> writeRequest) {
-		Assert.notNull(writeRequest, "writeRequest must not be null");
+	public <T> CredentialDetails<T> write(final CredentialRequest<T> credentialRequest) {
+		Assert.notNull(credentialRequest, "credentialRequest must not be null");
 
-		Class<T> credentialType = (Class<T>) writeRequest.getValue().getClass();
+		Class<T> credentialType = (Class<T>) credentialRequest.getValue().getClass();
 		final ParameterizedTypeReference<CredentialDetails<T>> ref = getDetailsReference(credentialType);
 
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
@@ -103,7 +103,7 @@ public class CredHubTemplate implements CredHubOperations {
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(BASE_URL_PATH, PUT,
-								new HttpEntity<WriteRequest<T>>(writeRequest), ref);
+								new HttpEntity<CredentialRequest<T>>(credentialRequest), ref);
 
 				throwExceptionOnError(response);
 

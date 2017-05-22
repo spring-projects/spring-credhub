@@ -18,48 +18,48 @@ package org.springframework.credhub.support;
 
 import org.springframework.util.Assert;
 
-import static org.springframework.credhub.support.ValueType.USER;
+import static org.springframework.credhub.support.ValueType.RSA;
 
 /**
- * The details of a request to write a new or update an existing {@link UserCredential} in CredHub.
+ * The details of a request to write a new or update an existing {@link RsaCredential} in CredHub.
  *
  * @author Scott Frederick
  */
-public class UserWriteRequest extends WriteRequest<UserCredential> {
+public class RsaCredentialRequest extends CredentialRequest<RsaCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link UserWriteRequest}.
+	 * to construct a {@link RsaCredentialRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static UserWriteRequestBuilder builder() {
-		return new UserWriteRequestBuilder();
+	public static RsaCredentialRequestBuilder builder() {
+		return new RsaCredentialRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link UserWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link RsaCredentialRequest}s.
 	 */
-	public static class UserWriteRequestBuilder
-			extends WriteRequestBuilder<UserCredential, UserWriteRequest, UserWriteRequestBuilder> {
+	public static class RsaCredentialRequestBuilder
+			extends CredentialRequestBuilder<RsaCredential, RsaCredentialRequest, RsaCredentialRequestBuilder> {
 		@Override
-		protected UserWriteRequest createTarget() {
-			return new UserWriteRequest();
+		protected RsaCredentialRequest createTarget() {
+			return new RsaCredentialRequest();
 		}
 
 		@Override
-		protected UserWriteRequestBuilder createBuilder() {
+		protected RsaCredentialRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the value of a user credential.
+		 * Set the value of an RSA credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public UserWriteRequestBuilder value(UserCredential value) {
+		public RsaCredentialRequestBuilder value(RsaCredential value) {
 			Assert.notNull(value, "value must not be null");
-			targetObj.setType(USER);
+			targetObj.setType(RSA);
 			targetObj.setValue(value);
 			return this;
 		}

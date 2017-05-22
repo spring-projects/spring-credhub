@@ -22,7 +22,7 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.VcapServicesData;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -36,10 +36,10 @@ public interface CredHubOperations {
 	 * Write a new credential to CredHub, or overwrite an existing credential with a new
 	 * value.
 	 *
-	 * @param writeRequest the credential to write to CredHub; must not be {@literal null}
+	 * @param credentialRequest the credential to write to CredHub; must not be {@literal null}
 	 * @return the details of the written credential
 	 */
-	<T> CredentialDetails<T> write(final WriteRequest<T> writeRequest);
+	<T> CredentialDetails<T> write(final CredentialRequest<T> credentialRequest);
 
 	/**
 	 * Retrieve a credential using its ID, as returned in a write request.

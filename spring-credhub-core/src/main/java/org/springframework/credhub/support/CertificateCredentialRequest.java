@@ -18,48 +18,48 @@ package org.springframework.credhub.support;
 
 import org.springframework.util.Assert;
 
-import static org.springframework.credhub.support.ValueType.SSH;
+import static org.springframework.credhub.support.ValueType.CERTIFICATE;
 
 /**
- * The details of a request to write a new or update an existing {@link SshCredential} in CredHub.
+ * The details of a request to write a new or update an existing {@link CertificateCredential} in CredHub.
  *
  * @author Scott Frederick
  */
-public class SshWriteRequest extends WriteRequest<SshCredential> {
+public class CertificateCredentialRequest extends CredentialRequest<CertificateCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link SshWriteRequest}.
+	 * to construct a {@link CertificateCredentialRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static SshWriteRequestBuilder builder() {
-		return new SshWriteRequestBuilder();
+	public static CertificateCredentialRequestBuilder builder() {
+		return new CertificateCredentialRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link SshWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link CertificateCredentialRequest}s.
 	 */
-	public static class SshWriteRequestBuilder
-			extends WriteRequestBuilder<SshCredential, SshWriteRequest, SshWriteRequestBuilder> {
+	public static class CertificateCredentialRequestBuilder
+			extends CredentialRequestBuilder<CertificateCredential, CertificateCredentialRequest, CertificateCredentialRequestBuilder> {
 		@Override
-		protected SshWriteRequest createTarget() {
-			return new SshWriteRequest();
+		protected CertificateCredentialRequest createTarget() {
+			return new CertificateCredentialRequest();
 		}
 
 		@Override
-		protected SshWriteRequestBuilder createBuilder() {
+		protected CertificateCredentialRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the value of an SSH credential.
+		 * Set the value of an certificate credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public SshWriteRequestBuilder value(SshCredential value) {
+		public CertificateCredentialRequestBuilder value(CertificateCredential value) {
 			Assert.notNull(value, "value must not be null");
-			targetObj.setType(SSH);
+			targetObj.setType(CERTIFICATE);
 			targetObj.setValue(value);
 			return this;
 		}

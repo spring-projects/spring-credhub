@@ -30,8 +30,8 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.JsonCredential;
-import org.springframework.credhub.support.JsonWriteRequest;
-import org.springframework.credhub.support.JsonWriteRequest.JsonWriteRequestBuilder;
+import org.springframework.credhub.support.JsonCredentialRequest;
+import org.springframework.credhub.support.JsonCredentialRequest.JsonCredentialRequestBuilder;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.util.StringUtils;
@@ -76,7 +76,7 @@ public class CredHubDemoController {
 
 	private CredentialDetails<JsonCredential> writeCredentials(Map<String, Object> value, Results results) {
 		try {
-			JsonWriteRequestBuilder requestBuilder = JsonWriteRequest.builder()
+			JsonCredentialRequestBuilder requestBuilder = JsonCredentialRequest.builder()
 					.overwrite(true)
 					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
 					.value(value);
@@ -86,7 +86,7 @@ public class CredHubDemoController {
 						AdditionalPermission.builder().app(appId).operation(READ).build());
 			}
 
-			JsonWriteRequest request = requestBuilder.build();
+			JsonCredentialRequest request = requestBuilder.build();
 
 			CredentialDetails<JsonCredential> credentialDetails = credHubTemplate.write(request);
 			saveResults(results, "Successfully wrote credentials: ", credentialDetails);

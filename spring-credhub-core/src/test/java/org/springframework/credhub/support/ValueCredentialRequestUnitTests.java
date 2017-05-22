@@ -18,7 +18,6 @@ package org.springframework.credhub.support;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.credhub.support.UserWriteRequest.UserWriteRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,44 +25,43 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class UserWriteRequestUnitTests extends WriteRequestUnitTestsBase {
+public class ValueCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
+
 	@Before
 	public void setUp() {
-		requestBuilder = UserWriteRequest.builder()
+		requestBuilder = ValueCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
-				.value(new UserCredential("myname", "secret"));
+				.value(new ValueCredential("somevalue"));
 	}
 
 	@Test
-	public void serializeWithUsernameAndPassword() throws Exception {
+	public void serializeWithValue() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("user")),
-						hasJsonPath("$.value.username", equalTo("myname")),
-						hasJsonPath("$.value.password", equalTo("secret"))));
+						hasJsonPath("$.type", equalTo("value")),
+						hasJsonPath("$.value", equalTo("somevalue"))));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test
-	public void serializeWithPassword() throws Exception {
-		UserWriteRequestBuilder builder = UserWriteRequest.builder()
+	public void serializeWithStringValue() throws Exception {
+		requestBuilder = ValueCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
-				.value(new UserCredential("secret"));
+				.value("somevalue");
 
-		String jsonValue = serializeToJson(builder);
+		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
-						hasJsonPath("$.type", equalTo("user")),
-						hasNoJsonPath("$.value.username"),
-						hasJsonPath("$.value.password", equalTo("secret"))));
+						hasJsonPath("$.type", equalTo("value")),
+						hasJsonPath("$.value", equalTo("somevalue"))));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}

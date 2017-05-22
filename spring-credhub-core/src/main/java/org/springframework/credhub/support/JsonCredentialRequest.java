@@ -18,50 +18,59 @@ package org.springframework.credhub.support;
 
 import org.springframework.util.Assert;
 
-import static org.springframework.credhub.support.ValueType.CERTIFICATE;
+import java.util.Map;
+
+import static org.springframework.credhub.support.ValueType.JSON;
 
 /**
- * The details of a request to write a new or update an existing {@link CertificateCredential} in CredHub.
+ * The details of a request to write a new or update an existing {@link JsonCredential} in CredHub.
  *
  * @author Scott Frederick
  */
-public class CertificateWriteRequest extends WriteRequest<CertificateCredential> {
+public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link CertificateWriteRequest}.
+	 * to construct a {@link JsonCredentialRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static CertificateWriteRequestBuilder builder() {
-		return new CertificateWriteRequestBuilder();
+	public static JsonCredentialRequestBuilder builder() {
+		return new JsonCredentialRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link CertificateWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link JsonCredentialRequest}s.
 	 */
-	public static class CertificateWriteRequestBuilder
-			extends WriteRequestBuilder<CertificateCredential, CertificateWriteRequest, CertificateWriteRequestBuilder> {
+	public static class JsonCredentialRequestBuilder extends
+			CredentialRequestBuilder<JsonCredential, JsonCredentialRequest, JsonCredentialRequestBuilder> {
+
 		@Override
-		protected CertificateWriteRequest createTarget() {
-			return new CertificateWriteRequest();
+		protected JsonCredentialRequest createTarget() {
+			return new JsonCredentialRequest();
 		}
 
 		@Override
-		protected CertificateWriteRequestBuilder createBuilder() {
+		protected JsonCredentialRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the value of an certificate credential.
+		 * Set the value of a JSON credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public CertificateWriteRequestBuilder value(CertificateCredential value) {
+		public JsonCredentialRequestBuilder value(JsonCredential value) {
 			Assert.notNull(value, "value must not be null");
-			targetObj.setType(CERTIFICATE);
+			targetObj.setType(JSON);
 			targetObj.setValue(value);
 			return this;
 		}
+
+		public JsonCredentialRequestBuilder value(Map<String, Object> value) {
+			value(new JsonCredential(value));
+			return this;
+		}
 	}
+
 }

@@ -25,9 +25,9 @@ import org.junit.runner.RunWith;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.PasswordCredential;
-import org.springframework.credhub.support.PasswordWriteRequest;
+import org.springframework.credhub.support.PasswordCredentialRequest;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -48,8 +48,8 @@ public class CredHubTemplateDetailPasswordUnitTests
 	}
 
 	@Override
-	public WriteRequest<PasswordCredential> getRequest() {
-		return PasswordWriteRequest.builder()
+	public CredentialRequest<PasswordCredential> getRequest() {
+		return PasswordCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();

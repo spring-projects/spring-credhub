@@ -25,9 +25,9 @@ import org.junit.runner.RunWith;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.JsonCredential;
-import org.springframework.credhub.support.JsonWriteRequest;
+import org.springframework.credhub.support.JsonCredentialRequest;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -53,8 +53,8 @@ public class CredHubTemplateDetailJsonUnitTests
 	}
 
 	@Override
-	public WriteRequest<JsonCredential> getRequest() {
-		return JsonWriteRequest.builder()
+	public CredentialRequest<JsonCredential> getRequest() {
+		return JsonCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();

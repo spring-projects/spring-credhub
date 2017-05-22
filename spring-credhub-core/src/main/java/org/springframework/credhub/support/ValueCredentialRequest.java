@@ -25,41 +25,39 @@ import static org.springframework.credhub.support.ValueType.VALUE;
  *
  * @author Scott Frederick
  */
-public class ValueWriteRequest extends WriteRequest<ValueCredential> {
+public class ValueCredentialRequest extends CredentialRequest<ValueCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link ValueWriteRequest}.
+	 * to construct a {@link ValueCredentialRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static ValueWriteRequestBuilder builder() {
-		return new ValueWriteRequestBuilder();
+	public static ValueCredentialRequestBuilder builder() {
+		return new ValueCredentialRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link ValueWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link ValueCredentialRequest}s.
 	 */
-	public static class ValueWriteRequestBuilder
-			extends WriteRequestBuilder<ValueCredential, ValueWriteRequest, ValueWriteRequestBuilder> {
+	public static class ValueCredentialRequestBuilder
+			extends CredentialRequestBuilder<ValueCredential, ValueCredentialRequest, ValueCredentialRequestBuilder> {
 		@Override
-		protected ValueWriteRequest createTarget() {
-			return new ValueWriteRequest();
+		protected ValueCredentialRequest createTarget() {
+			return new ValueCredentialRequest();
 		}
 
 		@Override
-		protected ValueWriteRequestBuilder createBuilder() {
+		protected ValueCredentialRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the value of a {@literal value} credential. A {@literal value} credential
-		 * consists of a single string value. The type of the credential is set to
-		 * {@link ValueType#VALUE}.
+		 * Set the value of a {@literal value} credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public ValueWriteRequestBuilder value(ValueCredential value) {
+		public ValueCredentialRequestBuilder value(ValueCredential value) {
 			Assert.notNull(value, "value must not be null");
 			targetObj.setType(VALUE);
 			targetObj.setValue(value);
@@ -72,7 +70,7 @@ public class ValueWriteRequest extends WriteRequest<ValueCredential> {
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public ValueWriteRequestBuilder value(String value) {
+		public ValueCredentialRequestBuilder value(String value) {
 			Assert.notNull(value, "value must not be null");
 			targetObj.setType(VALUE);
 			targetObj.setValue(new ValueCredential(value));

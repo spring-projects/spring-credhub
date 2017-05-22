@@ -27,11 +27,11 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class PasswordWriteRequestUnitTests extends WriteRequestUnitTestsBase {
+public class PasswordCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
 
 	@Before
 	public void setUp() {
-		requestBuilder = PasswordWriteRequest.builder()
+		requestBuilder = PasswordCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.value(new PasswordCredential("secret"));
@@ -52,7 +52,7 @@ public class PasswordWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithStringValue() throws Exception {
-		requestBuilder = PasswordWriteRequest.builder()
+		requestBuilder = PasswordCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.value("secret");

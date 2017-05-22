@@ -27,9 +27,9 @@ import org.junit.runner.RunWith;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.RsaCredential;
-import org.springframework.credhub.support.RsaWriteRequest;
+import org.springframework.credhub.support.RsaCredentialRequest;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
@@ -48,8 +48,8 @@ public class CredHubTemplateDetailRsaUnitTests
 	}
 
 	@Override
-	public WriteRequest<RsaCredential> getRequest() {
-		return RsaWriteRequest.builder()
+	public CredentialRequest<RsaCredential> getRequest() {
+		return RsaCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();

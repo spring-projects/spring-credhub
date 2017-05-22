@@ -26,8 +26,8 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.ValueCredential;
 import org.springframework.credhub.support.ValueType;
-import org.springframework.credhub.support.ValueWriteRequest;
-import org.springframework.credhub.support.WriteRequest;
+import org.springframework.credhub.support.ValueCredentialRequest;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -49,8 +49,8 @@ public class CredHubTemplateDetailValueUnitTests
 	}
 
 	@Override
-	public WriteRequest<ValueCredential> getRequest() {
-		return ValueWriteRequest.builder()
+	public CredentialRequest<ValueCredential> getRequest() {
+		return ValueCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();

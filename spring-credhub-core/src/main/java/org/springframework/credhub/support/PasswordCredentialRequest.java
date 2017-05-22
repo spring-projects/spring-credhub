@@ -25,29 +25,29 @@ import static org.springframework.credhub.support.ValueType.PASSWORD;
  *
  * @author Scott Frederick
  */
-public class PasswordWriteRequest extends WriteRequest<PasswordCredential> {
+public class PasswordCredentialRequest extends CredentialRequest<PasswordCredential> {
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link PasswordWriteRequest}.
+	 * to construct a {@link PasswordCredentialRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static PasswordWriteRequestBuilder builder() {
-		return new PasswordWriteRequestBuilder();
+	public static PasswordCredentialRequestBuilder builder() {
+		return new PasswordCredentialRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link PasswordWriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link PasswordCredentialRequest}s.
 	 */
-	public static class PasswordWriteRequestBuilder
-			extends WriteRequestBuilder<PasswordCredential, PasswordWriteRequest, PasswordWriteRequestBuilder> {
+	public static class PasswordCredentialRequestBuilder
+			extends CredentialRequestBuilder<PasswordCredential, PasswordCredentialRequest, PasswordCredentialRequestBuilder> {
 		@Override
-		protected PasswordWriteRequest createTarget() {
-			return new PasswordWriteRequest();
+		protected PasswordCredentialRequest createTarget() {
+			return new PasswordCredentialRequest();
 		}
 
 		@Override
-		protected PasswordWriteRequestBuilder createBuilder() {
+		protected PasswordCredentialRequestBuilder createBuilder() {
 			return this;
 		}
 
@@ -57,7 +57,7 @@ public class PasswordWriteRequest extends WriteRequest<PasswordCredential> {
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public PasswordWriteRequestBuilder value(PasswordCredential value) {
+		public PasswordCredentialRequestBuilder value(PasswordCredential value) {
 			Assert.notNull(value, "value must not be null");
 			targetObj.setType(PASSWORD);
 			targetObj.setValue(value);
@@ -70,7 +70,7 @@ public class PasswordWriteRequest extends WriteRequest<PasswordCredential> {
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
-		public PasswordWriteRequestBuilder value(String value) {
+		public PasswordCredentialRequestBuilder value(String value) {
 			Assert.notNull(value, "value must not be null");
 			targetObj.setType(PASSWORD);
 			targetObj.setValue(new PasswordCredential(value));

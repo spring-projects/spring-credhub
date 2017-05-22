@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
-public class WriteRequest<T> {
+public class CredentialRequest<T> {
 	private boolean overwrite;
 	private CredentialName name;
 	private ValueType valueType;
@@ -40,9 +40,9 @@ public class WriteRequest<T> {
 	private List<AdditionalPermission> additionalPermissions;
 
 	/**
-	 * Initialize a {@link WriteRequest}.
+	 * Initialize a {@link CredentialRequest}.
 	 */
-	WriteRequest() {
+	CredentialRequest() {
 		additionalPermissions = new ArrayList<AdditionalPermission>();
 	}
 
@@ -113,10 +113,10 @@ public class WriteRequest<T> {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof WriteRequest))
+		if (!(o instanceof CredentialRequest))
 			return false;
 
-		WriteRequest that = (WriteRequest) o;
+		CredentialRequest that = (CredentialRequest) o;
 
 		if (overwrite != that.overwrite)
 			return false;
@@ -141,7 +141,7 @@ public class WriteRequest<T> {
 
 	@Override
 	public String toString() {
-		return "WriteRequest{"
+		return "CredentialRequest{"
 				+ "overwrite=" + overwrite
 				+ ", name=" + name
 				+ ", valueType=" + valueType
@@ -151,17 +151,17 @@ public class WriteRequest<T> {
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link WriteRequest}s.
+	 * A builder that provides a fluent API for constructing {@link CredentialRequest}s.
 	 */
 	@SuppressWarnings("unchecked")
-	static abstract class WriteRequestBuilder<T, R extends WriteRequest<T>, B extends WriteRequestBuilder<T, R, B>> {
+	static abstract class CredentialRequestBuilder<T, R extends CredentialRequest<T>, B extends CredentialRequestBuilder<T, R, B>> {
 		private final B thisObj;
 		protected final R targetObj;
 
 		/**
-		 * Create a {@link WriteRequestBuilder}. Intended for internal use.
+		 * Create a {@link CredentialRequestBuilder}. Intended for internal use.
 		 */
-		WriteRequestBuilder() {
+		CredentialRequestBuilder() {
 			this.thisObj = createBuilder();
 			this.targetObj = createTarget();
 		}
@@ -254,9 +254,9 @@ public class WriteRequest<T> {
 		}
 
 		/**
-		 * Create a {@link WriteRequest} from the provided values.
+		 * Create a {@link CredentialRequest} from the provided values.
 		 *
-		 * @return a {@link WriteRequest}
+		 * @return a {@link CredentialRequest}
 		 */
 		public R build() {
 			return targetObj;

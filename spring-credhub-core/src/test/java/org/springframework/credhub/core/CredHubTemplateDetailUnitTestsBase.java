@@ -44,12 +44,12 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTemplateUnitTestsBase {
-	static final String CREDENTIAL_ID = "1111-1111-1111-1111";
+	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
 	public abstract WriteRequest<T> getRequest();
 	public abstract Class<T> getType();
 
-	public static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(ValueType type, T credential) {
+	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(ValueType type, T credential) {
 		return Arrays.asList(
 				new ResponseEntity<CredentialDetails<T>>(
 						new CredentialDetails<T>(CREDENTIAL_ID, NAME, type, credential),
@@ -58,7 +58,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTempl
 		);
 	}
 
-	public static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(ValueType type, T credential) {
+	static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(ValueType type, T credential) {
 		return Arrays.asList(
 				new ResponseEntity<CredentialDetailsData<T>>(
 						new CredentialDetailsData<T>(

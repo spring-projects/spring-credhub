@@ -16,8 +16,10 @@
 
 package org.springframework.credhub.support;
 
+import org.springframework.util.Assert;
+
 /**
- * Details of a {@literal user} credential.
+ * A user credential consists of an optional username and a password.
  *
  * @author Scott Frederick
  */
@@ -28,7 +30,7 @@ public class UserCredential {
 	/**
 	 * Create an empty {@link UserCredential}. Intended to be used internally for deserialization of responses.
 	 */
-	public UserCredential() {
+	private UserCredential() {
 		username = null;
 		password = null;
 	}
@@ -36,11 +38,24 @@ public class UserCredential {
 	/**
 	 * Create a {@link UserCredential} with the specified values.
 	 *
-	 * @param username the name of the user
-	 * @param password the password of the user
+	 * @param username the name of the user; must not be {@literal null}
+	 * @param password the password of the user; must not be {@literal null}
 	 */
 	public UserCredential(String username, String password) {
+		Assert.notNull(username, "username must not be null");
+		Assert.notNull(password, "password must not be null");
 		this.username = username;
+		this.password = password;
+	}
+
+	/**
+	 * Create a {@link UserCredential} with the specified password value.
+	 *
+	 * @param password the password of the user; must not be {@literal null}
+	 */
+	public UserCredential(String password) {
+		Assert.notNull(password, "password must not be null");
+		this.username = null;
 		this.password = password;
 	}
 

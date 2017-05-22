@@ -154,7 +154,7 @@ public class WriteRequest<T> {
 	 * A builder that provides a fluent API for constructing {@link WriteRequest}s.
 	 */
 	@SuppressWarnings("unchecked")
-	public static abstract class WriteRequestBuilder<T, R extends WriteRequest<T>, B extends WriteRequestBuilder<T, R, B>> {
+	static abstract class WriteRequestBuilder<T, R extends WriteRequest<T>, B extends WriteRequestBuilder<T, R, B>> {
 		private final B thisObj;
 		protected final R targetObj;
 

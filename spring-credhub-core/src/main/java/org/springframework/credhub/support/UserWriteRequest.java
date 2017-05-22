@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
 import static org.springframework.credhub.support.ValueType.USER;
 
 /**
- * The details of a request to write a new or update an existing user credential in CredHub.
+ * The details of a request to write a new or update an existing {@link UserCredential} in CredHub.
  *
  * @author Scott Frederick
  */
@@ -52,7 +52,7 @@ public class UserWriteRequest extends WriteRequest<UserCredential> {
 		}
 
 		/**
-		 * Set the value of a user credential. The type of the credential is set to {@link ValueType#USER}.
+		 * Set the value of a user credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder

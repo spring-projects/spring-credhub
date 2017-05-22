@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
 import static org.springframework.credhub.support.ValueType.PASSWORD;
 
 /**
- * The details of a request to write a new or update an existing password credential in CredHub.
+ * The details of a request to write a new or update an existing {@link PasswordCredential} in CredHub.
  *
  * @author Scott Frederick
  */
@@ -52,8 +52,7 @@ public class PasswordWriteRequest extends WriteRequest<PasswordCredential> {
 		}
 
 		/**
-		 * Set the value of a password credential. A password credential consists of
-		 * a single string value. The type of the credential is set to {@link ValueType#PASSWORD}.
+		 * Set the value of a password credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
@@ -62,6 +61,19 @@ public class PasswordWriteRequest extends WriteRequest<PasswordCredential> {
 			Assert.notNull(value, "value must not be null");
 			targetObj.setType(PASSWORD);
 			targetObj.setValue(value);
+			return this;
+		}
+
+		/**
+		 * Set the value of a password credential. 
+		 *
+		 * @param value the credential value; must not be {@literal null}
+		 * @return the builder
+		 */
+		public PasswordWriteRequestBuilder value(String value) {
+			Assert.notNull(value, "value must not be null");
+			targetObj.setType(PASSWORD);
+			targetObj.setValue(new PasswordCredential(value));
 			return this;
 		}
 	}

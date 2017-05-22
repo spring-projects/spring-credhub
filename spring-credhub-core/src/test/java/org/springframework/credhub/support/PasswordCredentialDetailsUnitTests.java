@@ -21,7 +21,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class CredentialDetailsPasswordUnitTests extends JsonParsingUnitTestsBase {
+public class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String PASSWORD_CREDENTIALS =
 			"  \"type\": \"password\"," +
 			"  \"value\": \"secret\"";

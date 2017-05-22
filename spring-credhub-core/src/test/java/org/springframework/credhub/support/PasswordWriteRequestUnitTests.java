@@ -49,4 +49,22 @@ public class PasswordWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
+
+	@Test
+	public void serializeWithStringValue() throws Exception {
+		requestBuilder = PasswordWriteRequest.builder()
+				.name(new SimpleCredentialName("example", "credential"))
+				.overwrite(true)
+				.value("secret");
+
+		String jsonValue = serializeToJson(requestBuilder);
+
+		assertThat(jsonValue,
+				allOf(hasJsonPath("$.overwrite", equalTo(true)),
+						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.type", equalTo("password")),
+						hasJsonPath("$.value", equalTo("secret"))));
+
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+	}
 }

@@ -18,6 +18,7 @@ package org.springframework.credhub.support;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.credhub.support.UserWriteRequest.UserWriteRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,7 +27,6 @@ import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
 public class UserWriteRequestUnitTests extends WriteRequestUnitTestsBase {
-
 	@Before
 	public void setUp() {
 		requestBuilder = UserWriteRequest.builder()
@@ -36,7 +36,7 @@ public class UserWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithValue() throws Exception {
+	public void serializeWithUsernameAndPassword() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
@@ -44,6 +44,25 @@ public class UserWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 						hasJsonPath("$.name", equalTo("/c/example/credential")),
 						hasJsonPath("$.type", equalTo("user")),
 						hasJsonPath("$.value.username", equalTo("myname")),
+						hasJsonPath("$.value.password", equalTo("secret"))));
+
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+	}
+
+	@Test
+	public void serializeWithPassword() throws Exception {
+		UserWriteRequestBuilder builder = UserWriteRequest.builder()
+				.name(new SimpleCredentialName("example", "credential"))
+				.overwrite(true)
+				.value(new UserCredential("secret"));
+
+		String jsonValue = serializeToJson(builder);
+
+		assertThat(jsonValue,
+				allOf(hasJsonPath("$.overwrite", equalTo(true)),
+						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.type", equalTo("user")),
+						hasNoJsonPath("$.value.username"),
 						hasJsonPath("$.value.password", equalTo("secret"))));
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));

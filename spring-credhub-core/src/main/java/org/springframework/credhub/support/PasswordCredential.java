@@ -20,22 +20,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A container type for a credential that contains a single string {@literal password} value.
+ * A password credential consists of a single string value.
  *
  * @author Scott Frederick
  */
 public class PasswordCredential extends StringCredential {
 	/**
-	 * Create an empty {@link PasswordCredential}. Intended to be used internally for deserialization of responses.
-	 */
-	public PasswordCredential() {
-		super(null);
-	}
-
-	/**
 	 * Create a {@link PasswordCredential} containing the specified password value.
 	 *
-	 * @param value the password
+	 * @param value the password; must not be {@literal null}
 	 */
 	@JsonCreator
 	public PasswordCredential(String value) {

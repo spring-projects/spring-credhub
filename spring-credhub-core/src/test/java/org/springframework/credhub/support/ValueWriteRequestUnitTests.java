@@ -47,4 +47,22 @@ public class ValueWriteRequestUnitTests extends WriteRequestUnitTestsBase {
 
 		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
+
+	@Test
+	public void serializeWithStringValue() throws Exception {
+		requestBuilder = ValueWriteRequest.builder()
+				.name(new SimpleCredentialName("example", "credential"))
+				.overwrite(true)
+				.value("somevalue");
+
+		String jsonValue = serializeToJson(requestBuilder);
+
+		assertThat(jsonValue,
+				allOf(hasJsonPath("$.overwrite", equalTo(true)),
+						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.type", equalTo("value")),
+						hasJsonPath("$.value", equalTo("somevalue"))));
+
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+	}
 }

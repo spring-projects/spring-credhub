@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A convenience type to alias a {@link Map} that contains JSON credentials.
+ * A JSON credential consists of one or more fields in a JSON document. The JSON document is represented as a
+ * {@literal Map} object, which will be converted to a JSON document before sending to CredHub.
  *
  * @author Scott Frederick
  */

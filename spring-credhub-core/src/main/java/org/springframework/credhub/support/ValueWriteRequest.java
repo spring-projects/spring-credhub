@@ -65,6 +65,19 @@ public class ValueWriteRequest extends WriteRequest<ValueCredential> {
 			targetObj.setValue(value);
 			return this;
 		}
+
+		/**
+		 * Set the value of a {@literal value} credential. 
+		 *
+		 * @param value the credential value; must not be {@literal null}
+		 * @return the builder
+		 */
+		public ValueWriteRequestBuilder value(String value) {
+			Assert.notNull(value, "value must not be null");
+			targetObj.setType(VALUE);
+			targetObj.setValue(new ValueCredential(value));
+			return this;
+		}
 	}
 
 }

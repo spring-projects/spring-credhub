@@ -43,6 +43,12 @@ public enum ValueType {
 	USER("user"),
 
 	/**
+	 * An RSA credential consists of a private key and/or public key. The values
+	 * are provided by the client.
+	 */
+	RSA("rsa"),
+
+	/**
 	 * A JSON credential consists of one or more fields in a JSON document. The keys and
 	 * values in the JSON document are determined by the client.
 	 */

@@ -16,12 +16,14 @@
 
 package org.springframework.credhub.support;
 
+import org.springframework.util.Assert;
+
 /**
  * A base type for a credential that contains a single string value.
  *
  * @author Scott Frederick
  */
-public class StringCredential {
+class StringCredential {
 	protected final String value;
 
 	/**
@@ -29,7 +31,8 @@ public class StringCredential {
 	 *
 	 * @param value the credential value
 	 */
-	protected StringCredential(String value) {
+	StringCredential(String value) {
+		Assert.notNull(value, "value must not be null");
 		this.value = value;
 	}
 

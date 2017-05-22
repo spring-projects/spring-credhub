@@ -16,30 +16,27 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 /**
- * A password credential consists of a single string value.
+ * An RSA credential consists of a public and/or private key. At least one of these key values must be provided.
  *
- * @author Scott Frederick
+ * @author Scott Frederick 
  */
-public class ValueCredential extends StringCredential {
+public class RsaCredential extends KeyPairCredential {
 	/**
-	 * Create a {@link ValueCredential} containing the specified string value.
-	 *
-	 * @param value the value
+	 * Create an empty {@link RsaCredential}. Intended to be used internally for deserialization of responses.
 	 */
-	public ValueCredential(String value) {
-		super(value);
+	private RsaCredential() {
+		super();
 	}
 
 	/**
-	 * Get the credential value.
+	 * Create an {@link RsaCredential} from the provided public and private key. At least one of the key
+	 * values must not be {@literal null}.
 	 *
-	 * @return the credential value
+	 * @param publicKey the public key
+	 * @param privateKey the private key
 	 */
-	@JsonValue
-	public String getValue() {
-		return value;
+	public RsaCredential(String publicKey, String privateKey) {
+		super(publicKey, privateKey);
 	}
 }

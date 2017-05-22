@@ -21,37 +21,35 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class CredentialDetailsUserUnitTests extends JsonParsingUnitTestsBase {
-	private static final String USER_CREDENTIALS =
-			"  \"type\": \"user\"," +
-			"  \"value\": {" +
-			"  \"username\": \"myname\"," +
-			"  \"password\": \"secret\"" +
-			"  }";
+public class ValueCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+	private static final String VALUE_CREDENTIALS =
+			"  \"type\": \"value\"," +
+			"  \"value\": \"somevalue\"";
 
 	@Test
 	public void deserializeDetails() throws Exception {
-		CredentialDetails<UserCredential> data = parseDetails(USER_CREDENTIALS, UserCredential.class);
+		CredentialDetails<ValueCredential> data =
+				parseDetails(VALUE_CREDENTIALS, ValueCredential.class);
 
 		assertDetails(data);
 	}
 
 	@Test
 	public void deserializeDetailsData() throws Exception {
-		CredentialDetailsData<UserCredential> response = parseDetailsData(USER_CREDENTIALS, UserCredential.class);
+		CredentialDetailsData<ValueCredential> response =
+				parseDetailsData(VALUE_CREDENTIALS, ValueCredential.class);
 
 		assertThat(response.getData().size(), equalTo(1));
 
-		CredentialDetails<UserCredential> data = response.getData().get(0);
+		CredentialDetails<ValueCredential> data = response.getData().get(0);
 
 		assertDetails(data);
 	}
 
-	private void assertDetails(CredentialDetails<UserCredential> data) {
+	private void assertDetails(CredentialDetails<ValueCredential> data) {
 		assertCommonDetails(data);
 		
-		assertThat(data.getValueType(), equalTo(ValueType.USER));
-		assertThat(data.getValue().getUsername(), equalTo("myname"));
-		assertThat(data.getValue().getPassword(), equalTo("secret"));
+		assertThat(data.getValueType(), equalTo(ValueType.VALUE));
+		assertThat(data.getValue().getValue(), equalTo("somevalue"));
 	}
 }

@@ -24,7 +24,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class CredentialDetailsJsonUnitTests extends JsonParsingUnitTestsBase {
+public class JsonCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String JSON_CREDENTIALS =
 			"  \"type\": \"json\"," +
 			"  \"value\": {" +

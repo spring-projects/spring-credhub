@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
+import org.springframework.credhub.support.CertificateCredential;
 import org.springframework.credhub.support.JsonCredential;
 import org.springframework.credhub.support.PasswordCredential;
 import org.springframework.credhub.support.RsaCredential;
@@ -68,6 +69,7 @@ public class JsonUtils {
 				new NamedType(UserCredential.class, ValueType.USER.type()),
 				new NamedType(RsaCredential.class, ValueType.RSA.type()),
 				new NamedType(SshCredential.class, ValueType.SSH.type()),
+				new NamedType(CertificateCredential.class, ValueType.CERTIFICATE.type()),
 				new NamedType(JsonCredential.class, ValueType.JSON.type())
 		);
 	}

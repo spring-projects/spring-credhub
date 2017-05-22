@@ -33,8 +33,8 @@ public class RsaCredential extends KeyPairCredential {
 	 * Create an {@link RsaCredential} from the provided public and private key. At least one of the key
 	 * values must not be {@literal null}.
 	 *
-	 * @param publicKey the public key
-	 * @param privateKey the private key
+	 * @param publicKey the public key; may be {@literal null} only if {@literal privateKey} is not null
+	 * @param privateKey the private key; may be {@literal null} only if {@literal publicKey} is not null
 	 */
 	public RsaCredential(String publicKey, String privateKey) {
 		super(publicKey, privateKey);

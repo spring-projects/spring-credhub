@@ -46,7 +46,7 @@ public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTes
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("password")),
 						hasJsonPath("$.parameters.length", equalTo(20)),
 						hasJsonPath("$.parameters.exclude_lower", equalTo(true)),
@@ -68,7 +68,7 @@ public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTes
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("password")),
 						hasNoJsonPath("$.parameters.length"),
 						hasNoJsonPath("$.parameters.exclude_lower"),

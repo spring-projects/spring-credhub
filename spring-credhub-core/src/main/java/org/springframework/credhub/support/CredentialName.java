@@ -47,8 +47,8 @@ public class CredentialName {
 
 		Assert.isTrue(split.length > 2, "name must include at least one segment separated by '/'");
 
-		// remove the "/c/" prefix
-		this.segments = Arrays.copyOfRange(split, 2, split.length);
+		// remove the "/" prefix
+		this.segments = Arrays.copyOfRange(split, 1, split.length);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class CredentialName {
 	 */
 	@JsonInclude
 	public String getName() {
-		return "/c/" + StringUtils.arrayToDelimitedString(segments, "/");
+		return "/" + StringUtils.arrayToDelimitedString(segments, "/");
 	}
 
 	@Override

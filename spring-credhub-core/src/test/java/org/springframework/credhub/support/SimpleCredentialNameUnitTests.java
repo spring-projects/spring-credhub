@@ -29,13 +29,13 @@ public class SimpleCredentialNameUnitTests {
 		CredentialName credentialName =
 				new SimpleCredentialName("myorg", "example", "credential-name");
 
-		assertThat(credentialName.getName(), equalTo("/c/myorg/example/credential-name"));
+		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
 	}
 	
 	@Test
 	public void simpleNameIsParsed() {
-		CredentialName credentialName = new CredentialName("/c/myorg/example/credential-name");
+		CredentialName credentialName = new CredentialName("/myorg/example/credential-name");
 
-		assertThat(credentialName.getName(), equalTo("/c/myorg/example/credential-name"));
+		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
 	}
 }

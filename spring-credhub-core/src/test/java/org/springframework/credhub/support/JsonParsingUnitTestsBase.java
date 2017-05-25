@@ -31,7 +31,7 @@ public abstract class JsonParsingUnitTestsBase {
 	protected final String CREDENTIAL_DETAIL_TEMPLATE =  "{" +
 			"  \"version_created_at\": \"" + TEST_DATE_STRING + "\"," +
 			"  \"id\": \"80cbb13f-7562-4e72-92de-f3ccf69eaa59\"," +
-			"  \"name\": \"/c/service-broker-name/service-instance-name/binding-id/credentials-json\"," +
+			"  \"name\": \"/service-broker-name/service-instance-name/binding-id/credentials-json\"," +
 			" %s" +
 			"}";
 
@@ -76,6 +76,6 @@ public abstract class JsonParsingUnitTestsBase {
 		assertThat(data.getVersionCreatedAt(), equalTo(testDate));
 		assertThat(data.getId(), equalTo("80cbb13f-7562-4e72-92de-f3ccf69eaa59"));
 		assertThat(data.getName().getName(), equalTo(
-				"/c/service-broker-name/service-instance-name/binding-id/credentials-json"));
+				"/service-broker-name/service-instance-name/binding-id/credentials-json"));
 	}
 }

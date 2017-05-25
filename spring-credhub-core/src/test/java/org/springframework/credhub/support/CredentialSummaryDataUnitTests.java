@@ -32,15 +32,15 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 		String json = "{\n" +
 				"  \"credentials\": [\n" +
 				"    {\n" +
-				"      \"name\": \"/c/deploy123/example1\",\n" +
+				"      \"name\": \"/deploy123/example1\",\n" +
 				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
 				"    },\n" +
 				"    {\n" +
-				"      \"name\": \"/c/deploy123/example2\",\n" +
+				"      \"name\": \"/deploy123/example2\",\n" +
 				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
 				"    },\n" +
 				"    {\n" +
-				"      \"name\": \"/c/deploy123/example3\",\n" +
+				"      \"name\": \"/deploy123/example3\",\n" +
 				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
 				"    }\n" +
 				"  ]\n" +
@@ -53,11 +53,11 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 		List<CredentialSummary> credentials = response.getCredentials();
 
 		assertThat(credentials.get(0).getName().getName(),
-				equalTo("/c/deploy123/example1"));
+				equalTo("/deploy123/example1"));
 		assertThat(credentials.get(1).getName().getName(),
-				equalTo("/c/deploy123/example2"));
+				equalTo("/deploy123/example2"));
 		assertThat(credentials.get(2).getName().getName(),
-				equalTo("/c/deploy123/example3"));
+				equalTo("/deploy123/example3"));
 
 		for (CredentialSummary credential : credentials) {
 			assertThat(credential.getVersionCreatedAt(), equalTo(testDate));

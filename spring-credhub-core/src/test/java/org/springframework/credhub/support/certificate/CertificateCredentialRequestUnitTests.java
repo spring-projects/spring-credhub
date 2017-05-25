@@ -40,7 +40,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("certificate")),
 						hasJsonPath("$.value.certificate", equalTo("cert")),
 						hasJsonPath("$.value.ca", equalTo("ca")),
@@ -57,7 +57,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("certificate")),
 						hasJsonPath("$.value.certificate", equalTo("cert")),
 						hasNoJsonPath("$.value.ca"),
@@ -74,7 +74,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("certificate")),
 						hasNoJsonPath("$.value.certificate"),
 						hasJsonPath("$.value.ca", equalTo("ca")),

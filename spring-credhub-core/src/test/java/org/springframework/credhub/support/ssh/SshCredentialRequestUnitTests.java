@@ -40,7 +40,7 @@ public class SshCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("ssh")),
 						hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
@@ -56,7 +56,7 @@ public class SshCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("ssh")),
 						hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasNoJsonPath("$.value.private_key")));
@@ -72,7 +72,7 @@ public class SshCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("ssh")),
 						hasNoJsonPath("$.value.public_key"),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));

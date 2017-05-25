@@ -45,7 +45,7 @@ public class ServiceInstanceCredentialName extends CredentialName {
 	 */
 	ServiceInstanceCredentialName(String serviceBrokerName, String serviceOfferingName,
 								  String serviceBindingId, String credentialName) {
-		super(serviceBrokerName, serviceOfferingName, serviceBindingId, credentialName);
+		super("c", serviceBrokerName, serviceOfferingName, serviceBindingId, credentialName);
 	}
 
 	/**

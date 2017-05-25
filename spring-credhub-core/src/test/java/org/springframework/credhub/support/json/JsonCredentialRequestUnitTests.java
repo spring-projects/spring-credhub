@@ -48,7 +48,7 @@ public class JsonCredentialRequestUnitTests extends CredentialRequestUnitTestsBa
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(false)),
-						hasJsonPath("$.name", equalTo("/c/example/credential")),
+						hasJsonPath("$.name", equalTo("/example/credential")),
 						hasJsonPath("$.type", equalTo("json")),
 						hasJsonPath("$.value.data", equalTo("value")),
 						hasJsonPath("$.value.test", equalTo(true))));

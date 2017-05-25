@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
-class StringCredential {
+public class StringCredential {
 	protected final String value;
 
 	/**
@@ -31,7 +31,7 @@ class StringCredential {
 	 *
 	 * @param value the credential value
 	 */
-	StringCredential(String value) {
+	protected StringCredential(String value) {
 		Assert.notNull(value, "value must not be null");
 		this.value = value;
 	}

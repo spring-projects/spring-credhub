@@ -20,13 +20,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.credhub.core.JsonUtils;
+
 import org.springframework.credhub.support.CredentialRequest.CredentialRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.credhub.support.AdditionalPermission.Operation.READ;
 import static org.springframework.credhub.support.AdditionalPermission.Operation.WRITE;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
@@ -39,11 +38,6 @@ public abstract class CredentialRequestUnitTestsBase {
 	@Before
 	public void setUpCredentialRequestUnitTests() {
 		mapper = JsonUtils.buildObjectMapper();
-	}
-
-	@Test
-	public void typeIsSerializable() {
-		assertTrue(mapper.canSerialize(CredentialRequest.class));
 	}
 
 	@Test
@@ -91,7 +85,7 @@ public abstract class CredentialRequestUnitTestsBase {
 						equalTo("read"))));
 	}
 
-	<T extends CredentialRequestBuilder> String serializeToJson(T requestBuilder)
+	protected <T extends CredentialRequestBuilder> String serializeToJson(T requestBuilder)
 			throws JsonProcessingException {
 		String jsonValue = mapper.writeValueAsString(requestBuilder.build());
 		assertThat(jsonValue, isJson());

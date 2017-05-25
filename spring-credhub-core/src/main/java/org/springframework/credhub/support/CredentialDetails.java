@@ -31,7 +31,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 	private String id;
 	
 	@JsonProperty("type")
-	private ValueType valueType;
+	private CredentialType credentialType;
 
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
 	private T value;
@@ -49,14 +49,14 @@ public class CredentialDetails<T> extends CredentialSummary {
 	 *
 	 * @param id the CredHub-generated unique ID of the credential
 	 * @param name the client-provided name of the credential
-	 * @param valueType the {@link ValueType} of the credential
+	 * @param credentialType the {@link CredentialType} of the credential
 	 * @param value the client-provided value for the credential
 	 * created
 	 */
-	public CredentialDetails(String id, CredentialName name, ValueType valueType, T value) {
+	public CredentialDetails(String id, CredentialName name, CredentialType credentialType, T value) {
 		super(name);
 		this.id = id;
-		this.valueType = valueType;
+		this.credentialType = credentialType;
 		this.value = value;
 	}
 
@@ -70,12 +70,12 @@ public class CredentialDetails<T> extends CredentialSummary {
 	}
 
 	/**
-	 * Get the client-provided {@link ValueType} of the credential.
+	 * Get the client-provided {@link CredentialType} of the credential.
 	 *
 	 * @return the credential type
 	 */
-	public ValueType getValueType() {
-		return this.valueType;
+	public CredentialType getCredentialType() {
+		return this.credentialType;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 
 		if (id != null ? !id.equals(that.id) : that.id != null)
 			return false;
-		if (valueType != that.valueType)
+		if (credentialType != that.credentialType)
 			return false;
 		if (value != null ? !value.equals(that.value) : that.value != null)
 			return false;
@@ -109,7 +109,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (valueType != null ? valueType.hashCode() : 0);
+		result = 31 * result + (credentialType != null ? credentialType.hashCode() : 0);
 		result = 31 * result + (value != null ? value.hashCode() : 0);
 		result = 31 * result
 				+ (versionCreatedAt != null ? versionCreatedAt.hashCode() : 0);
@@ -121,7 +121,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 		return "CredentialDetails{"
 				+ "id='" + id + '\''
 				+ ", name=" + name
-				+ ", valueType=" + valueType
+				+ ", credentialType=" + credentialType
 				+ ", value=" + value
 				+ ", versionCreatedAt='" + versionCreatedAt + '\'' +
 				'}';

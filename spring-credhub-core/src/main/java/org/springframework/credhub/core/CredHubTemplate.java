@@ -26,10 +26,10 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -41,6 +41,7 @@ import org.springframework.web.client.RestTemplate;
 import static org.springframework.credhub.core.TypeUtils.getDetailsDataReference;
 import static org.springframework.credhub.core.TypeUtils.getDetailsReference;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 
 /**
@@ -104,6 +105,28 @@ public class CredHubTemplate implements CredHubOperations {
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(BASE_URL_PATH, PUT,
 								new HttpEntity<CredentialRequest<T>>(credentialRequest), ref);
+
+				throwExceptionOnError(response);
+
+				return response.getBody();
+			}
+		});
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> CredentialDetails<T> generate(final ParametersRequest<T> parametersRequest) {
+		Assert.notNull(parametersRequest, "generateRequest must not be null");
+
+		Class<T> credentialType = (Class<T>) parametersRequest.getParameters().getClass();
+		final ParameterizedTypeReference<CredentialDetails<T>> ref = getDetailsReference(credentialType);
+
+		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
+			@Override
+			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
+				ResponseEntity<CredentialDetails<T>> response =
+						restOperations.exchange(BASE_URL_PATH, POST,
+								new HttpEntity<ParametersRequest<T>>(parametersRequest), ref);
 
 				throwExceptionOnError(response);
 
@@ -234,7 +257,7 @@ public class CredHubTemplate implements CredHubOperations {
 				Map<String, VcapServicesData> wrappedServiceData = wrapServiceDataRequest(serviceData);
 
 				ResponseEntity<Map<String, VcapServicesData>> response = restOperations
-						.exchange(INTERPOLATE_URL_PATH, HttpMethod.POST,
+						.exchange(INTERPOLATE_URL_PATH, POST,
 								new HttpEntity<Map<String, VcapServicesData>>(wrappedServiceData), mapType());
 
 				throwExceptionOnError(response);

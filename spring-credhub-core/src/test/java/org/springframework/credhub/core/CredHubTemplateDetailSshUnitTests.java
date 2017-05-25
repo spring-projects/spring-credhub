@@ -26,10 +26,10 @@ import org.junit.runner.RunWith;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
-import org.springframework.credhub.support.SshCredential;
-import org.springframework.credhub.support.SshCredentialRequest;
-import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.CredentialRequest;
+import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.ssh.SshCredential;
+import org.springframework.credhub.support.ssh.SshCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
@@ -39,12 +39,12 @@ public class CredHubTemplateDetailSshUnitTests
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<SshCredential>>> buildDetailResponses() {
-		return buildDetailResponses(ValueType.RSA, CREDENTIAL);
+		return buildDetailResponses(CredentialType.RSA, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
 	public static List<ResponseEntity<CredentialDetailsData<SshCredential>>> buildDataResponses() {
-		return buildDataResponses(ValueType.RSA, CREDENTIAL);
+		return buildDataResponses(CredentialType.RSA, CREDENTIAL);
 	}
 
 	@Override

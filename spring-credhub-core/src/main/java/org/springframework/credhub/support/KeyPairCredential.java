@@ -23,14 +23,14 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
-class KeyPairCredential {
+public class KeyPairCredential {
 	private final String publicKey;
 	private final String privateKey;
 
 	/**
 	 * Create an empty {@link KeyPairCredential}. Intended to be used internally for deserialization of responses.
 	 */
-	KeyPairCredential() {
+	protected KeyPairCredential() {
 		publicKey = null;
 		privateKey = null;
 	}
@@ -41,7 +41,7 @@ class KeyPairCredential {
 	 * @param publicKey the public key
 	 * @param privateKey the private key
 	 */
-	KeyPairCredential(String publicKey, String privateKey) {
+	protected KeyPairCredential(String publicKey, String privateKey) {
 		Assert.isTrue(publicKey != null || privateKey != null,
 				"one of publicKey or privateKey must not be null");
 

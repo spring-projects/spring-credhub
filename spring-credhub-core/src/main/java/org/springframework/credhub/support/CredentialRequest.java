@@ -23,8 +23,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import org.springframework.util.Assert;
 
 /**
@@ -32,46 +30,16 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
-public class CredentialRequest<T> {
-	private boolean overwrite;
-	private CredentialName name;
-	private ValueType valueType;
+public class CredentialRequest<T> extends CredHubRequest {
 	private T value;
 	private List<AdditionalPermission> additionalPermissions;
 
 	/**
 	 * Initialize a {@link CredentialRequest}.
 	 */
-	CredentialRequest() {
+	protected CredentialRequest(CredentialType type) {
+		this.credentialType = type;
 		additionalPermissions = new ArrayList<AdditionalPermission>();
-	}
-
-	/**
-	 * Get the value of the {@literal boolean} flag indicating whether the CredHub
-	 * should create a new credential or update an existing credential.
-	 *
-	 * @return the {@literal boolean} overwrite value
-	 */
-	public boolean isOverwrite() {
-		return this.overwrite;
-	}
-
-	void setOverwrite(boolean overwrite) {
-		this.overwrite = overwrite;
-	}
-
-	/**
-	 * Get the {@link CredentialName} of the credential.
-	 *
-	 * @return the name of the credential
-	 */
-	@JsonInclude
-	public String getName() {
-		return name.getName();
-	}
-
-	void setName(CredentialName name) {
-		this.name = name;
 	}
 
 	/**
@@ -83,21 +51,8 @@ public class CredentialRequest<T> {
 		return this.value;
 	}
 
-	void setValue(T value) {
+	protected void setValue(T value) {
 		this.value = value;
-	}
-
-	/**
-	 * Get the {@link ValueType} of the credential.
-	 *
- 	 * @return the type of the credential
-	 */
-	public String getType() {
-		return valueType.type();
-	}
-
-	void setType(ValueType valueType) {
-		this.valueType = valueType;
 	}
 
 	/**
@@ -122,7 +77,7 @@ public class CredentialRequest<T> {
 			return false;
 		if (!name.equals(that.name))
 			return false;
-		if (valueType != that.valueType)
+		if (credentialType != that.credentialType)
 			return false;
 		if (!value.equals(that.value))
 			return false;
@@ -133,7 +88,7 @@ public class CredentialRequest<T> {
 	public int hashCode() {
 		int result = (overwrite ? 1 : 0);
 		result = 31 * result + name.hashCode();
-		result = 31 * result + valueType.hashCode();
+		result = 31 * result + credentialType.hashCode();
 		result = 31 * result + value.hashCode();
 		result = 31 * result + additionalPermissions.hashCode();
 		return result;
@@ -144,7 +99,7 @@ public class CredentialRequest<T> {
 		return "CredentialRequest{"
 				+ "overwrite=" + overwrite
 				+ ", name=" + name
-				+ ", valueType=" + valueType
+				+ ", credentialType=" + credentialType
 				+ ", value=" + value
 				+ ", additionalPermissions=" + additionalPermissions
 				+ '}';
@@ -154,14 +109,14 @@ public class CredentialRequest<T> {
 	 * A builder that provides a fluent API for constructing {@link CredentialRequest}s.
 	 */
 	@SuppressWarnings("unchecked")
-	static abstract class CredentialRequestBuilder<T, R extends CredentialRequest<T>, B extends CredentialRequestBuilder<T, R, B>> {
+	protected static abstract class CredentialRequestBuilder<T, R extends CredentialRequest<T>, B extends CredentialRequestBuilder<T, R, B>> {
 		private final B thisObj;
 		protected final R targetObj;
 
 		/**
 		 * Create a {@link CredentialRequestBuilder}. Intended for internal use.
 		 */
-		CredentialRequestBuilder() {
+		protected CredentialRequestBuilder() {
 			this.thisObj = createBuilder();
 			this.targetObj = createTarget();
 		}
@@ -181,8 +136,7 @@ public class CredentialRequest<T> {
 		protected abstract B createBuilder();
 
 		/**
-		 * Set the value of a credential. In concrete builders, this should set the value
-		 * and the value type. 
+		 * Set the value of a credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder

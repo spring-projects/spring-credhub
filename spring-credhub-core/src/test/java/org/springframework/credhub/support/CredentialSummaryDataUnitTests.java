@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import org.springframework.credhub.support.json.JsonCredential;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;

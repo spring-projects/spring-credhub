@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.credhub.support.JsonUtils;
 import org.springframework.credhub.support.ServiceInstanceCredentialName;
 import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.http.HttpEntity;

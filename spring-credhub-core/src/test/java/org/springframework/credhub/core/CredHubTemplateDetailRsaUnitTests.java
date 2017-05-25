@@ -26,10 +26,10 @@ import org.junit.runner.RunWith;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
-import org.springframework.credhub.support.RsaCredential;
-import org.springframework.credhub.support.RsaCredentialRequest;
-import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.CredentialRequest;
+import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.rsa.RsaCredential;
+import org.springframework.credhub.support.rsa.RsaCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
@@ -39,12 +39,12 @@ public class CredHubTemplateDetailRsaUnitTests
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<RsaCredential>>> buildDetailResponses() {
-		return buildDetailResponses(ValueType.RSA, CREDENTIAL);
+		return buildDetailResponses(CredentialType.RSA, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
 	public static List<ResponseEntity<CredentialDetailsData<RsaCredential>>> buildDataResponses() {
-		return buildDataResponses(ValueType.RSA, CREDENTIAL);
+		return buildDataResponses(CredentialType.RSA, CREDENTIAL);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ package org.springframework.credhub.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.credhub.support.JsonUtils;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;

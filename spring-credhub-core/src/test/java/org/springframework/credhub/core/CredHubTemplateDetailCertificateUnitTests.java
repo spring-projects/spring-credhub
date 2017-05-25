@@ -24,12 +24,12 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import org.springframework.credhub.support.CertificateCredentialRequest;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
-import org.springframework.credhub.support.CertificateCredential;
-import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.CredentialRequest;
+import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.credhub.support.certificate.CertificateCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
@@ -40,12 +40,12 @@ public class CredHubTemplateDetailCertificateUnitTests
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<CertificateCredential>>> buildDetailResponses() {
-		return buildDetailResponses(ValueType.CERTIFICATE, CREDENTIAL);
+		return buildDetailResponses(CredentialType.CERTIFICATE, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
 	public static List<ResponseEntity<CredentialDetailsData<CertificateCredential>>> buildDataResponses() {
-		return buildDataResponses(ValueType.CERTIFICATE, CREDENTIAL);
+		return buildDataResponses(CredentialType.CERTIFICATE, CREDENTIAL);
 	}
 
 	@Override

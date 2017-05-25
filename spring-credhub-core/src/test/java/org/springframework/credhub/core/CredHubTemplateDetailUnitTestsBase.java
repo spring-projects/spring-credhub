@@ -22,8 +22,8 @@ import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
-import org.springframework.credhub.support.ValueType;
 import org.springframework.credhub.support.CredentialRequest;
+import org.springframework.credhub.support.CredentialType;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +49,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTempl
 	public abstract CredentialRequest<T> getRequest();
 	public abstract Class<T> getType();
 
-	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(ValueType type, T credential) {
+	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {
 		return Arrays.asList(
 				new ResponseEntity<CredentialDetails<T>>(
 						new CredentialDetails<T>(CREDENTIAL_ID, NAME, type, credential),
@@ -58,7 +58,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTempl
 		);
 	}
 
-	static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(ValueType type, T credential) {
+	static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(CredentialType type, T credential) {
 		return Arrays.asList(
 				new ResponseEntity<CredentialDetailsData<T>>(
 						new CredentialDetailsData<T>(

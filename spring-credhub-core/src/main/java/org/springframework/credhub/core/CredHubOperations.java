@@ -21,12 +21,13 @@ import java.util.List;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.VcapServicesData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Specifies the main interaction with CredHub to save, retrieve,
+ * Specifies the main interaction with CredHub to save, generate, retrieve,
  * and delete credentials.
  *
  * @author Scott Frederick
@@ -40,6 +41,16 @@ public interface CredHubOperations {
 	 * @return the details of the written credential
 	 */
 	<T> CredentialDetails<T> write(final CredentialRequest<T> credentialRequest);
+
+	/**
+	 * Generate a new credential in CredHub, or overwrite an existing credential with a new
+	 * generated value.
+	 *
+	 * @param parametersRequest the parameters of the new credential to generate in CredHub;
+	 *                                must not be {@literal null}
+	 * @return the details of the generated credential
+	 */
+	<T> CredentialDetails<T> generate(ParametersRequest<T> parametersRequest);
 
 	/**
 	 * Retrieve a credential using its ID, as returned in a write request.

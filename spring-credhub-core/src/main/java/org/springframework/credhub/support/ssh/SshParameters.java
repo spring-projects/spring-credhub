@@ -17,6 +17,7 @@
 package org.springframework.credhub.support.ssh;
 
 import org.springframework.credhub.support.KeyLength;
+import org.springframework.credhub.support.rsa.KeyParameters;
 import org.springframework.util.Assert;
 
 /**
@@ -25,15 +26,14 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
-public class SshParameters {
-	private final KeyLength keyLength;
+public class SshParameters extends KeyParameters {
 	private final String sshComment;
 
 	/**
 	 * Create a {@link SshParameters} using defaults for all parameter values.
 	 */
 	private SshParameters() {
-		keyLength = null;
+		super();
 		sshComment = null;
 	}
 
@@ -43,8 +43,8 @@ public class SshParameters {
 	 * @param sshComment comment for the generated SSH key; must not be {@literal null}
 	 */
 	public SshParameters(String sshComment) {
+		super();
 		Assert.notNull(sshComment, "sshComment must not be null");
-		this.keyLength = null;
 		this.sshComment = sshComment;
 	}
 
@@ -54,8 +54,8 @@ public class SshParameters {
 	 * @param keyLength length of generated SSH key; must not be {@literal null}
 	 */
 	public SshParameters(KeyLength keyLength) {
+		super(keyLength);
 		Assert.notNull(keyLength, "keyLength must not be null");
-		this.keyLength = keyLength;
 		this.sshComment = null;
 	}
 
@@ -66,19 +66,10 @@ public class SshParameters {
 	 * @param sshComment comment for the generated SSH key; must not be {@literal null}
 	 */
 	public SshParameters(KeyLength keyLength, String sshComment) {
+		super(keyLength);
 		Assert.notNull(keyLength, "keyLength must not be null");
 		Assert.notNull(sshComment, "sshComment must not be null");
-		this.keyLength = keyLength;
 		this.sshComment = sshComment;
-	}
-
-	/**
-	 * Get the value of the key length parameter.
-	 *
-	 * @return the value of the parameter; will be {@literal null} if not explicitly set
-	 */
-	public Integer getKeyLength() {
-		return keyLength == null ? null : keyLength.getLength();
 	}
 
 	/**

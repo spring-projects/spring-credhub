@@ -28,15 +28,22 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.certificate.CertificateCredential;
 import org.springframework.credhub.support.certificate.CertificateCredentialRequest;
+import org.springframework.credhub.support.certificate.CertificateParameters;
+import org.springframework.credhub.support.certificate.CertificateParametersRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailCertificateUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<CertificateCredential, Void> {
+		extends CredHubTemplateDetailUnitTestsBase<CertificateCredential, CertificateParameters> {
 	private static final CertificateCredential CREDENTIAL =
 			new CertificateCredential("certificate", "authority", "private-key");
+	private static final CertificateParameters PARAMETERS = CertificateParameters.builder()
+			.commonName("common")
+			.credential("credential")
+			.build();
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<CertificateCredential>>> buildDetailResponses() {
@@ -57,6 +64,14 @@ public class CredHubTemplateDetailCertificateUnitTests
 	}
 
 	@Override
+	public ParametersRequest<CertificateParameters> getGenerateRequest() {
+		return CertificateParametersRequest.builder()
+				.name(NAME)
+				.parameters(PARAMETERS)
+				.build();
+	}
+
+	@Override
 	public Class<CertificateCredential> getType() {
 		return CertificateCredential.class;
 	}
@@ -65,6 +80,12 @@ public class CredHubTemplateDetailCertificateUnitTests
 	public void write(@FromDataPoints("detail-responses")
 					  ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
+	}
+
+	@Theory
+	public void generate(@FromDataPoints("detail-responses")
+					  ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+		verifyGenerate(expectedResponse);
 	}
 
 	@Theory

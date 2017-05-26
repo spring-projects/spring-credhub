@@ -17,29 +17,24 @@
 package org.springframework.credhub.support.rsa;
 
 import org.springframework.credhub.support.KeyLength;
-import org.springframework.util.Assert;
 
-/**
- * Parameters for generating a new RSA credential. All parameters are optional; if not specified,
- * CredHub-provided defaults will be used.
- *
- * @author Scott Frederick
- */
-public class RsaParameters extends KeyParameters {
-	/**
-	 * Create a {@link RsaParameters} using defaults for all parameter values.
-	 */
-	private RsaParameters() {
-		super();
+public class KeyParameters {
+	protected final KeyLength keyLength;
+
+	protected KeyParameters() {
+		this.keyLength = null;
+	}
+
+	protected KeyParameters(KeyLength keyLength) {
+		this.keyLength = keyLength;
 	}
 
 	/**
-	 * Create a {@link RsaParameters} using the specified values.
+	 * Get the value of the key length parameter.
 	 *
-	 * @param keyLength length of generated RSA key; must not be {@literal null}
+	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public RsaParameters(KeyLength keyLength) {
-		super(keyLength);
-		Assert.notNull(keyLength, "keyLength must not be null");
+	public Integer getKeyLength() {
+		return keyLength == null ? null : keyLength.getLength();
 	}
 }

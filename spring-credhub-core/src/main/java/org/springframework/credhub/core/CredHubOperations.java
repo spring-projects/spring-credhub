@@ -50,7 +50,7 @@ public interface CredHubOperations {
 	 *                                must not be {@literal null}
 	 * @return the details of the generated credential
 	 */
-	<T> CredentialDetails<T> generate(ParametersRequest<T> parametersRequest);
+	<T, P> CredentialDetails<T> generate(ParametersRequest<P> parametersRequest);
 
 	/**
 	 * Retrieve a credential using its ID, as returned in a write request.

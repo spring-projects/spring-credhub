@@ -28,14 +28,19 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.KeyLength;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.ssh.SshCredential;
 import org.springframework.credhub.support.ssh.SshCredentialRequest;
+import org.springframework.credhub.support.ssh.SshParameters;
+import org.springframework.credhub.support.ssh.SshParametersRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailSshUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<SshCredential> {
+		extends CredHubTemplateDetailUnitTestsBase<SshCredential, SshParameters> {
 	private static final SshCredential CREDENTIAL = new SshCredential("public-key", "private-key");
+	private static final SshParameters PARAMETERS = new SshParameters(KeyLength.LENGTH_2048, "comment");
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<SshCredential>>> buildDetailResponses() {
@@ -48,10 +53,18 @@ public class CredHubTemplateDetailSshUnitTests
 	}
 
 	@Override
-	public CredentialRequest<SshCredential> getRequest() {
+	public CredentialRequest<SshCredential> getWriteRequest() {
 		return SshCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
+				.build();
+	}
+
+	@Override
+	public ParametersRequest<SshParameters> getGenerateRequest() {
+		return SshParametersRequest.builder()
+				.name(NAME)
+				.parameters(PARAMETERS)
 				.build();
 	}
 
@@ -64,6 +77,12 @@ public class CredHubTemplateDetailSshUnitTests
 	public void write(@FromDataPoints("detail-responses")
 					  ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
+	}
+
+	@Theory
+	public void generate(@FromDataPoints("detail-responses")
+						 ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+		verifyGenerate(expectedResponse);
 	}
 
 	@Theory

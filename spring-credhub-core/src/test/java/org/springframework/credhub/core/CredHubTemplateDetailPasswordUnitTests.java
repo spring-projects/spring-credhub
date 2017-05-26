@@ -28,14 +28,16 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.password.PasswordCredential;
 import org.springframework.credhub.support.password.PasswordCredentialRequest;
 import org.springframework.credhub.support.password.PasswordParameters;
+import org.springframework.credhub.support.password.PasswordParametersRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailPasswordUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<PasswordCredential> {
+		extends CredHubTemplateDetailUnitTestsBase<PasswordCredential, PasswordParameters> {
 	private static final PasswordCredential CREDENTIAL = new PasswordCredential("secret");
 	private static final PasswordParameters PARAMETERS = new PasswordParameters();
 
@@ -50,10 +52,18 @@ public class CredHubTemplateDetailPasswordUnitTests
 	}
 
 	@Override
-	public CredentialRequest<PasswordCredential> getRequest() {
+	public CredentialRequest<PasswordCredential> getWriteRequest() {
 		return PasswordCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
+				.build();
+	}
+
+	@Override
+	protected ParametersRequest<PasswordParameters> getGenerateRequest() {
+		return PasswordParametersRequest.builder()
+				.name(NAME)
+				.parameters(PARAMETERS)
 				.build();
 	}
 
@@ -66,6 +76,12 @@ public class CredHubTemplateDetailPasswordUnitTests
 	public void write(@FromDataPoints("detail-responses")
 					  ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
+	}
+
+	@Theory
+	public void generate(@FromDataPoints("detail-responses")
+						 ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+		verifyGenerate(expectedResponse);
 	}
 
 	@Theory

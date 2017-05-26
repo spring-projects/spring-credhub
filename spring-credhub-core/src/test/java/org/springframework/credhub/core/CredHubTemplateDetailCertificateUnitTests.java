@@ -34,7 +34,7 @@ import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailCertificateUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<CertificateCredential> {
+		extends CredHubTemplateDetailUnitTestsBase<CertificateCredential, Void> {
 	private static final CertificateCredential CREDENTIAL =
 			new CertificateCredential("certificate", "authority", "private-key");
 
@@ -49,7 +49,7 @@ public class CredHubTemplateDetailCertificateUnitTests
 	}
 
 	@Override
-	public CredentialRequest<CertificateCredential> getRequest() {
+	public CredentialRequest<CertificateCredential> getWriteRequest() {
 		return CertificateCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)

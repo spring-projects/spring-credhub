@@ -28,14 +28,19 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.KeyLength;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.rsa.RsaCredential;
 import org.springframework.credhub.support.rsa.RsaCredentialRequest;
+import org.springframework.credhub.support.rsa.RsaParameters;
+import org.springframework.credhub.support.rsa.RsaParametersRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailRsaUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<RsaCredential> {
+		extends CredHubTemplateDetailUnitTestsBase<RsaCredential, RsaParameters> {
 	private static final RsaCredential CREDENTIAL = new RsaCredential("public-key", "private-key");
+	private static final RsaParameters PARAMETERS = new RsaParameters(KeyLength.LENGTH_4096);
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<RsaCredential>>> buildDetailResponses() {
@@ -48,10 +53,18 @@ public class CredHubTemplateDetailRsaUnitTests
 	}
 
 	@Override
-	public CredentialRequest<RsaCredential> getRequest() {
+	public CredentialRequest<RsaCredential> getWriteRequest() {
 		return RsaCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
+				.build();
+	}
+
+	@Override
+	public ParametersRequest<RsaParameters> getGenerateRequest() {
+		return RsaParametersRequest.builder()
+				.name(NAME)
+				.parameters(PARAMETERS)
 				.build();
 	}
 
@@ -64,6 +77,12 @@ public class CredHubTemplateDetailRsaUnitTests
 	public void write(@FromDataPoints("detail-responses")
 					  ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
+	}
+
+	@Theory
+	public void generate(@FromDataPoints("detail-responses")
+						 ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+		verifyGenerate(expectedResponse);
 	}
 
 	@Theory

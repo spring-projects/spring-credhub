@@ -34,7 +34,7 @@ import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailUserUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<UserCredential> {
+		extends CredHubTemplateDetailUnitTestsBase<UserCredential, Void> {
 	private static final UserCredential CREDENTIAL = new UserCredential("myname", "secret");
 
 	@DataPoints("detail-responses")
@@ -48,7 +48,7 @@ public class CredHubTemplateDetailUserUnitTests
 	}
 
 	@Override
-	public CredentialRequest<UserCredential> getRequest() {
+	public CredentialRequest<UserCredential> getWriteRequest() {
 		return UserCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)

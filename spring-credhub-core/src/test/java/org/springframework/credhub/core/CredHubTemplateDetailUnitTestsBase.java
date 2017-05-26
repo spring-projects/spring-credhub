@@ -24,6 +24,7 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +40,20 @@ import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY;
 import static org.springframework.credhub.core.TypeUtils.getDetailsReference;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTemplateUnitTestsBase {
+public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTemplateUnitTestsBase {
 	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
-	public abstract CredentialRequest<T> getRequest();
-	public abstract Class<T> getType();
+	protected abstract Class<T> getType();
+	protected abstract CredentialRequest<T> getWriteRequest();
+
+	protected ParametersRequest<P> getGenerateRequest() {
+		return null;
+	}
 
 	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {
 		return Arrays.asList(
@@ -71,7 +77,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTempl
 	}
 
 	void verifyWrite(ResponseEntity<CredentialDetails<T>> expectedResponse) {
-		CredentialRequest<T> request = getRequest();
+		CredentialRequest<T> request = getWriteRequest();
 
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				getDetailsReference(getType());
@@ -91,6 +97,32 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T> extends CredHubTempl
 		}
 		else {
 			CredentialDetails<T> response = credHubTemplate.write(request);
+
+			assertResponseContainsExpectedCredentials(expectedResponse, response);
+		}
+	}
+
+	void verifyGenerate(ResponseEntity<CredentialDetails<T>> expectedResponse) {
+		ParametersRequest<P> request = getGenerateRequest();
+
+		final ParameterizedTypeReference<CredentialDetails<T>> ref =
+				getDetailsReference(getType());
+
+		when(restTemplate.exchange(BASE_URL_PATH, POST,
+				new HttpEntity<ParametersRequest<P>>(request), ref))
+						.thenReturn(expectedResponse);
+
+		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
+			try {
+				credHubTemplate.generate(request);
+				fail("Exception should have been thrown");
+			}
+			catch (CredHubException e) {
+				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+			}
+		}
+		else {
+			CredentialDetails<T> response = credHubTemplate.generate(request);
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}

@@ -34,7 +34,7 @@ import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
 public class CredHubTemplateDetailJsonUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<JsonCredential> {
+		extends CredHubTemplateDetailUnitTestsBase<JsonCredential, Void> {
 	private static final JsonCredential CREDENTIAL = new JsonCredential() {
 		{
 			put("data", "value");
@@ -53,7 +53,7 @@ public class CredHubTemplateDetailJsonUnitTests
 	}
 
 	@Override
-	public CredentialRequest<JsonCredential> getRequest() {
+	public CredentialRequest<JsonCredential> getWriteRequest() {
 		return JsonCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)

@@ -115,7 +115,7 @@ public class CredHubTemplate implements CredHubOperations {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> CredentialDetails<T> generate(final ParametersRequest<T> parametersRequest) {
+	public <T, P> CredentialDetails<T> generate(final ParametersRequest<P> parametersRequest) {
 		Assert.notNull(parametersRequest, "generateRequest must not be null");
 
 		Class<T> credentialType = (Class<T>) parametersRequest.getParameters().getClass();
@@ -126,7 +126,7 @@ public class CredHubTemplate implements CredHubOperations {
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(BASE_URL_PATH, POST,
-								new HttpEntity<ParametersRequest<T>>(parametersRequest), ref);
+								new HttpEntity<ParametersRequest<P>>(parametersRequest), ref);
 
 				throwExceptionOnError(response);
 

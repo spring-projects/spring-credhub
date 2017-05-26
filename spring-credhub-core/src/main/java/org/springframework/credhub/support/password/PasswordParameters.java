@@ -17,7 +17,7 @@
 package org.springframework.credhub.support.password;
 
 /**
- * Parameters for generating a new password value. All parameters are optional; if not specified,
+ * Parameters for generating a new password credential. All parameters are optional; if not specified,
  * CredHub-provided defaults will be used.
  *
  * @author Scott Frederick
@@ -43,7 +43,7 @@ public class PasswordParameters {
 	/**
 	 * Create a {@link PasswordParameters} using the specified values.
 	 *
-	 * @param length length of generated credential value
+	 * @param length length of generated password value
 	 * @param excludeUpper {@literal true} to exclude upper case alpha characters from generated credential value
 	 * @param excludeLower {@literal true} to exclude lower case alpha characters from generated credential value
 	 * @param excludeNumber {@literal true} to exclude numeric characters from generated credential value

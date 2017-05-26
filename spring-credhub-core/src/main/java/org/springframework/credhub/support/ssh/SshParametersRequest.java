@@ -14,58 +14,58 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.support.password;
+package org.springframework.credhub.support.ssh;
 
 import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.util.Assert;
 
-import static org.springframework.credhub.support.CredentialType.PASSWORD;
+import static org.springframework.credhub.support.CredentialType.SSH;
 
 /**
- * The details of a request to generate a new {@link PasswordCredential} in CredHub.
+ * The details of a request to generate a new {@link SshCredential} in CredHub.
  *
  * @author Scott Frederick
  */
-public class PasswordParametersRequest extends ParametersRequest<PasswordParameters> {
+public class SshParametersRequest extends ParametersRequest<SshParameters> {
 	/**
-	 * Create a {@link PasswordParametersRequest}.
+	 * Create a {@link SshParametersRequest}.
 	 */
-	PasswordParametersRequest() {
-		super(PASSWORD);
+	SshParametersRequest() {
+		super(SSH);
 	}
 
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link PasswordParametersRequest}.
+	 * to construct a {@link SshParametersRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static PasswordParametersRequestBuilder builder() {
-		return new PasswordParametersRequestBuilder();
+	public static SshParametersRequestBuilder builder() {
+		return new SshParametersRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link PasswordParametersRequest}s.
+	 * A builder that provides a fluent API for constructing {@link SshParametersRequest}s.
 	 */
-	public static class PasswordParametersRequestBuilder
-			extends ParametersRequestBuilder<PasswordParameters, PasswordParametersRequest, PasswordParametersRequestBuilder> {
+	public static class SshParametersRequestBuilder
+			extends ParametersRequestBuilder<SshParameters, SshParametersRequest, SshParametersRequestBuilder> {
 		@Override
-		protected PasswordParametersRequest createTarget() {
-			return new PasswordParametersRequest();
+		protected SshParametersRequest createTarget() {
+			return new SshParametersRequest();
 		}
 
 		@Override
-		protected PasswordParametersRequestBuilder createBuilder() {
+		protected SshParametersRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the parameters for generation of a password credential.
+		 * Set the parameters for generation of an SSH credential.
 		 *
 		 * @param parameters the generation parameters; must not be {@literal null}
 		 * @return the builder
 		 */
-		public PasswordParametersRequestBuilder parameters(PasswordParameters parameters) {
+		public SshParametersRequestBuilder parameters(SshParameters parameters) {
 			Assert.notNull(parameters, "parameters must not be null");
 			targetObj.setParameters(parameters);
 			return this;

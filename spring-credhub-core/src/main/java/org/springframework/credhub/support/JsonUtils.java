@@ -45,7 +45,7 @@ public class JsonUtils {
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-		configureCredentialDetailcredentialTypeMapping(objectMapper);
+		configureCredentialDetailTypeMapping(objectMapper);
 
 		return objectMapper;
 	}
@@ -56,7 +56,7 @@ public class JsonUtils {
 	 *
 	 * @param objectMapper the {@link ObjectMapper} to configure
 	 */
-	private static void configureCredentialDetailcredentialTypeMapping(ObjectMapper objectMapper) {
+	private static void configureCredentialDetailTypeMapping(ObjectMapper objectMapper) {
 		List<NamedType> subtypes = new ArrayList<NamedType>();
 		for (CredentialType type : CredentialType.values()) {
 			subtypes.add(new NamedType(type.getModelClass(), type.getValueType()));

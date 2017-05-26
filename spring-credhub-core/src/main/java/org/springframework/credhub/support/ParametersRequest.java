@@ -91,14 +91,14 @@ public class ParametersRequest<T> extends CredHubRequest {
 	 * A builder that provides a fluent API for constructing {@link ParametersRequest}s.
 	 */
 	@SuppressWarnings("unchecked")
-	protected static abstract class GenerateCredentialRequestBuilder<T, R extends ParametersRequest<T>, B extends GenerateCredentialRequestBuilder<T, R, B>> {
+	protected static abstract class ParametersRequestBuilder<T, R extends ParametersRequest<T>, B extends ParametersRequestBuilder<T, R, B>> {
 		private final B thisObj;
 		protected final R targetObj;
 
 		/**
-		 * Create a {@link GenerateCredentialRequestBuilder}. Intended for internal use.
+		 * Create a {@link ParametersRequestBuilder}. Intended for internal use.
 		 */
-		protected GenerateCredentialRequestBuilder() {
+		protected ParametersRequestBuilder() {
 			this.thisObj = createBuilder();
 			this.targetObj = createTarget();
 		}

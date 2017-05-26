@@ -14,58 +14,58 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.support.password;
+package org.springframework.credhub.support.rsa;
 
 import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.util.Assert;
 
-import static org.springframework.credhub.support.CredentialType.PASSWORD;
+import static org.springframework.credhub.support.CredentialType.RSA;
 
 /**
- * The details of a request to generate a new {@link PasswordCredential} in CredHub.
+ * The details of a request to generate a new {@link RsaCredential} in CredHub.
  *
  * @author Scott Frederick
  */
-public class PasswordParametersRequest extends ParametersRequest<PasswordParameters> {
+public class RsaParametersRequest extends ParametersRequest<RsaParameters> {
 	/**
-	 * Create a {@link PasswordParametersRequest}.
+	 * Create a {@link RsaParametersRequest}.
 	 */
-	PasswordParametersRequest() {
-		super(PASSWORD);
+	RsaParametersRequest() {
+		super(RSA);
 	}
 
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link PasswordParametersRequest}.
+	 * to construct a {@link RsaParametersRequest}.
 	 *
 	 * @return a builder
 	 */
-	public static PasswordParametersRequestBuilder builder() {
-		return new PasswordParametersRequestBuilder();
+	public static RsaParametersRequestBuilder builder() {
+		return new RsaParametersRequestBuilder();
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link PasswordParametersRequest}s.
+	 * A builder that provides a fluent API for constructing {@link RsaParametersRequest}s.
 	 */
-	public static class PasswordParametersRequestBuilder
-			extends ParametersRequestBuilder<PasswordParameters, PasswordParametersRequest, PasswordParametersRequestBuilder> {
+	public static class RsaParametersRequestBuilder
+			extends ParametersRequestBuilder<RsaParameters, RsaParametersRequest, RsaParametersRequestBuilder> {
 		@Override
-		protected PasswordParametersRequest createTarget() {
-			return new PasswordParametersRequest();
+		protected RsaParametersRequest createTarget() {
+			return new RsaParametersRequest();
 		}
 
 		@Override
-		protected PasswordParametersRequestBuilder createBuilder() {
+		protected RsaParametersRequestBuilder createBuilder() {
 			return this;
 		}
 
 		/**
-		 * Set the parameters for generation of a password credential.
+		 * Set the parameters for generation of an RSA credential.
 		 *
 		 * @param parameters the generation parameters; must not be {@literal null}
 		 * @return the builder
 		 */
-		public PasswordParametersRequestBuilder parameters(PasswordParameters parameters) {
+		public RsaParametersRequestBuilder parameters(RsaParameters parameters) {
 			Assert.notNull(parameters, "parameters must not be null");
 			targetObj.setParameters(parameters);
 			return this;

@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import org.springframework.credhub.support.ParametersRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.password.PasswordParametersRequest.PasswordGenerateRequestBuilder;
+import org.springframework.credhub.support.password.PasswordParametersRequest.PasswordParametersRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -31,7 +31,7 @@ import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTestsBase {
 	@Test
 	public void serializeWithParameters() throws Exception {
-		PasswordGenerateRequestBuilder requestBuilder = PasswordParametersRequest.builder()
+		PasswordParametersRequestBuilder requestBuilder = PasswordParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(PasswordParameters.builder()
@@ -44,38 +44,46 @@ public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTes
 
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "password");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("password")),
-						hasJsonPath("$.parameters.length", equalTo(20)),
+				allOf(hasJsonPath("$.parameters.length", equalTo(20)),
 						hasJsonPath("$.parameters.exclude_lower", equalTo(true)),
 						hasJsonPath("$.parameters.exclude_upper", equalTo(false)),
 						hasJsonPath("$.parameters.exclude_number", equalTo(true)),
 						hasJsonPath("$.parameters.include_special", equalTo(false))));
-
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 
 	@Test
-	public void serializeWithDefaults() throws Exception {
-		PasswordGenerateRequestBuilder requestBuilder = PasswordParametersRequest.builder()
+	public void serializeWithEmptyParameters() throws Exception {
+		PasswordParametersRequestBuilder requestBuilder = PasswordParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new PasswordParameters());
 
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "password");
+		assertParametersNotSet(jsonValue);
+	}
+
+	@Test
+	public void serializeWithNoParameters() throws Exception {
+		PasswordParametersRequestBuilder requestBuilder = PasswordParametersRequest.builder()
+				.name(new SimpleCredentialName("example", "credential"))
+				.overwrite(true);
+
+		String jsonValue = serializeToJson(requestBuilder);
+
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "password");
+		assertParametersNotSet(jsonValue);
+	}
+
+	private void assertParametersNotSet(String jsonValue) {
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("password")),
-						hasNoJsonPath("$.parameters.length"),
+				allOf(hasNoJsonPath("$.parameters.length"),
 						hasNoJsonPath("$.parameters.exclude_lower"),
 						hasNoJsonPath("$.parameters.exclude_upper"),
 						hasNoJsonPath("$.parameters.exclude_number"),
 						hasNoJsonPath("$.parameters.include_special")));
-
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 }

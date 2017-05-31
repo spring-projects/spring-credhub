@@ -17,7 +17,7 @@
 package org.springframework.credhub.support.certificate;
 
 import org.springframework.credhub.support.KeyLength;
-import org.springframework.credhub.support.rsa.KeyParameters;
+import org.springframework.credhub.support.KeyParameters;
 import org.springframework.util.Assert;
 
 /**

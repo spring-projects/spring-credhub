@@ -168,7 +168,7 @@ public class PasswordParameters {
 		}
 
 		/**
-		 * Set the value of the include characters parameter.
+		 * Set the value of the include special characters parameter.
 		 *
 		 * @param include {@literal true} to include non-alphanumeric characters in generated credential value
 		 * @return the builder

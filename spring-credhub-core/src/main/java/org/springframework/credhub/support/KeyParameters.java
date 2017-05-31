@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.support.rsa;
-
-import org.springframework.credhub.support.KeyLength;
+package org.springframework.credhub.support;
 
 /**
  * Base class for parameter types that contain specifications for key generation.

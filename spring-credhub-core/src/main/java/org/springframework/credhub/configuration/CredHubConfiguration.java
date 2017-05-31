@@ -24,7 +24,6 @@ import org.springframework.credhub.core.CloudFoundryAppInstanceProperties;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
-import org.springframework.credhub.support.SslConfiguration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 
 /**
@@ -84,18 +83,17 @@ public class CredHubConfiguration {
 	 * Create a {@link ClientFactoryWrapper} containing a
 	 * {@link ClientHttpRequestFactory}. {@link ClientHttpRequestFactory} is not exposed
 	 * as root bean because {@link ClientHttpRequestFactory} is configured with
-	 * {@link ClientOptions} and {@link SslConfiguration} which are not necessarily
+	 * {@link ClientOptions} which are not necessarily
 	 * applicable for the whole application.
 	 *
 	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
 	 * instance.
 	 * @see #clientOptions()
-	 * @see #sslConfiguration()
 	 */
 	@Bean
 	public ClientFactoryWrapper clientHttpRequestFactoryWrapper() {
 		ClientHttpRequestFactory clientHttpRequestFactory =
-				ClientHttpRequestFactoryFactory.create(clientOptions(), sslConfiguration());
+				ClientHttpRequestFactoryFactory.create(clientOptions());
 		return new ClientFactoryWrapper(clientHttpRequestFactory);
 	}
 
@@ -106,20 +104,6 @@ public class CredHubConfiguration {
 	 */
 	private ClientOptions clientOptions() {
 		return new ClientOptions();
-	}
-
-	/**
-	 * Create the default {@link SslConfiguration} to configure SSL context parameters.
-	 * The default configuration uses a certificate and key supplied in the application
-	 * container to configure mutual SSL authentication between the client application
-	 * and the CredHub server.
-	 *
-	 * @return the default {@link SslConfiguration}
-	 */
-	private SslConfiguration sslConfiguration() {
-		CloudFoundryAppInstanceProperties properties = cloudFoundryAppInstanceProperties();
-		return SslConfiguration.forContainerCert(properties.getInstanceCertLocation(),
-				properties.getInstanceKeyLocation());
 	}
 
 	/**

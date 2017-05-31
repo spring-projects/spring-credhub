@@ -22,21 +22,19 @@ import org.junit.Test;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.support.ClientOptions;
-import org.springframework.credhub.support.SslConfiguration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents;
 
 public class ClientHttpRequestFactoryFactoryTests {
 
 	@Test
 	public void httpComponentsClientCreated() throws Exception {
 
-		ClientHttpRequestFactory factory =
-				ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents(
-						new ClientOptions(), new SslConfiguration());
+		ClientHttpRequestFactory factory = usingHttpComponents(new ClientOptions());
 
 		assertThat(factory, instanceOf(HttpComponentsClientHttpRequestFactory.class));
 

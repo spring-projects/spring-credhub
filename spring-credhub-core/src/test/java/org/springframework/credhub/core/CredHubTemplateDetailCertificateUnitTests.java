@@ -42,7 +42,7 @@ public class CredHubTemplateDetailCertificateUnitTests
 			new CertificateCredential("certificate", "authority", "private-key");
 	private static final CertificateParameters PARAMETERS = CertificateParameters.builder()
 			.commonName("common")
-			.credential("credential")
+			.certificateAuthorityCredential("credential")
 			.build();
 
 	@DataPoints("detail-responses")

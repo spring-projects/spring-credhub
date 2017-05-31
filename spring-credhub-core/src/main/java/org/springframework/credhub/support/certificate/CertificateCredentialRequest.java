@@ -60,7 +60,7 @@ public class CertificateCredentialRequest extends CredentialRequest<CertificateC
 		}
 
 		/**
-		 * Set the value of an certificate credential.
+		 * Set the value of a certificate credential.
 		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder

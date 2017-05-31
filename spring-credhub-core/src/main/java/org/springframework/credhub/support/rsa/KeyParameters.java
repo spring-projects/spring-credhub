@@ -18,13 +18,26 @@ package org.springframework.credhub.support.rsa;
 
 import org.springframework.credhub.support.KeyLength;
 
+/**
+ * Base class for parameter types that contain specifications for key generation.
+ *
+ * @author Scott Frederick
+ */
 public class KeyParameters {
 	protected final KeyLength keyLength;
 
+	/**
+	 * Create an empty {@link KeyParameters}.
+	 */
 	protected KeyParameters() {
 		this.keyLength = null;
 	}
 
+	/**
+	 * Create a {@link KeyParameters} with the specified key length.
+	 *
+	 * @param keyLength the length of the key to generate
+	 */
 	protected KeyParameters(KeyLength keyLength) {
 		this.keyLength = keyLength;
 	}

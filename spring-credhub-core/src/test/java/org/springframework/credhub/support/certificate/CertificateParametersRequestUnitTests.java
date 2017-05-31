@@ -45,7 +45,7 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 						.state("state")
 						.country("country")
 						.duration(1234)
-						.credential("credential")
+						.certificateAuthorityCredential("credential")
 						.certificateAuthority(true)
 						.selfSign(false)
 						.build());
@@ -64,7 +64,7 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 						hasJsonPath("$.parameters.state", equalTo("state")),
 						hasJsonPath("$.parameters.country", equalTo("country")),
 						hasJsonPath("$.parameters.duration", equalTo(1234)),
-						hasJsonPath("$.parameters.credential", equalTo("credential")),
+						hasJsonPath("$.parameters.ca", equalTo("credential")),
 						hasJsonPath("$.parameters.is_ca", equalTo(true)),
 						hasJsonPath("$.parameters.self_sign", equalTo(false))));
 	}
@@ -76,7 +76,7 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 				.overwrite(true)
 				.parameters(CertificateParameters.builder()
 						.commonName("common")
-						.credential("credential")
+						.certificateAuthorityCredential("credential")
 						.build());
 
 		String jsonValue = serializeToJson(requestBuilder);
@@ -85,7 +85,7 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.parameters.key_length"),
 						hasJsonPath("$.parameters.common_name", equalTo("common")),
-						hasJsonPath("$.parameters.credential", equalTo("credential")),
+						hasJsonPath("$.parameters.ca", equalTo("credential")),
 						hasNoJsonPath("$.parameters.alternative_names"),
 						hasNoJsonPath("$.parameters.organization"),
 						hasNoJsonPath("$.parameters.organization_unit"),

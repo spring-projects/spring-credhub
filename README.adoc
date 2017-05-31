@@ -43,7 +43,9 @@ public class AppConfig {
 
 This configuration will result in a `CredHubTemplate` bean being configured and added to the Spring application context. The `CredHubTemplate` will be configured for mutual TLS authentication using a certificate and private key. The certificate and key are provided by Cloud Foundry in the application container when an application is deployed to Cloud Foundry. This is currently the only supported authentication configuration. Support for https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/product-summary.md#authentication[OAuth2 authentication with CredHub] via Cloud Foundry UAA will be added in the future.
 
-The `CredHubTemplate` can be used through its `CredHubOperations` interface:
+The `CredHubTemplate` can be used through its `CredHubOperations` interface.
+
+The following is an example of setting a new credential in CredHub:
 
 ====
 [source,java]
@@ -53,19 +55,50 @@ public class MyApp {
     @Autowired
     CredHubOperations credHubOperations;
 
-    public void writeAndDeleteCredentials() {
-
-        WriteRequest request = WriteRequest.builder()
+    public void writeAndDeleteCredential() {
+        PasswordCredentialRequest request = PasswordCredentialRequest.builder()
             .overwrite(true)
-            .name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
-            .passwordValue("secret")
+            .name(new SimpleCredentialName("spring-credhub", "demo"))
+            .value(new PasswordCredential("secret"))
             .build();
 
-        CredentialDetails storedCredentials = credHubOperations.write(request);
+        CredentialDetails<PasswordCredential> storedCredential =
+            credHubOperations.write(request);
 
-        CredentialDetails retrievedDetails = credHubOperations.getById(storedCredentials.getId());
+        CredentialDetails<PasswordCredential> retrievedCredential =
+            credHubOperations.getById(storedCredential.getId());
 
-        credHubOperations.deleteByName(storedCredentials.getName());
+        credHubOperations.deleteByName(storedCredential.getName());
+    }
+}
+----
+====
+
+The following is an example of generating a new credential in CredHub:
+
+====
+[source,java]
+----
+public class MyApp {
+
+    @Autowired
+    CredHubOperations credHubOperations;
+
+    public void generateCredential() {
+        PasswordParametersRequest request = PasswordParametersRequest.builder()
+            .overwrite(true)
+            .name(new SimpleCredentialName("spring-credhub", "demo"))
+            .parameters(PasswordParameters.builder()
+                .length(20)
+                .excludeLower(false)
+                .excludeUpper(false)
+                .excludeNumber(false)
+                .includeSpecial(true)
+                .build())
+            .build();
+
+        CredentialDetails<PasswordCredential> credential =
+            credHubOperations.generate(request);
     }
 }
 ----

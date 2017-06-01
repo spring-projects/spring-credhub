@@ -24,12 +24,21 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents;
+import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection.usingJdk;
 
 public class ClientHttpRequestFactoryFactoryTests {
+
+	@Test
+	public void jdkDefaultClientCreated() throws Exception {
+		ClientHttpRequestFactory factory = usingJdk(new ClientOptions());
+
+		assertThat(factory, instanceOf(SimpleClientHttpRequestFactory.class));
+	}
 
 	@Test
 	public void httpComponentsClientCreated() throws Exception {
@@ -38,8 +47,7 @@ public class ClientHttpRequestFactoryFactoryTests {
 
 		assertThat(factory, instanceOf(HttpComponentsClientHttpRequestFactory.class));
 
-		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory)
-				.getHttpClient();
+		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory).getHttpClient();
 
 		assertThat(httpClient, instanceOf(CloseableHttpClient.class));
 

@@ -56,20 +56,24 @@ public class CredHubDemoController {
 	public Results runTests(@RequestBody Map<String, Object> value) {
 		Results results = new Results();
 
-		CredentialDetails<JsonCredential> credentialDetails = writeCredentials(value, results);
-		CredentialName credentialName = credentialDetails.getName();
+		try {
+			CredentialDetails<JsonCredential> credentialDetails = writeCredentials(value, results);
+			CredentialName credentialName = credentialDetails.getName();
 
-		getCredentialsById(credentialDetails.getId(), results);
+			getCredentialsById(credentialDetails.getId(), results);
 
-		getCredentialsByName(credentialName, results);
+			getCredentialsByName(credentialName, results);
 
-		findCredentialsByName(credentialName, results);
+			findCredentialsByName(credentialName, results);
 
-		findCredentialsByPath(credentialName.getName(), results);
+			findCredentialsByPath(credentialName.getName(), results);
 
-		interpolateServiceData(credentialName, results);
+			interpolateServiceData(credentialName, results);
 
-		deleteCredentials(credentialName, results);
+			deleteCredentials(credentialName, results);
+		} catch (Exception e) {
+			saveResults(results, "Exception caught: " + e.getMessage());
+		}
 
 		return results;
 	}

@@ -29,20 +29,19 @@ public class ClientOptions {
 	/**
 	 * Connection timeout;
 	 */
-	private final int connectionTimeout;
+	private final Integer connectionTimeout;
 
 	/**
 	 * Read timeout;
 	 */
-	private final int readTimeout;
+	private final Integer readTimeout;
 
 	/**
-	 * Create new {@link ClientOptions} with default timeouts of {@literal 5}
-	 * {@link TimeUnit#SECONDS} connection timeout and {@literal 15}
-	 * {@link TimeUnit#SECONDS} read timeout.
+	 * Create new {@link ClientOptions} with default timeouts.
 	 */
 	public ClientOptions() {
-		this((int) TimeUnit.SECONDS.toMillis(5), (int) TimeUnit.SECONDS.toMillis(15));
+		this.connectionTimeout = null;
+		this.readTimeout = null;
 	}
 
 	/**
@@ -59,20 +58,20 @@ public class ClientOptions {
 	}
 
 	/**
-	 * Gets the connection timeout in {@link TimeUnit#MILLISECONDS}.
+	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
 	 *
-	 * @return the connection timeout
+	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
-	public int getConnectionTimeout() {
+	public Integer getConnectionTimeout() {
 		return connectionTimeout;
 	}
 
 	/**
-	 * Gets the read timeout in {@link TimeUnit#MILLISECONDS}
+	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
 	 *
-	 * @return the read timeout
+	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
-	public int getReadTimeout() {
+	public Integer getReadTimeout() {
 		return readTimeout;
 	}
 

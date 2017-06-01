@@ -45,7 +45,7 @@ public class SshCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 						hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class SshCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 						hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasNoJsonPath("$.value.private_key")));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class SshCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 						hasNoJsonPath("$.value.public_key"),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test(expected = IllegalArgumentException.class)

@@ -49,7 +49,7 @@ public class UserCredentialRequestUnitTests extends CredentialRequestUnitTestsBa
 						hasJsonPath("$.value.username", equalTo("myname")),
 						hasJsonPath("$.value.password", equalTo("secret"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test
@@ -68,6 +68,6 @@ public class UserCredentialRequestUnitTests extends CredentialRequestUnitTestsBa
 						hasNoJsonPath("$.value.username"),
 						hasJsonPath("$.value.password", equalTo("secret"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 }

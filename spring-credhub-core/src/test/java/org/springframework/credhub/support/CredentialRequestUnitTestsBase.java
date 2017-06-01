@@ -29,6 +29,7 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.credhub.support.AdditionalPermission.Operation.READ;
 import static org.springframework.credhub.support.AdditionalPermission.Operation.WRITE;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
+import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
 
 public abstract class CredentialRequestUnitTestsBase {
@@ -51,9 +52,9 @@ public abstract class CredentialRequestUnitTestsBase {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.additional_permissions[0].actor",
+				allOf(hasJsonPath("$.access_control_entries[0].actor",
 						equalTo("mtls-app:app-id")),
-						hasJsonPath("$.additional_permissions[0].operations[0]",
+						hasJsonPath("$.access_control_entries[0].operations[0]",
 								equalTo("read"))));
 	}
 
@@ -72,16 +73,16 @@ public abstract class CredentialRequestUnitTestsBase {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue, allOf(
-				hasJsonPath("$.additional_permissions[0].actor",
+				hasJsonPath("$.access_control_entries[0].actor",
 						equalTo("mtls-app:app1-id")),
-				hasJsonPath("$.additional_permissions[0].operations[0]", equalTo("read")),
-				hasJsonPath("$.additional_permissions[0].operations[1]",
+				hasJsonPath("$.access_control_entries[0].operations[0]", equalTo("read")),
+				hasJsonPath("$.access_control_entries[0].operations[1]",
 						equalTo("write")),
-				hasJsonPath("$.additional_permissions[1].actor",
+				hasJsonPath("$.access_control_entries[1].actor",
 						equalTo("mtls-app:app2-id")),
-				hasJsonPath("$.additional_permissions[1].operations[0]",
+				hasJsonPath("$.access_control_entries[1].operations[0]",
 						equalTo("write")),
-				hasJsonPath("$.additional_permissions[1].operations[1]",
+				hasJsonPath("$.access_control_entries[1].operations[1]",
 						equalTo("read"))));
 	}
 
@@ -90,5 +91,9 @@ public abstract class CredentialRequestUnitTestsBase {
 		String jsonValue = mapper.writeValueAsString(requestBuilder.build());
 		assertThat(jsonValue, isJson());
 		return jsonValue;
+	}
+
+	protected void assertNoPermissions(String jsonValue) {
+		assertThat(jsonValue, hasNoJsonPath("$.access_control_entries"));
 	}
 }

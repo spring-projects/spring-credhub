@@ -26,7 +26,6 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
 public class ValueCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
 
@@ -48,7 +47,7 @@ public class ValueCredentialRequestUnitTests extends CredentialRequestUnitTestsB
 						hasJsonPath("$.type", equalTo("value")),
 						hasJsonPath("$.value", equalTo("somevalue"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test
@@ -66,6 +65,6 @@ public class ValueCredentialRequestUnitTests extends CredentialRequestUnitTestsB
 						hasJsonPath("$.type", equalTo("value")),
 						hasJsonPath("$.value", equalTo("somevalue"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 }

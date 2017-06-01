@@ -46,7 +46,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 						hasJsonPath("$.value.ca", equalTo("ca")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 						hasNoJsonPath("$.value.ca"),
 						hasNoJsonPath("$.value.private_key")));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 						hasJsonPath("$.value.ca", equalTo("ca")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+		assertNoPermissions(jsonValue);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -96,4 +96,5 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 				.overwrite(true)
 				.value(value);
 	}
+
 }

@@ -31,9 +31,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
+import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.support.VcapServicesData;
+import org.springframework.http.HttpStatus;
 
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -60,6 +63,20 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 	}
 
 	@Test
+	public void processServiceDataWithCredHubError() {
+		CloudFoundryRawServiceData rawServiceData = buildRawServiceData();
+
+		when(credHubOperations.interpolateServiceData(argThat(matchesContent(rawServiceData))))
+				.thenThrow(new CredHubException(HttpStatus.UNAUTHORIZED));
+
+		CredHubInterpolationServiceDataPostProcessor processor =
+				new CredHubInterpolationServiceDataPostProcessor(credHubOperations);
+
+		CloudFoundryRawServiceData actual = processor.process(rawServiceData);
+		assertThat(actual, equalTo(rawServiceData));
+	}
+
+	@Test
 	public void processServiceDataWithInitializationError() {
 		CredHubInterpolationServiceDataPostProcessor processor =
 				new CredHubInterpolationServiceDataPostProcessor(null);
@@ -81,6 +98,7 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 	private Matcher<CloudFoundryRawServiceData> matchesContent(final VcapServicesData expected) {
 		return new BaseMatcher<CloudFoundryRawServiceData>() {
 			@Override
+			@SuppressWarnings("unchecked")
 			public boolean matches(Object actual) {
 				return mapsAreEquivalent((Map<String, ?>) actual, expected);
 			}

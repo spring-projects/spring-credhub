@@ -45,9 +45,8 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 			credHubOperations = new CredHubConfiguration().credHubTemplate();
 		}
 		catch (Exception e) {
-			logger.log(Level.INFO, "CredHubOperations cannot be initialized, " +
-							"disabling processing of service data: "
-							+ e.getMessage());
+			logger.log(Level.WARNING, "CredHubOperations cannot be initialized, " +
+							"disabling processing of service data", e);
 		}
 	}
 
@@ -75,10 +74,15 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 			return serviceData;
 		}
 
-		VcapServicesData interpolatedData = credHubOperations
-				.interpolateServiceData(connectorsToCredHub(serviceData));
+		try {
+			VcapServicesData interpolatedData = credHubOperations
+					.interpolateServiceData(connectorsToCredHub(serviceData));
 
-		return credHubToConnectors(interpolatedData);
+			return credHubToConnectors(interpolatedData);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Error interpolating service data from CredHub.", e);
+			return serviceData;
+		}
 	}
 
 	/**

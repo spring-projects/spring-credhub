@@ -6,7 +6,7 @@ Spring CredHub provides client-side support for storing, retrieving, and deletin
 
 === Maven configuration
 
-Add the Maven dependency and the Spring snapshot repository:
+Add the Maven dependency:
 
 ====
 [source,xml]
@@ -14,13 +14,26 @@ Add the Maven dependency and the Spring snapshot repository:
 <dependency>
   <groupId>org.springframework.credhub</groupId>
   <artifactId>spring-credhub-core</artifactId>
-  <version>1.0.0.BUILD-SNAPSHOT</version>
+  <version>${spring-credhub-version}</version>
 </dependency>
+----
+====
 
+Snapshot, Milestone, or Release Candidate versions will also require a https://github.com/spring-projects/spring-framework/wiki/Spring-repository-FAQ[Spring repository] to be added to the build file.
+
+====
+[source,xml]
+----
 <repository>
   <id>spring-libs-snapshot</id>
   <name>Spring Snapshot Repository</name>
   <url>http://repo.spring.io/libs-snapshot</url>
+</repository>
+
+<repository>
+  <id>spring-libs-milestone</id>
+  <name>Spring Milestone Repository</name>
+  <url>http://repo.spring.io/libs-milestone</url>
 </repository>
 ----
 ====
@@ -41,9 +54,7 @@ public class AppConfig {
 ----
 ====
 
-This configuration will result in a `CredHubTemplate` bean being configured and added to the Spring application context. The `CredHubTemplate` will be configured for mutual TLS authentication using a certificate and private key. The certificate and key are provided by Cloud Foundry in the application container when an application is deployed to Cloud Foundry. This is currently the only supported authentication configuration. Support for https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/product-summary.md#authentication[OAuth2 authentication with CredHub] via Cloud Foundry UAA will be added in the future.
-
-The `CredHubTemplate` can be used through its `CredHubOperations` interface.
+This configuration will result in a `CredHubTemplate` bean being configured and added to the Spring application context. The `CredHubTemplate` can be used through its `CredHubOperations` interface.
 
 The following is an example of setting a new credential in CredHub:
 
@@ -103,6 +114,12 @@ public class MyApp {
 }
 ----
 ====
+
+=== Authentication
+
+CredHub supports two authentication methods: mutual TLS and OAuth2. Spring CredHub currently supports mutual TLS authentication with applications deployed to Cloud Foundry using the Container Security Provider feature of the Java Buildpack. Applications using Spring CredHub should be deployed to Cloud Foundry using Java Buildpack https://github.com/cloudfoundry/java-buildpack/releases/tag/v3.17[3.17] or greater, or https://github.com/cloudfoundry/java-buildpack/releases/tag/v4.1[4.1] or greater.
+
+Support for http://credhub-api.cfapps.io/#authentication[OAuth2 authentication with CredHub] via Cloud Foundry UAA will be added in the future.
 
 === Demo Application
 

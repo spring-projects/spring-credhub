@@ -38,8 +38,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
-import static org.springframework.credhub.core.TypeUtils.getDetailsDataReference;
-import static org.springframework.credhub.core.TypeUtils.getDetailsReference;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
@@ -97,7 +95,8 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(credentialRequest, "credentialRequest must not be null");
 
 		Class<T> credentialType = (Class<T>) credentialRequest.getValue().getClass();
-		final ParameterizedTypeReference<CredentialDetails<T>> ref = getDetailsReference(credentialType);
+		final ParameterizedTypeReference<CredentialDetails<T>> ref =
+				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
 			@Override
@@ -119,7 +118,8 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(parametersRequest, "generateRequest must not be null");
 
 		Class<T> credentialType = (Class<T>) parametersRequest.getParameters().getClass();
-		final ParameterizedTypeReference<CredentialDetails<T>> ref = getDetailsReference(credentialType);
+		final ParameterizedTypeReference<CredentialDetails<T>> ref =
+				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
 			@Override
@@ -140,7 +140,8 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(id, "credential id must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
-		final ParameterizedTypeReference<CredentialDetails<T>> ref = getDetailsReference(credentialType);
+		final ParameterizedTypeReference<CredentialDetails<T>> ref =
+				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
 			@Override
@@ -160,7 +161,8 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
-		final ParameterizedTypeReference<CredentialDetailsData<T>> ref = getDetailsDataReference(credentialType);
+		final ParameterizedTypeReference<CredentialDetailsData<T>> ref =
+				new ParameterizedTypeReference<CredentialDetailsData<T>>() {};
 
 		return doWithRest(new RestOperationsCallback<List<CredentialDetails<T>>>() {
 			@Override

@@ -20,7 +20,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.credhub.core.CloudFoundryAppInstanceProperties;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
@@ -54,17 +53,6 @@ public class CredHubConfiguration {
 	@Bean
 	public CredHubProperties credHubProperties() {
 		return new CredHubProperties();
-	}
-
-	/**
-	 * Create the {@link CloudFoundryAppInstanceProperties} that contains information
-	 * about the application instance running on Cloud Foundry.
-	 *
-	 * @return the {@link CloudFoundryAppInstanceProperties} bean
-	 */
-	@Bean
-	public CloudFoundryAppInstanceProperties cloudFoundryAppInstanceProperties() {
-		return new CloudFoundryAppInstanceProperties();
 	}
 
 	/**

@@ -34,17 +34,20 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY;
-import static org.springframework.credhub.core.TypeUtils.getDetailsReference;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+@SuppressWarnings("unchecked")
 public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTemplateUnitTestsBase {
 	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
@@ -79,11 +82,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 	void verifyWrite(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		CredentialRequest<T> request = getWriteRequest();
 
-		final ParameterizedTypeReference<CredentialDetails<T>> ref =
-				getDetailsReference(getType());
-
-		when(restTemplate.exchange(BASE_URL_PATH, PUT,
-				new HttpEntity<CredentialRequest<T>>(request), ref))
+		when(restTemplate.exchange(eq(BASE_URL_PATH), eq(PUT),
+				eq(new HttpEntity<CredentialRequest<T>>(request)), isA(ParameterizedTypeReference.class)))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -105,11 +105,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 	void verifyGenerate(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		ParametersRequest<P> request = getGenerateRequest();
 
-		final ParameterizedTypeReference<CredentialDetails<T>> ref =
-				getDetailsReference(getType());
-
-		when(restTemplate.exchange(BASE_URL_PATH, POST,
-				new HttpEntity<ParametersRequest<P>>(request), ref))
+		when(restTemplate.exchange(eq(BASE_URL_PATH), eq(POST),
+				eq(new HttpEntity<ParametersRequest<P>>(request)), isA(ParameterizedTypeReference.class)))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -129,10 +126,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 	}
 
 	void verifyGetById(ResponseEntity<CredentialDetails<T>> expectedResponse) {
-		final ParameterizedTypeReference<CredentialDetails<T>> ref =
-				getDetailsReference(getType());
-
-		when(restTemplate.exchange(ID_URL_PATH, GET, null, ref, CREDENTIAL_ID))
+		when(restTemplate.exchange(eq(ID_URL_PATH), eq(GET), isNull(HttpEntity.class),
+				isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID)))
 				.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -153,10 +148,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 	}
 
 	void verifyGetByNameWithString(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
-		ParameterizedTypeReference<CredentialDetailsData<T>> ref = TypeUtils
-				.getDetailsDataReference(getType());
-
-		when(restTemplate.exchange(NAME_URL_QUERY, GET, null, ref, NAME.getName()))
+		when(restTemplate.exchange(eq(NAME_URL_QUERY), eq(GET), isNull(HttpEntity.class),
+				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
 				.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(OK)) {
@@ -177,12 +170,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		}
 	}
 
-
 	void verifyGetByNameWithCredentialName(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
-		ParameterizedTypeReference<CredentialDetailsData<T>> ref = TypeUtils
-				.getDetailsDataReference(getType());
-
-		when(restTemplate.exchange(NAME_URL_QUERY, GET, null, ref, NAME.getName()))
+		when(restTemplate.exchange(eq(NAME_URL_QUERY), eq(GET), isNull(HttpEntity.class),
+				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
 				.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(OK)) {

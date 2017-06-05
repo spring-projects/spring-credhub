@@ -30,7 +30,7 @@ public abstract class CredHubTemplateUnitTestsBase {
 	protected static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
 
 	@Rule
-	public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
+	public MockitoRule mockitoRule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
 	@Mock
 	protected RestTemplate restTemplate;

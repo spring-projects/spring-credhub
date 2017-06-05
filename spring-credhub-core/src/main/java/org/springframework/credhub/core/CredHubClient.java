@@ -18,11 +18,19 @@
 
 package org.springframework.credhub.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.credhub.support.JsonUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -30,6 +38,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriTemplateHandler;
 import org.springframework.web.util.UriTemplateHandler;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Factory for creating a {@link RestTemplate} configured for communication with
@@ -52,6 +62,7 @@ public class CredHubClient {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 		restTemplate.setUriTemplateHandler(createUriTemplateHandler(baseUri));
 		restTemplate.setMessageConverters(createMessageConverters());
+		restTemplate.setInterceptors(createInterceptors());
 		return restTemplate;
 	}
 
@@ -81,5 +92,33 @@ public class CredHubClient {
 		messageConverters.add(new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper()));
 
 		return messageConverters;
+	}
+
+	/**
+	 * Create the {@link ClientHttpRequestInterceptor} necessary to configure requests and responses.
+	 *
+	 * @return the list of {@link ClientHttpRequestInterceptor}s
+	 */
+	private static List<ClientHttpRequestInterceptor> createInterceptors() {
+		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>(1);
+		interceptors.add(new CredHubRequestInterceptor());
+		return interceptors;
+	}
+
+	/**
+	 * A request interceptor that sets headers common to all CredHub requests.
+	 */
+	private static class CredHubRequestInterceptor implements ClientHttpRequestInterceptor {
+		@Override
+		public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+											ClientHttpRequestExecution execution) throws IOException {
+			HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
+
+			HttpHeaders headers = requestWrapper.getHeaders();
+			headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			return execution.execute(requestWrapper, body);
+		}
 	}
 }

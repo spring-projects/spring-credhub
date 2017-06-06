@@ -334,6 +334,7 @@
 				</repository>
 			</repositories>
 		</profile>
+		
 		<profile>
 
 			<id>spring5</id>
@@ -387,6 +388,9 @@
 								<phase>package</phase>
 							</execution>
 						</executions>
+						<configuration>
+							<excludePackageNames>org.springframework.credhub.demo</excludePackageNames>
+						</configuration>
 					</plugin>
 
 				</plugins>
@@ -397,7 +401,7 @@
 		<profile>
 
 			<!--
-				Profile to be activated when building the distribution atrifacts.
+				Profile to be activated when building the distribution artifacts.
 
 				Generates reference documentation, aggregates JavaDoc etc. Has to be combined with
 				profiles "release" or "milestone" to deploy artifacts into the appropriate places.
@@ -410,17 +414,6 @@
 				<maven.install.skip>true</maven.install.skip>
 				<skipTests>true</skipTests>
 			</properties>
-
-<!--			<dependencies>
-				<dependency>
-					<groupId>org.springframework.data.build</groupId>
-					<artifactId>spring-data-build-resources</artifactId>
-					<version>2.0.0.BUILD-SNAPSHOT</version>
-					<scope>provided</scope>
-					<type>zip</type>
-				</dependency>
-			</dependencies>
--->
 
 			<build>
 
@@ -568,6 +561,7 @@
 									<link>http://docs.spring.io/spring/docs/current/javadoc-api/</link>
 									<link>http://docs.oracle.com/javase/6/docs/api</link>
 								</links>
+								<excludePackageNames>org.springframework.credhub.demo</excludePackageNames>
 							</configuration>
 						</plugin>
 

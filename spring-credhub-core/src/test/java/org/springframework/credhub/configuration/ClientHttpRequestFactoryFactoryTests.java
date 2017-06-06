@@ -24,15 +24,20 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.Netty4ClientHttpRequestFactory;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+import org.springframework.http.client.OkHttpClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection.usingJdk;
+import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.Netty.usingNetty;
+import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp.usingOkHttp;
+import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp3.usingOkHttp3;
 
 public class ClientHttpRequestFactoryFactoryTests {
-
 	@Test
 	public void jdkDefaultClientCreated() throws Exception {
 		ClientHttpRequestFactory factory = usingJdk(new ClientOptions());
@@ -42,7 +47,6 @@ public class ClientHttpRequestFactoryFactoryTests {
 
 	@Test
 	public void httpComponentsClientCreated() throws Exception {
-
 		ClientHttpRequestFactory factory = usingHttpComponents(new ClientOptions());
 
 		assertThat(factory, instanceOf(HttpComponentsClientHttpRequestFactory.class));
@@ -50,6 +54,33 @@ public class ClientHttpRequestFactoryFactoryTests {
 		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory).getHttpClient();
 
 		assertThat(httpClient, instanceOf(CloseableHttpClient.class));
+
+		((DisposableBean) factory).destroy();
+	}
+
+	@Test
+	public void okHttpClientCreated() throws Exception {
+		ClientHttpRequestFactory factory = usingOkHttp(new ClientOptions());
+
+		assertThat(factory, instanceOf(OkHttpClientHttpRequestFactory.class));
+
+		((DisposableBean) factory).destroy();
+	}
+
+	@Test
+	public void okHttp3ClientCreated() throws Exception {
+		ClientHttpRequestFactory factory = usingOkHttp3(new ClientOptions());
+
+		assertThat(factory, instanceOf(OkHttp3ClientHttpRequestFactory.class));
+
+		((DisposableBean) factory).destroy();
+	}
+
+	@Test
+	public void nettyClientCreated() throws Exception {
+		ClientHttpRequestFactory factory = usingNetty(new ClientOptions());
+
+		assertThat(factory, instanceOf(Netty4ClientHttpRequestFactory.class));
 
 		((DisposableBean) factory).destroy();
 	}

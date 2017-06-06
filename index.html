@@ -1,0 +1,133 @@
+---
+# The name of your project
+title: Spring CredHub
+
+badges:
+
+  # Customize your project's badges. Delete any entries that do not apply.
+  custom:
+    - name: Source (GitHub)
+      url:  https://github.com/spring-projects/spring-credhub
+      icon: github
+
+    - name: Issues (GitHub)
+      url:  https://github.com/spring-projects/spring-credhub/issues
+      icon: tracking
+
+    - name: CI (Bamboo)
+      url:  https://build.spring.io/browse/SPRINGCREDHUB-CORE
+      icon: ci
+
+    - name: StackOverflow
+      url:  http://stackoverflow.com/questions/tagged/spring-credhub
+      icon: stackoverflow
+
+---
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+{% capture billboard_description %}
+
+Spring CredHub provides client-side support for storing, retrieving, and deleting credentials from a [CredHub](https://github.com/cloudfoundry-incubator/credhub) server running in a [Cloud Foundry](https://www.cloudfoundry.org/) platform.
+
+{% endcapture %}
+
+{% capture main_content %}
+
+[CredHub](https://github.com/cloudfoundry-incubator/credhub) provides an [API](http://credhub-api.cfapps.io/) to securely store, generate, retrieve, and delete credentials of various types. Spring CredHub provides a Java binding for the CredHub API, making it easy to integrate Spring applications with CredHub.
+
+## Features
+
+* Storing, retrieving, and deleting all CredHub credential types - user, password, certificate, RSA, SSH, value (arbitrary string), and JSON.
+* Generating credential types user, password, certificate, RSA, and SSH.
+* Interpolating Cloud Foundry service binding credentials that contain CredHub references.
+
+<span id="quick-start"></span>
+
+## Quick Start
+
+{% include download_widget.md %}
+
+## Configure CredHubTemplate
+
+The class `org.springframework.credhub.core.CredHubTemplate` is the central class of Spring CredHub. The template offers convenience operations to write, retrieve, and delete credentials in CredHub and provides a mapping between client application domain objects and CredHub credentials.
+
+Spring CredHub is initialized by providing Java Spring config like the following:
+
+```java
+@Configuration
+@Import(CredHubConfiguration.class)
+public class AppConfig {
+}
+```
+
+## Inject and Use CredHubTemplate
+
+This configuration will result in a `CredHubTemplate` bean being configured and added to the Spring application context. The `CredHubTemplate` can be used through its `CredHubOperations` interface.
+
+The following is an example of setting a new credential in CredHub:
+
+```java
+public class MyApp {
+  @Autowired
+  CredHubOperations credHubOperations;
+
+  public void writeAndDeleteCredential() {
+    PasswordCredentialRequest request =
+      PasswordCredentialRequest.builder()
+        .overwrite(true)
+        .name(new SimpleCredentialName("spring-credhub", "demo"))
+        .value(new PasswordCredential("secret"))
+        .build();
+
+    CredentialDetails<PasswordCredential> storedCredential =
+        credHubOperations.write(request);
+
+    CredentialDetails<PasswordCredential> retrievedCredential =
+        credHubOperations.getById(storedCredential.getId());
+
+    credHubOperations.deleteByName(storedCredential.getName());
+  }
+}
+```
+
+The following is an example of generating a new credential in CredHub:
+
+```java
+public class MyApp {
+  @Autowired
+  CredHubOperations credHubOperations;
+
+  public void generateCredential() {
+    PasswordParametersRequest request =
+      PasswordParametersRequest.builder()
+        .overwrite(true)
+        .name(new SimpleCredentialName("spring-credhub", "demo"))
+        .parameters(PasswordParameters.builder()
+            .length(20)
+            .excludeLower(false)
+            .excludeUpper(false)
+            .excludeNumber(false)
+            .includeSpecial(true)
+            .build())
+        .build();
+
+    CredentialDetails<PasswordCredential> credential =
+        credHubOperations.generate(request);
+  }
+}
+```
+
+{% endcapture %}
+
+{% capture related_resources %}
+
+### Sample Projects
+
+* [Spring CredHub Demo](https://github.com/spring-projects/spring-credhub/tree/master/spring-credhub-demo)
+
+{% endcapture %}
+
+
+{% include project_page.html %}
+</html>

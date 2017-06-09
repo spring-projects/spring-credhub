@@ -28,7 +28,7 @@ import java.util.Map;
  *
  * <pre>
  * {@code
- * "VCAP_SERVICES": {
+ * {
  *   "mysql": [
  *     {
  *       "label": "mysql",
@@ -57,50 +57,19 @@ import java.util.Map;
  * }
  * </pre>
  *
- * Then the {@link VcapServicesData} data structure would expect to the equivalent of this JSON document:
- *
- * <pre>
- * {@code
- * {
- *   "mysql": [
- *     {
- *       "label": "mysql",
- *       "name": "mysql-db",
- *       "plan": "100mb",
- *       "tags": [ "mysql", "relational" ],
- *       "credentials": {
- *         "jdbcUrl": "jdbc:mysql://mysql-broker:3306/db?user=username\u0026password=password",
- *         "uri": "mysql://username:password@mysql-broker:3306/db?reconnect=true",
- *       }
- *     }
- *   ]
- *   "rabbitmq": [
- *     {
- *       "label": "rabbitmq",
- *       "name": "rabbit-queue",
- *       "plan": "standard",
- *       "tags": [ "rabbitmq", "messaging" ],
- *       "credentials": {
- *         "http_api_uri": "http://username:password@rabbitmq-broker:12345/api",
- *         "uri": "amqp://username:password@rabbitmq-broker/vhost",
- *       }
- *     }
- *   ]
- * }
- * }
- * </pre>
- *
+ * Then the {@link ServicesData} data structure would hold the equivalent of this JSON structure parsed
+ * to a {@literal Map}.
  */
-public class VcapServicesData extends HashMap<String, List<Map<String, Object>>> {
-	public VcapServicesData() {
+public class ServicesData extends HashMap<String, List<Map<String, Object>>> {
+	public ServicesData() {
 	}
 
 	/**
 	 * Initialize with the provided {@link HashMap}.
 	 *
-	 * @param vcapServices a {@literal HashMap} to initialize this data structure from
+	 * @param data a {@literal HashMap} to initialize this data structure from
 	 */
-	public VcapServicesData(HashMap<String, List<Map<String, Object>>> vcapServices) {
-		super(vcapServices);
+	public ServicesData(HashMap<String, List<Map<String, Object>>> data) {
+		super(data);
 	}
 }

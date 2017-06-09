@@ -22,7 +22,7 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.ParametersRequest;
-import org.springframework.credhub.support.VcapServicesData;
+import org.springframework.credhub.support.ServicesData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.web.client.RestTemplate;
 
@@ -179,7 +179,7 @@ public interface CredHubOperations {
 	 * @return the serviceData structure with CredHub references replaced by stored
 	 * credential values
 	 */
-	VcapServicesData interpolateServiceData(VcapServicesData serviceData);
+	ServicesData interpolateServiceData(ServicesData serviceData);
 
 	/**
 	 * Allow interaction with the configured {@link RestTemplate} not provided

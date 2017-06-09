@@ -23,11 +23,11 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.cloud.cloudfoundry.ServiceDataPostProcessor;
 import org.springframework.credhub.configuration.CredHubConfiguration;
 import org.springframework.credhub.core.CredHubOperations;
-import org.springframework.credhub.support.VcapServicesData;
+import org.springframework.credhub.support.ServicesData;
 
 /**
  * A Spring Cloud Connectors {@link ServiceDataPostProcessor} that post-processes service
- * data from {@literal VCAP_SERVICES} using the CredHub {@literal vcap} interpolation API.
+ * data from {@literal VCAP_SERVICES} using the CredHub interpolation API.
  *
  * @author Scott Frederick
  */
@@ -63,7 +63,7 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 	/**
 	 * Process the provided {@literal serviceData} parsed from {@literal VCAP_SERVICES} by
 	 * Spring Cloud Connectors using the
-	 * {@link CredHubOperations#interpolateServiceData(VcapServicesData)} API.
+	 * {@link CredHubOperations#interpolateServiceData(ServicesData)} API.
 	 *
 	 * @param serviceData raw service data parsed from {@literal VCAP_SERVICES}
 	 * @return serviceData with CredHub references replaced by stored credentials
@@ -75,7 +75,7 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 		}
 
 		try {
-			VcapServicesData interpolatedData = credHubOperations
+			ServicesData interpolatedData = credHubOperations
 					.interpolateServiceData(connectorsToCredHub(serviceData));
 
 			return credHubToConnectors(interpolatedData);
@@ -89,13 +89,13 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 	 * Convert from the Spring Cloud Connectors service data structure to the Spring Credhub
 	 * data structure.
 	 *
-	 * @param serviceData the Spring Cloud Connectors data structure
+	 * @param rawServiceData the Spring Cloud Connectors data structure
 	 * @return the equivalent Spring CredHub data structure
 	 */
-	private VcapServicesData connectorsToCredHub(CloudFoundryRawServiceData serviceData) {
-		VcapServicesData vcapServicesData = new VcapServicesData();
-		vcapServicesData.putAll(serviceData);
-		return vcapServicesData;
+	private ServicesData connectorsToCredHub(CloudFoundryRawServiceData rawServiceData) {
+		ServicesData servicesData = new ServicesData();
+		servicesData.putAll(rawServiceData);
+		return servicesData;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 	 * @param interpolatedData the Spring CredHub data structure
 	 * @return the equivalent Spring Cloud Connectors data structure
 	 */
-	private CloudFoundryRawServiceData credHubToConnectors(VcapServicesData interpolatedData) {
+	private CloudFoundryRawServiceData credHubToConnectors(ServicesData interpolatedData) {
 		CloudFoundryRawServiceData rawServicesData = new CloudFoundryRawServiceData();
 		rawServicesData.putAll(interpolatedData);
 		return rawServicesData;

@@ -33,7 +33,7 @@ import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.json.JsonCredential;
 import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.VcapServicesData;
+import org.springframework.credhub.support.ServicesData;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -140,8 +140,8 @@ public class CredHubDemoController {
 
 	private void interpolateServiceData(CredentialName name, Results results) {
 		try {
-			VcapServicesData request = buildVcapServicesData(name.getName());
-			VcapServicesData interpolatedServiceData = credHubTemplate.interpolateServiceData(request);
+			ServicesData request = buildServicesData(name.getName());
+			ServicesData interpolatedServiceData = credHubTemplate.interpolateServiceData(request);
 			saveResults(results, "Successfully interpolated service data: ", interpolatedServiceData);
 		} catch (Exception e) {
 			saveResults(results, "Error interpolating service data: ", e.getMessage());
@@ -157,7 +157,7 @@ public class CredHubDemoController {
 		}
 	}
 
-	private VcapServicesData buildVcapServicesData(String credHubReferenceName) throws IOException {
+	private ServicesData buildServicesData(String credHubReferenceName) throws IOException {
 		String vcapServices = "{" +
 				"  \"service-offering\": [" +
 				"   {" +
@@ -176,7 +176,7 @@ public class CredHubDemoController {
 				"}";
 
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(vcapServices, VcapServicesData.class);
+		return mapper.readValue(vcapServices, ServicesData.class);
 	}
 
 	private void saveResults(Results results, String message) {

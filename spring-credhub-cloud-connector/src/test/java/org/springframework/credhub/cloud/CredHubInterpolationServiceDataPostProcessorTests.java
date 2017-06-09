@@ -33,7 +33,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.CredHubOperations;
-import org.springframework.credhub.support.VcapServicesData;
+import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpStatus;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -50,7 +50,7 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 	@Test
 	public void processServiceData() {
 		CloudFoundryRawServiceData rawServiceData = buildRawServiceData();
-		VcapServicesData interpolatedServiceData = buildInterpolatedServiceData();
+		ServicesData interpolatedServiceData = buildInterpolatedServiceData();
 
 		when(credHubOperations.interpolateServiceData(argThat(matchesContent(rawServiceData))))
 				.thenReturn(interpolatedServiceData);
@@ -86,16 +86,16 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 		verifyZeroInteractions(credHubOperations);
 	}
 
-	private ArgumentMatcher<VcapServicesData> matchesContent(final CloudFoundryRawServiceData expected) {
-		return new ArgumentMatcher<VcapServicesData>() {
+	private ArgumentMatcher<ServicesData> matchesContent(final CloudFoundryRawServiceData expected) {
+		return new ArgumentMatcher<ServicesData>() {
 			@Override
-			public boolean matches(VcapServicesData actual) {
+			public boolean matches(ServicesData actual) {
 				return mapsAreEquivalent(actual, expected);
 			}
 		};
 	}
 
-	private Matcher<CloudFoundryRawServiceData> matchesContent(final VcapServicesData expected) {
+	private Matcher<CloudFoundryRawServiceData> matchesContent(final ServicesData expected) {
 		return new BaseMatcher<CloudFoundryRawServiceData>() {
 			@Override
 			@SuppressWarnings("unchecked")
@@ -125,12 +125,12 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 			}
 		};
 
-		HashMap<String, List<Map<String, Object>>> vcapServices = buildVcapServices(credentials);
+		HashMap<String, List<Map<String, Object>>> rawServiceData = buildRawServiceData(credentials);
 
-		return new CloudFoundryRawServiceData(vcapServices);
+		return new CloudFoundryRawServiceData(rawServiceData);
 	}
 
-	private VcapServicesData buildInterpolatedServiceData() {
+	private ServicesData buildInterpolatedServiceData() {
 		HashMap<String, String> credentials = new HashMap<String, String>() {
 			{
 				put("uri", "https://example.com");
@@ -139,12 +139,12 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 			}
 		};
 
-		HashMap<String, List<Map<String, Object>>> vcapServices = buildVcapServices(credentials);
+		HashMap<String, List<Map<String, Object>>> rawServiceData = buildRawServiceData(credentials);
 
-		return new VcapServicesData(vcapServices);
+		return new ServicesData(rawServiceData);
 	}
 
-	private HashMap<String, List<Map<String, Object>>> buildVcapServices(final HashMap<String, String> credentials) {
+	private HashMap<String, List<Map<String, Object>>> buildRawServiceData(final HashMap<String, String> credentials) {
 		return new HashMap<String, List<Map<String, Object>>>() {
 				{
 					put("service-offering", Collections.<Map<String, Object>> singletonList(

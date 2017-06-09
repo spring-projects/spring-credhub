@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.Assert;
 
 /**
@@ -33,7 +32,6 @@ import org.springframework.util.Assert;
  */
 public class CredentialRequest<T> extends CredHubRequest {
 	private T value;
-	@JsonProperty(value="access_control_entries")
 	private List<AdditionalPermission> additionalPermissions;
 
 	/**

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +32,8 @@ import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.json.JsonCredential;
 import org.springframework.credhub.support.json.JsonCredentialRequest;
-import org.springframework.credhub.support.json.JsonCredentialRequest.JsonCredentialRequestBuilder;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.VcapServicesData;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,17 +79,15 @@ public class CredHubDemoController {
 
 	private CredentialDetails<JsonCredential> writeCredentials(Map<String, Object> value, Results results) {
 		try {
-			JsonCredentialRequestBuilder requestBuilder = JsonCredentialRequest.builder()
+			JsonCredentialRequest request = JsonCredentialRequest.builder()
 					.overwrite(true)
 					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
-					.value(value);
-
-			if (StringUtils.hasText(appId)) {
-				requestBuilder.additionalPermission(
-						AdditionalPermission.builder().app(appId).operation(READ).build());
-			}
-
-			JsonCredentialRequest request = requestBuilder.build();
+					.value(value)
+					.additionalPermission(AdditionalPermission.builder()
+							.app(UUID.randomUUID().toString())
+							.operation(READ)
+							.build())
+					.build();
 
 			CredentialDetails<JsonCredential> credentialDetails = credHubTemplate.write(request);
 			saveResults(results, "Successfully wrote credentials: ", credentialDetails);

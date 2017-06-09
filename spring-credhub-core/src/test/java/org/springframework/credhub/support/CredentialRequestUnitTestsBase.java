@@ -52,9 +52,9 @@ public abstract class CredentialRequestUnitTestsBase {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.access_control_entries[0].actor",
+				allOf(hasJsonPath("$.additional_permissions[0].actor",
 						equalTo("mtls-app:app-id")),
-						hasJsonPath("$.access_control_entries[0].operations[0]",
+						hasJsonPath("$.additional_permissions[0].operations[0]",
 								equalTo("read"))));
 	}
 
@@ -73,16 +73,16 @@ public abstract class CredentialRequestUnitTestsBase {
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue, allOf(
-				hasJsonPath("$.access_control_entries[0].actor",
+				hasJsonPath("$.additional_permissions[0].actor",
 						equalTo("mtls-app:app1-id")),
-				hasJsonPath("$.access_control_entries[0].operations[0]", equalTo("read")),
-				hasJsonPath("$.access_control_entries[0].operations[1]",
+				hasJsonPath("$.additional_permissions[0].operations[0]", equalTo("read")),
+				hasJsonPath("$.additional_permissions[0].operations[1]",
 						equalTo("write")),
-				hasJsonPath("$.access_control_entries[1].actor",
+				hasJsonPath("$.additional_permissions[1].actor",
 						equalTo("mtls-app:app2-id")),
-				hasJsonPath("$.access_control_entries[1].operations[0]",
+				hasJsonPath("$.additional_permissions[1].operations[0]",
 						equalTo("write")),
-				hasJsonPath("$.access_control_entries[1].operations[1]",
+				hasJsonPath("$.additional_permissions[1].operations[1]",
 						equalTo("read"))));
 	}
 
@@ -94,6 +94,6 @@ public abstract class CredentialRequestUnitTestsBase {
 	}
 
 	protected void assertNoPermissions(String jsonValue) {
-		assertThat(jsonValue, hasNoJsonPath("$.access_control_entries"));
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 }

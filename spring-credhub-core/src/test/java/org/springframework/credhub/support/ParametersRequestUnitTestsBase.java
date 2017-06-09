@@ -49,6 +49,6 @@ public abstract class ParametersRequestUnitTestsBase {
 				allOf(hasJsonPath("$.overwrite", equalTo(overwrite)),
 						hasJsonPath("$.name", equalTo(name)),
 						hasJsonPath("$.type", equalTo(type))));
-		assertThat(jsonValue, hasNoJsonPath("$.access_control_entries"));
+		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
 	}
 }

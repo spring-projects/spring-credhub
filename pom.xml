@@ -207,7 +207,7 @@
 			If this section was missing, Maven would complain about
 			missing version numbers for executions without the
 			profile active.
-		-->
+			-->
 
 			<plugins>
 				<plugin>
@@ -307,11 +307,9 @@
 
 	<repositories>
 		<repository>
-			<id>spring-libs-snapshot</id>
-			<url>https://repo.spring.io/libs-snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<id>spring-milestone</id>
+			<name>Spring Milestone Repository</name>
+			<url>https://repo.spring.io/libs-milestone-local</url>
 		</repository>
 	</repositories>
 
@@ -360,7 +358,7 @@
 
 			<distributionManagement>
 				<repository>
-					<id>repo.spring.io</id>
+					<id>spring-milestone</id>
 					<name>Spring Milestone Repository</name>
 					<url>http://repo.spring.io/libs-milestone-local</url>
 				</repository>

@@ -9,8 +9,8 @@
 	<version>1.0.0.BUILD-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>spring-credhub-dependencies</name>
-	<description>Spring CredHub Dependencies</description>
+	<name>Spring CredHub BOM</name>
+	<description>Spring CredHub BOM</description>
 
 	<url>http://projects.spring.io/spring-credhub/</url>
 
@@ -35,7 +35,7 @@
 
 	<ciManagement>
 		<system>Bamboo</system>
-		<url>https://build.spring.io/browse/SPRINGCREDHUB-CREDHUB</url>
+		<url>https://build.spring.io/browse/SPRINGCREDHUB</url>
 	</ciManagement>
 
 	<developers>
@@ -116,12 +116,18 @@
 
 	<repositories>
 		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
+			<id>spring-snapshot</id>
+			<name>Spring Snapshot Repository</name>
+			<url>https://repo.spring.io/libs-snapshot-local</url>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Milestone Repository</name>
+			<url>https://repo.spring.io/libs-milestone-local</url>
 		</repository>
 	</repositories>
 
@@ -132,7 +138,7 @@
 
 			<distributionManagement>
 				<repository>
-					<id>repo.spring.io</id>
+					<id>spring-milestone</id>
 					<name>Spring Milestone Repository</name>
 					<url>http://repo.spring.io/libs-milestone-local</url>
 				</repository>

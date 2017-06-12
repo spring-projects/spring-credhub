@@ -4,7 +4,7 @@
 
 	<groupId>org.springframework.credhub</groupId>
 	<artifactId>spring-credhub-parent</artifactId>
-	<version>1.0.0.BUILD-SNAPSHOT</version>
+	<version>1.0.0.M1</version>
 
 	<name>Spring CredHub</name>
 	<description>Parent project for Spring CredHub</description>
@@ -88,7 +88,7 @@
 			<dependency>
 				<groupId>org.springframework.credhub</groupId>
 				<artifactId>spring-credhub-dependencies</artifactId>
-				<version>1.0.0.BUILD-SNAPSHOT</version>
+				<version>1.0.0.M1</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>

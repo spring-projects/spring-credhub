@@ -118,6 +118,12 @@ public class MyApp {
 }
 ```
 
+## Authentication
+
+CredHub supports two authentication methods: mutual TLS and OAuth2.
+
+Spring CredHub currently supports mutual TLS authentication with applications deployed to Cloud Foundry using the Container Security Provider feature of the Java Buildpack. Applications using Spring CredHub should be deployed to Cloud Foundry using Java Buildpack [3.17](https://github.com/cloudfoundry/java-buildpack/releases/tag/v3.17) or greater, or [4.1](https://github.com/cloudfoundry/java-buildpack/releases/tag/v4.1) or greater.
+
 {% endcapture %}
 
 {% capture related_resources %}

@@ -1,144 +1,16 @@
+image::https://build.spring.io/plugins/servlet/wittified/build-status/SPRINGCREDHUB-CORE[Build Status,link=https://build.spring.io/browse/SPRINGCREDHUB-CORE]
+
+image::https://spring.io/badges/spring-credhub/snapshot.svg[link=http://projects.spring.io/spring-credhub#quick-start]
+
 = Spring CredHub
 
 Spring CredHub provides client-side support for storing, retrieving, and deleting credentials from a https://github.com/cloudfoundry-incubator/credhub[CredHub] server running in a https://www.cloudfoundry.org/[Cloud Foundry] platform.
 
-== Quick Start
-
-=== Maven configuration
-
-Add the Maven dependency:
-
-====
-[source,xml]
-----
-<dependency>
-  <groupId>org.springframework.credhub</groupId>
-  <artifactId>spring-credhub-core</artifactId>
-  <version>${spring-credhub-version}</version>
-</dependency>
-----
-====
-
-Snapshot, Milestone, or Release Candidate versions will also require a https://github.com/spring-projects/spring-framework/wiki/Spring-repository-FAQ[Spring repository] to be added to the build file.
-
-====
-[source,xml]
-----
-<repository>
-  <id>spring-libs-snapshot</id>
-  <name>Spring Snapshot Repository</name>
-  <url>http://repo.spring.io/libs-snapshot</url>
-</repository>
-
-<repository>
-  <id>spring-libs-milestone</id>
-  <name>Spring Milestone Repository</name>
-  <url>http://repo.spring.io/libs-milestone</url>
-</repository>
-----
-====
-
-=== Using CredHubTemplate
-
-The class `org.springframework.credhub.core.CredHubTemplate` is the central class of Spring CredHub. The template offers convenience operations to write, retrieve, and delete credentials in CredHub and provides a mapping between client application domain objects and CredHub credentials.
-
-Spring CredHub is initialized by providing Java Spring config like the following:
-
-====
-[source,java]
-----
-@Configuration
-@Import(CredHubConfiguration.class)
-public class AppConfig {
-}
-----
-====
-
-This configuration will result in a `CredHubTemplate` bean being configured and added to the Spring application context. The `CredHubTemplate` can be used through its `CredHubOperations` interface.
-
-The following is an example of setting a new credential in CredHub:
-
-====
-[source,java]
-----
-public class MyApp {
-
-    @Autowired
-    CredHubOperations credHubOperations;
-
-    public void writeAndDeleteCredential() {
-        PasswordCredentialRequest request = PasswordCredentialRequest.builder()
-            .overwrite(true)
-            .name(new SimpleCredentialName("spring-credhub", "demo"))
-            .value(new PasswordCredential("secret"))
-            .build();
-
-        CredentialDetails<PasswordCredential> storedCredential =
-            credHubOperations.write(request);
-
-        CredentialDetails<PasswordCredential> retrievedCredential =
-            credHubOperations.getById(storedCredential.getId());
-
-        credHubOperations.deleteByName(storedCredential.getName());
-    }
-}
-----
-====
-
-The following is an example of generating a new credential in CredHub:
-
-====
-[source,java]
-----
-public class MyApp {
-
-    @Autowired
-    CredHubOperations credHubOperations;
-
-    public void generateCredential() {
-        PasswordParametersRequest request = PasswordParametersRequest.builder()
-            .overwrite(true)
-            .name(new SimpleCredentialName("spring-credhub", "demo"))
-            .parameters(PasswordParameters.builder()
-                .length(20)
-                .excludeLower(false)
-                .excludeUpper(false)
-                .excludeNumber(false)
-                .includeSpecial(true)
-                .build())
-            .build();
-
-        CredentialDetails<PasswordCredential> credential =
-            credHubOperations.generate(request);
-    }
-}
-----
-====
-
-=== Authentication
-
-CredHub supports two authentication methods: mutual TLS and OAuth2. Spring CredHub currently supports mutual TLS authentication with applications deployed to Cloud Foundry using the Container Security Provider feature of the Java Buildpack. Applications using Spring CredHub should be deployed to Cloud Foundry using Java Buildpack https://github.com/cloudfoundry/java-buildpack/releases/tag/v3.17[3.17] or greater, or https://github.com/cloudfoundry/java-buildpack/releases/tag/v4.1[4.1] or greater.
-
-Support for http://credhub-api.cfapps.io/#authentication[OAuth2 authentication with CredHub] via Cloud Foundry UAA will be added in the future.
+See the https://projects.spring.io/spring-credhub/[project site] for more information.
 
 === Demo Application
 
-A simple application that demonstrates the use of Spring CredHub is available in link:/spring-credhub-demo/src/main/java/org/springframework/credhub/demo[this repository].
-
-This application can also be used to test CredHub connectivity by deploying it to a Cloud Foundry platform that has CredHub installed. The demo application subproject includes a deployment manifest that makes it simple to deploy the application. Use the http://docs.cloudfoundry.org/cf-cli/getting-started.html[`cf` CLI] to target and authenticate to a Cloud Foundry platform, and run the following commands:
-
-----
-$ ./mvnw package
-$ cf push -f spring-credhub-demo/manifest.yml
-----
-
-After deploying the application, send an HTTP request to the demo application with this command:
-
-----
-$ curl -X POST http://spring-credhub-demo.cf.example.com/test -d @spring-credhub-demo/demo.json -H "Content-type: application/json"
-----
-
-The application will write, retrieve, and delete a set of JSON credentials in CredHub and show the results of each request.
+A simple application that demonstrates the use of Spring CredHub is available in link:/spring-credhub-demo[this repository].
 
 == Building
 

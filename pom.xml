@@ -538,7 +538,6 @@
 								<stylesheetfile>${shared.resources}/javadoc/spring-javadoc.css</stylesheetfile>
 								<!-- copies doc-files subdirectory which contains image resources -->
 								<docfilessubdirs>true</docfilessubdirs>
-								<additionalparam>-Xdoclint:none</additionalparam>
 								<links>
 									<link>http://docs.spring.io/spring/docs/current/javadoc-api/</link>
 									<link>http://docs.oracle.com/javase/6/docs/api</link>

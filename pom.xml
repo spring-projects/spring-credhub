@@ -400,17 +400,13 @@
 
 			<!--
 				Profile to be activated when building the distribution artifacts.
-
-				Generates reference documentation, aggregates JavaDoc etc. Has to be combined with
-				profiles "release" or "milestone" to deploy artifacts into the appropriate places.
+				Generates reference documentation, aggregates JavaDoc etc.
 			-->
 
 			<id>distribute</id>
 
 			<properties>
 				<shared.resources>${project.build.directory}/shared-resources</shared.resources>
-				<maven.install.skip>true</maven.install.skip>
-				<skipTests>true</skipTests>
 			</properties>
 
 			<build>
@@ -590,17 +586,6 @@
 							</configuration>
 
 						</plugin>
-
-						<!--
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-deploy-plugin</artifactId>
-							<configuration>
-								<skip>true</skip>
-								<uniqueVersion>false</uniqueVersion>
-							</configuration>
-						</plugin>
-						-->
 					</plugins>
 				</pluginManagement>
 			</build>

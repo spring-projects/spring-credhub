@@ -56,6 +56,7 @@
 		<developer>
 			<id>sfrederick</id>
 			<name>Scott Frederick</name>
+			<email>sfrederick@pivotal.io</email>
 		</developer>
 	</developers>
 
@@ -305,6 +306,7 @@
 		</pluginManagement>
 	</build>
 
+<!--
 	<repositories>
 		<repository>
 			<id>spring-milestone</id>
@@ -312,46 +314,48 @@
 			<url>https://repo.spring.io/libs-milestone-local</url>
 		</repository>
 	</repositories>
+-->
 
-	<profiles>
-		<profile>
+	<!--<profiles>-->
+		<!--<profile>-->
 
-			<id>springNext</id>
+			<!--<id>springNext</id>-->
 
-			<properties>
-				<spring.version>4.3.8.BUILD-SNAPSHOT</spring.version>
-			</properties>
+			<!--<properties>-->
+				<!--<spring.version>4.3.8.BUILD-SNAPSHOT</spring.version>-->
+			<!--</properties>-->
 
-			<repositories>
-				<repository>
-					<id>spring-libs-snapshot</id>
-					<url>https://repo.spring.io/libs-snapshot</url>
-					<snapshots>
-						<enabled>true</enabled>
-					</snapshots>
-				</repository>
-			</repositories>
-		</profile>
+			<!--<repositories>-->
+				<!--<repository>-->
+					<!--<id>spring-libs-snapshot</id>-->
+					<!--<url>https://repo.spring.io/libs-snapshot</url>-->
+					<!--<snapshots>-->
+						<!--<enabled>true</enabled>-->
+					<!--</snapshots>-->
+				<!--</repository>-->
+			<!--</repositories>-->
+		<!--</profile>-->
 		
-		<profile>
+		<!--<profile>-->
 
-			<id>spring5</id>
+			<!--<id>spring5</id>-->
 
-			<properties>
-				<spring.version>5.0.0.BUILD-SNAPSHOT</spring.version>
-			</properties>
+			<!--<properties>-->
+				<!--<spring.version>5.0.0.BUILD-SNAPSHOT</spring.version>-->
+			<!--</properties>-->
 
-			<repositories>
-				<repository>
-					<id>spring-libs-snapshot</id>
-					<url>https://repo.spring.io/libs-snapshot</url>
-					<snapshots>
-						<enabled>true</enabled>
-					</snapshots>
-				</repository>
-			</repositories>
-		</profile>
+			<!--<repositories>-->
+				<!--<repository>-->
+					<!--<id>spring-libs-snapshot</id>-->
+					<!--<url>https://repo.spring.io/libs-snapshot</url>-->
+					<!--<snapshots>-->
+						<!--<enabled>true</enabled>-->
+					<!--</snapshots>-->
+				<!--</repository>-->
+			<!--</repositories>-->
+		<!--</profile>-->
 
+<!--
 		<profile>
 
 			<id>milestone</id>
@@ -365,10 +369,12 @@
 			</distributionManagement>
 
 		</profile>
+-->
 
+<!--
 		<profile>
 
-			<!-- Profile to be run on the CI server, JARs JavaDocs -->
+			&lt;!&ndash; Profile to be run on the CI server, JARs JavaDocs &ndash;&gt;
 
 			<id>ci</id>
 
@@ -395,13 +401,15 @@
 			</build>
 
 		</profile>
+-->
 
+<!--
 		<profile>
 
-			<!--
+			&lt;!&ndash;
 				Profile to be activated when building the distribution artifacts.
 				Generates reference documentation, aggregates JavaDoc etc.
-			-->
+			&ndash;&gt;
 
 			<id>distribute</id>
 
@@ -413,9 +421,9 @@
 
 				<plugins>
 
-					<!--
+					&lt;!&ndash;
 						Unpacks the content of spring-data-build-resources into the shared resources folder.
-					-->
+					&ndash;&gt;
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -438,9 +446,9 @@
 						</configuration>
 					</plugin>
 
-					<!--
+					&lt;!&ndash;
 						Configures JavaDoc generation.
-					-->
+					&ndash;&gt;
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -459,16 +467,16 @@
 						</executions>
 					</plugin>
 
-					<!--
+					&lt;!&ndash;
 						Copies all namespaces schemas to target/schemas flatten the directory structure.
 						Depended on by the site.xml assembly descriptor.
-					-->
+					&ndash;&gt;
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
+						<inherited>false</inherited>
 						<executions>
-
 							<execution>
 								<id>copy-documentation-resources</id>
 								<phase>generate-resources</phase>
@@ -502,9 +510,9 @@
 								</goals>
 								<configuration>
 									<tasks>
-										<zip destfile="${project.build.directory}/spring-credhub-${project.version}.zip">
-											<zipfileset src="${project.build.directory}/spring-credhub-${project.version}-javadoc.jar" prefix="api" />
-											<!--<fileset dir="${project.build.directory}/content"/>-->
+										<zip destfile="${project.root}/target/spring-credhub-${project.version}.zip">
+											<zipfileset src="${project.root}/target/spring-credhub-${project.version}-javadoc.jar" prefix="api" />
+											&lt;!&ndash;<fileset dir="${project.build.directory}/content"/>&ndash;&gt;
 										</zip>
 									</tasks>
 								</configuration>
@@ -517,9 +525,9 @@
 				<pluginManagement>
 					<plugins>
 
-						<!--
+						&lt;!&ndash;
 							JavaDoc
-						-->
+						&ndash;&gt;
 
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -532,7 +540,7 @@
 								<javadocDirectory>${shared.resources}/javadoc</javadocDirectory>
 								<overview>${shared.resources}/javadoc/overview.html</overview>
 								<stylesheetfile>${shared.resources}/javadoc/spring-javadoc.css</stylesheetfile>
-								<!-- copies doc-files subdirectory which contains image resources -->
+								&lt;!&ndash; copies doc-files subdirectory which contains image resources &ndash;&gt;
 								<docfilessubdirs>true</docfilessubdirs>
 								<links>
 									<link>http://docs.spring.io/spring/docs/current/javadoc-api/</link>
@@ -542,9 +550,9 @@
 							</configuration>
 						</plugin>
 
-						<!--
+						&lt;!&ndash;
 							Asciidoctor
-						-->
+						&ndash;&gt;
 
 						<plugin>
 							<groupId>org.asciidoctor</groupId>
@@ -607,5 +615,6 @@
 				</pluginRepository>
 			</pluginRepositories>
 		</profile>
-	</profiles>
+-->
+	<!--</profiles>-->
 </project>

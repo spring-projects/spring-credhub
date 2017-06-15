@@ -1,0 +1,174 @@
+/*
+ * Copyright 2016-2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+description = "Spring CredHub"
+
+buildscript {
+	repositories {
+		jcenter()
+		maven { url 'https://repo.spring.io/plugins-release' }
+	}
+	dependencies {
+		classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+		classpath 'io.spring.gradle:spring-io-plugin:0.0.7.RELEASE'
+		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
+	}
+}
+
+ext {
+	springVersion = "4.3.8.RELEASE"
+
+	junitVersion = "4.12"
+	mockitoVersion = "2.7.22"
+
+	javadocLinks = [
+			'http://docs.oracle.com/javase/7/docs/api/',
+			'http://docs.oracle.com/javaee/6/api/',
+			'http://docs.spring.io/spring/docs/current/javadoc-api/',
+	] as String[]
+}
+
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven'
+	apply plugin: 'eclipse'
+
+	apply plugin: 'propdeps'
+	apply plugin: 'propdeps-maven'
+	apply plugin: 'propdeps-idea'
+	apply plugin: 'propdeps-eclipse'
+	apply plugin: "org.asciidoctor.gradle.asciidoctor"
+
+	group = 'org.springframework.credhub'
+
+	asciidoctor {
+		sourceDir = new File("docs/src/main/asciidoc")
+		outputDir = new File("docs/target/generated-docs")
+		options = [
+				'doctype': 'book'
+		]
+		attributes = [
+				'source-highlighter': 'coderay'
+		]
+	}
+
+	apply from: "${rootProject.projectDir}/publish-maven.gradle"
+
+	if (project.hasProperty('platformVersion')) {
+		apply plugin: 'spring-io'
+
+		// necessary to resolve the Spring IO versions (which may include snapshots)
+		repositories {
+			maven { url "https://repo.spring.io/libs-snapshot" }
+		}
+
+		dependencyManagement {
+			springIoTestRuntime {
+				imports {
+					mavenBom "io.spring.platform:platform-bom:${platformVersion}"
+				}
+			}
+		}
+	}
+
+	dependencies {
+		testCompile("junit:junit:$junitVersion")
+		testCompile("org.mockito:mockito-core:$mockitoVersion")
+	}
+}
+
+subprojects {
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	tasks.withType(JavaCompile) {
+		options.encoding = 'UTF-8'
+	}
+
+	task packageSources(type: Jar) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+	}
+
+	task javadocJar(type: Jar) {
+		classifier = "javadoc"
+		from javadoc
+	}
+
+	artifacts {
+		archives packageSources
+		archives javadocJar
+	}
+
+	javadoc {
+		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+		options.author = true
+		options.header = project.name
+	}
+
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/libs-snapshot-local" }
+		maven { url "https://repo.spring.io/libs-milestone-local" }
+	}
+}
+
+configure(rootProject) {
+	task api(type: Javadoc) {
+		group = "Documentation"
+		description = "Generates aggregated Javadoc API documentation."
+		title = "${rootProject.description} ${version} API"
+		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+		options.author = true
+		options.header = rootProject.description
+		options.links(project.ext.javadocLinks)
+
+		source subprojects.collect { project ->
+			project.sourceSets.main.allJava
+		}
+
+		classpath = files(subprojects.collect { project ->
+			project.sourceSets.main.compileClasspath
+		})
+
+		maxMemory = "1024m"
+		destinationDir = new File(buildDir, "api")
+	}
+
+	task docsZip(type: Zip) {
+		group = 'Distribution'
+		classifier = 'docs'
+		description = "Builds -${classifier} archive containing api and reference " +
+				"for deployment at docs.spring.io/spring-credhub/docs."
+
+		from(api) {
+			into 'api'
+		}
+	}
+
+	artifacts {
+		archives docsZip
+	}
+}
+
+task dist(dependsOn: assemble) {
+	group = 'Distribution'
+	description = 'Builds -dist and -docs distribution archives.'
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.5'
+}

@@ -83,11 +83,6 @@ allprojects {
 			}
 		}
 	}
-
-	dependencies {
-		testCompile("junit:junit:$junitVersion")
-		testCompile("org.mockito:mockito-core:$mockitoVersion")
-	}
 }
 
 subprojects {
@@ -119,6 +114,11 @@ subprojects {
 		options.header = project.name
 	}
 
+	dependencies {
+		testCompile("junit:junit:$junitVersion")
+		testCompile("org.mockito:mockito-core:$mockitoVersion")
+	}
+
 	repositories {
 		mavenCentral()
 		maven { url "https://repo.spring.io/libs-snapshot-local" }
@@ -131,8 +131,6 @@ configure(rootProject) {
 		group = "Documentation"
 		description = "Generates aggregated Javadoc API documentation."
 		title = "${rootProject.description} ${version} API"
-
-		exclude 'org/springframework/credhub/demo/'
 
 		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
 		options.author = true

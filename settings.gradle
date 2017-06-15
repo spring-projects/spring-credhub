@@ -3,9 +3,7 @@ rootProject.name = 'spring-credhub'
 include ':spring-credhub-dependencies'
 include ':spring-credhub-core'
 include ':spring-credhub-cloud-connector'
-include ':spring-credhub-demo'
 
 project(':spring-credhub-dependencies').projectDir = "$rootDir/spring-credhub-dependencies" as File
 project(':spring-credhub-core').projectDir = "$rootDir/spring-credhub-core" as File
 project(':spring-credhub-cloud-connector').projectDir = "$rootDir/spring-credhub-cloud-connector" as File
-project(':spring-credhub-demo').projectDir = "$rootDir/spring-credhub-demo" as File

@@ -22,7 +22,9 @@ buildscript {
 	}
 
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+		classpath 'io.spring.gradle:spring-io-plugin:0.0.7.RELEASE'
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
 	}
 
 	repositories {
@@ -31,10 +33,25 @@ buildscript {
 	}
 }
 
-apply plugin: "org.springframework.boot"
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'org.springframework.boot'
 
 dependencies {
-	compile project(':spring-credhub-core')
+	compile group: 'org.springframework.credhub', name: 'spring-credhub-core', version: '1.0.0.BUILD-SNAPSHOT'
+
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/libs-snapshot-local" }
+	maven { url "https://repo.spring.io/libs-milestone-local" }
 }

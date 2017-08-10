@@ -18,9 +18,15 @@ package org.springframework.credhub.configuration;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import com.squareup.okhttp.OkHttpClient;
 import io.netty.handler.ssl.ClientAuth;
@@ -169,6 +175,7 @@ public class ClientHttpRequestFactoryFactory {
 				throws IOException, GeneralSecurityException {
 
 			final OkHttpClient okHttpClient = new OkHttpClient();
+
 			okHttpClient.setSslSocketFactory(SSLContext.getDefault().getSocketFactory());
 
 			OkHttpClientHttpRequestFactory requestFactory =
@@ -204,8 +211,10 @@ public class ClientHttpRequestFactoryFactory {
 		static ClientHttpRequestFactory usingOkHttp3(ClientOptions options)
 				throws IOException, GeneralSecurityException {
 
-			Builder builder = new Builder()
-					.sslSocketFactory(SSLContext.getDefault().getSocketFactory());
+			SSLSocketFactory socketFactory = SSLContext.getDefault().getSocketFactory();
+			X509TrustManager trustManager = getTrustManager();
+
+			Builder builder = new Builder().sslSocketFactory(socketFactory, trustManager);
 
 			if (options.getConnectionTimeout() != null) {
 				builder.connectTimeout(options.getConnectionTimeout(), TimeUnit.MILLISECONDS);
@@ -215,6 +224,28 @@ public class ClientHttpRequestFactoryFactory {
 			}
 
 			return new OkHttp3ClientHttpRequestFactory(builder.build());
+		}
+
+		private static X509TrustManager getTrustManager() {
+			try {
+				TrustManagerFactory trustManagerFactory =
+						TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+				trustManagerFactory.init((KeyStore) null);
+
+				TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+				
+				for (TrustManager trustManager : trustManagers) {
+					if (trustManager instanceof X509TrustManager) {
+						return (X509TrustManager) trustManager;
+					}
+				}
+
+				throw new IllegalStateException("Unable to setup SSL with OkHttp3; no X509TrustManager found in: " +
+						Arrays.toString(trustManagers));
+			} catch (GeneralSecurityException e) {
+				throw new IllegalStateException("Unable to setup SSL with OkHttp3; error getting a X509TrustManager: " +
+						e.getMessage(), e);
+			}
 		}
 	}
 

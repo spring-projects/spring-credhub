@@ -38,6 +38,7 @@ public interface CredHubOperations {
 	 * value.
 	 *
 	 * @param credentialRequest the credential to write to CredHub; must not be {@literal null}
+	 * @param <T> the credential implementation type
 	 * @return the details of the written credential
 	 */
 	<T> CredentialDetails<T> write(final CredentialRequest<T> credentialRequest);
@@ -48,6 +49,8 @@ public interface CredHubOperations {
 	 *
 	 * @param parametersRequest the parameters of the new credential to generate in CredHub;
 	 *                                must not be {@literal null}
+	 * @param <T> the credential implementation type
+	 * @param <P> the credential parameter implementation type
 	 * @return the details of the generated credential
 	 */
 	<T, P> CredentialDetails<T> generate(ParametersRequest<P> parametersRequest);
@@ -57,6 +60,7 @@ public interface CredHubOperations {
 	 *
 	 * @param id the ID of the credential; must not be {@literal null}
 	 * @param credentialType the type of the credential to be retrieved; must not be {@literal null}
+	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
 	 */
 	<T> CredentialDetails<T> getById(final String id, Class<T> credentialType);
@@ -67,6 +71,8 @@ public interface CredHubOperations {
 	 * including historical values.
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
+	 * @param credentialType the type of credential expected to be returned
+	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential, including history
 	 */
 	<T> List<CredentialDetails<T>> getByName(final String name, Class<T> credentialType);
@@ -77,6 +83,8 @@ public interface CredHubOperations {
 	 * including historical values.
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
+	 * @param credentialType the type of credential expected to be returned
+	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential, including history
 	 */
 	<T> List<CredentialDetails<T>> getByName(final CredentialName name, Class<T> credentialType);
@@ -186,6 +194,7 @@ public interface CredHubOperations {
 	 * by other methods.
 	 *
 	 * @param callback wrapper for the callback method
+	 * @param <T> the credential implementation type
 	 * @return the return value from the callback method
 	 */
 	<T> T doWithRest(RestOperationsCallback<T> callback);

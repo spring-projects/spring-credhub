@@ -25,6 +25,7 @@ import java.util.Map;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("javadoc")
 public class JsonCredential extends HashMap<String, Object> {
 	/**
 	 * @see HashMap#HashMap()
@@ -35,6 +36,8 @@ public class JsonCredential extends HashMap<String, Object> {
 
 	/**
 	 * @see HashMap#HashMap(int)
+	 *
+	 * @param  initialCapacity the initial capacity
 	 */
 	public JsonCredential(int initialCapacity) {
 		super(initialCapacity);
@@ -42,6 +45,9 @@ public class JsonCredential extends HashMap<String, Object> {
 
 	/**
 	 * @see HashMap#HashMap(int, float)
+	 *
+	 * @param initialCapacity the initial capacity
+	 * @param loadFactor      the load factor
 	 */
 	public JsonCredential(int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
@@ -49,6 +55,8 @@ public class JsonCredential extends HashMap<String, Object> {
 
 	/**
 	 * @see HashMap#HashMap(Map)
+	 *
+	 * @param m the map whose mappings are to be placed in this map
 	 */
 	public JsonCredential(Map<? extends String, ?> m) {
 		super(m);

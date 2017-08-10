@@ -36,6 +36,8 @@ public class CredentialRequest<T> extends CredHubRequest {
 
 	/**
 	 * Initialize a {@link CredentialRequest}.
+	 *
+	 * @param type the credential implementation type
 	 */
 	protected CredentialRequest(CredentialType type) {
 		this.credentialType = type;

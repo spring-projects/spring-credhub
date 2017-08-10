@@ -92,14 +92,26 @@ public class CredHubTemplateDetailSshUnitTests
 	}
 
 	@Theory
-	public void getByNameWithString(@FromDataPoints("data-responses")
-									ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
-		verifyGetByNameWithString(expectedResponse);
+	public void getByNameUsingString(@FromDataPoints("detail-responses")
+						ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+		verifyGetByNameUsingString(expectedResponse);
 	}
 
 	@Theory
-	public void getByNameWithCredentialName(@FromDataPoints("data-responses")
-											ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
-		verifyGetByNameWithCredentialName(expectedResponse);
+	public void getByNameUsingCredentialName(@FromDataPoints("detail-responses")
+						ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+		verifyGetByNameUsingCredentialName(expectedResponse);
+	}
+
+	@Theory
+	public void getByNameWithHistoryUsingString(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+		verifyGetByNameWithHistoryUsingString(expectedResponse);
+	}
+
+	@Theory
+	public void getByNameWithHistoryUsingCredentialName(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+		verifyGetByNameWithHistoryUsingCredentialName(expectedResponse);
 	}
 }

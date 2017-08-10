@@ -74,14 +74,26 @@ public class CredHubTemplateDetailValueUnitTests
 	}
 
 	@Theory
-	public void getByNameWithString(@FromDataPoints("data-responses")
-									ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
-		verifyGetByNameWithString(expectedResponse);
+	public void getByNameUsingString(@FromDataPoints("detail-responses")
+						ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
+		verifyGetByNameUsingString(expectedResponse);
 	}
 
 	@Theory
-	public void getByNameWithCredentialName(@FromDataPoints("data-responses")
-											ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
-		verifyGetByNameWithCredentialName(expectedResponse);
+	public void getByNameUsingCredentialName(@FromDataPoints("detail-responses")
+						ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
+		verifyGetByNameUsingCredentialName(expectedResponse);
+	}
+
+	@Theory
+	public void getByNameWithHistoryUsingString(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
+		verifyGetByNameWithHistoryUsingString(expectedResponse);
+	}
+
+	@Theory
+	public void getByNameWithHistoryUsingCredentialName(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
+		verifyGetByNameWithHistoryUsingCredentialName(expectedResponse);
 	}
 }

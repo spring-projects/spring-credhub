@@ -50,11 +50,10 @@ public class CredHubTemplate implements CredHubOperations {
 	static final String BASE_URL_PATH = "/api/v1/data";
 	static final String ID_URL_PATH = BASE_URL_PATH + "/{id}";
 	static final String NAME_URL_QUERY = BASE_URL_PATH + "?name={name}";
+	static final String NAME_URL_QUERY_CURRENT = NAME_URL_QUERY + "&current=true";
 	static final String NAME_LIKE_URL_QUERY = BASE_URL_PATH + "?name-like={name}";
 	static final String PATH_URL_QUERY = BASE_URL_PATH + "?path={path}";
 	static final String INTERPOLATE_URL_PATH = "/api/v1/interpolate";
-
-	static final String VCAP_SERVICES_KEY = "VCAP_SERVICES";
 
 	private final RestTemplate restTemplate;
 
@@ -92,7 +91,6 @@ public class CredHubTemplate implements CredHubOperations {
 	public <T> CredentialDetails<T> write(final CredentialRequest<T> credentialRequest) {
 		Assert.notNull(credentialRequest, "credentialRequest must not be null");
 
-		Class<T> credentialType = (Class<T>) credentialRequest.getValue().getClass();
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
@@ -115,7 +113,6 @@ public class CredHubTemplate implements CredHubOperations {
 	public <T, P> CredentialDetails<T> generate(final ParametersRequest<P> parametersRequest) {
 		Assert.notNull(parametersRequest, "generateRequest must not be null");
 
-		Class<T> credentialType = (Class<T>) parametersRequest.getParameters().getClass();
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
@@ -155,7 +152,35 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> List<CredentialDetails<T>> getByName(final String name, Class<T> credentialType) {
+	public <T> CredentialDetails<T> getByName(final String name, Class<T> credentialType) {
+		Assert.notNull(name, "credential name must not be null");
+		Assert.notNull(credentialType, "credential type must not be null");
+
+		final ParameterizedTypeReference<CredentialDetails<T>> ref =
+				new ParameterizedTypeReference<CredentialDetails<T>>() {};
+
+		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
+			@Override
+			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
+				ResponseEntity<CredentialDetails<T>> response =
+						restOperations.exchange(NAME_URL_QUERY_CURRENT, GET, null, ref, name);
+
+				throwExceptionOnError(response);
+
+				return response.getBody();
+			}
+		});
+	}
+
+	@Override
+	public <T> CredentialDetails<T> getByName(final CredentialName name, Class<T> credentialType) {
+		Assert.notNull(name, "credential name must not be null");
+
+		return getByName(name.getName(), credentialType);
+	}
+
+	@Override
+	public <T> List<CredentialDetails<T>> getByNameWithHistory(final String name, Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -176,10 +201,10 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> List<CredentialDetails<T>> getByName(final CredentialName name, Class<T> credentialType) {
+	public <T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
 
-		return getByName(name.getName(), credentialType);
+		return getByNameWithHistory(name.getName(), credentialType);
 	}
 
 	@Override

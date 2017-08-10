@@ -112,7 +112,7 @@ public class CredHubDemoController {
 
 	private void getCredentialsByName(CredentialName name, Results results) {
 		try {
-			List<CredentialDetails<JsonCredential>> retrievedDetails =
+			CredentialDetails<JsonCredential> retrievedDetails =
 					credHubTemplate.getByName(name, JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by name: ", retrievedDetails);
 		} catch (Exception e) {

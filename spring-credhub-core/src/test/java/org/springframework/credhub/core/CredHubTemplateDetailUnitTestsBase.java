@@ -41,6 +41,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY_CURRENT;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
@@ -125,6 +126,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	void verifyGetById(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		when(restTemplate.exchange(eq(ID_URL_PATH), eq(GET), isNull(HttpEntity.class),
 				isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID)))
@@ -147,8 +149,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		}
 	}
 
-	void verifyGetByNameWithString(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
-		when(restTemplate.exchange(eq(NAME_URL_QUERY), eq(GET), isNull(HttpEntity.class),
+	@SuppressWarnings("deprecation")
+	void verifyGetByNameUsingString(ResponseEntity<CredentialDetails<T>> expectedResponse) {
+		when(restTemplate.exchange(eq(NAME_URL_QUERY_CURRENT), eq(GET), isNull(HttpEntity.class),
 				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
 				.thenReturn(expectedResponse);
 
@@ -163,15 +166,16 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 			}
 		}
 		else {
-			List<CredentialDetails<T>> response = credHubTemplate
+			CredentialDetails<T> response = credHubTemplate
 					.getByName(NAME.getName(), getType());
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}
 	}
 
-	void verifyGetByNameWithCredentialName(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
-		when(restTemplate.exchange(eq(NAME_URL_QUERY), eq(GET), isNull(HttpEntity.class),
+	@SuppressWarnings("deprecation")
+	void verifyGetByNameUsingCredentialName(ResponseEntity<CredentialDetails<T>> expectedResponse) {
+		when(restTemplate.exchange(eq(NAME_URL_QUERY_CURRENT), eq(GET), isNull(HttpEntity.class),
 				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
 				.thenReturn(expectedResponse);
 
@@ -186,7 +190,53 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 			}
 		}
 		else {
-			List<CredentialDetails<T>> response = credHubTemplate.getByName(NAME, getType());
+			CredentialDetails<T> response = credHubTemplate.getByName(NAME, getType());
+
+			assertResponseContainsExpectedCredentials(expectedResponse, response);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	void verifyGetByNameWithHistoryUsingString(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
+		when(restTemplate.exchange(eq(NAME_URL_QUERY), eq(GET), isNull(HttpEntity.class),
+				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
+				.thenReturn(expectedResponse);
+
+		if (!expectedResponse.getStatusCode().equals(OK)) {
+			try {
+				credHubTemplate.getByNameWithHistory(NAME.getName(), String.class);
+				fail("Exception should have been thrown");
+			}
+			catch (CredHubException e) {
+				assertThat(e.getMessage(),
+						containsString(expectedResponse.getStatusCode().toString()));
+			}
+		}
+		else {
+			List<CredentialDetails<T>> response = credHubTemplate.getByNameWithHistory(NAME.getName(), getType());
+
+			assertResponseContainsExpectedCredentials(expectedResponse, response);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	void verifyGetByNameWithHistoryUsingCredentialName(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
+		when(restTemplate.exchange(eq(NAME_URL_QUERY), eq(GET), isNull(HttpEntity.class),
+				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
+				.thenReturn(expectedResponse);
+
+		if (!expectedResponse.getStatusCode().equals(OK)) {
+			try {
+				credHubTemplate.getByNameWithHistory(NAME, String.class);
+				fail("Exception should have been thrown");
+			}
+			catch (CredHubException e) {
+				assertThat(e.getMessage(),
+						containsString(expectedResponse.getStatusCode().toString()));
+			}
+		}
+		else {
+			List<CredentialDetails<T>> response = credHubTemplate.getByNameWithHistory(NAME, getType());
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}

@@ -48,7 +48,7 @@ public class PasswordParametersRequest extends ParametersRequest<PasswordParamet
 	 * A builder that provides a fluent API for constructing {@link PasswordParametersRequest}s.
 	 */
 	public static class PasswordParametersRequestBuilder
-			extends ParametersRequestBuilder<PasswordParameters, PasswordParametersRequest, PasswordParametersRequestBuilder> {
+			extends CredHubRequestBuilder<PasswordParameters, PasswordParametersRequest, PasswordParametersRequestBuilder> {
 		@Override
 		protected PasswordParametersRequest createTarget() {
 			return new PasswordParametersRequest();

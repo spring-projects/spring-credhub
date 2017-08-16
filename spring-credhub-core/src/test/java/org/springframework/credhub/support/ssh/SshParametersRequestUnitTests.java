@@ -16,12 +16,12 @@
 
 package org.springframework.credhub.support.ssh;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.KeyLength;
-import org.springframework.credhub.support.ParametersRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.ssh.SshParametersRequest.SshParametersRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,10 +29,14 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class SshParametersRequestUnitTests extends ParametersRequestUnitTestsBase {
+public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+	@Before
+	public void setUp() {
+		requestBuilder = SshParametersRequest.builder();
+	}
 	@Test
 	public void serializeWithParameters() throws Exception {
-		SshParametersRequestBuilder requestBuilder = SshParametersRequest.builder()
+		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new SshParameters(KeyLength.LENGTH_2048, "ssh comment"));
@@ -47,7 +51,7 @@ public class SshParametersRequestUnitTests extends ParametersRequestUnitTestsBas
 
 	@Test
 	public void serializeWithLengthParameter() throws Exception {
-		SshParametersRequestBuilder requestBuilder = SshParametersRequest.builder()
+		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new SshParameters(KeyLength.LENGTH_2048));
@@ -62,7 +66,7 @@ public class SshParametersRequestUnitTests extends ParametersRequestUnitTestsBas
 
 	@Test
 	public void serializeWithCommentParameter() throws Exception {
-		SshParametersRequestBuilder requestBuilder = SshParametersRequest.builder()
+		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new SshParameters("ssh comment"));
@@ -77,7 +81,7 @@ public class SshParametersRequestUnitTests extends ParametersRequestUnitTestsBas
 
 	@Test
 	public void serializeWithNoParameters() throws Exception {
-		SshParametersRequestBuilder requestBuilder = SshParametersRequest.builder()
+		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true);
 

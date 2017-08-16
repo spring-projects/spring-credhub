@@ -19,7 +19,7 @@ package org.springframework.credhub.support.rsa;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.CredentialRequestUnitTestsBase;
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 
 import static org.hamcrest.CoreMatchers.allOf;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class RsaCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
+public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
 		buildRequest(new RsaCredential("public-key", "private-key"));
@@ -38,11 +38,9 @@ public class RsaCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 	public void serializeWithPublicAndPrivateKey() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("rsa")),
-						hasJsonPath("$.value.public_key", equalTo("public-key")),
+				allOf(hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
 		assertNoPermissions(jsonValue);
@@ -54,11 +52,9 @@ public class RsaCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("rsa")),
-						hasJsonPath("$.value.public_key", equalTo("public-key")),
+				allOf(hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasNoJsonPath("$.value.private_key")));
 
 		assertNoPermissions(jsonValue);
@@ -70,11 +66,9 @@ public class RsaCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("rsa")),
-						hasNoJsonPath("$.value.public_key"),
+				allOf(hasNoJsonPath("$.value.public_key"),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
 		assertNoPermissions(jsonValue);
@@ -84,7 +78,7 @@ public class RsaCredentialRequestUnitTests extends CredentialRequestUnitTestsBas
 	public void serializeWithNeitherKey() throws Exception {
 		buildRequest(new RsaCredential(null, null));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		serializeToJson(requestBuilder);
 	}
 
 	private void buildRequest(RsaCredential value) {

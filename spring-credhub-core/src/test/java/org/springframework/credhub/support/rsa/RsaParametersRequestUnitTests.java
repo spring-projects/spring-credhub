@@ -16,22 +16,27 @@
 
 package org.springframework.credhub.support.rsa;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.KeyLength;
-import org.springframework.credhub.support.ParametersRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.rsa.RsaParametersRequest.RsaParametersRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class RsaParametersRequestUnitTests extends ParametersRequestUnitTestsBase {
+public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+	@Before
+	public void setUp() {
+		requestBuilder = RsaParametersRequest.builder();
+	}
+
 	@Test
 	public void serializeWithParameters() throws Exception {
-		RsaParametersRequestBuilder requestBuilder = RsaParametersRequest.builder()
+		requestBuilder = RsaParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new RsaParameters(KeyLength.LENGTH_4096));
@@ -44,7 +49,7 @@ public class RsaParametersRequestUnitTests extends ParametersRequestUnitTestsBas
 
 	@Test
 	public void serializeWithNoParameters() throws Exception {
-		RsaParametersRequestBuilder requestBuilder = RsaParametersRequest.builder()
+		requestBuilder = RsaParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true);
 

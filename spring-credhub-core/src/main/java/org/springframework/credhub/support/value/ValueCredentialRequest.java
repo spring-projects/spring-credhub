@@ -48,7 +48,7 @@ public class ValueCredentialRequest extends CredentialRequest<ValueCredential> {
 	 * A builder that provides a fluent API for constructing {@link ValueCredentialRequest}s.
 	 */
 	public static class ValueCredentialRequestBuilder
-			extends CredentialRequestBuilder<ValueCredential, ValueCredentialRequest, ValueCredentialRequestBuilder> {
+			extends CredHubRequestBuilder<ValueCredential, ValueCredentialRequest, ValueCredentialRequestBuilder> {
 		@Override
 		protected ValueCredentialRequest createTarget() {
 			return new ValueCredentialRequest();

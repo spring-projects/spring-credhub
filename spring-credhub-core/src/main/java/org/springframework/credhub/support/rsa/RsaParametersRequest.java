@@ -48,7 +48,7 @@ public class RsaParametersRequest extends ParametersRequest<RsaParameters> {
 	 * A builder that provides a fluent API for constructing {@link RsaParametersRequest}s.
 	 */
 	public static class RsaParametersRequestBuilder
-			extends ParametersRequestBuilder<RsaParameters, RsaParametersRequest, RsaParametersRequestBuilder> {
+			extends CredHubRequestBuilder<RsaParameters, RsaParametersRequest, RsaParametersRequestBuilder> {
 		@Override
 		protected RsaParametersRequest createTarget() {
 			return new RsaParametersRequest();

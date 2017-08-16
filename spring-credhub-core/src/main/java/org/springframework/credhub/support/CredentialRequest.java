@@ -18,31 +18,20 @@
 
 package org.springframework.credhub.support;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.credhub.support.permissions.CredentialPermission;
-import org.springframework.util.Assert;
-
 /**
  * The details of a request to write a new or update an existing credential in CredHub.
  *
  * @author Scott Frederick
  */
-public class CredentialRequest<T> extends CredHubRequest {
-	private T value;
-	private List<CredentialPermission> additionalPermissions;
-
+public class CredentialRequest<T> extends CredHubRequest<T> {
 	/**
 	 * Initialize a {@link CredentialRequest}.
 	 *
 	 * @param type the credential implementation type
 	 */
 	protected CredentialRequest(CredentialType type) {
+		super();
 		this.credentialType = type;
-		additionalPermissions = new ArrayList<CredentialPermission>();
 	}
 
 	/**
@@ -51,173 +40,10 @@ public class CredentialRequest<T> extends CredHubRequest {
 	 * @return the value of the credential
 	 */
 	public T getValue() {
-		return this.value;
+		return this.details;
 	}
 
 	protected void setValue(T value) {
-		this.value = value;
+		this.details = value;
 	}
-
-	/**
-	 * Get the set of {@link CredentialPermission} to assign to the credential.
-	 *
-	 * @return the set of {@link CredentialPermission}
-	 */
-	public List<CredentialPermission> getAdditionalPermissions() {
-		return this.additionalPermissions;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (!(o instanceof CredentialRequest))
-			return false;
-
-		CredentialRequest that = (CredentialRequest) o;
-
-		if (overwrite != that.overwrite)
-			return false;
-		if (!name.equals(that.name))
-			return false;
-		if (credentialType != that.credentialType)
-			return false;
-		if (!value.equals(that.value))
-			return false;
-		return additionalPermissions.equals(that.additionalPermissions);
-	}
-
-	@Override
-	public int hashCode() {
-		int result = (overwrite ? 1 : 0);
-		result = 31 * result + name.hashCode();
-		result = 31 * result + credentialType.hashCode();
-		result = 31 * result + value.hashCode();
-		result = 31 * result + additionalPermissions.hashCode();
-		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "CredentialRequest{"
-				+ "overwrite=" + overwrite
-				+ ", name=" + name
-				+ ", credentialType=" + credentialType
-				+ ", value=" + value
-				+ ", additionalPermissions=" + additionalPermissions
-				+ '}';
-	}
-
-	/**
-	 * A builder that provides a fluent API for constructing {@link CredentialRequest}s.
-	 */
-	@SuppressWarnings("unchecked")
-	protected static abstract class CredentialRequestBuilder<T, R extends CredentialRequest<T>, B extends CredentialRequestBuilder<T, R, B>> {
-		private final B thisObj;
-		protected final R targetObj;
-
-		/**
-		 * Create a {@link CredentialRequestBuilder}. Intended for internal use.
-		 */
-		protected CredentialRequestBuilder() {
-			this.thisObj = createBuilder();
-			this.targetObj = createTarget();
-		}
-
-		/**
-		 * Provide the concrete object to build.
-		 *
-		 * @return the target object
-		 */
-		protected abstract R createTarget();
-
-		/**
-		 * Provide the concrete builder.
-		 *
-		 * @return the builder
-		 */
-		protected abstract B createBuilder();
-
-		/**
-		 * Set the value of a credential.
-		 *
-		 * @param value the credential value; must not be {@literal null}
-		 * @return the builder
-		 */
-		public abstract B value(T value);
-
-		/**
-		 * Set the {@link CredentialName} for the credential.
-		 *
-		 * @param name the credential name; must not be {@literal null}
-		 * @return the builder
-		 */
-		public B name(CredentialName name) {
-			Assert.notNull(name, "name must not be null");
-			targetObj.setName(name);
-			return thisObj;
-		}
-
-		/**
-		 * Sets a {@literal boolean} value indicating whether CredHub should create a new
-		 * credential or update and existing credential.
-		 *
-		 * @param overwrite {@literal false} to create a new credential, or
-		 * {@literal true} to update and existing credential
-		 * @return the builder 
-		 */
-		public B overwrite(boolean overwrite) {
-			targetObj.setOverwrite(overwrite);
-			return thisObj;
-		}
-
-		/**
-		 * Add an {@link CredentialPermission} to the permissions that will be assigned to the
-		 * credential.
-		 *
-		 * @param permission a {@link CredentialPermission} to assign to the
-		 * credential
-		 * @return the builder
-		 */
-		public B permission(CredentialPermission permission) {
-			targetObj.getAdditionalPermissions().add(permission);
-			return thisObj;
-		}
-
-		/**
-		 * Add a collection of {@link CredentialPermission}s to the controls that will be
-		 * assigned to the credential.
-		 *
-		 * @param permissions a collection of {@link CredentialPermission}s to
-		 * assign to the credential
-		 * @return the builder
-		 */
-		public B permissions(Collection<? extends CredentialPermission> permissions) {
-			targetObj.getAdditionalPermissions().addAll(permissions);
-			return thisObj;
-		}
-
-		/**
-		 * Add a collection of {@link CredentialPermission}s to the controls that will be
-		 * assigned to the credential.
-		 *
-		 * @param permissions a collection of {@link CredentialPermission}s to
-		 * assign to the credential
-		 * @return the builder
-		 */
-		public B permissions(CredentialPermission... permissions) {
-			targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));
-			return thisObj;
-		}
-
-		/**
-		 * Create a {@link CredentialRequest} from the provided values.
-		 *
-		 * @return a {@link CredentialRequest}
-		 */
-		public R build() {
-			return targetObj;
-		}
-	}
-
 }

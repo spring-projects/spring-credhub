@@ -16,12 +16,12 @@
 
 package org.springframework.credhub.support.certificate;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.KeyLength;
-import org.springframework.credhub.support.ParametersRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.certificate.CertificateParametersRequest.CertificateParametersRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,10 +29,15 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class CertificateParametersRequestUnitTests extends ParametersRequestUnitTestsBase {
+public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+	@Before
+	public void setUp() {
+		requestBuilder = CertificateParametersRequest.builder();
+	}
+
 	@Test
 	public void serializeWithParameters() throws Exception {
-		CertificateParametersRequestBuilder requestBuilder = CertificateParametersRequest.builder()
+		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(CertificateParameters.builder()
@@ -71,7 +76,7 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 
 	@Test
 	public void serializeWithMinimalParameters() throws Exception {
-		CertificateParametersRequestBuilder requestBuilder = CertificateParametersRequest.builder()
+		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(CertificateParameters.builder()
@@ -99,7 +104,7 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 
 	@Test
 	public void serializeWithNoParameters() throws Exception {
-		CertificateParametersRequestBuilder requestBuilder = CertificateParametersRequest.builder()
+		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true);
 
@@ -111,14 +116,14 @@ public class CertificateParametersRequestUnitTests extends ParametersRequestUnit
 
 	@Test(expected = IllegalArgumentException.class)
 	public void serializeWithEmptyParameters() throws Exception {
-		CertificateParametersRequestBuilder requestBuilder = CertificateParametersRequest.builder()
+		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(CertificateParameters.builder()
 						.keyLength(KeyLength.LENGTH_2048)
 						.build());
 
-		String jsonValue = serializeToJson(requestBuilder);
+		serializeToJson(requestBuilder);
 	}
 
 	private void assertParametersNotSet(String jsonValue) {

@@ -48,7 +48,7 @@ public class RsaCredentialRequest extends CredentialRequest<RsaCredential> {
 	 * A builder that provides a fluent API for constructing {@link RsaCredentialRequest}s.
 	 */
 	public static class RsaCredentialRequestBuilder
-			extends CredentialRequestBuilder<RsaCredential, RsaCredentialRequest, RsaCredentialRequestBuilder> {
+			extends CredHubRequestBuilder<RsaCredential, RsaCredentialRequest, RsaCredentialRequestBuilder> {
 		@Override
 		protected RsaCredentialRequest createTarget() {
 			return new RsaCredentialRequest();

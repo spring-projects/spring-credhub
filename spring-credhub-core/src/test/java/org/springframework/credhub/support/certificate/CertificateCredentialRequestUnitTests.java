@@ -19,7 +19,7 @@ package org.springframework.credhub.support.certificate;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.CredentialRequestUnitTestsBase;
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 
 import static org.hamcrest.CoreMatchers.allOf;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class CertificateCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
+public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
 		buildRequest(new CertificateCredential("cert", "ca", "private-key"));
@@ -38,11 +38,9 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 	public void serializeWithAllValues() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("certificate")),
-						hasJsonPath("$.value.certificate", equalTo("cert")),
+				allOf(hasJsonPath("$.value.certificate", equalTo("cert")),
 						hasJsonPath("$.value.ca", equalTo("ca")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
@@ -55,11 +53,9 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("certificate")),
-						hasJsonPath("$.value.certificate", equalTo("cert")),
+				allOf(hasJsonPath("$.value.certificate", equalTo("cert")),
 						hasNoJsonPath("$.value.ca"),
 						hasNoJsonPath("$.value.private_key")));
 
@@ -72,11 +68,9 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("certificate")),
-						hasNoJsonPath("$.value.certificate"),
+				allOf(hasNoJsonPath("$.value.certificate"),
 						hasJsonPath("$.value.ca", equalTo("ca")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
 
@@ -87,7 +81,7 @@ public class CertificateCredentialRequestUnitTests extends CredentialRequestUnit
 	public void serializeWithNoValues() throws Exception {
 		buildRequest(new CertificateCredential(null, null, null));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		serializeToJson(requestBuilder);
 	}
 
 	private void buildRequest(CertificateCredential value) {

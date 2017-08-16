@@ -48,7 +48,7 @@ public class CertificateParametersRequest extends ParametersRequest<CertificateP
 	 * A builder that provides a fluent API for constructing {@link CertificateParametersRequest}s.
 	 */
 	public static class CertificateParametersRequestBuilder
-			extends ParametersRequestBuilder<CertificateParameters, CertificateParametersRequest, CertificateParametersRequestBuilder> {
+			extends CredHubRequestBuilder<CertificateParameters, CertificateParametersRequest, CertificateParametersRequestBuilder> {
 		@Override
 		protected CertificateParametersRequest createTarget() {
 			return new CertificateParametersRequest();

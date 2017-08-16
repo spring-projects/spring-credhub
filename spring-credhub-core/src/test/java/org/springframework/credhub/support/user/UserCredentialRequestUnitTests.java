@@ -19,7 +19,7 @@ package org.springframework.credhub.support.user;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.CredentialRequestUnitTestsBase;
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.user.UserCredentialRequest.UserCredentialRequestBuilder;
 
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class UserCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
+public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
 		requestBuilder = UserCredentialRequest.builder()
@@ -42,11 +42,9 @@ public class UserCredentialRequestUnitTests extends CredentialRequestUnitTestsBa
 	public void serializeWithUsernameAndPassword() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "user");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("user")),
-						hasJsonPath("$.value.username", equalTo("myname")),
+				allOf(hasJsonPath("$.value.username", equalTo("myname")),
 						hasJsonPath("$.value.password", equalTo("secret"))));
 
 		assertNoPermissions(jsonValue);
@@ -61,11 +59,9 @@ public class UserCredentialRequestUnitTests extends CredentialRequestUnitTestsBa
 
 		String jsonValue = serializeToJson(builder);
 
+		assertCommonRequestFields(jsonValue, true, "/example/credential", "user");
 		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("user")),
-						hasNoJsonPath("$.value.username"),
+				allOf(hasNoJsonPath("$.value.username"),
 						hasJsonPath("$.value.password", equalTo("secret"))));
 
 		assertNoPermissions(jsonValue);

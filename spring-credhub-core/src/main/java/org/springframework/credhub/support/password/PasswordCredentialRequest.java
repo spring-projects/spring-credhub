@@ -48,7 +48,7 @@ public class PasswordCredentialRequest extends CredentialRequest<PasswordCredent
 	 * A builder that provides a fluent API for constructing {@link PasswordCredentialRequest}s.
 	 */
 	public static class PasswordCredentialRequestBuilder
-			extends CredentialRequestBuilder<PasswordCredential, PasswordCredentialRequest, PasswordCredentialRequestBuilder> {
+			extends CredHubRequestBuilder<PasswordCredential, PasswordCredentialRequest, PasswordCredentialRequestBuilder> {
 		@Override
 		protected PasswordCredentialRequest createTarget() {
 			return new PasswordCredentialRequest();

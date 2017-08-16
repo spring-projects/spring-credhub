@@ -50,7 +50,7 @@ public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 	 * A builder that provides a fluent API for constructing {@link JsonCredentialRequest}s.
 	 */
 	public static class JsonCredentialRequestBuilder extends
-			CredentialRequestBuilder<JsonCredential, JsonCredentialRequest, JsonCredentialRequestBuilder> {
+			CredHubRequestBuilder<JsonCredential, JsonCredentialRequest, JsonCredentialRequestBuilder> {
 
 		@Override
 		protected JsonCredentialRequest createTarget() {

@@ -48,7 +48,7 @@ public class SshParametersRequest extends ParametersRequest<SshParameters> {
 	 * A builder that provides a fluent API for constructing {@link SshParametersRequest}s.
 	 */
 	public static class SshParametersRequestBuilder
-			extends ParametersRequestBuilder<SshParameters, SshParametersRequest, SshParametersRequestBuilder> {
+			extends CredHubRequestBuilder<SshParameters, SshParametersRequest, SshParametersRequestBuilder> {
 		@Override
 		protected SshParametersRequest createTarget() {
 			return new SshParametersRequest();

@@ -48,7 +48,7 @@ public class UserCredentialRequest extends CredentialRequest<UserCredential> {
 	 * A builder that provides a fluent API for constructing {@link UserCredentialRequest}s.
 	 */
 	public static class UserCredentialRequestBuilder
-			extends CredentialRequestBuilder<UserCredential, UserCredentialRequest, UserCredentialRequestBuilder> {
+			extends CredHubRequestBuilder<UserCredential, UserCredentialRequest, UserCredentialRequestBuilder> {
 		@Override
 		protected UserCredentialRequest createTarget() {
 			return new UserCredentialRequest();

@@ -16,12 +16,12 @@
 
 package org.springframework.credhub.support.user;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.ParametersRequestUnitTestsBase;
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.password.PasswordParameters;
-import org.springframework.credhub.support.user.UserParametersRequest.UserParametersRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,10 +29,15 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class UserParametersRequestUnitTests extends ParametersRequestUnitTestsBase {
+public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+	@Before
+	public void setUp() {
+		requestBuilder = new UserParametersRequest().builder();
+	}
+
 	@Test
 	public void serializeWithParameters() throws Exception {
-		UserParametersRequestBuilder requestBuilder = UserParametersRequest.builder()
+		requestBuilder = UserParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.username("user")
@@ -58,7 +63,7 @@ public class UserParametersRequestUnitTests extends ParametersRequestUnitTestsBa
 
 	@Test
 	public void serializeWithEmptyParameters() throws Exception {
-		UserParametersRequestBuilder requestBuilder = UserParametersRequest.builder()
+		requestBuilder = UserParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new PasswordParameters());
@@ -71,7 +76,7 @@ public class UserParametersRequestUnitTests extends ParametersRequestUnitTestsBa
 
 	@Test
 	public void serializeWithNoParameters() throws Exception {
-		UserParametersRequestBuilder requestBuilder = UserParametersRequest.builder()
+		requestBuilder = UserParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true);
 

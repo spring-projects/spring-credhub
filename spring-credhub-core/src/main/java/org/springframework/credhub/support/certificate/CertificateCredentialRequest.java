@@ -48,7 +48,7 @@ public class CertificateCredentialRequest extends CredentialRequest<CertificateC
 	 * A builder that provides a fluent API for constructing {@link CertificateCredentialRequest}s.
 	 */
 	public static class CertificateCredentialRequestBuilder
-			extends CredentialRequestBuilder<CertificateCredential, CertificateCredentialRequest, CertificateCredentialRequestBuilder> {
+			extends CredHubRequestBuilder<CertificateCredential, CertificateCredentialRequest, CertificateCredentialRequestBuilder> {
 		@Override
 		protected CertificateCredentialRequest createTarget() {
 			return new CertificateCredentialRequest();

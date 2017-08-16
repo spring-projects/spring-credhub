@@ -19,7 +19,7 @@ package org.springframework.credhub.support.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.CredentialRequestUnitTestsBase;
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 
 import static org.hamcrest.CoreMatchers.allOf;
@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 
-public class ValueCredentialRequestUnitTests extends CredentialRequestUnitTestsBase {
+public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Before
 	public void setUp() {

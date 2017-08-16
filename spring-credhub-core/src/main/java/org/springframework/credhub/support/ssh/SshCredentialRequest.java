@@ -48,7 +48,7 @@ public class SshCredentialRequest extends CredentialRequest<SshCredential> {
 	 * A builder that provides a fluent API for constructing {@link SshCredentialRequest}s.
 	 */
 	public static class SshCredentialRequestBuilder
-			extends CredentialRequestBuilder<SshCredential, SshCredentialRequest, SshCredentialRequestBuilder> {
+			extends CredHubRequestBuilder<SshCredential, SshCredentialRequest, SshCredentialRequestBuilder> {
 		@Override
 		protected SshCredentialRequest createTarget() {
 			return new SshCredentialRequest();

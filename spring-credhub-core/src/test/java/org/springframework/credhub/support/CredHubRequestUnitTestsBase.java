@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.CredentialRequest.CredentialRequestBuilder;
+import org.springframework.credhub.support.CredHubRequest.CredHubRequestBuilder;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.credhub.support.utils.JsonUtils;
@@ -37,9 +37,9 @@ import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
 
-public abstract class CredentialRequestUnitTestsBase {
+public abstract class CredHubRequestUnitTestsBase {
 	private ObjectMapper mapper;
-	protected CredentialRequestBuilder requestBuilder;
+	protected CredHubRequestBuilder requestBuilder;
 
 	@Before
 	public void setUpCredentialRequestUnitTests() {
@@ -90,11 +90,18 @@ public abstract class CredentialRequestUnitTestsBase {
 		);
 	}
 
-	protected <T extends CredentialRequestBuilder> String serializeToJson(T requestBuilder)
+	protected <T extends CredHubRequestBuilder> String serializeToJson(T requestBuilder)
 			throws JsonProcessingException {
 		String jsonValue = mapper.writeValueAsString(requestBuilder.build());
 		assertThat(jsonValue, isJson());
 		return jsonValue;
+	}
+
+	protected void assertCommonRequestFields(String jsonValue, boolean overwrite, String name, String type) {
+		assertThat(jsonValue,
+				allOf(hasJsonPath("$.overwrite", equalTo(overwrite)),
+						hasJsonPath("$.name", equalTo(name)),
+						hasJsonPath("$.type", equalTo(type))));
 	}
 
 	protected void assertNoPermissions(String jsonValue) {

@@ -16,11 +16,11 @@
 
 package org.springframework.credhub.support.password;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.credhub.support.ParametersRequestUnitTestsBase;
+import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.password.PasswordParametersRequest.PasswordParametersRequestBuilder;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -28,10 +28,15 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
-public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTestsBase {
+public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+	@Before
+	public void setUp() {
+		requestBuilder = PasswordParametersRequest.builder();
+	}
+
 	@Test
 	public void serializeWithParameters() throws Exception {
-		PasswordParametersRequestBuilder requestBuilder = PasswordParametersRequest.builder()
+		requestBuilder = PasswordParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(PasswordParameters.builder()
@@ -55,7 +60,7 @@ public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTes
 
 	@Test
 	public void serializeWithEmptyParameters() throws Exception {
-		PasswordParametersRequestBuilder requestBuilder = PasswordParametersRequest.builder()
+		requestBuilder = PasswordParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.parameters(new PasswordParameters());
@@ -68,7 +73,7 @@ public class PasswordParametersRequestUnitTests extends ParametersRequestUnitTes
 
 	@Test
 	public void serializeWithNoParameters() throws Exception {
-		PasswordParametersRequestBuilder requestBuilder = PasswordParametersRequest.builder()
+		requestBuilder = PasswordParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true);
 

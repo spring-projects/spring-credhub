@@ -22,12 +22,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredentialRequest.CredentialRequestBuilder;
+import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.utils.JsonUtils;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.springframework.credhub.support.AdditionalPermission.Operation.READ;
-import static org.springframework.credhub.support.AdditionalPermission.Operation.WRITE;
+import static org.springframework.credhub.support.permissions.Operation.READ;
+import static org.springframework.credhub.support.permissions.Operation.READ_ACL;
+import static org.springframework.credhub.support.permissions.Operation.WRITE;
+import static org.springframework.credhub.support.permissions.Operation.WRITE_ACL;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
@@ -44,7 +49,7 @@ public abstract class CredentialRequestUnitTestsBase {
 	@Test
 	public void serializationWithOnePermission() throws Exception {
 		requestBuilder
-				.additionalPermission(AdditionalPermission.builder()
+				.permission(CredentialPermission.builder()
 						.app("app-id")
 						.operation(READ)
 						.build());
@@ -53,7 +58,7 @@ public abstract class CredentialRequestUnitTestsBase {
 
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.additional_permissions[0].actor",
-						equalTo("mtls-app:app-id")),
+						equalTo(Actor.app("app-id").getIdentity())),
 						hasJsonPath("$.additional_permissions[0].operations[0]",
 								equalTo("read"))));
 	}
@@ -61,29 +66,28 @@ public abstract class CredentialRequestUnitTestsBase {
 	@Test
 	public void serializationWithTwoPermissions() throws Exception {
 		requestBuilder
-				.additionalPermission(AdditionalPermission.builder()
-						.app("app1-id")
+				.permission(CredentialPermission.builder()
+						.app("app-id")
 						.operation(READ).operation(WRITE)
 						.build())
-				.additionalPermission(AdditionalPermission.builder()
-						.app("app2-id")
-						.operation(WRITE).operation(READ)
+				.permission(CredentialPermission.builder()
+						.user("zone1", "user-id")
+						.operations(READ_ACL, WRITE_ACL)
 						.build());
 
 		String jsonValue = serializeToJson(requestBuilder);
 
 		assertThat(jsonValue, allOf(
 				hasJsonPath("$.additional_permissions[0].actor",
-						equalTo("mtls-app:app1-id")),
+						equalTo(Actor.app("app-id").getIdentity())),
 				hasJsonPath("$.additional_permissions[0].operations[0]", equalTo("read")),
-				hasJsonPath("$.additional_permissions[0].operations[1]",
-						equalTo("write")),
+				hasJsonPath("$.additional_permissions[0].operations[1]", equalTo("write")),
 				hasJsonPath("$.additional_permissions[1].actor",
-						equalTo("mtls-app:app2-id")),
-				hasJsonPath("$.additional_permissions[1].operations[0]",
-						equalTo("write")),
-				hasJsonPath("$.additional_permissions[1].operations[1]",
-						equalTo("read"))));
+						equalTo(Actor.user("zone1", "user-id").getIdentity())),
+				hasJsonPath("$.additional_permissions[1].operations[0]", equalTo("read_acl")),
+				hasJsonPath("$.additional_permissions[1].operations[1]", equalTo("write_acl"))
+				)
+		);
 	}
 
 	protected <T extends CredentialRequestBuilder> String serializeToJson(T requestBuilder)

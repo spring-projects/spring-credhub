@@ -18,6 +18,8 @@ package org.springframework.credhub.core;
 
 import java.util.List;
 
+import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
@@ -74,17 +76,6 @@ public interface CredHubOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
 	 */
-	<T> CredentialDetails<T> getByName(final String name, Class<T> credentialType);
-
-	/**
-	 * Retrieve a credential using its name, as passed to a write request.
-	 * Only the current credential value will be returned.
-	 *
-	 * @param name the name of the credential; must not be {@literal null}
-	 * @param credentialType the type of credential expected to be returned
-	 * @param <T> the credential implementation type
-	 * @return the details of the retrieved credential
-	 */
 	<T> CredentialDetails<T> getByName(final CredentialName name, Class<T> credentialType);
 
 	/**
@@ -97,27 +88,7 @@ public interface CredHubOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential, including history
 	 */
-	<T> List<CredentialDetails<T>> getByNameWithHistory(String name, Class<T> credentialType);
-
-	/**
-	 * Retrieve a credential using its name, as passed to a write request.
-	 * A collection of all stored values for the named credential will be returned,
-	 * including historical values.
-	 *
-	 * @param name the name of the credential; must not be {@literal null}
-	 * @param credentialType the type of credential expected to be returned
-	 * @param <T> the credential implementation type
-	 * @return the details of the retrieved credential, including history
-	 */
 	<T> List<CredentialDetails<T>> getByNameWithHistory(CredentialName name, Class<T> credentialType);
-
-	/**
-	 * Find a credential using a full or partial name.
-	 *
-	 * @param name the name of the credential; must not be {@literal null}
-	 * @return a summary of the credential search results
-	 */
-	List<CredentialSummary> findByName(String name);
 
 	/**
 	 * Find a credential using a full or partial name.
@@ -140,14 +111,32 @@ public interface CredHubOperations {
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
 	 */
-	void deleteByName(String name);
+	void deleteByName(CredentialName name);
 
 	/**
-	 * Delete a credential by its full name.
+	 * Get the permissions associated with a credential.
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
+	 * @return the collection of permissions associated with the credential
 	 */
-	void deleteByName(CredentialName name);
+	List<CredentialPermission> getPermissions(CredentialName name);
+
+	/**
+	 * Add permissions to an existing credential.
+	 *
+	 * @param name the name of the credential; must not be {@literal null}
+	 * @param permissions a collection of permissions to add
+	 * @return the collection of permissions associated with the credential
+	 */
+	List<CredentialPermission> addPermissions(CredentialName name, CredentialPermission... permissions);
+
+	/**
+	 * Delete a permission associated with a credential.
+	 *
+	 * @param name the name of the credential; must not be {@literal null}
+	 * @param actor the actor of the permission; must not be {@literal null}
+	 */
+	void deletePermission(CredentialName name, Actor actor);
 
 	/**
 	 * Search the provided data structure of bound service credentials, looking for

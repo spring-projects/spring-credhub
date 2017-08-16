@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.support;
+package org.springframework.credhub.support.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import org.springframework.credhub.support.CredentialType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,8 @@ public class JsonUtils {
 		objectMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 
 		configureCredentialDetailTypeMapping(objectMapper);
 
@@ -62,6 +66,10 @@ public class JsonUtils {
 			subtypes.add(new NamedType(type.getModelClass(), type.getValueType()));
 		}
 
+		registerSubtypes(objectMapper, subtypes);
+	}
+
+	private static void registerSubtypes(ObjectMapper objectMapper, List<NamedType> subtypes) {
 		objectMapper.registerSubtypes(subtypes.toArray(new NamedType[]{}));
 	}
 }

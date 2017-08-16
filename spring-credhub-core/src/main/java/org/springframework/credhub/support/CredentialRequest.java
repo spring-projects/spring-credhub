@@ -1,18 +1,18 @@
 /*
  *
- *  * Copyright 2013-2017 the original author or authors.
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *      http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Copyright 2013-2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  */
 
@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.util.Assert;
 
 /**
@@ -32,7 +33,7 @@ import org.springframework.util.Assert;
  */
 public class CredentialRequest<T> extends CredHubRequest {
 	private T value;
-	private List<AdditionalPermission> additionalPermissions;
+	private List<CredentialPermission> additionalPermissions;
 
 	/**
 	 * Initialize a {@link CredentialRequest}.
@@ -41,7 +42,7 @@ public class CredentialRequest<T> extends CredHubRequest {
 	 */
 	protected CredentialRequest(CredentialType type) {
 		this.credentialType = type;
-		additionalPermissions = new ArrayList<AdditionalPermission>();
+		additionalPermissions = new ArrayList<CredentialPermission>();
 	}
 
 	/**
@@ -58,11 +59,11 @@ public class CredentialRequest<T> extends CredHubRequest {
 	}
 
 	/**
-	 * Get the set of {@link AdditionalPermission} to assign to the credential.
+	 * Get the set of {@link CredentialPermission} to assign to the credential.
 	 *
-	 * @return the set of {@link AdditionalPermission}
+	 * @return the set of {@link CredentialPermission}
 	 */
-	public List<AdditionalPermission> getAdditionalPermissions() {
+	public List<CredentialPermission> getAdditionalPermissions() {
 		return this.additionalPermissions;
 	}
 
@@ -171,40 +172,40 @@ public class CredentialRequest<T> extends CredHubRequest {
 		}
 
 		/**
-		 * Add an {@link AdditionalPermission} to the permissions that will be assigned to the
+		 * Add an {@link CredentialPermission} to the permissions that will be assigned to the
 		 * credential.
 		 *
-		 * @param permission an {@link AdditionalPermission} to assign to the
+		 * @param permission a {@link CredentialPermission} to assign to the
 		 * credential
 		 * @return the builder
 		 */
-		public B additionalPermission(AdditionalPermission permission) {
+		public B permission(CredentialPermission permission) {
 			targetObj.getAdditionalPermissions().add(permission);
 			return thisObj;
 		}
 
 		/**
-		 * Add a collection of {@link AdditionalPermission}s to the controls that will be
+		 * Add a collection of {@link CredentialPermission}s to the controls that will be
 		 * assigned to the credential.
 		 *
-		 * @param permissions an collection of {@link AdditionalPermission}s to
+		 * @param permissions a collection of {@link CredentialPermission}s to
 		 * assign to the credential
 		 * @return the builder
 		 */
-		public B additionalPermissions(Collection<? extends AdditionalPermission> permissions) {
+		public B permissions(Collection<? extends CredentialPermission> permissions) {
 			targetObj.getAdditionalPermissions().addAll(permissions);
 			return thisObj;
 		}
 
 		/**
-		 * Add a collection of {@link AdditionalPermission}s to the controls that will be
+		 * Add a collection of {@link CredentialPermission}s to the controls that will be
 		 * assigned to the credential.
 		 *
-		 * @param permissions an collection of {@link AdditionalPermission}s to
+		 * @param permissions a collection of {@link CredentialPermission}s to
 		 * assign to the credential
 		 * @return the builder
 		 */
-		public B additionalPermissions(AdditionalPermission... permissions) {
+		public B permissions(CredentialPermission... permissions) {
 			targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));
 			return thisObj;
 		}

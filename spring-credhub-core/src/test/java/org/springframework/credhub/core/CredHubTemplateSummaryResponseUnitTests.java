@@ -50,29 +50,7 @@ public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnit
 			new ResponseEntity<CredentialSummaryData>(new CredentialSummaryData(), UNAUTHORIZED);
 
 	@Theory
-	public void findByNameWithString(@FromDataPoints("responses")
-												 ResponseEntity<CredentialSummaryData> expectedResponse) {
-		when(restTemplate.getForEntity(NAME_LIKE_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
-				.thenReturn(expectedResponse);
-
-		if (!expectedResponse.getStatusCode().equals(OK)) {
-			try {
-				credHubTemplate.findByName(NAME.getName());
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
-			}
-		}
-		else {
-			List<CredentialSummary> response = credHubTemplate.findByName(NAME.getName());
-
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
-		}
-	}
-
-	@Theory
-	public void findByNameWithCredentialName(@FromDataPoints("responses")
+	public void findByName(@FromDataPoints("responses")
 														 ResponseEntity<CredentialSummaryData> expectedResponse) {
 		when(restTemplate.getForEntity(NAME_LIKE_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
 				.thenReturn(expectedResponse);

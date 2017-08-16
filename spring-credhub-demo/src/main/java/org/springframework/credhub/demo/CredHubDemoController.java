@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.credhub.core.CredHubTemplate;
-import org.springframework.credhub.support.AdditionalPermission;
+import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
@@ -38,12 +38,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.credhub.support.AdditionalPermission.Operation.READ;
+import static org.springframework.credhub.support.permissions.Operation.DELETE;
+import static org.springframework.credhub.support.permissions.Operation.READ;
+import static org.springframework.credhub.support.permissions.Operation.READ_ACL;
+import static org.springframework.credhub.support.permissions.Operation.WRITE;
+import static org.springframework.credhub.support.permissions.Operation.WRITE_ACL;
 
 @RestController
 public class CredHubDemoController {
-	@Value("${vcap.application.application_id:}")
-	private String appId;
+	private static final String APP_GUID_1 = UUID.randomUUID().toString();
+	private static final String APP_GUID_2 = UUID.randomUUID().toString();
 
 	private CredHubTemplate credHubTemplate;
 
@@ -67,6 +71,14 @@ public class CredHubDemoController {
 
 			findCredentialsByPath(credentialName.getName(), results);
 
+			getCredentialPermissions(credentialName, results);
+
+			addCredentialPermissions(credentialName, results);
+
+			deleteCredentialPermission(credentialName, results);
+
+			getCredentialPermissions(credentialName, results);
+
 			interpolateServiceData(credentialName, results);
 
 			deleteCredentials(credentialName, results);
@@ -83,9 +95,10 @@ public class CredHubDemoController {
 					.overwrite(true)
 					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
 					.value(value)
-					.additionalPermission(AdditionalPermission.builder()
-							.app(UUID.randomUUID().toString())
+					.permission(CredentialPermission.builder()
+							.app(APP_GUID_1)
 							.operation(READ)
+							.operation(WRITE)
 							.build())
 					.build();
 
@@ -135,6 +148,37 @@ public class CredHubDemoController {
 			saveResults(results, "Successfully found credentials by path: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error finding credentials by path: ", e.getMessage());
+		}
+	}
+
+	private void getCredentialPermissions(CredentialName name, Results results) {
+		try {
+			List<CredentialPermission> retrievedDetails = credHubTemplate.getPermissions(name);
+			saveResults(results, "Successfully retrieved credential permissions: ", retrievedDetails);
+		} catch (Exception e) {
+			saveResults(results, "Error retrieving credential permissions: ", e.getMessage());
+		}
+	}
+
+	private void addCredentialPermissions(CredentialName name, Results results) {
+		try {
+			CredentialPermission permission = CredentialPermission.builder()
+					.app(APP_GUID_2)
+					.operations(READ_ACL, WRITE_ACL, DELETE)
+					.build();
+
+			List<CredentialPermission> permissions = credHubTemplate.addPermissions(name, permission);
+			saveResults(results, "Successfully added permissions: ", permissions);
+		} catch (Exception e) {
+			saveResults(results, "Error adding permission: ", e.getMessage());
+		}	}
+
+	private void deleteCredentialPermission(CredentialName name, Results results) {
+		try {
+			credHubTemplate.deletePermission(name, Actor.app(APP_GUID_1));
+			saveResults(results, "Successfully deleted permission");
+		} catch (Exception e) {
+			saveResults(results, "Error deleting permission: ", e.getMessage());
 		}
 	}
 

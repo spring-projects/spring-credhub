@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 
 import org.springframework.credhub.support.ParametersRequest.ParametersRequestBuilder;
+import org.springframework.credhub.support.utils.JsonUtils;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;

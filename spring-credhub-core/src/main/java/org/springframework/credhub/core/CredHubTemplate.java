@@ -22,11 +22,14 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.CredentialPermissions;
+import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
 import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.ServicesData;
-import org.springframework.credhub.support.CredentialRequest;
+import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +56,11 @@ public class CredHubTemplate implements CredHubOperations {
 	static final String NAME_URL_QUERY_CURRENT = NAME_URL_QUERY + "&current=true";
 	static final String NAME_LIKE_URL_QUERY = BASE_URL_PATH + "?name-like={name}";
 	static final String PATH_URL_QUERY = BASE_URL_PATH + "?path={path}";
+
+	static final String PERMISSIONS_URL_PATH = "/api/v1/permissions";
+	static final String PERMISSIONS_URL_QUERY = PERMISSIONS_URL_PATH + "?credential_name={name}";
+	static final String PERMISSIONS_ACTOR_URL_QUERY = PERMISSIONS_URL_QUERY + "&actor={actor}";
+
 	static final String INTERPOLATE_URL_PATH = "/api/v1/interpolate";
 
 	private final RestTemplate restTemplate;
@@ -152,7 +160,7 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> CredentialDetails<T> getByName(final String name, Class<T> credentialType) {
+	public <T> CredentialDetails<T> getByName(final CredentialName name, Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -163,7 +171,7 @@ public class CredHubTemplate implements CredHubOperations {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(NAME_URL_QUERY_CURRENT, GET, null, ref, name);
+						restOperations.exchange(NAME_URL_QUERY_CURRENT, GET, null, ref, name.getName());
 
 				throwExceptionOnError(response);
 
@@ -173,14 +181,7 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> CredentialDetails<T> getByName(final CredentialName name, Class<T> credentialType) {
-		Assert.notNull(name, "credential name must not be null");
-
-		return getByName(name.getName(), credentialType);
-	}
-
-	@Override
-	public <T> List<CredentialDetails<T>> getByNameWithHistory(final String name, Class<T> credentialType) {
+	public <T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -191,7 +192,7 @@ public class CredHubTemplate implements CredHubOperations {
 			@Override
 			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY, GET, null, ref, name);
+						restOperations.exchange(NAME_URL_QUERY, GET, null, ref, name.getName());
 
 				throwExceptionOnError(response);
 
@@ -201,14 +202,7 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, Class<T> credentialType) {
-		Assert.notNull(name, "credential name must not be null");
-
-		return getByNameWithHistory(name.getName(), credentialType);
-	}
-
-	@Override
-	public List<CredentialSummary> findByName(final String name) {
+	public List<CredentialSummary> findByName(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
 
 		return doWithRest(new RestOperationsCallback<List<CredentialSummary>>() {
@@ -217,20 +211,13 @@ public class CredHubTemplate implements CredHubOperations {
 					RestOperations restOperations) {
 				ResponseEntity<CredentialSummaryData> response = restOperations
 						.getForEntity(NAME_LIKE_URL_QUERY,
-								CredentialSummaryData.class, name);
+								CredentialSummaryData.class, name.getName());
 
 				throwExceptionOnError(response);
 
 				return response.getBody().getCredentials();
 			}
 		});
-	}
-
-	@Override
-	public List<CredentialSummary> findByName(final CredentialName name) {
-		Assert.notNull(name, "credential name must not be null");
-
-		return findByName(name.getName());
 	}
 
 	@Override
@@ -253,23 +240,67 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public void deleteByName(final String name) {
+	public void deleteByName(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
+
+		final String name1 = name.getName();
+		Assert.notNull(name1, "credential name must not be null");
 
 		doWithRest(new RestOperationsCallback<Void>() {
 			@Override
 			public Void doWithRestOperations(RestOperations restOperations) {
-				restOperations.delete(NAME_URL_QUERY, name);
+				restOperations.delete(NAME_URL_QUERY, name1);
 				return null;
 			}
 		});
 	}
 
 	@Override
-	public void deleteByName(final CredentialName name) {
+	public List<CredentialPermission> getPermissions(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
 
-		deleteByName(name.getName());
+		return doWithRest(new RestOperationsCallback<List<CredentialPermission>>() {
+			@Override
+			public List<CredentialPermission> doWithRestOperations(RestOperations restOperations) {
+				ResponseEntity<CredentialPermissions> response =
+						restOperations.getForEntity(PERMISSIONS_URL_QUERY,
+								CredentialPermissions.class, name.getName());
+				return response.getBody().getPermissions();
+			}
+		});
+	}
+
+	@Override
+	public List<CredentialPermission> addPermissions(final CredentialName name, CredentialPermission... permissions) {
+		Assert.notNull(name, "credential name must not be null");
+
+		final CredentialPermissions credentialPermissions = new CredentialPermissions(name, permissions);
+
+		return doWithRest(new RestOperationsCallback<List<CredentialPermission>>() {
+			@Override
+			public List<CredentialPermission> doWithRestOperations(RestOperations restOperations) {
+				ResponseEntity<CredentialPermissions> response =
+						restOperations.exchange(PERMISSIONS_URL_PATH, POST,
+								new HttpEntity<CredentialPermissions>(credentialPermissions),
+								CredentialPermissions.class);
+
+				return response.getBody().getPermissions();
+			}
+		});
+	}
+
+	@Override
+	public void deletePermission(final CredentialName name, final Actor actor) {
+		Assert.notNull(name, "credential name must not be null");
+		Assert.notNull(actor, "actor must not be null");
+
+		doWithRest(new RestOperationsCallback<Void>() {
+			@Override
+			public Void doWithRestOperations(RestOperations restOperations) {
+				restOperations.delete(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity());
+				return null;
+			}
+		});
 	}
 
 	@Override

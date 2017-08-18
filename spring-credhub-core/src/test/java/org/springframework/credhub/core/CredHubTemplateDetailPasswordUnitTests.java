@@ -85,6 +85,12 @@ public class CredHubTemplateDetailPasswordUnitTests
 	}
 
 	@Theory
+	public void regenerate(@FromDataPoints("detail-responses")
+						 ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+		verifyRegenerate(expectedResponse);
+	}
+
+	@Theory
 	public void getById(@FromDataPoints("detail-responses")
 						ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);

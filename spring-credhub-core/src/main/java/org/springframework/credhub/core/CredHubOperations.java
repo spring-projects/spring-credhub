@@ -58,6 +58,16 @@ public interface CredHubOperations {
 	<T, P> CredentialDetails<T> generate(ParametersRequest<P> parametersRequest);
 
 	/**
+	 * Regenerate a credential in CredHub. Only credentials that were previously generated can be
+	 * re-generated.
+	 *
+	 * @param name the name of the credential; must not be {@literal null}
+	 * @param <T> the credential implementation type
+	 * @return the details of the regenerated credential
+	 */
+	<T> CredentialDetails<T> regenerate(CredentialName name);
+
+	/**
 	 * Retrieve a credential using its ID, as returned in a write request.
 	 *
 	 * @param id the ID of the credential; must not be {@literal null}

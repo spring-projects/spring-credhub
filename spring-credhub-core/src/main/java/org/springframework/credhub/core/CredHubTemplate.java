@@ -16,7 +16,9 @@
 
 package org.springframework.credhub.core;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
@@ -119,7 +121,7 @@ public class CredHubTemplate implements CredHubOperations {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T, P> CredentialDetails<T> generate(final ParametersRequest<P> parametersRequest) {
-		Assert.notNull(parametersRequest, "generateRequest must not be null");
+		Assert.notNull(parametersRequest, "parametersRequest must not be null");
 
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
@@ -130,6 +132,31 @@ public class CredHubTemplate implements CredHubOperations {
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(BASE_URL_PATH, POST,
 								new HttpEntity<ParametersRequest<P>>(parametersRequest), ref);
+
+				throwExceptionOnError(response);
+
+				return response.getBody();
+			}
+		});
+	}
+
+	@Override
+	public <T> CredentialDetails<T> regenerate(final CredentialName name) {
+		Assert.notNull(name, "credential name must not be null");
+
+		final ParameterizedTypeReference<CredentialDetails<T>> ref =
+				new ParameterizedTypeReference<CredentialDetails<T>>() {};
+
+		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
+			@Override
+			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
+				Map<String, Object> request = new HashMap<String, Object>(2);
+				request.put("name", name.getName());
+				request.put("regenerate", true);
+
+				ResponseEntity<CredentialDetails<T>> response =
+						restOperations.exchange(BASE_URL_PATH, POST,
+								new HttpEntity<Map<String, Object>>(request), ref);
 
 				throwExceptionOnError(response);
 

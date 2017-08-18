@@ -86,6 +86,12 @@ public class CredHubTemplateDetailSshUnitTests
 	}
 
 	@Theory
+	public void regenerate(@FromDataPoints("detail-responses")
+						 ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+		verifyRegenerate(expectedResponse);
+	}
+
+	@Theory
 	public void getById(@FromDataPoints("detail-responses")
 						ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);

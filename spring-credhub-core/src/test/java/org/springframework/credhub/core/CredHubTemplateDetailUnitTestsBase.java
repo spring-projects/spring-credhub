@@ -17,7 +17,9 @@
 package org.springframework.credhub.core;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.support.CredentialDetails;
@@ -56,7 +58,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 	protected abstract CredentialRequest<T> getWriteRequest();
 
 	protected ParametersRequest<P> getGenerateRequest() {
-		return null;
+		throw new IllegalStateException("Tests that verify credential generation must override this method");
 	}
 
 	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {
@@ -121,6 +123,32 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		}
 		else {
 			CredentialDetails<T> response = credHubTemplate.generate(request);
+
+			assertResponseContainsExpectedCredentials(expectedResponse, response);
+		}
+	}
+
+	void verifyRegenerate(ResponseEntity<CredentialDetails<T>> expectedResponse) {
+		Map<String, Object> request = new HashMap<String, Object>() {{
+				put("name", NAME.getName());
+				put("regenerate", true);
+		}};
+
+		when(restTemplate.exchange(eq(BASE_URL_PATH), eq(POST),
+				eq(new HttpEntity<Map<String, Object>>(request)), isA(ParameterizedTypeReference.class)))
+						.thenReturn(expectedResponse);
+
+		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
+			try {
+				credHubTemplate.regenerate(NAME);
+				fail("Exception should have been thrown");
+			}
+			catch (CredHubException e) {
+				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+			}
+		}
+		else {
+			CredentialDetails<T> response = credHubTemplate.regenerate(NAME);
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}

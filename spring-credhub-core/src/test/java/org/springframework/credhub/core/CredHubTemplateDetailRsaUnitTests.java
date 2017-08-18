@@ -86,6 +86,12 @@ public class CredHubTemplateDetailRsaUnitTests
 	}
 
 	@Theory
+	public void regenerate(@FromDataPoints("detail-responses")
+						 ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+		verifyRegenerate(expectedResponse);
+	}
+
+	@Theory
 	public void getById(@FromDataPoints("detail-responses")
 						ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);

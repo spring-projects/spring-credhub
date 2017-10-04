@@ -64,7 +64,7 @@ public abstract class CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializationWithTwoPermissions() throws Exception {
+	public void serializationWithThreePermissions() throws Exception {
 		requestBuilder
 				.permission(CredentialPermission.builder()
 						.app("app-id")
@@ -73,6 +73,10 @@ public abstract class CredHubRequestUnitTestsBase {
 				.permission(CredentialPermission.builder()
 						.user("zone1", "user-id")
 						.operations(READ_ACL, WRITE_ACL)
+						.build())
+				.permission(CredentialPermission.builder()
+						.client("client-id")
+						.operations(READ, WRITE, READ_ACL, WRITE_ACL)
 						.build());
 
 		String jsonValue = serializeToJson(requestBuilder);
@@ -82,10 +86,18 @@ public abstract class CredHubRequestUnitTestsBase {
 						equalTo(Actor.app("app-id").getIdentity())),
 				hasJsonPath("$.additional_permissions[0].operations[0]", equalTo("read")),
 				hasJsonPath("$.additional_permissions[0].operations[1]", equalTo("write")),
+
 				hasJsonPath("$.additional_permissions[1].actor",
 						equalTo(Actor.user("zone1", "user-id").getIdentity())),
 				hasJsonPath("$.additional_permissions[1].operations[0]", equalTo("read_acl")),
-				hasJsonPath("$.additional_permissions[1].operations[1]", equalTo("write_acl"))
+				hasJsonPath("$.additional_permissions[1].operations[1]", equalTo("write_acl")),
+
+				hasJsonPath("$.additional_permissions[2].actor",
+						equalTo(Actor.client("client-id").getIdentity())),
+				hasJsonPath("$.additional_permissions[2].operations[0]", equalTo("read")),
+				hasJsonPath("$.additional_permissions[2].operations[1]", equalTo("write")),
+				hasJsonPath("$.additional_permissions[2].operations[2]", equalTo("read_acl")),
+				hasJsonPath("$.additional_permissions[2].operations[3]", equalTo("write_acl"))
 				)
 		);
 	}

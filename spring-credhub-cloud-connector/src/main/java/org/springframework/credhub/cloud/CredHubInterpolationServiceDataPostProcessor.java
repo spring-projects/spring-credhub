@@ -21,8 +21,9 @@ import java.util.logging.Logger;
 
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.cloud.cloudfoundry.ServiceDataPostProcessor;
-import org.springframework.credhub.configuration.CredHubConfiguration;
+import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.support.ServicesData;
 
 /**
@@ -30,8 +31,10 @@ import org.springframework.credhub.support.ServicesData;
  * data from {@literal VCAP_SERVICES} using the CredHub interpolation API.
  *
  * @author Scott Frederick
+ * @author Daniel Lavoie
  */
-public class CredHubInterpolationServiceDataPostProcessor implements ServiceDataPostProcessor {
+public class CredHubInterpolationServiceDataPostProcessor
+		implements ServiceDataPostProcessor {
 	private Logger logger = Logger
 			.getLogger(CredHubInterpolationServiceDataPostProcessor.class.getName());
 
@@ -42,17 +45,31 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 	 */
 	public CredHubInterpolationServiceDataPostProcessor() {
 		try {
-			credHubOperations = new CredHubConfiguration().credHubTemplate();
+			CredHubTemplateFactory credHubTemplateFactroy = new CredHubTemplateFactory();
+			CredHubProperties credHubProperties = new CredHubProperties();
+
+			credHubProperties.setUrl(System.getProperty("spring.credhub.url"));
+
+			if (credHubProperties.getUrl() != null
+					&& !credHubProperties.getUrl().isEmpty()) {
+				credHubOperations = credHubTemplateFactroy.credHubTemplate(
+						credHubProperties,
+						credHubTemplateFactroy.clientHttpRequestFactoryWrapper());
+			}
+			else {
+				logger.log(Level.WARNING,
+						"System property spring.credhub.url is undefined. CredHubOperations cannot be initialized, disabling processing of service data");
+			}
 		}
 		catch (Exception e) {
-			logger.log(Level.WARNING, "CredHubOperations cannot be initialized, " +
-							"disabling processing of service data", e);
+			logger.log(Level.WARNING, "CredHubOperations cannot be initialized, "
+					+ "disabling processing of service data", e);
 		}
 	}
 
 	/**
-	 * Initialize the service data post-processor using the provided {@link CredHubOperations}.
-	 * Intended for internal use.
+	 * Initialize the service data post-processor using the provided
+	 * {@link CredHubOperations}. Intended for internal use.
 	 *
 	 * @param credHubOperations the CredHubOperations to use
 	 */
@@ -79,15 +96,17 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 					.interpolateServiceData(connectorsToCredHub(serviceData));
 
 			return credHubToConnectors(interpolatedData);
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Error interpolating service data from CredHub.", e);
+		}
+		catch (Exception e) {
+			logger.log(Level.WARNING, "Error interpolating service data from CredHub.",
+					e);
 			return serviceData;
 		}
 	}
 
 	/**
-	 * Convert from the Spring Cloud Connectors service data structure to the Spring Credhub
-	 * data structure.
+	 * Convert from the Spring Cloud Connectors service data structure to the Spring
+	 * Credhub data structure.
 	 *
 	 * @param rawServiceData the Spring Cloud Connectors data structure
 	 * @return the equivalent Spring CredHub data structure
@@ -99,13 +118,14 @@ public class CredHubInterpolationServiceDataPostProcessor implements ServiceData
 	}
 
 	/**
-	 * Convert from the Spring Credhub service data structure to the Spring Cloud Connectors
-	 * data structure.
+	 * Convert from the Spring Credhub service data structure to the Spring Cloud
+	 * Connectors data structure.
 	 *
 	 * @param interpolatedData the Spring CredHub data structure
 	 * @return the equivalent Spring Cloud Connectors data structure
 	 */
-	private CloudFoundryRawServiceData credHubToConnectors(ServicesData interpolatedData) {
+	private CloudFoundryRawServiceData credHubToConnectors(
+			ServicesData interpolatedData) {
 		CloudFoundryRawServiceData rawServicesData = new CloudFoundryRawServiceData();
 		rawServicesData.putAll(interpolatedData);
 		return rawServicesData;

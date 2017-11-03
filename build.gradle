@@ -30,6 +30,7 @@ buildscript {
 
 ext {
 	springVersion = "4.3.8.RELEASE"
+	springBootVersion = "1.5.6.RELEASE"
 
 	junitVersion = "4.12"
 	mockitoVersion = "2.7.22"

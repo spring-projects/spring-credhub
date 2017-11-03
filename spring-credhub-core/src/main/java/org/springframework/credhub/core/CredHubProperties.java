@@ -18,43 +18,49 @@
 
 package org.springframework.credhub.core;
 
-import org.springframework.beans.factory.annotation.Value;
-
 /**
  * Properties containing information about a CredHub server.
  *
  * @author Scott Frederick
+ * @author Daniel Lavoie
  */
 public class CredHubProperties {
-	@Value("${CREDHUB_API}")
-	private String apiUriBase;
+	private String url;
 
 	/**
 	 * Create a new instance without initializing properties.
 	 */
 	public CredHubProperties() {
-		if (apiUriBase == null) {
-			apiUriBase = System.getenv("CREDHUB_API");
-		}
+
 	}
 
 	/**
-	 * Create a new instance with the provided properties. Intended to be used
-	 * internally for testing.
+	 * Create a new instance with the provided properties. Intended to be used internally
+	 * for testing.
 	 *
-	 * @param apiUriBase the base URI for the CredHub server
+	 * @param url the base URI for the CredHub server
 	 */
-	CredHubProperties(String apiUriBase) {
-		this.apiUriBase = apiUriBase;
+	CredHubProperties(String url) {
+		this.url = url;
 	}
 
 	/**
-	 * Get the base URI for the CredHub server (scheme, host, and port). This value
-	 * will be prepended to all requests to CredHub.
+	 * Get the base URI for the CredHub server (scheme, host, and port). This value will
+	 * be prepended to all requests to CredHub.
 	 *
 	 * @return the base URI
 	 */
-	public String getApiUriBase() {
-		return apiUriBase;
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * Set the base URI for the CredHub server (scheme, host, and port). This value will
+	 * be prepended to all requests to CredHub.
+	 *
+	 * @param url the base URI for the CredHub server
+	 */
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

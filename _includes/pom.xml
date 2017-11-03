@@ -1,7 +1,8 @@
 <dependencies>
     <dependency>
         <groupId>{@= groupId @}</groupId>
-        <artifactId>spring-credhub-core</artifactId>
+        <artifactId>spring-credhub-starter</artifactId>
         <version>{@= version @}</version>
     </dependency>
 </dependencies>
+

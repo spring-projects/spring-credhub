@@ -1,0 +1,4 @@
+dependencies {
+    compile '{@= groupId @}:spring-credhub-starter:{@= version @}'
+}
+

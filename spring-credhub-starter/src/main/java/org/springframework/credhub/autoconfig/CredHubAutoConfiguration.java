@@ -14,56 +14,53 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.configuration;
+package org.springframework.credhub.autoconfig;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 
 /**
- * Configuration for the {@link CredHubTemplate} used to communicate with CredHub. This
- * class is typically imported into Java-based Spring application configuration as in
- * this example:
- *
- * <pre>
- * {@code
- * &#64;Configuration
- * &#64;Import(CredHubConfiguration.class)
- * public class MyConfiguration {
- * }
- * }
- * </pre>
- *
- * @author Scott Frederick 
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link CredHubTemplate}.
+ * 
+ * @author Scott Frederick
+ * @author Daniel Lavoie
  */
+
 @Configuration
-public class CredHubConfiguration {
+@ConditionalOnProperty(value = "spring.credhub.url")
+public class CredHubAutoConfiguration {
+	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
 
 	/**
-	 * Create the {@link CredHubProperties} that contains information about the
-	 * CredHub server.
-	 *
-	 * @return the {@link CredHubProperties} bean
+	 * Configuration properties for CredHub
+	 * 
+	 * @return a {@link CredHubProperties} bean 
 	 */
 	@Bean
+	@ConfigurationProperties(prefix = "spring.credhub")
 	public CredHubProperties credHubProperties() {
 		return new CredHubProperties();
 	}
 
 	/**
-	 * Create the {@link CredHubTemplate} that the application will use to interact
-	 * with CredHub.
+	 * Create the {@link CredHubTemplate} that the application will use to interact with
+	 * CredHub.
 	 *
 	 * @return the {@link CredHubTemplate} bean
 	 */
 	@Bean
 	public CredHubTemplate credHubTemplate() {
-		return new CredHubTemplate(credHubProperties().getApiUriBase(),
+		return credHubTemplateFactory.credHubTemplate(credHubProperties(),
 				clientHttpRequestFactoryWrapper().getClientHttpRequestFactory());
 	}
 
@@ -71,8 +68,8 @@ public class CredHubConfiguration {
 	 * Create a {@link ClientFactoryWrapper} containing a
 	 * {@link ClientHttpRequestFactory}. {@link ClientHttpRequestFactory} is not exposed
 	 * as root bean because {@link ClientHttpRequestFactory} is configured with
-	 * {@link ClientOptions} which are not necessarily
-	 * applicable for the whole application.
+	 * {@link ClientOptions} which are not necessarily applicable for the whole
+	 * application.
 	 *
 	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
 	 * instance.
@@ -80,18 +77,8 @@ public class CredHubConfiguration {
 	 */
 	@Bean
 	public ClientFactoryWrapper clientHttpRequestFactoryWrapper() {
-		ClientHttpRequestFactory clientHttpRequestFactory =
-				ClientHttpRequestFactoryFactory.create(clientOptions());
-		return new ClientFactoryWrapper(clientHttpRequestFactory);
-	}
-
-	/**
-	 * Create the default {@link ClientOptions} to configure communication parameters.
-	 *
-	 * @return the default {@link ClientOptions}
-	 */
-	private ClientOptions clientOptions() {
-		return new ClientOptions();
+		return new ClientFactoryWrapper(
+				credHubTemplateFactory.clientHttpRequestFactoryWrapper());
 	}
 
 	/**

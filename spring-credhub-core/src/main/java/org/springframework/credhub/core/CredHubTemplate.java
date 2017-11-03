@@ -97,7 +97,6 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> CredentialDetails<T> write(final CredentialRequest<T> credentialRequest) {
 		Assert.notNull(credentialRequest, "credentialRequest must not be null");
 
@@ -119,7 +118,6 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T, P> CredentialDetails<T> generate(final ParametersRequest<P> parametersRequest) {
 		Assert.notNull(parametersRequest, "parametersRequest must not be null");
 

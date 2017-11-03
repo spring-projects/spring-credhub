@@ -14,13 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.demo;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.credhub.configuration.CredHubConfiguration;
-
-@Configuration
-@Import(CredHubConfiguration.class)
-public class CredHubDemoConfiguration {
-}
+/**
+ * Spring auto configuration support for Spring CredHub.
+ */
+package org.springframework.credhub.autoconfig;

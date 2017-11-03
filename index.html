@@ -44,22 +44,9 @@ Spring CredHub provides client-side support for storing, retrieving, and deletin
 
 <span id="quick-start"></span>
 
-## Quick Start
+## Configure CredHub
 
-{% include download_widget.md %}
-
-## Configure CredHubTemplate
-
-The class `org.springframework.credhub.core.CredHubTemplate` is the central class of Spring CredHub. The template offers convenience operations to write, retrieve, and delete credentials in CredHub and provides a mapping between client application domain objects and CredHub credentials.
-
-Spring CredHub is initialized by providing Java Spring config like the following:
-
-```java
-@Configuration
-@Import(CredHubConfiguration.class)
-public class AppConfig {
-}
-```
+Spring CredHub will auto configure a `CredHubTemplate` if you provide the `spring.credhub.url` property to your Spring Boot application.
 
 ## Inject and Use CredHubTemplate
 

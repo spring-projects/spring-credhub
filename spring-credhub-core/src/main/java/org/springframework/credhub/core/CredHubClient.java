@@ -18,6 +18,8 @@
 
 package org.springframework.credhub.core;
 
+import static java.util.Collections.singletonList;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +41,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriTemplateHandler;
 import org.springframework.web.util.UriTemplateHandler;
 
-import static java.util.Collections.singletonList;
-
 /**
  * Factory for creating a {@link RestTemplate} configured for communication with
  * a CredHub server.
  *
  * @author Scott Frederick
+ * @author Daniel Lavoie
  */
 public class CredHubClient {
 	/**
@@ -59,11 +60,25 @@ public class CredHubClient {
 	public static RestTemplate createRestTemplate(String baseUri,
 			ClientHttpRequestFactory clientHttpRequestFactory) {
 		RestTemplate restTemplate = new RestTemplate();
+
+		configureRestTemplate(restTemplate, baseUri, clientHttpRequestFactory);
+
+		return restTemplate;
+	}
+	
+	/**
+	 * Configure a {@link RestTemplate} for communication with a CredHub server.
+	 * @param restTemplate an existing {@link RestTemplate} to configure
+	 * @param baseUri the base URI for the CredHub server
+	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
+	 * creating new connections
+	 */
+	public static void configureRestTemplate(RestTemplate restTemplate, String baseUri,
+			ClientHttpRequestFactory clientHttpRequestFactory) {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 		restTemplate.setUriTemplateHandler(createUriTemplateHandler(baseUri));
 		restTemplate.setMessageConverters(createMessageConverters());
 		restTemplate.setInterceptors(createInterceptors());
-		return restTemplate;
 	}
 
 	/**

@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.springframework.credhub.autoconfig.CredHubAutoConfiguration
+org.springframework.credhub.autoconfig.CredHubAutoConfiguration,\
+org.springframework.credhub.autoconfig.CredHubOAuth2AutoConfiguration

@@ -22,14 +22,15 @@ buildscript {
 		maven { url 'https://repo.spring.io/plugins-release' }
 	}
 	dependencies {
-		classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
-		classpath 'io.spring.gradle:spring-io-plugin:0.0.7.RELEASE'
+		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
+		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
 	}
 }
 
 ext {
 	springVersion = "4.3.8.RELEASE"
+	springCloudConnectorsVersion = "1.2.5.RELEASE"
 
 	junitVersion = "4.12"
 	mockitoVersion = "2.7.22"
@@ -78,7 +79,10 @@ allprojects {
 		dependencyManagement {
 			springIoTestRuntime {
 				imports {
-					mavenBom "io.spring.platform:platform-bom:${platformVersion}"
+					mavenBom("io.spring.platform:platform-bom:${platformVersion}") {
+						bomProperty "spring-cloud-connectors.version", "${springCloudConnectorsVersion}"
+						bomProperty "mockito.version", "${mockitoVersion}"
+					}
 				}
 			}
 		}
@@ -171,5 +175,5 @@ task dist(dependsOn: assemble) {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '3.5'
+	gradleVersion = '4.3'
 }

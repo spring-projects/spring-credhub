@@ -20,7 +20,7 @@ dependencies {
 	compile project(':spring-credhub-core')
 
 	compile group: 'org.springframework', name: 'spring-core', version: "${springVersion}"
-	compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: '1.2.5.RC1'
+	compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: "${springCloudConnectorsVersion}"
 
 	testCompile group: 'org.springframework', name: 'spring-test', version: "${springVersion}"
 	testCompile group: 'junit', name: 'junit', version: "${junitVersion}"

@@ -73,7 +73,6 @@ public class CredHubAutoConfiguration {
 	 *
 	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
 	 * instance.
-	 * @see #clientOptions()
 	 */
 	@Bean
 	public ClientFactoryWrapper clientHttpRequestFactoryWrapper() {

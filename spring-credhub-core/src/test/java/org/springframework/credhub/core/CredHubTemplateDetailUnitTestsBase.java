@@ -44,6 +44,7 @@ import static org.springframework.credhub.core.CredHubTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY_CURRENT;
+import static org.springframework.credhub.core.CredHubTemplate.REGENERATE_URL_PATH;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
@@ -131,10 +132,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 	void verifyRegenerate(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		Map<String, Object> request = new HashMap<String, Object>() {{
 				put("name", NAME.getName());
-				put("regenerate", true);
 		}};
 
-		when(restTemplate.exchange(eq(BASE_URL_PATH), eq(POST),
+		when(restTemplate.exchange(eq(REGENERATE_URL_PATH), eq(POST),
 				eq(new HttpEntity<Map<String, Object>>(request)), isA(ParameterizedTypeReference.class)))
 						.thenReturn(expectedResponse);
 

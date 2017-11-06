@@ -22,7 +22,7 @@ buildscript {
 		maven { url 'https://repo.spring.io/plugins-release' }
 	}
 	dependencies {
-		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
+		classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
 		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
 	}
@@ -90,8 +90,8 @@ allprojects {
 }
 
 subprojects {
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
+	sourceCompatibility = 1.7
+	targetCompatibility = 1.7
 
 	tasks.withType(JavaCompile) {
 		options.encoding = 'UTF-8'

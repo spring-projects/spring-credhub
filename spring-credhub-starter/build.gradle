@@ -27,6 +27,10 @@ buildscript {
 	}
 }
 
+bootRepackage {
+    enabled = false
+}
+
 dependencies {
 	compile project(':spring-credhub-core')
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter'

@@ -31,6 +31,8 @@ public class CredHubOAuth2AutoConfiguration {
 
 		/**
 		 * Bean that holds OAuth2 credential informations for CredHub.
+		 * 
+		 * @return the {@link CredHubCredentialsDetails} bean.
 		 */
 		@Bean
 		public CredHubCredentialsDetails credHubCredentialsDetails() {
@@ -39,6 +41,12 @@ public class CredHubOAuth2AutoConfiguration {
 
 		/**
 		 * Preconfigured {@link OAuth2RestTemplate} with OAuth2 credentials for CredHub.
+		 * 
+		 * @param credHubProperties {@link CredHubProperties} for CredHub
+		 * @param clientFactoryWrapper a {@link ClientFactoryWrapper} to customize CredHub
+		 * http requests.
+		 * 
+		 * @return the {@link CredHubOperations} bean.
 		 */
 		@Bean
 		public CredHubOperations oauth2CredHubTemplate(

@@ -28,7 +28,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import com.squareup.okhttp.OkHttpClient;
 import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
@@ -44,7 +43,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
-import org.springframework.http.client.OkHttpClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -62,10 +60,6 @@ public class ClientHttpRequestFactoryFactory {
 
 	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent(
 			"org.apache.http.client.HttpClient",
-			ClientHttpRequestFactoryFactory.class.getClassLoader());
-
-	private static final boolean OKHTTP_PRESENT = ClassUtils.isPresent(
-			"com.squareup.okhttp.OkHttpClient",
 			ClientHttpRequestFactoryFactory.class.getClassLoader());
 
 	private static final boolean OKHTTP3_PRESENT = ClassUtils.isPresent(
@@ -96,11 +90,6 @@ public class ClientHttpRequestFactoryFactory {
 			if (OKHTTP3_PRESENT) {
 				logger.info("Using OkHttp3 for HTTP connections");
 				return OkHttp3.usingOkHttp3(options);
-			}
-
-			if (OKHTTP_PRESENT) {
-				logger.info("Using OkHttp for HTTP connections");
-				return OkHttp.usingOkHttp(options);
 			}
 
 			if (NETTY_PRESENT) {
@@ -165,44 +154,7 @@ public class ClientHttpRequestFactoryFactory {
 	}
 
 	/**
-	 * {@link ClientHttpRequestFactory} using {@link OkHttpClient}.
-	 *
-	 * @author Mark Paluch
-	 * @author Scott Frederick
-	 */
-	static class OkHttp {
-		static ClientHttpRequestFactory usingOkHttp(ClientOptions options)
-				throws IOException, GeneralSecurityException {
-
-			final OkHttpClient okHttpClient = new OkHttpClient();
-
-			okHttpClient.setSslSocketFactory(SSLContext.getDefault().getSocketFactory());
-
-			OkHttpClientHttpRequestFactory requestFactory =
-					new OkHttpClientHttpRequestFactory(okHttpClient) {
-				@Override
-				public void destroy() throws IOException {
-					if (okHttpClient.getCache() != null) {
-						okHttpClient.getCache().close();
-					}
-
-					okHttpClient.getDispatcher().getExecutorService().shutdown();
-				}
-			};
-
-			if (options.getConnectionTimeout() != null) {
-				requestFactory.setConnectTimeout(options.getConnectionTimeout());
-			}
-			if (options.getReadTimeout() != null) {
-				requestFactory.setReadTimeout(options.getReadTimeout());
-			}
-
-			return requestFactory;
-		}
-	}
-
-	/**
-	 * {@link ClientHttpRequestFactory} using {@link OkHttpClient}.
+	 * {@link ClientHttpRequestFactory} using {@link OkHttp3}.
 	 *
 	 * @author Mark Paluch
 	 * @author Scott Frederick

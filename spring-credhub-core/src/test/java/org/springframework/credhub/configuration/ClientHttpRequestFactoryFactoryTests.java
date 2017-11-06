@@ -26,7 +26,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
-import org.springframework.http.client.OkHttpClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -34,7 +33,6 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection.usingJdk;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.Netty.usingNetty;
-import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp.usingOkHttp;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp3.usingOkHttp3;
 
 public class ClientHttpRequestFactoryFactoryTests {
@@ -54,15 +52,6 @@ public class ClientHttpRequestFactoryFactoryTests {
 		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory).getHttpClient();
 
 		assertThat(httpClient, instanceOf(CloseableHttpClient.class));
-
-		((DisposableBean) factory).destroy();
-	}
-
-	@Test
-	public void okHttpClientCreated() throws Exception {
-		ClientHttpRequestFactory factory = usingOkHttp(new ClientOptions());
-
-		assertThat(factory, instanceOf(OkHttpClientHttpRequestFactory.class));
 
 		((DisposableBean) factory).destroy();
 	}

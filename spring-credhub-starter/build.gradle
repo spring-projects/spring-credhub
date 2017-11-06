@@ -16,10 +16,22 @@
 
 description = 'Spring CredHub Starter'
 
+apply plugin: 'org.springframework.boot'
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+	}
+}
+
 dependencies {
 	compile project(':spring-credhub-core')
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: "${springBootVersion}"
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter'
 
+	optional group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
 	optional(group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3') {
 		exclude(module: 'commons-logging')
 	}
@@ -27,5 +39,5 @@ dependencies {
 	optional group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.6.0'
 	optional group: 'io.netty', name: 'netty-all', version: '4.1.8.Final'
 
-	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "${springBootVersion}"
+	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }

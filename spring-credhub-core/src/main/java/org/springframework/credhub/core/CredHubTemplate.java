@@ -64,6 +64,7 @@ public class CredHubTemplate implements CredHubOperations {
 	static final String PERMISSIONS_ACTOR_URL_QUERY = PERMISSIONS_URL_QUERY + "&actor={actor}";
 
 	static final String INTERPOLATE_URL_PATH = "/api/v1/interpolate";
+	static final String REGENERATE_URL_PATH = "/api/v1/regenerate";
 
 	private final RestTemplate restTemplate;
 
@@ -148,12 +149,11 @@ public class CredHubTemplate implements CredHubOperations {
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				Map<String, Object> request = new HashMap<String, Object>(2);
+				Map<String, Object> request = new HashMap<String, Object>(1);
 				request.put("name", name.getName());
-				request.put("regenerate", true);
 
 				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(BASE_URL_PATH, POST,
+						restOperations.exchange(REGENERATE_URL_PATH, POST,
 								new HttpEntity<Map<String, Object>>(request), ref);
 
 				throwExceptionOnError(response);

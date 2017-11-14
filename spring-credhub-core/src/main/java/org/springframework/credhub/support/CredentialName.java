@@ -45,10 +45,14 @@ public class CredentialName {
 
 		String[] split = name.split("/");
 
-		Assert.isTrue(split.length > 2, "name must include at least one segment separated by '/'");
+		Assert.isTrue(split.length > 0, "name must include at least one segment separated by '/'");
 
-		// remove the "/" prefix
-		this.segments = Arrays.copyOfRange(split, 1, split.length);
+		if (split[0].length() == 0) {
+			// name contains a leading "/"
+			this.segments = Arrays.copyOfRange(split, 1, split.length);
+		} else {
+			this.segments = split;
+		}
 	}
 
 	/**
@@ -68,7 +72,11 @@ public class CredentialName {
 	 */
 	@JsonInclude
 	public String getName() {
-		return "/" + StringUtils.arrayToDelimitedString(segments, "/");
+		if (segments.length == 1) {
+			return segments[0];
+		} else {
+			return "/" + StringUtils.arrayToDelimitedString(segments, "/");
+		}
 	}
 
 	@Override

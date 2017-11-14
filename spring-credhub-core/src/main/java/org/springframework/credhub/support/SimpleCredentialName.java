@@ -16,15 +16,12 @@
 
 package org.springframework.credhub.support;
 
-import org.springframework.util.Assert;
-
 import java.util.Arrays;
 
 /**
  * The client-provided name of a credential. The name consists of one or more segments.
  * When the value of each segment are combined the full name of the credential will be of
- * the form
- * {@literal /c/segment1/segment2/segment3}.
+ * the form {@literal /segment1/segment2/segment3}.
  *
  * Objects of this type are created by clients and included as part of requests.
  *
@@ -39,8 +36,6 @@ public class SimpleCredentialName extends CredentialName {
 	 */
 	public SimpleCredentialName(String... segments) {
 		super(segments);
-		Assert.notNull(segments, "segments must not be null");
-		Assert.isTrue(segments.length > 0, "at least one segment must be provided");
 	}
 
 	@Override

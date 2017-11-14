@@ -25,6 +25,27 @@ import static org.junit.Assert.assertThat;
 
 public class SimpleCredentialNameUnitTests {
 	@Test
+	public void singleElementNameIsConstructed() {
+		CredentialName credentialName = new SimpleCredentialName("credential-name");
+
+		assertThat(credentialName.getName(), equalTo("credential-name"));
+	}
+	
+	@Test
+	public void singleElementNameWithLeadingSlashIsParsed() {
+		CredentialName credentialName = new CredentialName("/credential-name");
+
+		assertThat(credentialName.getName(), equalTo("credential-name"));
+	}
+
+	@Test
+	public void singleElementNameWithoutLeadingSlashIsParsed() {
+		CredentialName credentialName = new CredentialName("credential-name");
+
+		assertThat(credentialName.getName(), equalTo("credential-name"));
+	}
+
+	@Test
 	public void simpleNameIsConstructed() {
 		CredentialName credentialName =
 				new SimpleCredentialName("myorg", "example", "credential-name");
@@ -35,6 +56,13 @@ public class SimpleCredentialNameUnitTests {
 	@Test
 	public void simpleNameIsParsed() {
 		CredentialName credentialName = new CredentialName("/myorg/example/credential-name");
+
+		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
+	}
+
+	@Test
+	public void simpleNameWithoutLeadingSlashIsParsed() {
+		CredentialName credentialName = new CredentialName("myorg/example/credential-name");
 
 		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
 	}

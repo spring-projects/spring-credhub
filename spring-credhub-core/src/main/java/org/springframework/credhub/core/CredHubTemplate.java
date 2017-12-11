@@ -189,18 +189,18 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
-		final ParameterizedTypeReference<CredentialDetails<T>> ref =
-				new ParameterizedTypeReference<CredentialDetails<T>>() {};
+		final ParameterizedTypeReference<CredentialDetailsData<T>> ref =
+				new ParameterizedTypeReference<CredentialDetailsData<T>>() {};
 
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetails<T>> response =
+				ResponseEntity<CredentialDetailsData<T>> response =
 						restOperations.exchange(NAME_URL_QUERY_CURRENT, GET, null, ref, name.getName());
 
 				throwExceptionOnError(response);
 
-				return response.getBody();
+				return response.getBody().getData().get(0);
 			}
 		});
 	}

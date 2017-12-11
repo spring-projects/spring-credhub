@@ -32,7 +32,7 @@ import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
-		requestBuilder = new UserParametersRequest().builder();
+		requestBuilder = UserParametersRequest.builder();
 	}
 
 	@Test

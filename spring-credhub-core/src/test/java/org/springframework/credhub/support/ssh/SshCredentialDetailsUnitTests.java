@@ -36,7 +36,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() throws Exception {
-		CredentialDetails<SshCredential> data = parseDetails(SSH_CREDENTIALS, SshCredential.class);
+		CredentialDetails<SshCredential> data = parseDetails(SSH_CREDENTIALS);
 
 		assertDetails(data, "public-key", "private-key");
 	}
@@ -48,7 +48,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 						"  \"value\": {" +
 						"  \"public_key\": \"public-key\"" +
 						"  }";
-		CredentialDetails<SshCredential> data = parseDetails(credentials, SshCredential.class);
+		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "public-key", null);
 	}
@@ -60,14 +60,14 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 						"  \"value\": {" +
 						"  \"private_key\": \"private-key\"" +
 						"  }";
-		CredentialDetails<SshCredential> data = parseDetails(credentials, SshCredential.class);
+		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "private-key");
 	}
 
 	@Test
 	public void deserializeDetailsData() throws Exception {
-		CredentialDetailsData<SshCredential> response = parseDetailsData(SSH_CREDENTIALS, SshCredential.class);
+		CredentialDetailsData<SshCredential> response = parseDetailsData(SSH_CREDENTIALS);
 
 		assertThat(response.getData().size(), equalTo(1));
 

@@ -98,8 +98,8 @@ public class CredHubTemplateDetailRsaUnitTests
 	}
 
 	@Theory
-	public void getByName(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+	public void getByName(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 

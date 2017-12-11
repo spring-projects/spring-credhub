@@ -74,8 +74,8 @@ public class CredHubTemplateDetailValueUnitTests
 	}
 
 	@Theory
-	public void getByName(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
+	public void getByName(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 

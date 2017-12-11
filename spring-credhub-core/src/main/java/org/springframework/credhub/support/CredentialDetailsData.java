@@ -44,6 +44,7 @@ public class CredentialDetailsData<T> {
 	 *
 	 * @param data a collection of {@link CredentialDetails}
 	 */
+	@SafeVarargs
 	public CredentialDetailsData(CredentialDetails<T>... data) {
 		this.data = Arrays.asList(data);
 	}

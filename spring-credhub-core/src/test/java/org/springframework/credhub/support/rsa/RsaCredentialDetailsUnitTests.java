@@ -36,7 +36,7 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() throws Exception {
-		CredentialDetails<RsaCredential> data = parseDetails(RSA_CREDENTIALS, RsaCredential.class);
+		CredentialDetails<RsaCredential> data = parseDetails(RSA_CREDENTIALS);
 
 		assertDetails(data, "public-key", "private-key");
 	}
@@ -48,7 +48,7 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 						"  \"value\": {" +
 						"  \"public_key\": \"public-key\"" +
 						"  }";
-		CredentialDetails<RsaCredential> data = parseDetails(credentials, RsaCredential.class);
+		CredentialDetails<RsaCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "public-key", null);
 	}
@@ -60,14 +60,14 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 						"  \"value\": {" +
 						"  \"private_key\": \"private-key\"" +
 						"  }";
-		CredentialDetails<RsaCredential> data = parseDetails(credentials, RsaCredential.class);
+		CredentialDetails<RsaCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "private-key");
 	}
 
 	@Test
 	public void deserializeDetailsData() throws Exception {
-		CredentialDetailsData<RsaCredential> response = parseDetailsData(RSA_CREDENTIALS, RsaCredential.class);
+		CredentialDetailsData<RsaCredential> response = parseDetailsData(RSA_CREDENTIALS);
 
 		assertThat(response.getData().size(), equalTo(1));
 

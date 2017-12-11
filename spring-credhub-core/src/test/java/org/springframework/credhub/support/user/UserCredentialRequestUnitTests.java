@@ -45,7 +45,8 @@ public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 		assertCommonRequestFields(jsonValue, true, "/example/credential", "user");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.value.username", equalTo("myname")),
-						hasJsonPath("$.value.password", equalTo("secret"))));
+						hasJsonPath("$.value.password", equalTo("secret")),
+						hasNoJsonPath("$.value.password_hash")));
 
 		assertNoPermissions(jsonValue);
 	}
@@ -62,7 +63,8 @@ public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 		assertCommonRequestFields(jsonValue, true, "/example/credential", "user");
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.value.username"),
-						hasJsonPath("$.value.password", equalTo("secret"))));
+						hasJsonPath("$.value.password", equalTo("secret")),
+						hasNoJsonPath("$.value.password_hash")));
 
 		assertNoPermissions(jsonValue);
 	}

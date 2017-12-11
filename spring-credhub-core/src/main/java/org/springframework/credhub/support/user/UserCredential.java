@@ -19,13 +19,15 @@ package org.springframework.credhub.support.user;
 import org.springframework.util.Assert;
 
 /**
- * A user credential consists of an optional username and a password.
+ * A user credential consists of an optional username and a password. When retrieved, a user credential
+ * will contain a hash of the password.
  *
  * @author Scott Frederick
  */
 public class UserCredential {
 	private final String username;
 	private final String password;
+	private final String passwordHash;
 
 	/**
 	 * Create an empty {@link UserCredential}. Intended to be used internally for deserialization of responses.
@@ -33,6 +35,7 @@ public class UserCredential {
 	private UserCredential() {
 		username = null;
 		password = null;
+		passwordHash = null;
 	}
 
 	/**
@@ -46,6 +49,7 @@ public class UserCredential {
 		Assert.notNull(password, "password must not be null");
 		this.username = username;
 		this.password = password;
+		this.passwordHash = null;
 	}
 
 	/**
@@ -57,6 +61,7 @@ public class UserCredential {
 		Assert.notNull(password, "password must not be null");
 		this.username = null;
 		this.password = password;
+		this.passwordHash = null;
 	}
 
 	/**
@@ -75,5 +80,14 @@ public class UserCredential {
 	 */
 	public String getPassword() {
 		return password;
+	}
+	
+	/**
+	 * Get the SHA-512 hash of the user password.
+	 *
+	 * @return the hash of the user password
+	 */
+	public String getPasswordHash() {
+		return passwordHash;
 	}
 }

@@ -64,21 +64,21 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 
 	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {
 		return Arrays.asList(
-				new ResponseEntity<CredentialDetails<T>>(
-						new CredentialDetails<T>(CREDENTIAL_ID, NAME, type, credential),
+				new ResponseEntity<>(
+						new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential),
 						OK),
-				new ResponseEntity<CredentialDetails<T>>(new CredentialDetails<T>(), UNAUTHORIZED)
+				new ResponseEntity<>(new CredentialDetails<T>(), UNAUTHORIZED)
 		);
 	}
 
 	static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(CredentialType type, T credential) {
 		return Arrays.asList(
-				new ResponseEntity<CredentialDetailsData<T>>(
-						new CredentialDetailsData<T>(
-								new CredentialDetails<T>(CREDENTIAL_ID, NAME,
+				new ResponseEntity<>(
+						new CredentialDetailsData<>(
+								new CredentialDetails<>(CREDENTIAL_ID, NAME,
 										type, credential)),
 						OK),
-				new ResponseEntity<CredentialDetailsData<T>>(
+				new ResponseEntity<>(
 						new CredentialDetailsData<T>(), UNAUTHORIZED)
 		);
 	}
@@ -87,7 +87,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		CredentialRequest<T> request = getWriteRequest();
 
 		when(restTemplate.exchange(eq(BASE_URL_PATH), eq(PUT),
-				eq(new HttpEntity<CredentialRequest<T>>(request)), isA(ParameterizedTypeReference.class)))
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -102,7 +102,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		else {
 			CredentialDetails<T> response = credHubTemplate.write(request);
 
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
+			assertDetailsResponseContainsExpectedCredential(expectedResponse, response);
 		}
 	}
 
@@ -110,7 +110,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		ParametersRequest<P> request = getGenerateRequest();
 
 		when(restTemplate.exchange(eq(BASE_URL_PATH), eq(POST),
-				eq(new HttpEntity<ParametersRequest<P>>(request)), isA(ParameterizedTypeReference.class)))
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -125,7 +125,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		else {
 			CredentialDetails<T> response = credHubTemplate.generate(request);
 
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
+			assertDetailsResponseContainsExpectedCredential(expectedResponse, response);
 		}
 	}
 
@@ -135,7 +135,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		}};
 
 		when(restTemplate.exchange(eq(REGENERATE_URL_PATH), eq(POST),
-				eq(new HttpEntity<Map<String, Object>>(request)), isA(ParameterizedTypeReference.class)))
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
 						.thenReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -150,7 +150,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		else {
 			CredentialDetails<T> response = credHubTemplate.regenerate(NAME);
 
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
+			assertDetailsResponseContainsExpectedCredential(expectedResponse, response);
 		}
 	}
 
@@ -173,12 +173,12 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 			CredentialDetails<T> response =
 					credHubTemplate.getById(CREDENTIAL_ID, getType());
 
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
+			assertDetailsResponseContainsExpectedCredential(expectedResponse, response);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	void verifyGetByName(ResponseEntity<CredentialDetails<T>> expectedResponse) {
+	void verifyGetByName(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
 		when(restTemplate.exchange(eq(NAME_URL_QUERY_CURRENT), eq(GET), isNull(HttpEntity.class),
 				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
 				.thenReturn(expectedResponse);
@@ -196,7 +196,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		else {
 			CredentialDetails<T> response = credHubTemplate.getByName(NAME, getType());
 
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
+			assertDataResponseContainsExpectedCredential(expectedResponse, response);
 		}
 	}
 
@@ -219,11 +219,11 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		else {
 			List<CredentialDetails<T>> response = credHubTemplate.getByNameWithHistory(NAME, getType());
 
-			assertResponseContainsExpectedCredentials(expectedResponse, response);
+			assertDataResponseContainsExpectedCredentials(expectedResponse, response);
 		}
 	}
 
-	private void assertResponseContainsExpectedCredentials(
+	private void assertDataResponseContainsExpectedCredentials(
 			ResponseEntity<CredentialDetailsData<T>> expectedResponse,
 			List<CredentialDetails<T>> response) {
 		assertThat(response, notNullValue());
@@ -231,7 +231,15 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		assertThat(response.get(0), equalTo(expectedResponse.getBody().getData().get(0)));
 	}
 
-	private void assertResponseContainsExpectedCredentials(
+	private void assertDataResponseContainsExpectedCredential(
+			ResponseEntity<CredentialDetailsData<T>> expectedResponse,
+			CredentialDetails<T> response) {
+		assertThat(response, notNullValue());
+		assertThat(1, equalTo(expectedResponse.getBody().getData().size()));
+		assertThat(response, equalTo(expectedResponse.getBody().getData().get(0)));
+	}
+
+	private void assertDetailsResponseContainsExpectedCredential(
 			ResponseEntity<CredentialDetails<T>> expectedResponse,
 			CredentialDetails<T> response) {
 		assertThat(response, notNullValue());

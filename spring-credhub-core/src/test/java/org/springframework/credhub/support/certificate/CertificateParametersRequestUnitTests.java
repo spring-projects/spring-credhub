@@ -36,6 +36,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void serializeWithParameters() throws Exception {
 		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
@@ -75,6 +76,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void serializeWithMinimalParameters() throws Exception {
 		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))

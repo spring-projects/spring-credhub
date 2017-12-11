@@ -54,13 +54,13 @@ public abstract class JsonParsingUnitTestsBase {
 
 
 	@SuppressWarnings("unchecked")
-	protected <T> CredentialDetails<T> parseDetails(String credentials, Class<T> type) throws java.io.IOException {
+	protected <T> CredentialDetails<T> parseDetails(String credentials) throws java.io.IOException {
 		String json = buildDetails(credentials);
 		return (CredentialDetails<T>) objectMapper.readValue(json, CredentialDetails.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T> CredentialDetailsData<T> parseDetailsData(String credentials, Class<T> type) throws java.io.IOException {
+	protected <T> CredentialDetailsData<T> parseDetailsData(String credentials) throws java.io.IOException {
 		String json = buildDetailsData(credentials);
 		return (CredentialDetailsData<T>) objectMapper.readValue(json, CredentialDetailsData.class);
 	}

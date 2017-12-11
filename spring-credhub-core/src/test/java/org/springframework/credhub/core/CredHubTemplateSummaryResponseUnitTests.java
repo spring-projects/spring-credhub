@@ -43,11 +43,11 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnitTestsBase {
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> successfulResponse =
-			new ResponseEntity<CredentialSummaryData>(new CredentialSummaryData(new CredentialSummary(NAME)), OK);
+			new ResponseEntity<>(new CredentialSummaryData(new CredentialSummary(NAME)), OK);
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> httpErrorResponse =
-			new ResponseEntity<CredentialSummaryData>(new CredentialSummaryData(), UNAUTHORIZED);
+			new ResponseEntity<>(new CredentialSummaryData(), UNAUTHORIZED);
 
 	@Theory
 	public void findByName(@FromDataPoints("responses")

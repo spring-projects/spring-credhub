@@ -31,19 +31,20 @@ public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"  \"type\": \"user\"," +
 			"  \"value\": {" +
 			"  \"username\": \"myname\"," +
-			"  \"password\": \"secret\"" +
+			"  \"password\": \"secret\"," +
+			"  \"password_hash\": \"secret-hash\"" +
 			"  }";
 
 	@Test
 	public void deserializeDetails() throws Exception {
-		CredentialDetails<UserCredential> data = parseDetails(USER_CREDENTIALS, UserCredential.class);
+		CredentialDetails<UserCredential> data = parseDetails(USER_CREDENTIALS);
 
 		assertDetails(data);
 	}
 
 	@Test
 	public void deserializeDetailsData() throws Exception {
-		CredentialDetailsData<UserCredential> response = parseDetailsData(USER_CREDENTIALS, UserCredential.class);
+		CredentialDetailsData<UserCredential> response = parseDetailsData(USER_CREDENTIALS);
 
 		assertThat(response.getData().size(), equalTo(1));
 
@@ -58,5 +59,6 @@ public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(data.getCredentialType(), equalTo(CredentialType.USER));
 		assertThat(data.getValue().getUsername(), equalTo("myname"));
 		assertThat(data.getValue().getPassword(), equalTo("secret"));
+		assertThat(data.getValue().getPasswordHash(), equalTo("secret-hash"));
 	}
 }

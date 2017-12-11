@@ -98,8 +98,8 @@ public class CredHubTemplateDetailSshUnitTests
 	}
 
 	@Theory
-	public void getByName(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+	public void getByName(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 

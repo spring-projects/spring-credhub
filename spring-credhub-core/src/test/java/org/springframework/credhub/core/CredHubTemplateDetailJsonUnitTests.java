@@ -78,8 +78,8 @@ public class CredHubTemplateDetailJsonUnitTests
 	}
 
 	@Theory
-	public void getByName(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+	public void getByName(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 

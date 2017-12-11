@@ -64,6 +64,7 @@ public abstract class CredHubRequestUnitTestsBase {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void serializationWithThreePermissions() throws Exception {
 		requestBuilder
 				.permission(CredentialPermission.builder()

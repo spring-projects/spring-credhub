@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.credhub.core.CredHubTemplate;
+import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.credhub.support.CredentialDetails;
@@ -49,9 +49,9 @@ public class CredHubDemoController {
 	private static final String APP_GUID_1 = UUID.randomUUID().toString();
 	private static final String APP_GUID_2 = UUID.randomUUID().toString();
 
-	private CredHubTemplate credHubTemplate;
+	private CredHubOperations credHubTemplate;
 
-	public CredHubDemoController(CredHubTemplate credHubTemplate) {
+	public CredHubDemoController(CredHubOperations credHubTemplate) {
 		this.credHubTemplate = credHubTemplate;
 	}
 

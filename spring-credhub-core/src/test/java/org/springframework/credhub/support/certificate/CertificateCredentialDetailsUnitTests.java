@@ -37,7 +37,7 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 
 	@Test
 	public void deserializeDetailsWithAllValues() throws Exception {
-		CredentialDetails<CertificateCredential> data = parseDetails(CERT_CREDENTIALS, CertificateCredential.class);
+		CredentialDetails<CertificateCredential> data = parseDetails(CERT_CREDENTIALS);
 
 		assertDetails(data, "cert", "authority", "private-key");
 	}
@@ -49,7 +49,7 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 				"  \"value\": {" +
 				"  \"certificate\": \"cert\"" +
 				"  }";
-		CredentialDetails<CertificateCredential> data = parseDetails(credentials, CertificateCredential.class);
+		CredentialDetails<CertificateCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "cert", null, null);
 	}
@@ -62,14 +62,14 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 				"  \"ca\": \"authority\"," +
 				"  \"private_key\": \"private-key\"" +
 				"  }";
-		CredentialDetails<CertificateCredential> data = parseDetails(credentials, CertificateCredential.class);
+		CredentialDetails<CertificateCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "authority", "private-key");
 	}
 
 	@Test
 	public void deserializeDetailsData() throws Exception {
-		CredentialDetailsData<CertificateCredential> response = parseDetailsData(CERT_CREDENTIALS, CertificateCredential.class);
+		CredentialDetailsData<CertificateCredential> response = parseDetailsData(CERT_CREDENTIALS);
 
 		assertThat(response.getData().size(), equalTo(1));
 

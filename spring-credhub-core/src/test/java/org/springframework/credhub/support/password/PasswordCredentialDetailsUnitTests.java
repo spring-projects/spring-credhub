@@ -34,7 +34,7 @@ public class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase
 	@Test
 	public void deserializeDetails() throws Exception {
 		CredentialDetails<PasswordCredential> data =
-				parseDetails(PASSWORD_CREDENTIALS, PasswordCredential.class);
+				parseDetails(PASSWORD_CREDENTIALS);
 
 		assertDetails(data);
 	}
@@ -42,7 +42,7 @@ public class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase
 	@Test
 	public void deserializeDetailsData() throws Exception {
 		CredentialDetailsData<PasswordCredential> response =
-				parseDetailsData(PASSWORD_CREDENTIALS, PasswordCredential.class);
+				parseDetailsData(PASSWORD_CREDENTIALS);
 
 		assertThat(response.getData().size(), equalTo(1));
 

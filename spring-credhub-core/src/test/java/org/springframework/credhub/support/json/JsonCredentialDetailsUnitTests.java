@@ -38,14 +38,14 @@ public class JsonCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetails() throws Exception {
-		CredentialDetails<JsonCredential> data = parseDetails(JSON_CREDENTIALS, JsonCredential.class);
+		CredentialDetails<JsonCredential> data = parseDetails(JSON_CREDENTIALS);
 
 		assertDetails(data);
 	}
 
 	@Test
 	public void deserializeDetailsData() throws Exception {
-		CredentialDetailsData<JsonCredential> data = parseDetailsData(JSON_CREDENTIALS, JsonCredential.class);
+		CredentialDetailsData<JsonCredential> data = parseDetailsData(JSON_CREDENTIALS);
 
 		assertThat(data.getData().size(), equalTo(1));
 		assertDetails(data.getData().get(0));

@@ -19,13 +19,11 @@ package org.springframework.credhub.autoconfig;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
-import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
@@ -55,19 +53,6 @@ public class CredHubAutoConfiguration {
 	}
 
 	/**
-	 * Create the {@link CredHubTemplate} that the application will use to interact
-	 * with CredHub.
-	 *
-	 * @return the {@link CredHubTemplate} bean
-	 */
-	@Bean
-	@ConditionalOnMissingBean
-	public CredHubOperations credHubTemplate() {
-		return credHubTemplateFactory.credHubTemplate(credHubProperties(),
-				clientHttpRequestFactoryWrapper().getClientHttpRequestFactory());
-	}
-
-	/**
 	 * Create a {@link ClientFactoryWrapper} containing a
 	 * {@link ClientHttpRequestFactory}. {@link ClientHttpRequestFactory} is not exposed
 	 * as root bean because {@link ClientHttpRequestFactory} is configured with
@@ -75,7 +60,7 @@ public class CredHubAutoConfiguration {
 	 * application.
 	 *
 	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
-	 * instance.
+	 * instance
 	 */
 	@Bean
 	public ClientFactoryWrapper clientHttpRequestFactoryWrapper() {

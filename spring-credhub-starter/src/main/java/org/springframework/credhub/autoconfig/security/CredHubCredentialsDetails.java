@@ -1,16 +1,24 @@
 package org.springframework.credhub.autoconfig.security;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 
-/**
- * Provides a {@link ClientCredentialsResourceDetails} for use to a
- * {@link OAuth2RestTemplate}.
- * 
- * @author Daniel Lavoie
- */
-@ConfigurationProperties("spring.credhub.oauth2")
-public class CredHubCredentialsDetails extends ClientCredentialsResourceDetails {
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+/**
+ * Qualifies a {@link ClientCredentialsResourceDetails} used by Spring CredHub.
+ *
+ * @author Scott Frederick
+ */
+@Qualifier
+@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@Documented
+public @interface CredHubCredentialsDetails {
 }

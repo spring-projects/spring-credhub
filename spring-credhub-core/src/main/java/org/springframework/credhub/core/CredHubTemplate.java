@@ -296,20 +296,20 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public List<CredentialPermission> addPermissions(final CredentialName name, CredentialPermission... permissions) {
+	public void addPermissions(final CredentialName name, CredentialPermission... permissions) {
 		Assert.notNull(name, "credential name must not be null");
 
 		final CredentialPermissions credentialPermissions = new CredentialPermissions(name, permissions);
 
 		return doWithRest(new RestOperationsCallback<List<CredentialPermission>>() {
 			@Override
-			public List<CredentialPermission> doWithRestOperations(RestOperations restOperations) {
+			public void doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialPermissions> response =
 						restOperations.exchange(PERMISSIONS_URL_PATH, POST,
 								new HttpEntity<CredentialPermissions>(credentialPermissions),
 								CredentialPermissions.class);
 
-				return response.getBody().getPermissions();
+				return null;
 			}
 		});
 	}

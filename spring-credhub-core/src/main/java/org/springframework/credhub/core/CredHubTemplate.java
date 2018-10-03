@@ -303,7 +303,7 @@ public class CredHubTemplate implements CredHubOperations {
 
 		return doWithRest(new RestOperationsCallback<List<CredentialPermission>>() {
 			@Override
-			public void doWithRestOperations(RestOperations restOperations) {
+			public Void doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialPermissions> response =
 						restOperations.exchange(PERMISSIONS_URL_PATH, POST,
 								new HttpEntity<CredentialPermissions>(credentialPermissions),

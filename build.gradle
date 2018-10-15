@@ -18,7 +18,6 @@ description = "Spring CredHub"
 
 buildscript {
 	repositories {
-		jcenter()
 		maven { url 'https://repo.spring.io/plugins-release' }
 	}
 	dependencies {
@@ -37,7 +36,7 @@ ext {
 
 	javadocLinks = [
 			'http://docs.oracle.com/javase/7/docs/api/',
-			'http://docs.oracle.com/javaee/6/api/',
+			"http://docs.oracle.com/javase/8/docs/api/",
 			'http://docs.spring.io/spring/docs/current/javadoc-api/',
 	] as String[]
 }
@@ -51,7 +50,7 @@ allprojects {
 	apply plugin: 'propdeps-maven'
 	apply plugin: 'propdeps-idea'
 	apply plugin: 'propdeps-eclipse'
-	apply plugin: "org.asciidoctor.gradle.asciidoctor"
+	apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
 	group = 'org.springframework.credhub'
 

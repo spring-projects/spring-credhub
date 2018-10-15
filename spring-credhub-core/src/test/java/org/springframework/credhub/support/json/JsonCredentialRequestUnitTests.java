@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.WriteMode;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -38,14 +39,15 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 						put("data", "value");
 						put("test", true);
 					}
-				});
+				})
+				.mode(WriteMode.OVERWRITE);
 	}
 
 	@Test
 	public void serializeWithJsonValue() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, false, "/example/credential", "json");
+		assertCommonRequestFields(jsonValue, false, WriteMode.OVERWRITE, "/example/credential", "json");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.value.data", equalTo("value")),
 						hasJsonPath("$.value.test", equalTo(true))));

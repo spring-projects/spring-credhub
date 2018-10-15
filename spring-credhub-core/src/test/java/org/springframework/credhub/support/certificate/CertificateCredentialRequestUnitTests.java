@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.WriteMode;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -38,7 +39,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithAllValues() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.value.certificate", equalTo("cert")),
 						hasJsonPath("$.value.ca", equalTo("ca")),
@@ -53,7 +54,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.value.certificate", equalTo("cert")),
 						hasNoJsonPath("$.value.ca"),
@@ -68,7 +69,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.value.certificate"),
 						hasJsonPath("$.value.ca", equalTo("ca")),
@@ -84,10 +85,12 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 		serializeToJson(requestBuilder);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void buildRequest(CertificateCredential value) {
 		requestBuilder = CertificateCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.OVERWRITE)
 				.value(value);
 	}
 

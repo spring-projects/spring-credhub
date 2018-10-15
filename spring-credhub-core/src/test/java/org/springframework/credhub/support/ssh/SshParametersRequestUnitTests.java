@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.WriteMode;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
+@SuppressWarnings("deprecation")
 public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
@@ -39,11 +41,12 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.OVERWRITE)
 				.parameters(new SshParameters(KeyLength.LENGTH_2048, "ssh comment"));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "ssh");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.parameters.key_length", equalTo(2048)),
 						hasJsonPath("$.parameters.ssh_comment", equalTo("ssh comment"))));
@@ -54,11 +57,12 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.NO_OVERWRITE)
 				.parameters(new SshParameters(KeyLength.LENGTH_2048));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "ssh");
+		assertCommonRequestFields(jsonValue, true, WriteMode.NO_OVERWRITE, "/example/credential", "ssh");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.parameters.key_length", equalTo(2048)),
 						hasNoJsonPath("$.parameters.ssh_comment")));
@@ -69,11 +73,12 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.CONVERGE)
 				.parameters(new SshParameters("ssh comment"));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "ssh");
+		assertCommonRequestFields(jsonValue, true, WriteMode.CONVERGE, "/example/credential", "ssh");
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.parameters.key_length"),
 						hasJsonPath("$.parameters.ssh_comment", equalTo("ssh comment"))));
@@ -83,11 +88,12 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithNoParameters() throws Exception {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true);
+				.overwrite(true)
+				.mode(WriteMode.OVERWRITE);
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "ssh");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.parameters.key_length"),
 						hasNoJsonPath("$.parameters.ssh_comment")));

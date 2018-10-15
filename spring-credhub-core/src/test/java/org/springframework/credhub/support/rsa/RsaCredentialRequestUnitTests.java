@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.WriteMode;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -38,7 +39,7 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithPublicAndPrivateKey() throws Exception {
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
@@ -52,7 +53,7 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.value.public_key", equalTo("public-key")),
 						hasNoJsonPath("$.value.private_key")));
@@ -66,7 +67,7 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.value.public_key"),
 						hasJsonPath("$.value.private_key", equalTo("private-key"))));
@@ -81,10 +82,12 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 		serializeToJson(requestBuilder);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void buildRequest(RsaCredential value) {
 		requestBuilder = RsaCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.OVERWRITE)
 				.value(value);
 	}
 }

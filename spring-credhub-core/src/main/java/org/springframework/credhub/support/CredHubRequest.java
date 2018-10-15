@@ -30,15 +30,17 @@ import java.util.List;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("WeakerAccess")
 public class CredHubRequest<T> {
 	protected boolean overwrite;
+	protected WriteMode mode;
 	protected CredentialName name;
 	protected CredentialType credentialType;
 	protected List<CredentialPermission> additionalPermissions;
 	protected T details;
 
 	public CredHubRequest() {
-		additionalPermissions = new ArrayList<CredentialPermission>();
+		additionalPermissions = new ArrayList<>();
 	}
 
 	/**
@@ -46,6 +48,7 @@ public class CredHubRequest<T> {
 	 * should create a new credential or update an existing credential.
 	 *
 	 * @return the {@literal boolean} overwrite value
+	 * @deprecated as of CredHub 1.6, use {@link #mode}
 	 */
 	public boolean isOverwrite() {
 		return this.overwrite;
@@ -53,6 +56,19 @@ public class CredHubRequest<T> {
 
 	void setOverwrite(boolean overwrite) {
 		this.overwrite = overwrite;
+	}
+
+	/**
+	 * Get the value of the write mode indicator.
+	 *
+	 * @return the write mode
+	 */
+	public WriteMode getMode() {
+		return this.mode;
+	}
+
+	void setMode(WriteMode mode) {
+		this.mode = mode;
 	}
 
 	/**
@@ -182,9 +198,22 @@ public class CredHubRequest<T> {
 		 * @param overwrite {@literal false} to create a new credential, or
 		 * {@literal true} to update and existing credential
 		 * @return the builder
+		 * @deprecated as of CredHub 1.6, use {@link #mode(WriteMode)}
 		 */
 		public B overwrite(boolean overwrite) {
 			targetObj.setOverwrite(overwrite);
+			return thisObj;
+		}
+
+		/**
+		 * Sets a value indicating the action CredHub should take when a credential being written
+		 * or generated already exists.
+		 *
+		 * @param mode the {@link WriteMode} to use when a credential exists
+		 * @return the builder
+		 */
+		public B mode(WriteMode mode) {
+			targetObj.setMode(mode);
 			return thisObj;
 		}
 

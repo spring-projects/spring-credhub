@@ -110,9 +110,10 @@ public abstract class CredHubRequestUnitTestsBase {
 		return jsonValue;
 	}
 
-	protected void assertCommonRequestFields(String jsonValue, boolean overwrite, String name, String type) {
+	protected void assertCommonRequestFields(String jsonValue, boolean overwrite, WriteMode writeMode, String name, String type) {
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.overwrite", equalTo(overwrite)),
+						hasJsonPath("$.mode", equalTo(writeMode.getMode())),
 						hasJsonPath("$.name", equalTo(name)),
 						hasJsonPath("$.type", equalTo(type))));
 	}

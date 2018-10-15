@@ -25,7 +25,7 @@ package org.springframework.credhub.support.permissions;
  */
 public enum ActorType {
 	/**
-	 * An Cloud Foundry application entity
+	 * A Cloud Foundry application entity
 	 */
 	APP("mtls-app"),
 

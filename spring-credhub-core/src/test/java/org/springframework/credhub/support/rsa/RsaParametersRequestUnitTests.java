@@ -22,12 +22,14 @@ import org.junit.Test;
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.WriteMode;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
+@SuppressWarnings("deprecation")
 public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
@@ -39,11 +41,12 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 		requestBuilder = RsaParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.OVERWRITE)
 				.parameters(new RsaParameters(KeyLength.LENGTH_4096));
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		assertThat(jsonValue, hasJsonPath("$.parameters.key_length", equalTo(4096)));
 	}
 
@@ -51,11 +54,12 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithNoParameters() throws Exception {
 		requestBuilder = RsaParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true);
+				.overwrite(true)
+				.mode(WriteMode.OVERWRITE);
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "rsa");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		assertThat(jsonValue, hasNoJsonPath("$.parameters.key_length"));
 	}
 }

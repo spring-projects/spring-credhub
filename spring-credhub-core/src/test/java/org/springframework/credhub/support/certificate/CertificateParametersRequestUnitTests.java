@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.WriteMode;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertThat;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
 import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
 
+@SuppressWarnings("deprecation")
 public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
 	public void setUp() {
@@ -41,6 +43,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.OVERWRITE)
 				.parameters(CertificateParameters.builder()
 						.keyLength(KeyLength.LENGTH_2048)
 						.commonName("common")
@@ -58,7 +61,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
+		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		assertThat(jsonValue,
 				allOf(hasJsonPath("$.parameters.key_length", equalTo(2048)),
 						hasJsonPath("$.parameters.common_name", equalTo("common")),
@@ -81,6 +84,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
+				.mode(WriteMode.NO_OVERWRITE)
 				.parameters(CertificateParameters.builder()
 						.commonName("common")
 						.certificateAuthorityCredential("credential")
@@ -88,7 +92,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
+		assertCommonRequestFields(jsonValue, true, WriteMode.NO_OVERWRITE, "/example/credential", "certificate");
 		assertThat(jsonValue,
 				allOf(hasNoJsonPath("$.parameters.key_length"),
 						hasJsonPath("$.parameters.common_name", equalTo("common")),
@@ -108,11 +112,12 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithNoParameters() throws Exception {
 		requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true);
+				.overwrite(true)
+				.mode(WriteMode.CONVERGE);
 
 		String jsonValue = serializeToJson(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, "/example/credential", "certificate");
+		assertCommonRequestFields(jsonValue, true, WriteMode.CONVERGE, "/example/credential", "certificate");
 		assertParametersNotSet(jsonValue);
 	}
 

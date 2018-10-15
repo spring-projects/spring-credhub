@@ -56,6 +56,7 @@ public class CredHubTemplate implements CredHubOperations {
 	static final String ID_URL_PATH = BASE_URL_PATH + "/{id}";
 	static final String NAME_URL_QUERY = BASE_URL_PATH + "?name={name}";
 	static final String NAME_URL_QUERY_CURRENT = NAME_URL_QUERY + "&current=true";
+	static final String NAME_URL_QUERY_VERSIONS = NAME_URL_QUERY + "&versions={versions}";
 	static final String NAME_LIKE_URL_QUERY = BASE_URL_PATH + "?name-like={name}";
 	static final String PATH_URL_QUERY = BASE_URL_PATH + "?path={path}";
 
@@ -109,7 +110,7 @@ public class CredHubTemplate implements CredHubOperations {
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(BASE_URL_PATH, PUT,
-								new HttpEntity<CredentialRequest<T>>(credentialRequest), ref);
+								new HttpEntity<>(credentialRequest), ref);
 
 				throwExceptionOnError(response);
 
@@ -130,7 +131,7 @@ public class CredHubTemplate implements CredHubOperations {
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(BASE_URL_PATH, POST,
-								new HttpEntity<ParametersRequest<P>>(parametersRequest), ref);
+								new HttpEntity<>(parametersRequest), ref);
 
 				throwExceptionOnError(response);
 
@@ -149,12 +150,12 @@ public class CredHubTemplate implements CredHubOperations {
 		return doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				Map<String, Object> request = new HashMap<String, Object>(1);
+				Map<String, Object> request = new HashMap<>(1);
 				request.put("name", name.getName());
 
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(REGENERATE_URL_PATH, POST,
-								new HttpEntity<Map<String, Object>>(request), ref);
+								new HttpEntity<>(request), ref);
 
 				throwExceptionOnError(response);
 
@@ -164,7 +165,7 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> CredentialDetails<T> getById(final String id, Class<T> credentialType) {
+	public <T> CredentialDetails<T> getById(final String id, final Class<T> credentialType) {
 		Assert.notNull(id, "credential id must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -185,7 +186,7 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> CredentialDetails<T> getByName(final CredentialName name, Class<T> credentialType) {
+	public <T> CredentialDetails<T> getByName(final CredentialName name, final Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -206,7 +207,7 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public <T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, Class<T> credentialType) {
+	public <T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, final Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -218,6 +219,29 @@ public class CredHubTemplate implements CredHubOperations {
 			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetailsData<T>> response =
 						restOperations.exchange(NAME_URL_QUERY, GET, null, ref, name.getName());
+
+				throwExceptionOnError(response);
+
+				return response.getBody().getData();
+			}
+		});
+	}
+
+	@Override
+	public <T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, final int versions,
+															   final Class<T> credentialType) {
+		Assert.notNull(name, "credential name must not be null");
+		Assert.notNull(credentialType, "credential type must not be null");
+
+		final ParameterizedTypeReference<CredentialDetailsData<T>> ref =
+				new ParameterizedTypeReference<CredentialDetailsData<T>>() {};
+
+		return doWithRest(new RestOperationsCallback<List<CredentialDetails<T>>>() {
+			@Override
+			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
+				ResponseEntity<CredentialDetailsData<T>> response =
+						restOperations.exchange(NAME_URL_QUERY_VERSIONS, GET, null, ref,
+								name.getName(), versions);
 
 				throwExceptionOnError(response);
 
@@ -296,7 +320,8 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	@Override
-	public List<CredentialPermission> addPermissions(final CredentialName name, CredentialPermission... permissions) {
+	public List<CredentialPermission> addPermissions(final CredentialName name,
+													 final CredentialPermission... permissions) {
 		Assert.notNull(name, "credential name must not be null");
 
 		final CredentialPermissions credentialPermissions = new CredentialPermissions(name, permissions);
@@ -306,7 +331,7 @@ public class CredHubTemplate implements CredHubOperations {
 			public List<CredentialPermission> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialPermissions> response =
 						restOperations.exchange(PERMISSIONS_URL_PATH, POST,
-								new HttpEntity<CredentialPermissions>(credentialPermissions),
+								new HttpEntity<>(credentialPermissions),
 								CredentialPermissions.class);
 
 				return response.getBody().getPermissions();
@@ -337,7 +362,7 @@ public class CredHubTemplate implements CredHubOperations {
 			public ServicesData doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<ServicesData> response = restOperations
 						.exchange(INTERPOLATE_URL_PATH, POST,
-								new HttpEntity<ServicesData>(serviceData), ServicesData.class);
+								new HttpEntity<>(serviceData), ServicesData.class);
 
 				throwExceptionOnError(response);
 

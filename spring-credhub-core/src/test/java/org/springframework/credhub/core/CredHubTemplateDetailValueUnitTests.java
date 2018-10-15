@@ -84,4 +84,10 @@ public class CredHubTemplateDetailValueUnitTests
 						ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
+
+	@Theory
+	public void getByNameWithVersions(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
+		verifyGetByNameWithVersions(expectedResponse);
+	}
 }

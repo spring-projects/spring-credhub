@@ -44,6 +44,7 @@ import static org.springframework.credhub.core.CredHubTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY;
 import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY_CURRENT;
+import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY_VERSIONS;
 import static org.springframework.credhub.core.CredHubTemplate.REGENERATE_URL_PATH;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -218,6 +219,29 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTe
 		}
 		else {
 			List<CredentialDetails<T>> response = credHubTemplate.getByNameWithHistory(NAME, getType());
+
+			assertDataResponseContainsExpectedCredentials(expectedResponse, response);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	void verifyGetByNameWithVersions(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
+		when(restTemplate.exchange(eq(NAME_URL_QUERY_VERSIONS), eq(GET), isNull(HttpEntity.class),
+				isA(ParameterizedTypeReference.class), eq(NAME.getName()), eq(5)))
+				.thenReturn(expectedResponse);
+
+		if (!expectedResponse.getStatusCode().equals(OK)) {
+			try {
+				credHubTemplate.getByNameWithHistory(NAME, 5, String.class);
+				fail("Exception should have been thrown");
+			}
+			catch (CredHubException e) {
+				assertThat(e.getMessage(),
+						containsString(expectedResponse.getStatusCode().toString()));
+			}
+		}
+		else {
+			List<CredentialDetails<T>> response = credHubTemplate.getByNameWithHistory(NAME, 5, getType());
 
 			assertDataResponseContainsExpectedCredentials(expectedResponse, response);
 		}

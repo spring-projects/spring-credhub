@@ -107,4 +107,10 @@ public class CredHubTemplateDetailPasswordUnitTests
 						ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
+
+	@Theory
+	public void getByNameWithVersions(@FromDataPoints("data-responses")
+						ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
+		verifyGetByNameWithVersions(expectedResponse);
+	}
 }

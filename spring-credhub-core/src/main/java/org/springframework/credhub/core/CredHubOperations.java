@@ -55,7 +55,7 @@ public interface CredHubOperations {
 	 * @param <P> the credential parameter implementation type
 	 * @return the details of the generated credential
 	 */
-	<T, P> CredentialDetails<T> generate(ParametersRequest<P> parametersRequest);
+	<T, P> CredentialDetails<T> generate(final ParametersRequest<P> parametersRequest);
 
 	/**
 	 * Regenerate a credential in CredHub. Only credentials that were previously generated can be
@@ -65,7 +65,7 @@ public interface CredHubOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the regenerated credential
 	 */
-	<T> CredentialDetails<T> regenerate(CredentialName name);
+	<T> CredentialDetails<T> regenerate(final CredentialName name);
 
 	/**
 	 * Retrieve a credential using its ID, as returned in a write request.
@@ -75,7 +75,7 @@ public interface CredHubOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
 	 */
-	<T> CredentialDetails<T> getById(final String id, Class<T> credentialType);
+	<T> CredentialDetails<T> getById(final String id, final Class<T> credentialType);
 
 	/**
 	 * Retrieve a credential using its name, as passed to a write request.
@@ -86,7 +86,7 @@ public interface CredHubOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
 	 */
-	<T> CredentialDetails<T> getByName(final CredentialName name, Class<T> credentialType);
+	<T> CredentialDetails<T> getByName(final CredentialName name, final Class<T> credentialType);
 
 	/**
 	 * Retrieve a credential using its name, as passed to a write request.
@@ -98,15 +98,29 @@ public interface CredHubOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential, including history
 	 */
-	<T> List<CredentialDetails<T>> getByNameWithHistory(CredentialName name, Class<T> credentialType);
+	<T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, final Class<T> credentialType);
 
 	/**
-	 * Find a credential using a full or partial name.
+	 * Retrieve a credential using its name, as passed to a write request.
+	 * A collection of stored values for the named credential will be returned,
+	 * with the specified number of historical values.
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
-	 * @return a summary of the credential search results
+	 * @param versions the number of historical versions to retrieve
+	 * @param credentialType the type of credential expected to be returned
+	 * @param <T> the credential implementation type
+	 * @return the details of the retrieved credential, including history
 	 */
-	List<CredentialSummary> findByName(CredentialName name);
+	<T> List<CredentialDetails<T>> getByNameWithHistory(final CredentialName name, int versions,
+														final Class<T> credentialType);
+
+		/**
+		 * Find a credential using a full or partial name.
+		 *
+		 * @param name the name of the credential; must not be {@literal null}
+		 * @return a summary of the credential search results
+		 */
+	List<CredentialSummary> findByName(final CredentialName name);
 
 	/**
 	 * Find a credential using a path.
@@ -114,14 +128,14 @@ public interface CredHubOperations {
 	 * @param path the path to the credential; must not be {@literal null}
 	 * @return a summary of the credential search results
 	 */
-	List<CredentialSummary> findByPath(String path);
+	List<CredentialSummary> findByPath(final String path);
 
 	/**
 	 * Delete a credential by its full name.
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
 	 */
-	void deleteByName(CredentialName name);
+	void deleteByName(final CredentialName name);
 
 	/**
 	 * Get the permissions associated with a credential.
@@ -129,7 +143,7 @@ public interface CredHubOperations {
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return the collection of permissions associated with the credential
 	 */
-	List<CredentialPermission> getPermissions(CredentialName name);
+	List<CredentialPermission> getPermissions(final CredentialName name);
 
 	/**
 	 * Add permissions to an existing credential.
@@ -138,7 +152,7 @@ public interface CredHubOperations {
 	 * @param permissions a collection of permissions to add
 	 * @return the collection of permissions associated with the credential
 	 */
-	List<CredentialPermission> addPermissions(CredentialName name, CredentialPermission... permissions);
+	List<CredentialPermission> addPermissions(final CredentialName name, final CredentialPermission... permissions);
 
 	/**
 	 * Delete a permission associated with a credential.
@@ -146,7 +160,7 @@ public interface CredHubOperations {
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param actor the actor of the permission; must not be {@literal null}
 	 */
-	void deletePermission(CredentialName name, Actor actor);
+	void deletePermission(final CredentialName name, final Actor actor);
 
 	/**
 	 * Search the provided data structure of bound service credentials, looking for
@@ -208,7 +222,7 @@ public interface CredHubOperations {
 	 * @return the serviceData structure with CredHub references replaced by stored
 	 * credential values
 	 */
-	ServicesData interpolateServiceData(ServicesData serviceData);
+	ServicesData interpolateServiceData(final ServicesData serviceData);
 
 	/**
 	 * Allow interaction with the configured {@link RestTemplate} not provided

@@ -57,6 +57,12 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 						.certificateAuthorityCredential("credential")
 						.certificateAuthority(true)
 						.selfSign(false)
+						.keyUsage(KeyUsage.CRL_SIGN, KeyUsage.DATA_ENCIPHERMENT, KeyUsage.DECIPHER_ONLY,
+								KeyUsage.DIGITAL_SIGNATURE, KeyUsage.ENCIPHER_ONLY, KeyUsage.KEY_AGREEMENT,
+								KeyUsage.KEY_CERT_SIGN, KeyUsage.KEY_ENCIPHERMENT, KeyUsage.NON_REPUDIATION)
+						.extendedKeyUsage(ExtendedKeyUsage.CLIENT_AUTH, ExtendedKeyUsage.CODE_SIGNING,
+								ExtendedKeyUsage.EMAIL_PROTECTION, ExtendedKeyUsage.SERVER_AUTH,
+								ExtendedKeyUsage.TIMESTAMPING)
 						.build());
 
 		String jsonValue = serializeToJson(requestBuilder);
@@ -75,7 +81,21 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 						hasJsonPath("$.parameters.duration", equalTo(1234)),
 						hasJsonPath("$.parameters.ca", equalTo("credential")),
 						hasJsonPath("$.parameters.is_ca", equalTo(true)),
-						hasJsonPath("$.parameters.self_sign", equalTo(false))));
+						hasJsonPath("$.parameters.self_sign", equalTo(false)),
+						hasJsonPath("$.parameters.key_usage[0]", equalTo(KeyUsage.CRL_SIGN.getValue())),
+						hasJsonPath("$.parameters.key_usage[1]", equalTo(KeyUsage.DATA_ENCIPHERMENT.getValue())),
+						hasJsonPath("$.parameters.key_usage[2]", equalTo(KeyUsage.DECIPHER_ONLY.getValue())),
+						hasJsonPath("$.parameters.key_usage[3]", equalTo(KeyUsage.DIGITAL_SIGNATURE.getValue())),
+						hasJsonPath("$.parameters.key_usage[4]", equalTo(KeyUsage.ENCIPHER_ONLY.getValue())),
+						hasJsonPath("$.parameters.key_usage[5]", equalTo(KeyUsage.KEY_AGREEMENT.getValue())),
+						hasJsonPath("$.parameters.key_usage[6]", equalTo(KeyUsage.KEY_CERT_SIGN.getValue())),
+						hasJsonPath("$.parameters.key_usage[7]", equalTo(KeyUsage.KEY_ENCIPHERMENT.getValue())),
+						hasJsonPath("$.parameters.key_usage[8]", equalTo(KeyUsage.NON_REPUDIATION.getValue())),
+						hasJsonPath("$.parameters.extended_key_usage[0]", equalTo(ExtendedKeyUsage.CLIENT_AUTH.getValue())),
+						hasJsonPath("$.parameters.extended_key_usage[1]", equalTo(ExtendedKeyUsage.CODE_SIGNING.getValue())),
+						hasJsonPath("$.parameters.extended_key_usage[2]", equalTo(ExtendedKeyUsage.EMAIL_PROTECTION.getValue())),
+						hasJsonPath("$.parameters.extended_key_usage[3]", equalTo(ExtendedKeyUsage.SERVER_AUTH.getValue())),
+						hasJsonPath("$.parameters.extended_key_usage[4]", equalTo(ExtendedKeyUsage.TIMESTAMPING.getValue()))));
 	}
 
 	@Test
@@ -105,7 +125,9 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 						hasNoJsonPath("$.parameters.country"),
 						hasNoJsonPath("$.parameters.duration"),
 						hasNoJsonPath("$.parameters.is_ca"),
-						hasNoJsonPath("$.parameters.self_sign")));
+						hasNoJsonPath("$.parameters.self_sign"),
+						hasNoJsonPath("$.parameters.key_usage"),
+						hasNoJsonPath("$.parameters.extended_key_usage")));
 	}
 
 	@Test

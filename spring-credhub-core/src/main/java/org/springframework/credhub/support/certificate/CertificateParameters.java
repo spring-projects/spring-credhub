@@ -37,6 +37,8 @@ public class CertificateParameters extends KeyParameters {
 	private Boolean certificateAuthority;
 	private Boolean selfSign;
 	private Integer duration;
+	private KeyUsage[] keyUsage;
+	private ExtendedKeyUsage[] extendedKeyUsage;
 
 	/**
 	 * Create a {@link CertificateParameters} using defaults for all parameter values. Intended for internal use.
@@ -53,6 +55,8 @@ public class CertificateParameters extends KeyParameters {
 		this.certificateAuthorityCredential = null;
 		this.certificateAuthority = null;
 		this.selfSign = null;
+		this.keyUsage = null;
+		this.extendedKeyUsage = null;
 	}
 
 	/**
@@ -61,7 +65,8 @@ public class CertificateParameters extends KeyParameters {
 	private CertificateParameters(KeyLength keyLength, String commonName, String[] alternativeNames, String organization,
 								  String organizationUnit, String locality, String state, String country,
 								  Integer duration, String certificateAuthorityCredential,
-								  Boolean certificateAuthority, Boolean selfSign) {
+								  Boolean certificateAuthority, Boolean selfSign,
+								  KeyUsage[] keyUsage, ExtendedKeyUsage[] extendedKeyUsage) {
 		super(keyLength);
 		this.commonName = commonName;
 		this.alternativeNames = alternativeNames;
@@ -74,6 +79,8 @@ public class CertificateParameters extends KeyParameters {
 		this.certificateAuthorityCredential = certificateAuthorityCredential;
 		this.certificateAuthority = certificateAuthority;
 		this.selfSign = selfSign;
+		this.keyUsage = keyUsage;
+		this.extendedKeyUsage = extendedKeyUsage;
 	}
 
 	/**
@@ -176,6 +183,24 @@ public class CertificateParameters extends KeyParameters {
 	}
 
 	/**
+	 * Get the value of the key usage extensions that will be used when generating the certificate.
+	 *
+	 * @return the value of the parameter; will be {@literal null} if not explicitly set
+	 */
+	public KeyUsage[] getKeyUsage() {
+		return keyUsage;
+	}
+
+	/**
+	 * Get the value of the extended key usage extensions that will be used when generating the certificate.
+	 *
+	 * @return the value of the parameter; will be {@literal null} if not explicitly set
+	 */
+	public ExtendedKeyUsage[] getExtendedKeyUsage() {
+		return extendedKeyUsage;
+	}
+
+	/**
 	 * Create a builder that provides a fluent API for providing the values required
 	 * to construct a {@link CertificateParameters}.
 	 *
@@ -201,6 +226,8 @@ public class CertificateParameters extends KeyParameters {
 		private String certificateAuthorityCredential;
 		private Boolean certificateAuthority;
 		private Boolean selfSign;
+		private KeyUsage[] keyUsage;
+		private ExtendedKeyUsage[] extendedKeyUsage;
 
 		/**
 		 * Set the length of the key for the generated certificate.
@@ -346,6 +373,28 @@ public class CertificateParameters extends KeyParameters {
 		}
 
 		/**
+		 * Set the value of the key usage extensions for the generated certificate.
+		 *
+		 * @param keyUsage one or more parameter values
+		 * @return the builder
+		 */
+		public CertificateParametersBuilder keyUsage(KeyUsage... keyUsage) {
+			this.keyUsage = keyUsage;
+			return this;
+		}
+
+		/**
+		 * Set the value of the extended key usage extensions for the generated certificate.
+		 *
+		 * @param extendedKeyUsage one or more parameter values
+		 * @return the builder
+		 */
+		public CertificateParametersBuilder extendedKeyUsage(ExtendedKeyUsage... extendedKeyUsage) {
+			this.extendedKeyUsage = extendedKeyUsage;
+			return this;
+		}
+
+		/**
 		 * Create a {@link CertificateParameters} from the provided values.
 		 *
 		 * @return the created {@link CertificateParameters}
@@ -357,7 +406,8 @@ public class CertificateParameters extends KeyParameters {
 			Assert.isTrue(certificateAuthorityCredential != null || certificateAuthority != null || selfSign != null,
 					"at least one signing parameter must be specified");
 			return new CertificateParameters(keyLength, commonName, alternativeNames, organization, organizationUnit,
-					locality, state, country, duration, certificateAuthorityCredential, certificateAuthority, selfSign);
+					locality, state, country, duration, certificateAuthorityCredential, certificateAuthority, selfSign,
+					keyUsage, extendedKeyUsage);
 		}
 	}
 }

@@ -31,14 +31,15 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"  \"type\": \"ssh\"," +
 			"  \"value\": {" +
 			"  \"private_key\": \"private-key\"," +
-			"  \"public_key\": \"public-key\"" +
+			"  \"public_key\": \"public-key\"," +
+			"  \"public_key_fingerprint\": \"fingerprint\"" +
 			"  }";
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() throws Exception {
 		CredentialDetails<SshCredential> data = parseDetails(SSH_CREDENTIALS);
 
-		assertDetails(data, "public-key", "private-key");
+		assertDetails(data, "public-key", "private-key", "fingerprint");
 	}
 
 	@Test
@@ -50,7 +51,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 						"  }";
 		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
-		assertDetails(data, "public-key", null);
+		assertDetails(data, "public-key", null, null);
 	}
 
 	@Test
@@ -62,7 +63,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 						"  }";
 		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
-		assertDetails(data, null, "private-key");
+		assertDetails(data, null, "private-key", null);
 	}
 
 	@Test
@@ -73,14 +74,16 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 		CredentialDetails<SshCredential> data = response.getData().get(0);
 
-		assertDetails(data, "public-key", "private-key");
+		assertDetails(data, "public-key", "private-key", "fingerprint");
 	}
 
-	private void assertDetails(CredentialDetails<SshCredential> data, String publicKey, String privateKey) {
+	private void assertDetails(CredentialDetails<SshCredential> data,
+							   String publicKey, String privateKey, String publicKeyFingerprint) {
 		assertCommonDetails(data);
 		
 		assertThat(data.getCredentialType(), equalTo(CredentialType.SSH));
 		assertThat(data.getValue().getPublicKey(), equalTo(publicKey));
 		assertThat(data.getValue().getPrivateKey(), equalTo(privateKey));
+		assertThat(data.getValue().getPublicKeyFingerprint(), equalTo(publicKeyFingerprint));
 	}
 }

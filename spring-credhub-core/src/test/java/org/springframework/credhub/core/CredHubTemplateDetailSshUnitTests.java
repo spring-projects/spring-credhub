@@ -44,12 +44,12 @@ public class CredHubTemplateDetailSshUnitTests
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<SshCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.RSA, CREDENTIAL);
+		return buildDetailResponses(CredentialType.SSH, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
 	public static List<ResponseEntity<CredentialDetailsData<SshCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.RSA, CREDENTIAL);
+		return buildDataResponses(CredentialType.SSH, CREDENTIAL);
 	}
 
 	@Override

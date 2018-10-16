@@ -21,14 +21,17 @@ import org.springframework.credhub.support.KeyPairCredential;
 /**
  * An SSH credential consists of a public and/or private key. At least one of these key values must be provided.
  *
- * @author Scott Frederick 
+ * @author Scott Frederick
  */
 public class SshCredential extends KeyPairCredential {
+	private final String publicKeyFingerprint;
+
 	/**
 	 * Create an empty {@link SshCredential}. Intended to be used internally for deserialization of responses.
 	 */
 	private SshCredential() {
 		super();
+		publicKeyFingerprint = null;
 	}
 
 	/**
@@ -40,5 +43,16 @@ public class SshCredential extends KeyPairCredential {
 	 */
 	public SshCredential(String publicKey, String privateKey) {
 		super(publicKey, privateKey);
+		publicKeyFingerprint = null;
+	}
+
+	/**
+	 * Get the fingerprint of the public key associated with the credential. This value can not be provided
+	 * when creating an {@code SshCredential}, but may be provided by CredHub when retrieving one.
+	 * 
+	 * @return the public key fingerprint value
+	 */
+	public String getPublicKeyFingerprint() {
+		return publicKeyFingerprint;
 	}
 }

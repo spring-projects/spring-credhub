@@ -18,11 +18,9 @@ package org.springframework.credhub.core;
 
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.http.HttpMethod.POST;
 
@@ -56,21 +54,10 @@ public class CredHubInterpolationTemplate implements CredHubInterpolationOperati
 						.exchange(INTERPOLATE_URL_PATH, POST,
 								new HttpEntity<>(serviceData), ServicesData.class);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody();
 			}
 		});
-	}
-	/**
-	 * Helper method to throw an appropriate exception if a request to CredHub
-	 * returns with an error code.
-	 *
-	 * @param response a {@link ResponseEntity} returned from {@link RestTemplate}
-	 */
-	private void throwExceptionOnError(ResponseEntity<?> response) {
-		if (!response.getStatusCode().equals(HttpStatus.OK)) {
-			throw new CredHubException(response.getStatusCode());
-		}
 	}
 }

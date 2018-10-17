@@ -39,6 +39,13 @@ public interface CredHubOperations {
 	CredHubPermissionsOperations permissions();
 
 	/**
+	 * Get the operations for retrieving, regenerating, and updating certificates.
+	 *
+	 * @return the certificates operations
+	 */
+	CredHubCertificateOperations certificates();
+
+	/**
 	 * Get the operations interpolating service binding credentials.
 	 *
 	 * @return the interpolation operations

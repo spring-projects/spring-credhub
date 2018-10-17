@@ -42,7 +42,7 @@ public class CredentialName {
 	 * @param name the credential name; must not be {@literal null}
 	 */
 	CredentialName(String name) {
-		Assert.notNull("name", "name must not be null");
+		Assert.notNull(name, "name must not be null");
 
 		String[] split = name.split("/");
 

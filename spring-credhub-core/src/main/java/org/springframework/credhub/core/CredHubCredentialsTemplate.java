@@ -27,11 +27,9 @@ import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
 import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +81,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 						restOperations.exchange(BASE_URL_PATH, PUT,
 								new HttpEntity<>(credentialRequest), ref);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody();
 			}
@@ -104,7 +102,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 						restOperations.exchange(BASE_URL_PATH, POST,
 								new HttpEntity<>(parametersRequest), ref);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody();
 			}
@@ -128,7 +126,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 						restOperations.exchange(REGENERATE_URL_PATH, POST,
 								new HttpEntity<>(request), ref);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody();
 			}
@@ -149,7 +147,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(ID_URL_PATH, GET, null, ref, id);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody();
 			}
@@ -170,7 +168,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 				ResponseEntity<CredentialDetailsData<T>> response =
 						restOperations.exchange(NAME_URL_QUERY_CURRENT, GET, null, ref, name.getName());
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getData().get(0);
 			}
@@ -191,7 +189,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 				ResponseEntity<CredentialDetailsData<T>> response =
 						restOperations.exchange(NAME_URL_QUERY, GET, null, ref, name.getName());
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getData();
 			}
@@ -214,7 +212,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 						restOperations.exchange(NAME_URL_QUERY_VERSIONS, GET, null, ref,
 								name.getName(), versions);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getData();
 			}
@@ -233,7 +231,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 						.getForEntity(NAME_LIKE_URL_QUERY,
 								CredentialSummaryData.class, name.getName());
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getCredentials();
 			}
@@ -252,7 +250,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 						.getForEntity(PATH_URL_QUERY, CredentialSummaryData.class,
 								path);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getCredentials();
 			}
@@ -268,7 +266,7 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 				ResponseEntity<CredentialPathData> response = restOperations
 						.getForEntity(SHOW_ALL_URL_QUERY, CredentialPathData.class);
 
-				throwExceptionOnError(response);
+				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getPaths();
 			}
@@ -289,17 +287,5 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 				return null;
 			}
 		});
-	}
-
-	/**
-	 * Helper method to throw an appropriate exception if a request to CredHub
-	 * returns with an error code.
-	 *
-	 * @param response a {@link ResponseEntity} returned from {@link RestTemplate}
-	 */
-	private void throwExceptionOnError(ResponseEntity<?> response) {
-		if (!response.getStatusCode().equals(HttpStatus.OK)) {
-			throw new CredHubException(response.getStatusCode());
-		}
 	}
 }

@@ -53,7 +53,7 @@ public class CredHubInterpolationTemplateUnitTests {
 	private CredHubInterpolationOperations credHubTemplate;
 
 	@Before
-	public void setUpCredHubTemplateUnitTests() {
+	public void setUp() {
 		credHubTemplate = new CredHubTemplate(restTemplate).interpolation();
 	}
 

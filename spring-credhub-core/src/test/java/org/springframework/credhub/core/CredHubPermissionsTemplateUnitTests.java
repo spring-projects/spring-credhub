@@ -54,7 +54,7 @@ public class CredHubPermissionsTemplateUnitTests {
 	private CredHubPermissionsOperations credHubTemplate;
 
 	@Before
-	public void setUpCredHubTemplateUnitTests() {
+	public void setUp() {
 		credHubTemplate = new CredHubTemplate(restTemplate).permissions();
 	}
 

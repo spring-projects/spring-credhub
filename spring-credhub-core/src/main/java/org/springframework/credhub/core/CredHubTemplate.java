@@ -79,6 +79,16 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	/**
+	 * Get the operations for retrieving, regenerating, and updating certificates.
+	 *
+	 * @return the certificates operations
+	 */
+	@Override
+	public CredHubCertificateOperations certificates() {
+		return new CredHubCertificateTemplate(this);
+	}
+
+	/**
 	 * Get the operations interpolating service binding credentials.
 	 *
 	 * @return the interpolation operations

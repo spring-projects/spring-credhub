@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Permissions applied to a credential in CredHub. If provided when a
@@ -38,14 +39,15 @@ import java.util.List;
  * @author Scott Frederick
  */
 public class CredentialPermission {
-	private Actor actor;
+	private final Actor actor;
 
 	@JsonProperty
-	private List<Operation> operations;
+	private final List<Operation> operations;
 
 	/**
 	 * Create a {@literal CredentialPermission}.
 	 */
+	@SuppressWarnings("unused")
 	private CredentialPermission() {
 		this.actor = null;
 		this.operations = null;
@@ -129,9 +131,7 @@ public class CredentialPermission {
 
 	@Override
 	public int hashCode() {
-		int result = actor != null ? actor.hashCode() : 0;
-		result = 31 * result + (operations != null ? operations.hashCode() : 0);
-		return result;
+		return Objects.hash(actor, operations);
 	}
 
 	@Override

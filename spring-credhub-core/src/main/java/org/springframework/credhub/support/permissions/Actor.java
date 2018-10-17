@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.util.Assert;
 
+import java.util.Objects;
+
 import static org.springframework.credhub.support.permissions.ActorType.APP;
 import static org.springframework.credhub.support.permissions.ActorType.OAUTH_CLIENT;
 import static org.springframework.credhub.support.permissions.ActorType.USER;
@@ -32,8 +34,8 @@ import static org.springframework.credhub.support.permissions.ActorType.USER;
  * @author Scott Frederick
  */
 public class Actor {
-	private ActorType authType;
-	private String primaryIdentifier;
+	private final ActorType authType;
+	private final String primaryIdentifier;
 
 	/**
 	 * Create a new {@literal Actor}.
@@ -168,8 +170,6 @@ public class Actor {
 
 	@Override
 	public int hashCode() {
-		int result = authType.hashCode();
-		result = 31 * result + primaryIdentifier.hashCode();
-		return result;
+		return Objects.hash(authType, primaryIdentifier);
 	}
 }

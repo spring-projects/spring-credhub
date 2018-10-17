@@ -20,6 +20,7 @@ package org.springframework.credhub.support;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A collection of {@link CredentialDetails}. Clients don't typically instantiate
@@ -29,12 +30,13 @@ import java.util.List;
  * @author Scott Frederick
  */
 public class CredentialDetailsData<T> {
-	private List<CredentialDetails<T>> data;
+	private final List<CredentialDetails<T>> data;
 
 	/**
 	 * Create a {@link CredentialDetailsData}.
 	 */
 	public CredentialDetailsData() {
+		this.data = null;
 	}
 
 	/**
@@ -74,9 +76,7 @@ public class CredentialDetailsData<T> {
 
 	@Override
 	public int hashCode() {
-		int result = super.hashCode();
-		result = 31 * result + (data != null ? data.hashCode() : 0);
-		return result;
+		return Objects.hashCode(data);
 	}
 
 	@Override

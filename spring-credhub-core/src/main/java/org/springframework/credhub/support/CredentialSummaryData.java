@@ -18,6 +18,7 @@ package org.springframework.credhub.support;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A collection of {@link CredentialSummary}s. Clients don't typically instantiate
@@ -27,12 +28,14 @@ import java.util.List;
  * @author Scott Frederick
  */
 public class CredentialSummaryData {
-	private List<CredentialSummary> credentials;
+	private final List<CredentialSummary> credentials;
 
 	/**
 	 * Create a {@link CredentialSummaryData}.
 	 */
-	CredentialSummaryData() {
+	@SuppressWarnings("unused")
+	private CredentialSummaryData() {
+		this.credentials = null;
 	}
 
 	/**
@@ -72,9 +75,7 @@ public class CredentialSummaryData {
 
 	@Override
 	public int hashCode() {
-		int result = super.hashCode();
-		result = 31 * result + (credentials != null ? credentials.hashCode() : 0);
-		return result;
+		return Objects.hashCode(credentials);
 	}
 
 	@Override

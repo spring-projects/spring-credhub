@@ -17,6 +17,7 @@
 package org.springframework.credhub.support;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +33,7 @@ import org.springframework.util.StringUtils;
  */
 public class CredentialName {
 	@JsonIgnore
-	protected final String[] segments;
+	final String[] segments;
 
 	/**
 	 * Create a name from the provided value. The name must consist of segments
@@ -93,6 +94,6 @@ public class CredentialName {
 
 	@Override
 	public int hashCode() {
-		return Arrays.hashCode(segments);
+		return Objects.hashCode(segments);
 	}
 }

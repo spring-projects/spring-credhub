@@ -22,6 +22,7 @@ import org.springframework.credhub.support.permissions.CredentialPermission;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A collection of {@link CredentialPermission}s. Clients don't typically instantiate
@@ -31,13 +32,16 @@ import java.util.List;
  * @author Scott Frederick
  */
 public class CredentialPermissions {
-	private CredentialName credentialName;
-	private List<CredentialPermission> permissions;
+	private final CredentialName credentialName;
+	private final List<CredentialPermission> permissions;
 
 	/**
 	 * Create a {@link CredentialPermissions}.
 	 */
-	public CredentialPermissions() {
+	@SuppressWarnings("unused")
+	private CredentialPermissions() {
+		this.credentialName = null;
+		this.permissions = null;
 	}
 
 	/**
@@ -93,8 +97,6 @@ public class CredentialPermissions {
 
 	@Override
 	public int hashCode() {
-		int result = credentialName != null ? credentialName.hashCode() : 0;
-		result = 31 * result + (permissions != null ? permissions.hashCode() : 0);
-		return result;
+		return Objects.hash(credentialName, permissions);
 	}
 }

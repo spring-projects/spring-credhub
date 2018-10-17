@@ -19,6 +19,8 @@ package org.springframework.credhub.support;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.util.Objects;
+
 /**
  * The details of a credential that has been written to CredHub. Clients don't
  * typically instantiate objects of this type, but will receive them in response
@@ -28,18 +30,21 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * @author Scott Frederick
  */
 public class CredentialDetails<T> extends CredentialSummary {
-	private String id;
+	private final String id;
 	
 	@JsonProperty("type")
-	private CredentialType credentialType;
+	private final CredentialType credentialType;
 
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
-	private T value;
+	private final T value;
 
 	/**
 	 * Create a {@link CredentialDetails}.
 	 */
 	public CredentialDetails() {
+		this.id = null;
+		this.credentialType = null;
+		this.value = null;
 	}
 
 	/**
@@ -107,13 +112,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 
 	@Override
 	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (credentialType != null ? credentialType.hashCode() : 0);
-		result = 31 * result + (value != null ? value.hashCode() : 0);
-		result = 31 * result
-				+ (versionCreatedAt != null ? versionCreatedAt.hashCode() : 0);
-		return result;
+		return Objects.hash(id, name, credentialType, value, versionCreatedAt);
 	}
 
 	@Override

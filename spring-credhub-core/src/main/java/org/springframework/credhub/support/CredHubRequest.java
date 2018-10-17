@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Fields common to all types of CredHub requests.
@@ -135,18 +136,14 @@ public class CredHubRequest<T> {
 		if (additionalPermissions != null ?
 				additionalPermissions.equals(that.additionalPermissions) : that.additionalPermissions == null) return false;
 		if (details != null ? !details.equals(that.details) : that.details != null) return false;
+		if (mode != null ? !mode.equals(that.mode) : that.mode != null) return false;
 
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = (overwrite ? 1 : 0);
-		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (credentialType != null ? credentialType.hashCode() : 0);
-		result = 31 * result + (additionalPermissions != null ? additionalPermissions.hashCode() : 0);
-		result = 31 * result + (details != null ? details.hashCode() : 0);
-		return result;
+		return Objects.hash(overwrite, name, credentialType, additionalPermissions, details, mode);
 	}
 
 	/**

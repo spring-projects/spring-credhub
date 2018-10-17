@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support;
 
+import java.util.Objects;
+
 /**
  * The path to a credential that has been written to CredHub. Clients don't typically
  * instantiate objects of this type, but will receive them in response to requests.
@@ -23,12 +25,14 @@ package org.springframework.credhub.support;
  * @author Scott Frederick
  */
 public class CredentialPath {
-	protected String path;
+	private final String path;
 
 	/**
 	 * Create a {@link CredentialPath}. Intended for internal use.
 	 */
-	CredentialPath() {
+	@SuppressWarnings("unused")
+	private CredentialPath() {
+		this.path = null;
 	}
 
 	/**
@@ -65,7 +69,7 @@ public class CredentialPath {
 
 	@Override
 	public int hashCode() {
-		return path != null ? path.hashCode() : 0;
+		return Objects.hashCode(path);
 	}
 
 	@Override

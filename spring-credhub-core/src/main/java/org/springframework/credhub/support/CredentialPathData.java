@@ -18,6 +18,7 @@ package org.springframework.credhub.support;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A collection of {@link CredentialPath}s. Clients don't typically instantiate
@@ -26,12 +27,14 @@ import java.util.List;
  * @author Scott Frederick
  */
 public class CredentialPathData {
-	private List<CredentialPath> paths;
+	private final List<CredentialPath> paths;
 
 	/**
 	 * Create a {@link CredentialPathData}.
 	 */
-	CredentialPathData() {
+	@SuppressWarnings("unused")
+	private CredentialPathData() {
+		this.paths = null;
 	}
 
 	/**
@@ -71,9 +74,7 @@ public class CredentialPathData {
 
 	@Override
 	public int hashCode() {
-		int result = super.hashCode();
-		result = 31 * result + (paths != null ? paths.hashCode() : 0);
-		return result;
+		return Objects.hashCode(paths);
 	}
 
 	@Override

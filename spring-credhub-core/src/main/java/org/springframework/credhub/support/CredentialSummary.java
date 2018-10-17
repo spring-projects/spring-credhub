@@ -17,6 +17,7 @@
 package org.springframework.credhub.support;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * A summary of a credential that has been written to CredHub. Clients don't typically
@@ -26,13 +27,15 @@ import java.util.Date;
  * @author Scott Frederick
  */
 public class CredentialSummary {
-	protected CredentialName name;
-	protected Date versionCreatedAt;
+	protected final CredentialName name;
+	protected final Date versionCreatedAt;
 
 	/**
 	 * Create a {@link CredentialSummary}. Intended for internal use.
 	 */
 	CredentialSummary() {
+		this.name = null;
+		this.versionCreatedAt = null;
 	}
 
 	/**
@@ -82,10 +85,7 @@ public class CredentialSummary {
 
 	@Override
 	public int hashCode() {
-		int result = name != null ? name.hashCode() : 0;
-		result = 31 * result
-				+ (versionCreatedAt != null ? versionCreatedAt.hashCode() : 0);
-		return result;
+		return Objects.hash(name, versionCreatedAt);
 	}
 
 	@Override

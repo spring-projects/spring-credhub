@@ -18,6 +18,8 @@ package org.springframework.credhub.support;
 
 import org.springframework.util.Assert;
 
+import java.util.Objects;
+
 /**
  * A base type for a credential that contains a single string value.
  *
@@ -50,7 +52,7 @@ public class StringCredential {
 
 	@Override
 	public int hashCode() {
-		return value != null ? value.hashCode() : 0;
+		return Objects.hashCode(value);
 	}
 
 	@Override

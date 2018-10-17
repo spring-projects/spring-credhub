@@ -18,6 +18,7 @@ package org.springframework.credhub.core;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.CredentialPath;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.ParametersRequest;
@@ -125,6 +126,13 @@ public interface CredHubCredentialsOperations {
 	 * @return a summary of the credential search results
 	 */
 	List<CredentialSummary> findByPath(final String path);
+
+	/**
+	 * Retrieve a collection of all paths that contain credentials.
+	 *
+	 * @return a collection of paths
+	 */
+	List<CredentialPath> getAllPaths();
 
 	/**
 	 * Delete a credential by its full name.

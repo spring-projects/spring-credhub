@@ -20,8 +20,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import org.springframework.credhub.support.json.JsonCredential;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -46,7 +44,7 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 				"  ]\n" +
 				"}";
 
-		CredentialSummaryData response = parseResponse(json, JsonCredential.class);
+		CredentialSummaryData response = parseResponse(json);
 
 		assertThat(response.getCredentials().size(), equalTo(3));
 
@@ -71,14 +69,13 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 				"  ]\n" +
 				"}";
 
-		CredentialSummaryData response = parseResponse(json, JsonCredential.class);
+		CredentialSummaryData response = parseResponse(json);
 
 		assertThat(response.getCredentials(), notNullValue());
 		assertThat(response.getCredentials().size(), equalTo(0));
 	}
 
-	private CredentialSummaryData parseResponse(String json, Class<JsonCredential> jsonCredentialClass)
-			throws java.io.IOException {
+	private CredentialSummaryData parseResponse(String json) throws java.io.IOException {
 		return objectMapper.readValue(json, CredentialSummaryData.class);
 	}
 }

@@ -20,12 +20,32 @@ package org.springframework.credhub.core;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.credhub.support.CredentialPath;
+import org.springframework.credhub.support.CredentialPathData;
+import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.SHOW_ALL_URL_QUERY;
+import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubCredentialsTemplateUnitTests extends CredHubCredentialsTemplateUnitTestsBase {
+	@Test
+	public void getAllPaths() {
+		when(restTemplate.getForEntity(SHOW_ALL_URL_QUERY, CredentialPathData.class))
+				.thenReturn(new ResponseEntity<>(new CredentialPathData(new CredentialPath("/path1"), new CredentialPath("/path2")), OK));
+
+		List<CredentialPath> paths = credHubTemplate.getAllPaths();
+
+		assertThat(paths.size()).isEqualTo(2);
+		assertThat(paths).extracting("path").contains("/path1", "/path2");
+	}
+
 	@Test
 	public void deleteByName() {
 		credHubTemplate.deleteByName(NAME);

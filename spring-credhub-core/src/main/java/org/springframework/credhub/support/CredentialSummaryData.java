@@ -79,7 +79,7 @@ public class CredentialSummaryData {
 
 	@Override
 	public String toString() {
-		return "CredentialSummaryResponse{"
+		return "CredentialSummaryData{"
 				+ "credentials=" + credentials
 				+ '}';
 	}

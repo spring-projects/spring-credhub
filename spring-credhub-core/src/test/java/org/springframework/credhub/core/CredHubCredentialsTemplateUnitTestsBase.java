@@ -26,7 +26,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.web.client.RestTemplate;
 
-public abstract class CredHubTemplateUnitTestsBase {
+public abstract class CredHubCredentialsTemplateUnitTestsBase {
 	protected static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
 
 	@Rule
@@ -35,10 +35,10 @@ public abstract class CredHubTemplateUnitTestsBase {
 	@Mock
 	protected RestTemplate restTemplate;
 
-	protected CredHubTemplate credHubTemplate;
+	protected CredHubCredentialsOperations credHubTemplate;
 
 	@Before
 	public void setUpCredHubTemplateUnitTests() {
-		credHubTemplate = new CredHubTemplate(restTemplate);
+		credHubTemplate = new CredHubTemplate(restTemplate).credentials();
 	}
 }

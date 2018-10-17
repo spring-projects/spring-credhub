@@ -40,12 +40,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubTemplate.BASE_URL_PATH;
-import static org.springframework.credhub.core.CredHubTemplate.ID_URL_PATH;
-import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY;
-import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY_CURRENT;
-import static org.springframework.credhub.core.CredHubTemplate.NAME_URL_QUERY_VERSIONS;
-import static org.springframework.credhub.core.CredHubTemplate.REGENERATE_URL_PATH;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.BASE_URL_PATH;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.ID_URL_PATH;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY_CURRENT;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY_VERSIONS;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.REGENERATE_URL_PATH;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
@@ -53,7 +53,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @SuppressWarnings("unchecked")
-public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubTemplateUnitTestsBase {
+public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentialsTemplateUnitTestsBase {
 	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
 	protected abstract Class<T> getType();

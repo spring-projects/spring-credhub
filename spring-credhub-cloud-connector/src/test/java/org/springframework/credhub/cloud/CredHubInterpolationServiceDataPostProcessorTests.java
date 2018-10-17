@@ -32,7 +32,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.credhub.core.CredHubException;
-import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.CredHubInterpolationOperations;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpStatus;
 
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubInterpolationServiceDataPostProcessorTests {
 	@Mock
-	private CredHubOperations credHubOperations;
+	private CredHubInterpolationOperations credHubOperations;
 
 	@Test
 	public void processServiceData() {

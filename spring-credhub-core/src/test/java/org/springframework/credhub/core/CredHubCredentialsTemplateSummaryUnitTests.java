@@ -34,13 +34,13 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubTemplate.NAME_LIKE_URL_QUERY;
-import static org.springframework.credhub.core.CredHubTemplate.PATH_URL_QUERY;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_LIKE_URL_QUERY;
+import static org.springframework.credhub.core.CredHubCredentialsTemplate.PATH_URL_QUERY;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RunWith(Theories.class)
-public class CredHubTemplateSummaryResponseUnitTests extends CredHubTemplateUnitTestsBase {
+public class CredHubCredentialsTemplateSummaryUnitTests extends CredHubCredentialsTemplateUnitTestsBase {
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> successfulResponse =
 			new ResponseEntity<>(new CredentialSummaryData(new CredentialSummary(NAME)), OK);

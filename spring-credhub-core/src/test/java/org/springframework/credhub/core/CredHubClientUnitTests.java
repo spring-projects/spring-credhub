@@ -39,7 +39,7 @@ public class CredHubClientUnitTests {
 	private ClientHttpRequestFactory clientHttpRequestFactory;
 
 	@Test
-	public void restTemplateIsCreated() throws Exception {
+	public void restTemplateIsCreated() {
 		RestTemplate restTemplate = CredHubClient.createRestTemplate(CREDHUB_URI,
 				clientHttpRequestFactory);
 

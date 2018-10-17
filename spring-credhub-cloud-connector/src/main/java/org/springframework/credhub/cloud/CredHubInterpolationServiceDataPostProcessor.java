@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.cloud.cloudfoundry.ServiceDataPostProcessor;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
+import org.springframework.credhub.core.CredHubInterpolationOperations;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.support.ServicesData;
@@ -38,7 +39,7 @@ public class CredHubInterpolationServiceDataPostProcessor
 	private Logger logger = Logger
 			.getLogger(CredHubInterpolationServiceDataPostProcessor.class.getName());
 
-	private CredHubOperations credHubOperations;
+	private CredHubInterpolationOperations credHubOperations;
 
 	/**
 	 * Initialize the service data post-processor.
@@ -54,7 +55,8 @@ public class CredHubInterpolationServiceDataPostProcessor
 					&& !credHubProperties.getUrl().isEmpty()) {
 				credHubOperations = credHubTemplateFactroy.credHubTemplate(
 						credHubProperties,
-						credHubTemplateFactroy.clientHttpRequestFactoryWrapper());
+						credHubTemplateFactroy.clientHttpRequestFactoryWrapper())
+						.interpolation();
 			}
 			else {
 				logger.log(Level.WARNING,
@@ -73,14 +75,14 @@ public class CredHubInterpolationServiceDataPostProcessor
 	 *
 	 * @param credHubOperations the CredHubOperations to use
 	 */
-	CredHubInterpolationServiceDataPostProcessor(CredHubOperations credHubOperations) {
+	CredHubInterpolationServiceDataPostProcessor(CredHubInterpolationOperations credHubOperations) {
 		this.credHubOperations = credHubOperations;
 	}
 
 	/**
 	 * Process the provided {@literal serviceData} parsed from {@literal VCAP_SERVICES} by
 	 * Spring Cloud Connectors using the
-	 * {@link CredHubOperations#interpolateServiceData(ServicesData)} API.
+	 * {@link org.springframework.credhub.core.CredHubInterpolationOperations#interpolateServiceData(ServicesData)} API.
 	 *
 	 * @param serviceData raw service data parsed from {@literal VCAP_SERVICES}
 	 * @return serviceData with CredHub references replaced by stored credentials

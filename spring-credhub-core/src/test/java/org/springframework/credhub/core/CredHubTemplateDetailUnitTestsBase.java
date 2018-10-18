@@ -31,11 +31,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -97,7 +94,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -120,7 +117,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -145,7 +142,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -167,7 +164,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -190,8 +187,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(),
-						containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -213,8 +209,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(),
-						containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -236,8 +231,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(),
-						containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -250,23 +244,22 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 	private void assertDataResponseContainsExpectedCredentials(
 			ResponseEntity<CredentialDetailsData<T>> expectedResponse,
 			List<CredentialDetails<T>> response) {
-		assertThat(response, notNullValue());
-		assertThat(response.size(), equalTo(expectedResponse.getBody().getData().size()));
-		assertThat(response.get(0), equalTo(expectedResponse.getBody().getData().get(0)));
+		assertThat(response).isNotNull();
+		assertThat(response).hasSize(expectedResponse.getBody().getData().size());
+		assertThat(response).contains(expectedResponse.getBody().getData().get(0));
 	}
 
 	private void assertDataResponseContainsExpectedCredential(
 			ResponseEntity<CredentialDetailsData<T>> expectedResponse,
 			CredentialDetails<T> response) {
-		assertThat(response, notNullValue());
-		assertThat(1, equalTo(expectedResponse.getBody().getData().size()));
-		assertThat(response, equalTo(expectedResponse.getBody().getData().get(0)));
+		assertThat(response).isNotNull();
+		assertThat(response).isEqualTo(expectedResponse.getBody().getData().get(0));
 	}
 
 	private void assertDetailsResponseContainsExpectedCredential(
 			ResponseEntity<CredentialDetails<T>> expectedResponse,
 			CredentialDetails<T> response) {
-		assertThat(response, notNullValue());
-		assertThat(response, equalTo(expectedResponse.getBody()));
+		assertThat(response).isNotNull();
+		assertThat(response).isEqualTo(expectedResponse.getBody());
 	}
 }

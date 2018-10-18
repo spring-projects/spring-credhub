@@ -35,8 +35,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubInterpolationTemplate.INTERPOLATE_URL_PATH;
 import static org.springframework.http.HttpMethod.POST;
@@ -76,7 +75,7 @@ public class CredHubInterpolationTemplateUnitTests {
 
 		ServicesData response = credHubTemplate.interpolateServiceData(vcapServices);
 
-		assertThat(response, equalTo(expectedResponse));
+		assertThat(response).isEqualTo(expectedResponse);
 	}
 
 	private ServicesData buildVcapServices(String credHubReferenceName) throws IOException {

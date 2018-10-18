@@ -28,8 +28,7 @@ import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection.usingJdk;
 import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.Netty.usingNetty;
@@ -37,21 +36,21 @@ import static org.springframework.credhub.configuration.ClientHttpRequestFactory
 
 public class ClientHttpRequestFactoryFactoryTests {
 	@Test
-	public void jdkDefaultClientCreated() throws Exception {
+	public void jdkDefaultClientCreated() {
 		ClientHttpRequestFactory factory = usingJdk(new ClientOptions());
 
-		assertThat(factory, instanceOf(SimpleClientHttpRequestFactory.class));
+		assertThat(factory).isInstanceOf(SimpleClientHttpRequestFactory.class);
 	}
 
 	@Test
 	public void httpComponentsClientCreated() throws Exception {
 		ClientHttpRequestFactory factory = usingHttpComponents(new ClientOptions());
 
-		assertThat(factory, instanceOf(HttpComponentsClientHttpRequestFactory.class));
+		assertThat(factory).isInstanceOf(HttpComponentsClientHttpRequestFactory.class);
 
 		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory).getHttpClient();
 
-		assertThat(httpClient, instanceOf(CloseableHttpClient.class));
+		assertThat(httpClient).isInstanceOf(CloseableHttpClient.class);
 
 		((DisposableBean) factory).destroy();
 	}
@@ -60,7 +59,7 @@ public class ClientHttpRequestFactoryFactoryTests {
 	public void okHttp3ClientCreated() throws Exception {
 		ClientHttpRequestFactory factory = usingOkHttp3(new ClientOptions());
 
-		assertThat(factory, instanceOf(OkHttp3ClientHttpRequestFactory.class));
+		assertThat(factory).isInstanceOf(OkHttp3ClientHttpRequestFactory.class);
 
 		((DisposableBean) factory).destroy();
 	}
@@ -69,7 +68,7 @@ public class ClientHttpRequestFactoryFactoryTests {
 	public void nettyClientCreated() throws Exception {
 		ClientHttpRequestFactory factory = usingNetty(new ClientOptions());
 
-		assertThat(factory, instanceOf(Netty4ClientHttpRequestFactory.class));
+		assertThat(factory).isInstanceOf(Netty4ClientHttpRequestFactory.class);
 
 		((DisposableBean) factory).destroy();
 	}

@@ -43,4 +43,5 @@ dependencies {
 	optional group: 'io.netty', name: 'netty-all', version: '4.1.8.Final'
 
 	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+	testCompile group: 'org.assertj', name: 'assertj-core', version: "${assertJVersion}"
 }

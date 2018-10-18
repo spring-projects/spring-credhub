@@ -18,8 +18,7 @@ package org.springframework.credhub.support;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServiceInstanceCredentialNameUnitTests {
 	@Test
@@ -27,6 +26,6 @@ public class ServiceInstanceCredentialNameUnitTests {
 		CredentialName credentialName =
 				new ServiceInstanceCredentialName("broker-name", "service-name", "binding-id", "credential-name");
 
-		assertThat(credentialName.getName(), equalTo("/c/broker-name/service-name/binding-id/credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("/c/broker-name/service-name/binding-id/credential-name");
 	}
 }

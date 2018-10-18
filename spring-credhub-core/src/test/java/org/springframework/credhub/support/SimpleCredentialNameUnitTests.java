@@ -20,29 +20,28 @@ package org.springframework.credhub.support;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleCredentialNameUnitTests {
 	@Test
 	public void singleElementNameIsConstructed() {
 		CredentialName credentialName = new SimpleCredentialName("credential-name");
 
-		assertThat(credentialName.getName(), equalTo("credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("credential-name");
 	}
 	
 	@Test
 	public void singleElementNameWithLeadingSlashIsParsed() {
 		CredentialName credentialName = new CredentialName("/credential-name");
 
-		assertThat(credentialName.getName(), equalTo("credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("credential-name");
 	}
 
 	@Test
 	public void singleElementNameWithoutLeadingSlashIsParsed() {
 		CredentialName credentialName = new CredentialName("credential-name");
 
-		assertThat(credentialName.getName(), equalTo("credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("credential-name");
 	}
 
 	@Test
@@ -50,20 +49,20 @@ public class SimpleCredentialNameUnitTests {
 		CredentialName credentialName =
 				new SimpleCredentialName("myorg", "example", "credential-name");
 
-		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("/myorg/example/credential-name");
 	}
 	
 	@Test
 	public void simpleNameIsParsed() {
 		CredentialName credentialName = new CredentialName("/myorg/example/credential-name");
 
-		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("/myorg/example/credential-name");
 	}
 
 	@Test
 	public void simpleNameWithoutLeadingSlashIsParsed() {
 		CredentialName credentialName = new CredentialName("myorg/example/credential-name");
 
-		assertThat(credentialName.getName(), equalTo("/myorg/example/credential-name"));
+		assertThat(credentialName.getName()).isEqualTo("/myorg/example/credential-name");
 	}
 }

@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.user;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,11 +25,7 @@ import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 import org.springframework.credhub.support.user.UserCredentialRequest.UserCredentialRequestBuilder;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
@@ -42,34 +39,32 @@ public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithUsernameAndPassword() throws Exception {
-		String jsonValue = serializeToJson(requestBuilder);
+	public void serializeWithUsernameAndPassword() {
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "user");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.username", equalTo("myname")),
-						hasJsonPath("$.value.password", equalTo("secret")),
-						hasNoJsonPath("$.value.password_hash")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "user");
+		assertThat(json).hasPath("$.value.username").isEqualTo("myname");
+		assertThat(json).hasPath("$.value.password").isEqualTo("secret");
+		assertThat(json).hasNoPath("$.value.password_hash");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithPassword() throws Exception {
+	public void serializeWithPassword() {
 		UserCredentialRequestBuilder builder = UserCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.OVERWRITE)
 				.value(new UserCredential("secret"));
 
-		String jsonValue = serializeToJson(builder);
+		DocumentContext json = toJsonPath(builder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "user");
-		assertThat(jsonValue,
-				allOf(hasNoJsonPath("$.value.username"),
-						hasJsonPath("$.value.password", equalTo("secret")),
-						hasNoJsonPath("$.value.password_hash")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "user");
+		assertThat(json).hasNoPath("$.value.username");
+		assertThat(json).hasPath("$.value.password").isEqualTo("secret");
+		assertThat(json).hasNoPath("$.value.password_hash");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 }

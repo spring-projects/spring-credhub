@@ -33,9 +33,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubPermissionsTemplate.PERMISSIONS_ACTOR_URL_QUERY;
@@ -80,9 +78,9 @@ public class CredHubPermissionsTemplateUnitTests {
 
 		List<CredentialPermission> response = credHubTemplate.getPermissions(NAME);
 
-		assertNotNull(response);
-		assertThat(response.size(), equalTo(expectedResponse.getPermissions().size()));
-		assertThat(response, equalTo(expectedResponse.getPermissions()));
+		assertThat(response).isNotNull();
+		assertThat(response).hasSize(expectedResponse.getPermissions().size());
+		assertThat(response).isEqualTo(expectedResponse.getPermissions());
 	}
 
 	@Test
@@ -108,9 +106,9 @@ public class CredHubPermissionsTemplateUnitTests {
 
 		List<CredentialPermission> response = credHubTemplate.addPermissions(NAME, permission1, permission2);
 
-		assertNotNull(response);
-		assertThat(response.size(), equalTo(expectedResponse.getPermissions().size()));
-		assertThat(response, equalTo(expectedResponse.getPermissions()));
+		assertThat(response).isNotNull();
+		assertThat(response).hasSize(expectedResponse.getPermissions().size());
+		assertThat(response).isEqualTo(expectedResponse.getPermissions());
 	}
 
 	@Test

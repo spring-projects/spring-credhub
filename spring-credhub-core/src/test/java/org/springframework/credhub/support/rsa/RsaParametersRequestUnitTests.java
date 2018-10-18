@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.rsa;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,10 +25,7 @@ import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
@@ -37,29 +35,29 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithParameters() throws Exception {
+	public void serializeWithParameters() {
 		requestBuilder = RsaParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.OVERWRITE)
 				.parameters(new RsaParameters(KeyLength.LENGTH_4096));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
-		assertThat(jsonValue, hasJsonPath("$.parameters.key_length", equalTo(4096)));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
+		assertThat(json).hasPath("$.parameters.key_length").isEqualTo(4096);
 	}
 
 	@Test
-	public void serializeWithNoParameters() throws Exception {
+	public void serializeWithNoParameters() {
 		requestBuilder = RsaParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.OVERWRITE);
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
-		assertThat(jsonValue, hasNoJsonPath("$.parameters.key_length"));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
+		assertThat(json).hasNoPath("$.parameters.key_length");
 	}
 }

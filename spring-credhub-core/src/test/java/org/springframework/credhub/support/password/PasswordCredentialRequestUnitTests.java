@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.password;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,9 +24,7 @@ import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
@@ -40,28 +39,28 @@ public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsB
 	}
 
 	@Test
-	public void serializeWithPasswordValue() throws Exception {
-		String jsonValue = serializeToJson(requestBuilder);
+	public void serializeWithPasswordValue() {
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "password");
-		assertThat(jsonValue, hasJsonPath("$.value", equalTo("secret")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "password");
+		assertThat(json).hasPath("$.value").isEqualTo("secret");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithStringValue() throws Exception {
+	public void serializeWithStringValue() {
 		requestBuilder = PasswordCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.OVERWRITE)
 				.value("secret");
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "password");
-		assertThat(jsonValue, hasJsonPath("$.value", equalTo("secret")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "password");
+		assertThat(json).hasPath("$.value").isEqualTo("secret");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 }

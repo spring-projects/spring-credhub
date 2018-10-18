@@ -20,13 +20,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 	@Test
-	public void deserializationWithCredentials() throws Exception {
+	public void deserializationWithCredentials() {
 		String json = "{\n" +
 				"  \"credentials\": [\n" +
 				"    {\n" +
@@ -44,38 +42,34 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 				"  ]\n" +
 				"}";
 
-		CredentialSummaryData response = parseResponse(json);
+		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 
-		assertThat(response.getCredentials().size(), equalTo(3));
+		assertThat(response.getCredentials().size()).isEqualTo(3);
 
 		List<CredentialSummary> credentials = response.getCredentials();
 
-		assertThat(credentials.get(0).getName().getName(),
-				equalTo("/deploy123/example1"));
-		assertThat(credentials.get(1).getName().getName(),
-				equalTo("/deploy123/example2"));
-		assertThat(credentials.get(2).getName().getName(),
-				equalTo("/deploy123/example3"));
+		assertThat(credentials.get(0).getName().getName())
+				.isEqualTo("/deploy123/example1");
+		assertThat(credentials.get(1).getName().getName())
+				.isEqualTo("/deploy123/example2");
+		assertThat(credentials.get(2).getName().getName())
+				.isEqualTo("/deploy123/example3");
 
 		for (CredentialSummary credential : credentials) {
-			assertThat(credential.getVersionCreatedAt(), equalTo(testDate));
+			assertThat(credential.getVersionCreatedAt()).isEqualTo(testDate);
 		}
 	}
 
 	@Test
-	public void deserializationWithEmptyCredentials() throws Exception {
+	public void deserializationWithEmptyCredentials() {
 		String json = "{\n" +
 				"  \"credentials\": [\n" +
 				"  ]\n" +
 				"}";
 
-		CredentialSummaryData response = parseResponse(json);
+		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 
-		assertThat(response.getCredentials(), notNullValue());
-		assertThat(response.getCredentials().size(), equalTo(0));
-	}
-
-	private CredentialSummaryData parseResponse(String json) throws java.io.IOException {
-		return objectMapper.readValue(json, CredentialSummaryData.class);
+		assertThat(response.getCredentials()).isNotNull();
+		assertThat(response.getCredentials()).hasSize(0);
 	}
 }

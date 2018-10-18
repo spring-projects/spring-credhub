@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.ssh;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,11 +25,7 @@ import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
@@ -36,66 +33,63 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void setUp() {
 		requestBuilder = SshParametersRequest.builder();
 	}
+
 	@Test
-	public void serializeWithParameters() throws Exception {
+	public void serializeWithParameters() {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.OVERWRITE)
 				.parameters(new SshParameters(KeyLength.LENGTH_2048, "ssh comment"));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.parameters.key_length", equalTo(2048)),
-						hasJsonPath("$.parameters.ssh_comment", equalTo("ssh comment"))));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertThat(json).hasPath("$.parameters.key_length").isEqualTo(2048);
+		assertThat(json).hasPath("$.parameters.ssh_comment").isEqualTo("ssh comment");
 	}
 
 	@Test
-	public void serializeWithLengthParameter() throws Exception {
+	public void serializeWithLengthParameter() {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.NO_OVERWRITE)
 				.parameters(new SshParameters(KeyLength.LENGTH_2048));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.NO_OVERWRITE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.parameters.key_length", equalTo(2048)),
-						hasNoJsonPath("$.parameters.ssh_comment")));
+		assertCommonRequestFields(json, true, WriteMode.NO_OVERWRITE, "/example/credential", "ssh");
+		assertThat(json).hasPath("$.parameters.key_length").isEqualTo(2048);
+		assertThat(json).hasNoPath("$.parameters.ssh_comment");
 	}
 
 	@Test
-	public void serializeWithCommentParameter() throws Exception {
+	public void serializeWithCommentParameter() {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.CONVERGE)
 				.parameters(new SshParameters("ssh comment"));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.CONVERGE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasNoJsonPath("$.parameters.key_length"),
-						hasJsonPath("$.parameters.ssh_comment", equalTo("ssh comment"))));
+		assertCommonRequestFields(json, true, WriteMode.CONVERGE, "/example/credential", "ssh");
+		assertThat(json).hasNoPath("$.parameters.key_length");
+		assertThat(json).hasPath("$.parameters.ssh_comment").isEqualTo("ssh comment");
 	}
 
 	@Test
-	public void serializeWithNoParameters() throws Exception {
+	public void serializeWithNoParameters() {
 		requestBuilder = SshParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.OVERWRITE);
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasNoJsonPath("$.parameters.key_length"),
-						hasNoJsonPath("$.parameters.ssh_comment")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertThat(json).hasNoPath("$.parameters.key_length");
+		assertThat(json).hasNoPath("$.parameters.ssh_comment");
 	}
 }

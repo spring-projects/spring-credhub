@@ -23,8 +23,7 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String CERT_CREDENTIALS =
@@ -36,14 +35,14 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 			"  }";
 
 	@Test
-	public void deserializeDetailsWithAllValues() throws Exception {
+	public void deserializeDetailsWithAllValues() {
 		CredentialDetails<CertificateCredential> data = parseDetails(CERT_CREDENTIALS);
 
 		assertDetails(data, "cert", "authority", "private-key");
 	}
 
 	@Test
-	public void deserializeDetailsCertOnly() throws Exception {
+	public void deserializeDetailsCertOnly() {
 		final String credentials =
 				"  \"type\": \"certificate\"," +
 				"  \"value\": {" +
@@ -55,7 +54,7 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 	}
 
 	@Test
-	public void deserializeDetailsWithNoCert() throws Exception {
+	public void deserializeDetailsWithNoCert() {
 		final String credentials =
 				"  \"type\": \"certificate\"," +
 				"  \"value\": {" +
@@ -68,10 +67,10 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 	}
 
 	@Test
-	public void deserializeDetailsData() throws Exception {
+	public void deserializeDetailsData() {
 		CredentialDetailsData<CertificateCredential> response = parseDetailsData(CERT_CREDENTIALS);
 
-		assertThat(response.getData().size(), equalTo(1));
+		assertThat(response.getData()).hasSize(1);
 
 		CredentialDetails<CertificateCredential> data = response.getData().get(0);
 
@@ -82,9 +81,9 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 							   String certificate, String ca, String privateKey) {
 		assertCommonDetails(data);
 		
-		assertThat(data.getCredentialType(), equalTo(CredentialType.CERTIFICATE));
-		assertThat(data.getValue().getCertificate(), equalTo(certificate));
-		assertThat(data.getValue().getCertificateAuthority(), equalTo(ca));
-		assertThat(data.getValue().getPrivateKey(), equalTo(privateKey));
+		assertThat(data.getCredentialType()).isEqualTo(CredentialType.CERTIFICATE);
+		assertThat(data.getValue().getCertificate()).isEqualTo(certificate);
+		assertThat(data.getValue().getCertificateAuthority()).isEqualTo(ca);
+		assertThat(data.getValue().getPrivateKey()).isEqualTo(privateKey);
 	}
 }

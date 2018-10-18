@@ -23,8 +23,7 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String RSA_CREDENTIALS =
@@ -35,14 +34,14 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"  }";
 
 	@Test
-	public void deserializeDetailsWithPublicAndPrivateKeys() throws Exception {
+	public void deserializeDetailsWithPublicAndPrivateKeys() {
 		CredentialDetails<RsaCredential> data = parseDetails(RSA_CREDENTIALS);
 
 		assertDetails(data, "public-key", "private-key");
 	}
 
 	@Test
-	public void deserializeDetailsWithPublicKey() throws Exception {
+	public void deserializeDetailsWithPublicKey() {
 		final String credentials =
 				"  \"type\": \"rsa\"," +
 						"  \"value\": {" +
@@ -54,7 +53,7 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsWithPrivateKey() throws Exception {
+	public void deserializeDetailsWithPrivateKey() {
 		final String credentials =
 				"  \"type\": \"rsa\"," +
 						"  \"value\": {" +
@@ -66,10 +65,10 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsData() throws Exception {
+	public void deserializeDetailsData() {
 		CredentialDetailsData<RsaCredential> response = parseDetailsData(RSA_CREDENTIALS);
 
-		assertThat(response.getData().size(), equalTo(1));
+		assertThat(response.getData()).hasSize(1);
 
 		CredentialDetails<RsaCredential> data = response.getData().get(0);
 
@@ -79,8 +78,8 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private void assertDetails(CredentialDetails<RsaCredential> data, String publicKey, String privateKey) {
 		assertCommonDetails(data);
 		
-		assertThat(data.getCredentialType(), equalTo(CredentialType.RSA));
-		assertThat(data.getValue().getPublicKey(), equalTo(publicKey));
-		assertThat(data.getValue().getPrivateKey(), equalTo(privateKey));
+		assertThat(data.getCredentialType()).isEqualTo(CredentialType.RSA);
+		assertThat(data.getValue().getPublicKey()).isEqualTo(publicKey);
+		assertThat(data.getValue().getPrivateKey()).isEqualTo(privateKey);
 	}
 }

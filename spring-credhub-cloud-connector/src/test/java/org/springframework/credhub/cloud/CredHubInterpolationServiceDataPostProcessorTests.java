@@ -21,9 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
@@ -36,11 +33,10 @@ import org.springframework.credhub.core.CredHubInterpolationOperations;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpStatus;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubInterpolationServiceDataPostProcessorTests {
@@ -59,7 +55,7 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 				new CredHubInterpolationServiceDataPostProcessor(credHubOperations);
 
 		CloudFoundryRawServiceData actual = processor.process(rawServiceData);
-		assertThat(actual, matchesContent(interpolatedServiceData));
+		assertThat(actual).isEqualTo(interpolatedServiceData);
 	}
 
 	@Test
@@ -73,7 +69,7 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 				new CredHubInterpolationServiceDataPostProcessor(credHubOperations);
 
 		CloudFoundryRawServiceData actual = processor.process(rawServiceData);
-		assertThat(actual, equalTo(rawServiceData));
+		assertThat(actual).isEqualTo(rawServiceData);
 	}
 
 	@Test
@@ -91,24 +87,6 @@ public class CredHubInterpolationServiceDataPostProcessorTests {
 			@Override
 			public boolean matches(ServicesData actual) {
 				return mapsAreEquivalent(actual, expected);
-			}
-		};
-	}
-
-	private Matcher<CloudFoundryRawServiceData> matchesContent(final ServicesData expected) {
-		return new BaseMatcher<CloudFoundryRawServiceData>() {
-			@Override
-			@SuppressWarnings("unchecked")
-			public boolean matches(Object actual) {
-				return mapsAreEquivalent((Map<String, ?>) actual, expected);
-			}
-
-			@Override
-			public void describeMismatch(Object item, Description mismatchDescription) {
-			}
-
-			@Override
-			public void describeTo(Description description) {
 			}
 		};
 	}

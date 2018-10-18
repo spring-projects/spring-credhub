@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.support.json;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredentialDetails;
@@ -24,8 +23,7 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String JSON_CREDENTIALS =
@@ -37,28 +35,28 @@ public class JsonCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"  }";
 
 	@Test
-	public void deserializeDetails() throws Exception {
+	public void deserializeDetails() {
 		CredentialDetails<JsonCredential> data = parseDetails(JSON_CREDENTIALS);
 
 		assertDetails(data);
 	}
 
 	@Test
-	public void deserializeDetailsData() throws Exception {
+	public void deserializeDetailsData() {
 		CredentialDetailsData<JsonCredential> data = parseDetailsData(JSON_CREDENTIALS);
 
-		assertThat(data.getData().size(), equalTo(1));
+		assertThat(data.getData()).hasSize(1);
 		assertDetails(data.getData().get(0));
 	}
 
 	private void assertDetails(CredentialDetails<JsonCredential> data) {
 		assertCommonDetails(data);
 
-		assertThat(data.getCredentialType(), equalTo(CredentialType.JSON));
+		assertThat(data.getCredentialType()).isEqualTo(CredentialType.JSON);
 
 		JsonCredential valueMap = data.getValue();
-		assertThat(valueMap.get("client_id"), CoreMatchers.<Object> equalTo("test-id"));
-		assertThat(valueMap.get("client_secret"), CoreMatchers.<Object> equalTo("test-secret"));
-		assertThat(valueMap.get("uri"), CoreMatchers.<Object> equalTo("https://example.com"));
+		assertThat(valueMap).containsEntry("client_id", "test-id")
+				.containsEntry("client_secret", "test-secret")
+				.containsEntry("uri", "https://example.com");
 	}
 }

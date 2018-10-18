@@ -2,13 +2,11 @@ package org.springframework.credhub.support;
 
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredentialPathDataTests extends JsonParsingUnitTestsBase {
 	@Test
-	public void deserializeWithPaths() throws IOException {
+	public void deserializeWithPaths() {
 		String json = "{\n" +
 				"  \"paths\": [\n" +
 				"    {\n" +
@@ -29,7 +27,7 @@ public class CredentialPathDataTests extends JsonParsingUnitTestsBase {
 				"  ]\n" +
 				"}";
 
-		CredentialPathData paths = parseResponse(json);
+		CredentialPathData paths = parseResponse(json, CredentialPathData.class);
 
 		assertThat(paths.getPaths().size()).isEqualTo(5);
 		assertThat(paths.getPaths()).extracting("path")
@@ -37,17 +35,13 @@ public class CredentialPathDataTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeWithNoPaths() throws IOException {
+	public void deserializeWithNoPaths() {
 		String json = "{\n" +
 				"  \"paths\": []" +
 				"}";
 
-		CredentialPathData paths = parseResponse(json);
+		CredentialPathData paths = parseResponse(json, CredentialPathData.class);
 
 		assertThat(paths.getPaths().size()).isEqualTo(0);
-	}
-
-	private CredentialPathData parseResponse(String json) throws java.io.IOException {
-		return objectMapper.readValue(json, CredentialPathData.class);
 	}
 }

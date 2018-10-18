@@ -16,56 +16,42 @@
 
 package org.springframework.credhub.support;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequest.CredHubRequestBuilder;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.CredentialPermission;
-import org.springframework.credhub.support.utils.JsonUtils;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
+
 import static org.springframework.credhub.support.permissions.Operation.READ;
 import static org.springframework.credhub.support.permissions.Operation.READ_ACL;
 import static org.springframework.credhub.support.permissions.Operation.WRITE;
 import static org.springframework.credhub.support.permissions.Operation.WRITE_ACL;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
 
 public abstract class CredHubRequestUnitTestsBase {
-	private ObjectMapper mapper;
 	protected CredHubRequestBuilder requestBuilder;
 
-	@Before
-	public void setUpCredentialRequestUnitTests() {
-		mapper = JsonUtils.buildObjectMapper();
-	}
-
 	@Test
-	public void serializationWithOnePermission() throws Exception {
+	public void serializationWithOnePermission() {
 		requestBuilder
 				.permission(CredentialPermission.builder()
 						.app("app-id")
 						.operation(READ)
 						.build());
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = JsonTestUtils.toJsonPath(requestBuilder.build());
 
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.additional_permissions[0].actor",
-						equalTo(Actor.app("app-id").getIdentity())),
-						hasJsonPath("$.additional_permissions[0].operations[0]",
-								equalTo("read"))));
+		assertThat(json).hasPath("$.additional_permissions[0].actor")
+				.isEqualTo(Actor.app("app-id").getIdentity());
+		assertThat(json).hasPath("$.additional_permissions[0].operations[0]")
+				.isEqualTo("read");
 	}
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void serializationWithThreePermissions() throws Exception {
+	public void serializationWithThreePermissions() {
 		requestBuilder
 				.permission(CredentialPermission.builder()
 						.app("app-id")
@@ -80,45 +66,47 @@ public abstract class CredHubRequestUnitTestsBase {
 						.operations(READ, WRITE, READ_ACL, WRITE_ACL)
 						.build());
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = JsonTestUtils.toJsonPath(requestBuilder.build());
 
-		assertThat(jsonValue, allOf(
-				hasJsonPath("$.additional_permissions[0].actor",
-						equalTo(Actor.app("app-id").getIdentity())),
-				hasJsonPath("$.additional_permissions[0].operations[0]", equalTo("read")),
-				hasJsonPath("$.additional_permissions[0].operations[1]", equalTo("write")),
+		assertThat(json).hasPath("$.additional_permissions[0].actor")
+				.isEqualTo(Actor.app("app-id").getIdentity());
+		assertThat(json).hasPath("$.additional_permissions[0].operations[0]")
+				.isEqualTo("read");
+		assertThat(json).hasPath("$.additional_permissions[0].operations[1]")
+				.isEqualTo("write");
 
-				hasJsonPath("$.additional_permissions[1].actor",
-						equalTo(Actor.user("zone1", "user-id").getIdentity())),
-				hasJsonPath("$.additional_permissions[1].operations[0]", equalTo("read_acl")),
-				hasJsonPath("$.additional_permissions[1].operations[1]", equalTo("write_acl")),
+		assertThat(json).hasPath("$.additional_permissions[1].actor")
+				.isEqualTo(Actor.user("zone1", "user-id").getIdentity());
+		assertThat(json).hasPath("$.additional_permissions[1].operations[0]")
+				.isEqualTo("read_acl");
+		assertThat(json).hasPath("$.additional_permissions[1].operations[1]")
+				.isEqualTo("write_acl");
 
-				hasJsonPath("$.additional_permissions[2].actor",
-						equalTo(Actor.client("client-id").getIdentity())),
-				hasJsonPath("$.additional_permissions[2].operations[0]", equalTo("read")),
-				hasJsonPath("$.additional_permissions[2].operations[1]", equalTo("write")),
-				hasJsonPath("$.additional_permissions[2].operations[2]", equalTo("read_acl")),
-				hasJsonPath("$.additional_permissions[2].operations[3]", equalTo("write_acl"))
-				)
-		);
+		assertThat(json).hasPath("$.additional_permissions[2].actor")
+				.isEqualTo(Actor.client("client-id").getIdentity());
+		assertThat(json).hasPath("$.additional_permissions[2].operations[0]")
+				.isEqualTo("read");
+		assertThat(json).hasPath("$.additional_permissions[2].operations[1]")
+				.isEqualTo("write");
+		assertThat(json).hasPath("$.additional_permissions[2].operations[2]")
+				.isEqualTo("read_acl");
+		assertThat(json).hasPath("$.additional_permissions[2].operations[3]")
+				.isEqualTo("write_acl");
 	}
 
-	protected <T extends CredHubRequestBuilder> String serializeToJson(T requestBuilder)
-			throws JsonProcessingException {
-		String jsonValue = mapper.writeValueAsString(requestBuilder.build());
-		assertThat(jsonValue, isJson());
-		return jsonValue;
+	protected DocumentContext toJsonPath(CredHubRequestBuilder requestBuilder) {
+		return JsonTestUtils.toJsonPath(requestBuilder.build());
 	}
 
-	protected void assertCommonRequestFields(String jsonValue, boolean overwrite, WriteMode writeMode, String name, String type) {
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(overwrite)),
-						hasJsonPath("$.mode", equalTo(writeMode.getMode())),
-						hasJsonPath("$.name", equalTo(name)),
-						hasJsonPath("$.type", equalTo(type))));
+	protected void assertCommonRequestFields(DocumentContext json, boolean overwrite, WriteMode writeMode,
+											 String name, String type) {
+		assertThat(json).hasPath("$.overwrite").isEqualTo(overwrite);
+		assertThat(json).hasPath("$.mode").isEqualTo(writeMode.getMode());
+		assertThat(json).hasPath("$.name").isEqualTo(name);
+		assertThat(json).hasPath("$.type").isEqualTo(type);
 	}
 
-	protected void assertNoPermissions(String jsonValue) {
-		assertThat(jsonValue, hasNoJsonPath("$.additional_permissions"));
+	protected void assertNoPermissions(DocumentContext json) {
+		assertThat(json).hasNoPath("$.additional_permissions");
 	}
 }

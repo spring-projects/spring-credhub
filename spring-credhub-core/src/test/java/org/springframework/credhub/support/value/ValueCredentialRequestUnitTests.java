@@ -16,20 +16,19 @@
 
 package org.springframework.credhub.support.value;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Before
+	@SuppressWarnings("deprecation")
 	public void setUp() {
 		requestBuilder = ValueCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
@@ -38,33 +37,32 @@ public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase
 	}
 
 	@Test
-	public void serializeWithValue() throws Exception {
-		String jsonValue = serializeToJson(requestBuilder);
+	public void serializeWithValue() {
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("value")),
-						hasJsonPath("$.value", equalTo("somevalue"))));
+		assertThat(json).hasPath("$.overwrite").isEqualTo(true);
+		assertThat(json).hasPath("$.name").isEqualTo("/example/credential");
+		assertThat(json).hasPath("$.type").isEqualTo("value");
+		assertThat(json).hasPath("$.value").isEqualTo("somevalue");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithStringValue() throws Exception {
+	@SuppressWarnings("deprecation")
+	public void serializeWithStringValue() {
 		requestBuilder = ValueCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.value("somevalue");
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.overwrite", equalTo(true)),
-						hasJsonPath("$.name", equalTo("/example/credential")),
-						hasJsonPath("$.type", equalTo("value")),
-						hasJsonPath("$.value", equalTo("somevalue"))));
+		assertThat(json).hasPath("$.overwrite").isEqualTo(true);
+		assertThat(json).hasPath("$.name").isEqualTo("/example/credential");
+		assertThat(json).hasPath("$.type").isEqualTo("value");
+		assertThat(json).hasPath("$.value").isEqualTo("somevalue");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 }

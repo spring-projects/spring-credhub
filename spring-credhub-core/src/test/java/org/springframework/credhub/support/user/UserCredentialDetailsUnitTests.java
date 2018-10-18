@@ -23,8 +23,7 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String USER_CREDENTIALS =
@@ -36,17 +35,17 @@ public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"  }";
 
 	@Test
-	public void deserializeDetails() throws Exception {
+	public void deserializeDetails() {
 		CredentialDetails<UserCredential> data = parseDetails(USER_CREDENTIALS);
 
 		assertDetails(data);
 	}
 
 	@Test
-	public void deserializeDetailsData() throws Exception {
+	public void deserializeDetailsData() {
 		CredentialDetailsData<UserCredential> response = parseDetailsData(USER_CREDENTIALS);
 
-		assertThat(response.getData().size(), equalTo(1));
+		assertThat(response.getData()).hasSize(1);
 
 		CredentialDetails<UserCredential> data = response.getData().get(0);
 
@@ -56,9 +55,9 @@ public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private void assertDetails(CredentialDetails<UserCredential> data) {
 		assertCommonDetails(data);
 		
-		assertThat(data.getCredentialType(), equalTo(CredentialType.USER));
-		assertThat(data.getValue().getUsername(), equalTo("myname"));
-		assertThat(data.getValue().getPassword(), equalTo("secret"));
-		assertThat(data.getValue().getPasswordHash(), equalTo("secret-hash"));
+		assertThat(data.getCredentialType()).isEqualTo(CredentialType.USER);
+		assertThat(data.getValue().getUsername()).isEqualTo("myname");
+		assertThat(data.getValue().getPassword()).isEqualTo("secret");
+		assertThat(data.getValue().getPasswordHash()).isEqualTo("secret-hash");
 	}
 }

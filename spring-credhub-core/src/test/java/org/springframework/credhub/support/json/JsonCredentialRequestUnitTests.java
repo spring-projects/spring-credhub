@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.json;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,10 +24,7 @@ import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
@@ -44,14 +42,13 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithJsonValue() throws Exception {
-		String jsonValue = serializeToJson(requestBuilder);
+	public void serializeWithJsonValue() {
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, false, WriteMode.OVERWRITE, "/example/credential", "json");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.data", equalTo("value")),
-						hasJsonPath("$.value.test", equalTo(true))));
+		assertCommonRequestFields(json, false, WriteMode.OVERWRITE, "/example/credential", "json");
+		assertThat(json).hasPath("$.value.data").isEqualTo("value");
+		assertThat(json).hasPath("$.value.test").isEqualTo(true);
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 }

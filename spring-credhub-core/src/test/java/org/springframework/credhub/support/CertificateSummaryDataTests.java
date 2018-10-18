@@ -18,13 +18,11 @@ package org.springframework.credhub.support;
 
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 	@Test
-	public void deserializeWithCertificates() throws IOException {
+	public void deserializeWithCertificates() {
 		String json = "{\n" +
 				"  \"certificates\": [\n" +
 				"    {\n" +
@@ -38,7 +36,7 @@ public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 				"  ]\n" +
 				"}";
 
-		CertificateSummaryData certificates = parseResponse(json);
+		CertificateSummaryData certificates = parseResponse(json, CertificateSummaryData.class);
 
 		assertThat(certificates.getCertificates().size()).isEqualTo(2);
 		assertThat(certificates.getCertificates()).extracting("id")
@@ -48,17 +46,13 @@ public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeWithNoCertificates() throws IOException {
+	public void deserializeWithNoCertificates() {
 		String json = "{\n" +
 				"  \"certificates\": []\n" +
 				"}";
 
-		CertificateSummaryData certificates = parseResponse(json);
+		CertificateSummaryData certificates = parseResponse(json, CertificateSummaryData.class);
 
 		assertThat(certificates.getCertificates().size()).isEqualTo(0);
-	}
-
-	private CertificateSummaryData parseResponse(String json) throws IOException {
-		return objectMapper.readValue(json, CertificateSummaryData.class);
 	}
 }

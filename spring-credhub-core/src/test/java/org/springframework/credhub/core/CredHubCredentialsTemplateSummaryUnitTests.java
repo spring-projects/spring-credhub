@@ -28,11 +28,8 @@ import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
 import org.springframework.http.ResponseEntity;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_LIKE_URL_QUERY;
 import static org.springframework.credhub.core.CredHubCredentialsTemplate.PATH_URL_QUERY;
@@ -61,7 +58,7 @@ public class CredHubCredentialsTemplateSummaryUnitTests extends CredHubCredentia
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -83,7 +80,7 @@ public class CredHubCredentialsTemplateSummaryUnitTests extends CredHubCredentia
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
-				assertThat(e.getMessage(), containsString(expectedResponse.getStatusCode().toString()));
+				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
 		}
 		else {
@@ -96,8 +93,8 @@ public class CredHubCredentialsTemplateSummaryUnitTests extends CredHubCredentia
 	private void assertResponseContainsExpectedCredentials(
 			ResponseEntity<CredentialSummaryData> expectedResponse,
 			List<CredentialSummary> response) {
-		assertThat(response, notNullValue());
-		assertThat(response.size(), equalTo(expectedResponse.getBody().getCredentials().size()));
-		assertThat(response.get(0), equalTo(expectedResponse.getBody().getCredentials().get(0)));
+		assertThat(response).isNotNull();
+		assertThat(response.size()).isEqualTo(expectedResponse.getBody().getCredentials().size());
+		assertThat(response).contains(expectedResponse.getBody().getCredentials().get(0));
 	}
 }

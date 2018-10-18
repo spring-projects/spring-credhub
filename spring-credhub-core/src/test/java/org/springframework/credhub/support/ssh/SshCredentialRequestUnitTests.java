@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.ssh;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,11 +24,7 @@ import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
@@ -36,50 +33,47 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithPublicAndPrivateKey() throws Exception {
-		String jsonValue = serializeToJson(requestBuilder);
+	public void serializeWithPublicAndPrivateKey() {
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.public_key", equalTo("public-key")),
-						hasJsonPath("$.value.private_key", equalTo("private-key"))));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
+		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithPublicKey() throws Exception {
+	public void serializeWithPublicKey() {
 		buildRequest(new SshCredential("public-key", null));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.public_key", equalTo("public-key")),
-						hasNoJsonPath("$.value.private_key")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
+		assertThat(json).hasNoPath("$.value.private_key");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithPrivateKey() throws Exception {
+	public void serializeWithPrivateKey() {
 		buildRequest(new SshCredential(null, "private-key"));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
-		assertThat(jsonValue,
-				allOf(hasNoJsonPath("$.value.public_key"),
-						hasJsonPath("$.value.private_key", equalTo("private-key"))));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertThat(json).hasNoPath("$.value.public_key");
+		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void serializeWithNeitherKey() throws Exception {
+	public void serializeWithNeitherKey() {
 		buildRequest(new SshCredential(null, null));
 
-		serializeToJson(requestBuilder);
+		toJsonPath(requestBuilder);
 	}
 
 	@SuppressWarnings("deprecation")

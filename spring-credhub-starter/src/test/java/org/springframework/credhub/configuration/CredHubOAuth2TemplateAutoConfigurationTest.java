@@ -13,8 +13,6 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Daniel Lavoie
@@ -37,13 +35,13 @@ public class CredHubOAuth2TemplateAutoConfigurationTest {
 
 	@Test
 	public void contextLoads() {
-		assertNotNull(credHubOperations);
-		assertThat(credHubOperations instanceof OAuth2CredHubTemplate);
+		assertThat(credHubOperations).isNotNull();
+		assertThat(credHubOperations).isInstanceOf(OAuth2CredHubTemplate.class);
 
-		assertNotNull(credentialsDetails);
-		assertEquals("test-user", credentialsDetails.getClientId());
-		assertEquals("test-secret", credentialsDetails.getClientSecret());
-		assertEquals("https://uaa.example.com/oauth/token", credentialsDetails.getAccessTokenUri());
+		assertThat(credentialsDetails).isNotNull();
+		assertThat("test-user").isEqualTo(credentialsDetails.getClientId());
+		assertThat("test-secret").isEqualTo(credentialsDetails.getClientSecret());
+		assertThat("https://uaa.example.com/oauth/token").isEqualTo(credentialsDetails.getAccessTokenUri());
 	}
 
 	@SpringBootApplication

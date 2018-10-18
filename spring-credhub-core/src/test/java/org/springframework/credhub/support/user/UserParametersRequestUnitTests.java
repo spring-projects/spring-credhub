@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.user;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,11 +25,7 @@ import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 import org.springframework.credhub.support.password.PasswordParameters;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
@@ -38,7 +35,7 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithParameters() throws Exception {
+	public void serializeWithParameters() {
 		requestBuilder = UserParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
@@ -52,52 +49,50 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 						.includeSpecial(false)
 						.build());
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "user");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.username", equalTo("user")),
-						hasJsonPath("$.parameters.length", equalTo(20)),
-						hasJsonPath("$.parameters.exclude_lower", equalTo(true)),
-						hasJsonPath("$.parameters.exclude_upper", equalTo(false)),
-						hasJsonPath("$.parameters.exclude_number", equalTo(true)),
-						hasJsonPath("$.parameters.include_special", equalTo(false))));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "user");
+		assertThat(json).hasPath("$.value.username").isEqualTo("user");
+		assertThat(json).hasPath("$.parameters.length").isEqualTo(20);
+		assertThat(json).hasPath("$.parameters.exclude_lower").isEqualTo(true);
+		assertThat(json).hasPath("$.parameters.exclude_upper").isEqualTo(false);
+		assertThat(json).hasPath("$.parameters.exclude_number").isEqualTo(true);
+		assertThat(json).hasPath("$.parameters.include_special").isEqualTo(false);
 	}
 
 	@Test
-	public void serializeWithEmptyParameters() throws Exception {
+	public void serializeWithEmptyParameters() {
 		requestBuilder = UserParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.NO_OVERWRITE)
 				.parameters(new PasswordParameters());
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.NO_OVERWRITE, "/example/credential", "user");
-		assertParametersNotSet(jsonValue);
+		assertCommonRequestFields(json, true, WriteMode.NO_OVERWRITE, "/example/credential", "user");
+		assertParametersNotSet(json);
 	}
 
 	@Test
-	public void serializeWithNoParameters() throws Exception {
+	public void serializeWithNoParameters() {
 		requestBuilder = UserParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
 				.overwrite(true)
 				.mode(WriteMode.CONVERGE);
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.CONVERGE, "/example/credential", "user");
-		assertParametersNotSet(jsonValue);
+		assertCommonRequestFields(json, true, WriteMode.CONVERGE, "/example/credential", "user");
+		assertParametersNotSet(json);
 	}
 
-	private void assertParametersNotSet(String jsonValue) {
-		assertThat(jsonValue,
-				allOf(hasNoJsonPath("$.value.username"),
-						hasNoJsonPath("$.parameters.length"),
-						hasNoJsonPath("$.parameters.exclude_lower"),
-						hasNoJsonPath("$.parameters.exclude_upper"),
-						hasNoJsonPath("$.parameters.exclude_number"),
-						hasNoJsonPath("$.parameters.include_special")));
+	private void assertParametersNotSet(DocumentContext json) {
+		assertThat(json).hasNoPath("$.value.username");
+		assertThat(json).hasNoPath("$.parameters.length");
+		assertThat(json).hasNoPath("$.parameters.exclude_lower");
+		assertThat(json).hasNoPath("$.parameters.exclude_upper");
+		assertThat(json).hasNoPath("$.parameters.exclude_number");
+		assertThat(json).hasNoPath("$.parameters.include_special");
 	}
 }

@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.certificate;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,11 +24,7 @@ import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasNoJsonPath;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Before
@@ -36,53 +33,50 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithAllValues() throws Exception {
-		String jsonValue = serializeToJson(requestBuilder);
+	public void serializeWithAllValues() {
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.certificate", equalTo("cert")),
-						hasJsonPath("$.value.ca", equalTo("ca")),
-						hasJsonPath("$.value.private_key", equalTo("private-key"))));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
+		assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
+		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithCertOnly() throws Exception {
+	public void serializeWithCertOnly() {
 		buildRequest(new CertificateCredential("cert", null, null));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.value.certificate", equalTo("cert")),
-						hasNoJsonPath("$.value.ca"),
-						hasNoJsonPath("$.value.private_key")));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
+		assertThat(json).hasNoPath("$.value.ca")
+				.hasNoPath("$.value.private_key");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test
-	public void serializeWithNoCert() throws Exception {
+	public void serializeWithNoCert() {
 		buildRequest(new CertificateCredential(null, "ca", "private-key"));
 
-		String jsonValue = serializeToJson(requestBuilder);
+		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(jsonValue, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
-		assertThat(jsonValue,
-				allOf(hasNoJsonPath("$.value.certificate"),
-						hasJsonPath("$.value.ca", equalTo("ca")),
-						hasJsonPath("$.value.private_key", equalTo("private-key"))));
+		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertThat(json).hasNoPath("$.value.certificate");
+		assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
+		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
-		assertNoPermissions(jsonValue);
+		assertNoPermissions(json);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void serializeWithNoValues() throws Exception {
+	public void serializeWithNoValues() {
 		buildRequest(new CertificateCredential(null, null, null));
 
-		serializeToJson(requestBuilder);
+		toJsonPath(requestBuilder);
 	}
 
 	@SuppressWarnings("deprecation")

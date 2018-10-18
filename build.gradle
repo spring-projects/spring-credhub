@@ -33,6 +33,7 @@ ext {
 
 	junitVersion = "4.12"
 	mockitoVersion = "2.7.22"
+	assertJVersion = "3.6.1"
 
 	javadocLinks = [
 			'http://docs.oracle.com/javase/7/docs/api/',

@@ -20,18 +20,16 @@ package org.springframework.credhub.support.permissions;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jayway.jsonpath.DocumentContext;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
+import org.springframework.credhub.support.JsonTestUtils;
 import org.springframework.credhub.support.SimpleCredentialName;
-import org.springframework.credhub.support.utils.JsonUtils;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 import static org.springframework.credhub.support.permissions.ActorType.APP;
 import static org.springframework.credhub.support.permissions.ActorType.USER;
 import static org.springframework.credhub.support.permissions.Operation.DELETE;
@@ -39,12 +37,10 @@ import static org.springframework.credhub.support.permissions.Operation.READ;
 import static org.springframework.credhub.support.permissions.Operation.READ_ACL;
 import static org.springframework.credhub.support.permissions.Operation.WRITE;
 import static org.springframework.credhub.support.permissions.Operation.WRITE_ACL;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.hasJsonPath;
-import static org.valid4j.matchers.jsonpath.JsonPathMatchers.isJson;
 
 public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 	@Test
-	public void deserializePermissions() throws Exception {
+	public void deserializePermissions() {
 		String json = "{\"credential_name\": \"/c/example\"," +
 				"\"permissions\": [" +
 				"    {" +
@@ -67,60 +63,52 @@ public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 
 		CredentialPermissions permissions = parsePermissions(json);
 
-		assertThat(permissions.getCredentialName(), equalTo("/c/example"));
-		assertThat(permissions.getPermissions().size(), equalTo(2));
+		assertThat(permissions.getCredentialName()).isEqualTo("/c/example");
+		assertThat(permissions.getPermissions().size()).isEqualTo(2);
 
 		CredentialPermission permission = permissions.getPermissions().get(0);
-		assertThat(permission.getActor().getAuthType(), equalTo(APP));
-		assertThat(permission.getActor().getPrimaryIdentifier(), equalTo("appid1"));
+		assertThat(permission.getActor().getAuthType()).isEqualTo(APP);
+		assertThat(permission.getActor().getPrimaryIdentifier()).isEqualTo("appid1");
 
 		List<Operation> operations = permission.getOperations();
-		assertThat(operations.size(), equalTo(5));
-		assertThat(operations, contains(READ, WRITE, DELETE, READ_ACL, WRITE_ACL));
+		assertThat(operations.size()).isEqualTo(5);
+		assertThat(operations).contains(READ, WRITE, DELETE, READ_ACL, WRITE_ACL);
 
 		permission = permissions.getPermissions().get(1);
-		assertThat(permission.getActor().getAuthType(), equalTo(USER));
-		assertThat(permission.getActor().getPrimaryIdentifier(), equalTo("zone1/userid"));
+		assertThat(permission.getActor().getAuthType()).isEqualTo(USER);
+		assertThat(permission.getActor().getPrimaryIdentifier()).isEqualTo("zone1/userid");
 
 		operations = permission.getOperations();
-		assertThat(operations.size(), equalTo(1));
-		assertThat(operations, contains(READ));
+		assertThat(operations.size()).isEqualTo(1);
+		assertThat(operations).contains(READ);
 	}
 
 	@Test
-	public void deserializeWithNoPermissions() throws Exception {
+	public void deserializeWithNoPermissions() {
 		String json = "{\"permissions\": []}";
 
 		CredentialPermissions permissions = parsePermissions(json);
 
-		assertThat(permissions.getPermissions().size(), equalTo(0));
+		assertThat(permissions.getPermissions().size()).isEqualTo(0);
 	}
 
 	@Test
-	public void serialize() throws Exception {
+	public void serialize() {
 		CredentialPermissions permissions = new CredentialPermissions(new SimpleCredentialName("example", "credentialName"),
 				CredentialPermission.builder()
 						.app("appid1")
 						.operations(READ, WRITE)
 						.build());
 
-		String jsonValue = serializeToJson(permissions);
+		DocumentContext json = JsonTestUtils.toJsonPath(permissions);
 
-		assertThat(jsonValue,
-				allOf(hasJsonPath("$.credential_name", equalTo("/example/credentialName")),
-						hasJsonPath("$.permissions[0].actor", equalTo(Actor.app("appid1").getIdentity())),
-						hasJsonPath("$.permissions[0].operations[0]", equalTo("read")),
-						hasJsonPath("$.permissions[0].operations[1]", equalTo("write"))));
+		assertThat(json).hasPath("$.credential_name").isEqualTo("/example/credentialName");
+		assertThat(json).hasPath("$.permissions[0].actor").isEqualTo(Actor.app("appid1").getIdentity());
+		assertThat(json).hasPath("$.permissions[0].operations[0]").isEqualTo("read");
+		assertThat(json).hasPath("$.permissions[0].operations[1]").isEqualTo("write");
 	}
 
-	protected String serializeToJson(Object obj) throws JsonProcessingException {
-		String jsonValue = JsonUtils.buildObjectMapper().writeValueAsString(obj);
-		assertThat(jsonValue, isJson());
-		return jsonValue;
-	}
-
-	@SuppressWarnings("unchecked")
-	private CredentialPermissions parsePermissions(String json) throws java.io.IOException {
-		return objectMapper.readValue(json, CredentialPermissions.class);
+	private CredentialPermissions parsePermissions(String json) {
+		return JsonTestUtils.fromJson(json, CredentialPermissions.class);
 	}
 }

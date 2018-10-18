@@ -23,8 +23,7 @@ import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	private static final String SSH_CREDENTIALS =
@@ -36,14 +35,14 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"  }";
 
 	@Test
-	public void deserializeDetailsWithPublicAndPrivateKeys() throws Exception {
+	public void deserializeDetailsWithPublicAndPrivateKeys() {
 		CredentialDetails<SshCredential> data = parseDetails(SSH_CREDENTIALS);
 
 		assertDetails(data, "public-key", "private-key", "fingerprint");
 	}
 
 	@Test
-	public void deserializeDetailsWithPublicKey() throws Exception {
+	public void deserializeDetailsWithPublicKey() {
 		final String credentials =
 				"  \"type\": \"ssh\"," +
 						"  \"value\": {" +
@@ -55,7 +54,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsWithPrivateKey() throws Exception {
+	public void deserializeDetailsWithPrivateKey() {
 		final String credentials =
 				"  \"type\": \"ssh\"," +
 						"  \"value\": {" +
@@ -67,10 +66,10 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsData() throws Exception {
+	public void deserializeDetailsData() {
 		CredentialDetailsData<SshCredential> response = parseDetailsData(SSH_CREDENTIALS);
 
-		assertThat(response.getData().size(), equalTo(1));
+		assertThat(response.getData()).hasSize(1);
 
 		CredentialDetails<SshCredential> data = response.getData().get(0);
 
@@ -81,9 +80,9 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 							   String publicKey, String privateKey, String publicKeyFingerprint) {
 		assertCommonDetails(data);
 		
-		assertThat(data.getCredentialType(), equalTo(CredentialType.SSH));
-		assertThat(data.getValue().getPublicKey(), equalTo(publicKey));
-		assertThat(data.getValue().getPrivateKey(), equalTo(privateKey));
-		assertThat(data.getValue().getPublicKeyFingerprint(), equalTo(publicKeyFingerprint));
+		assertThat(data.getCredentialType()).isEqualTo(CredentialType.SSH);
+		assertThat(data.getValue().getPublicKey()).isEqualTo(publicKey);
+		assertThat(data.getValue().getPrivateKey()).isEqualTo(privateKey);
+		assertThat(data.getValue().getPublicKeyFingerprint()).isEqualTo(publicKeyFingerprint);
 	}
 }

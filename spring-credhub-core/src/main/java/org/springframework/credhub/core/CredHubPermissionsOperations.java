@@ -41,9 +41,8 @@ public interface CredHubPermissionsOperations {
 	 *
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param permissions a collection of permissions to add
-	 * @return the collection of permissions associated with the credential
 	 */
-	List<CredentialPermission> addPermissions(final CredentialName name, final CredentialPermission... permissions);
+	void addPermissions(final CredentialName name, final CredentialPermission... permissions);
 
 	/**
 	 * Delete a permission associated with a credential.

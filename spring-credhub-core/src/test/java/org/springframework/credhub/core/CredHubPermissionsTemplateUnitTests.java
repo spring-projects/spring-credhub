@@ -98,17 +98,11 @@ public class CredHubPermissionsTemplateUnitTests {
 				.operation(Operation.DELETE)
 				.build();
 
-		CredentialPermissions expectedResponse = new CredentialPermissions(NAME, permission1, permission2);
+		credHubTemplate.addPermissions(NAME, permission1, permission2);
 
-		when(restTemplate.exchange(PERMISSIONS_URL_PATH, POST,
-				new HttpEntity<>(expectedResponse), CredentialPermissions.class))
-				.thenReturn(new ResponseEntity<>(expectedResponse, OK));
-
-		List<CredentialPermission> response = credHubTemplate.addPermissions(NAME, permission1, permission2);
-
-		assertThat(response).isNotNull();
-		assertThat(response).hasSize(expectedResponse.getPermissions().size());
-		assertThat(response).isEqualTo(expectedResponse.getPermissions());
+		verify(restTemplate).exchange(PERMISSIONS_URL_PATH, POST,
+				new HttpEntity<>(new CredentialPermissions(NAME, permission1, permission2)),
+				CredentialPermissions.class);
 	}
 
 	@Test

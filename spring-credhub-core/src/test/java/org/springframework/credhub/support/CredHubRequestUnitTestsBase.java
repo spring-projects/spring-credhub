@@ -98,9 +98,13 @@ public abstract class CredHubRequestUnitTestsBase {
 		return JsonTestUtils.toJsonPath(requestBuilder.build());
 	}
 
-	protected void assertCommonRequestFields(DocumentContext json, boolean overwrite, WriteMode writeMode,
+	protected void assertCommonRequestFields(DocumentContext json, Boolean overwrite, WriteMode writeMode,
 											 String name, String type) {
-		assertThat(json).hasPath("$.overwrite").isEqualTo(overwrite);
+		if (overwrite == null) {
+			assertThat(json).hasNoPath("$.overwrite");
+		} else {
+			assertThat(json).hasPath("$.overwrite").isEqualTo(overwrite);
+		}
 		assertThat(json).hasPath("$.mode").isEqualTo(writeMode.getMode());
 		assertThat(json).hasPath("$.name").isEqualTo(name);
 		assertThat(json).hasPath("$.type").isEqualTo(type);

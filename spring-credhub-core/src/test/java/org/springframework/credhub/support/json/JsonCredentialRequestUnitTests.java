@@ -45,7 +45,7 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	public void serializeWithJsonValue() {
 		DocumentContext json = toJsonPath(requestBuilder);
 
-		assertCommonRequestFields(json, false, WriteMode.OVERWRITE, "/example/credential", "json");
+		assertCommonRequestFields(json, null, WriteMode.OVERWRITE, "/example/credential", "json");
 		assertThat(json).hasPath("$.value.data").isEqualTo("value");
 		assertThat(json).hasPath("$.value.test").isEqualTo(true);
 

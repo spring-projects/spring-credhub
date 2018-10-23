@@ -42,7 +42,7 @@ public class CredHubAutoConfiguration {
 	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
 
 	/**
-	 * Configuration properties for CredHub
+	 * Create a {@link CredHubProperties} bean and populate it from properties.
 	 * 
 	 * @return a {@link CredHubProperties} bean
 	 */
@@ -53,19 +53,31 @@ public class CredHubAutoConfiguration {
 	}
 
 	/**
+	 * Create a {@link ClientOptions} bean and populate it from properties.
+	 *
+	 * @return a {@link ClientOptions} bean
+	 */
+	@Bean
+	@ConfigurationProperties(prefix = "spring.credhub")
+	public ClientOptions clientOptions() {
+		return new ClientOptions();
+	}
+
+	/**
 	 * Create a {@link ClientFactoryWrapper} containing a
 	 * {@link ClientHttpRequestFactory}. {@link ClientHttpRequestFactory} is not exposed
 	 * as root bean because {@link ClientHttpRequestFactory} is configured with
 	 * {@link ClientOptions} which are not necessarily applicable for the whole
 	 * application.
 	 *
+	 * @param clientOptions the populated {@link ClientOptions} bean
 	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
 	 * instance
 	 */
 	@Bean
-	public ClientFactoryWrapper clientHttpRequestFactoryWrapper() {
+	public ClientFactoryWrapper clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
 		return new ClientFactoryWrapper(
-				credHubTemplateFactory.clientHttpRequestFactoryWrapper());
+				credHubTemplateFactory.clientHttpRequestFactoryWrapper(clientOptions));
 	}
 
 	/**

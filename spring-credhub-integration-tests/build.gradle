@@ -1,0 +1,68 @@
+/*
+ * Copyright 2016-2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+description = 'Spring CredHub Integration Tests'
+
+buildscript {
+	ext {
+		springBootVersion = "1.5.8.RELEASE"
+	}
+
+	dependencies {
+		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
+		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+	}
+
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/plugins-release" }
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+	compile project(":spring-credhub-starter")
+	compile("org.springframework.boot:spring-boot-starter")
+	compile("org.springframework.security.oauth:spring-security-oauth2")
+	compile("org.apache.httpcomponents:httpclient:4.5.3") {
+		exclude(group: 'commons-logging', module: 'commons-logging')
+	}
+
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+	testCompile("org.assertj:assertj-core:${assertJVersion}")
+}
+
+test {
+	onlyIf {
+		project.hasProperty("integrationTests")
+	}
+}
+
+configurations.archives.artifacts.clear()
+
+repositories {
+	mavenCentral()
+}

@@ -33,7 +33,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("WeakerAccess")
 public class CredHubRequest<T> {
-	protected boolean overwrite;
+	protected Boolean overwrite;
 	protected WriteMode mode;
 	protected CredentialName name;
 	protected CredentialType credentialType;
@@ -51,7 +51,7 @@ public class CredHubRequest<T> {
 	 * @return the {@literal boolean} overwrite value
 	 * @deprecated as of CredHub 1.6, use {@link #mode}
 	 */
-	public boolean isOverwrite() {
+	public Boolean isOverwrite() {
 		return this.overwrite;
 	}
 

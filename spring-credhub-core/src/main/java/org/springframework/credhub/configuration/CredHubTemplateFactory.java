@@ -46,6 +46,17 @@ public class CredHubTemplateFactory {
 	}
 
 	/**
+	 * Create a {@link ClientHttpRequestFactory}.
+	 *
+	 * @return the {@link ClientHttpRequestFactory} instance.
+	 *
+	 * @param clientOptions options for creating the client connection
+	 */
+	public ClientHttpRequestFactory clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
+		return ClientHttpRequestFactoryFactory.create(clientOptions);
+	}
+
+	/**
 	 * Create the default {@link ClientOptions} to configure communication parameters.
 	 *
 	 * @return the default {@link ClientOptions}

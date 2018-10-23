@@ -147,6 +147,8 @@ configure(rootProject) {
 			project.sourceSets.main.compileClasspath
 		})
 
+		exclude '**/spring-credhub-integration-tests/**'
+
 		maxMemory = "1024m"
 		destinationDir = new File(buildDir, "api")
 	}

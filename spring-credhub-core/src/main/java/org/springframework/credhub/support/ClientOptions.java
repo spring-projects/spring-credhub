@@ -25,36 +25,38 @@ import java.util.concurrent.TimeUnit;
  * @author Scott Frederick
  */
 public class ClientOptions {
+	private Integer connectionTimeout;
+
+	private Integer readTimeout;
+
+	private boolean trustSelfSignedCerts;
+
+	private String[] caCertFiles;
 
 	/**
-	 * Connection timeout;
-	 */
-	private final Integer connectionTimeout;
-
-	/**
-	 * Read timeout;
-	 */
-	private final Integer readTimeout;
-
-	/**
-	 * Create new {@link ClientOptions} with default timeouts.
+	 * Create new {@link ClientOptions} with default values.
 	 */
 	public ClientOptions() {
 		this.connectionTimeout = null;
 		this.readTimeout = null;
+		this.trustSelfSignedCerts = false;
 	}
 
 	/**
 	 * Create a {@link ClientOptions} with the provided values.
 	 *
-	 * @param connectionTimeout connection timeout in {@link TimeUnit#MILLISECONDS}, must
-	 * be greater {@literal 0}.
-	 * @param readTimeout read timeout in {@link TimeUnit#MILLISECONDS}, must be greater
-	 * {@literal 0}.
+	 * @param connectionTimeout    connection timeout in {@link TimeUnit#MILLISECONDS}, must
+	 *                             be greater {@literal 0}
+	 * @param readTimeout          read timeout in {@link TimeUnit#MILLISECONDS}, must be greater
+	 *                             {@literal 0}
+	 * @param trustSelfSignedCerts trust self-signed SSL certficates
 	 */
-	public ClientOptions(int connectionTimeout, int readTimeout) {
+	public ClientOptions(int connectionTimeout, int readTimeout, boolean trustSelfSignedCerts,
+						 String[] caCertFiles) {
 		this.connectionTimeout = connectionTimeout;
 		this.readTimeout = readTimeout;
+		this.trustSelfSignedCerts = trustSelfSignedCerts;
+		this.caCertFiles = caCertFiles;
 	}
 
 	/**
@@ -63,7 +65,11 @@ public class ClientOptions {
 	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
 	public Integer getConnectionTimeout() {
-		return connectionTimeout;
+		return this.connectionTimeout;
+	}
+
+	public void setConnectionTimeout(Integer connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
 	}
 
 	/**
@@ -72,7 +78,26 @@ public class ClientOptions {
 	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
 	public Integer getReadTimeout() {
-		return readTimeout;
+		return this.readTimeout;
 	}
 
+	public void setReadTimeout(Integer readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
+	public boolean isTrustSelfSignedCerts() {
+		return this.trustSelfSignedCerts;
+	}
+
+	public void setTrustSelfSignedCerts(boolean trustSelfSignedCerts) {
+		this.trustSelfSignedCerts = trustSelfSignedCerts;
+	}
+
+	public String[] getCaCertFiles() {
+		return caCertFiles;
+	}
+
+	public void setCaCertFiles(String[] caCertFiles) {
+		this.caCertFiles = caCertFiles;
+	}
 }

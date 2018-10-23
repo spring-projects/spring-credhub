@@ -17,7 +17,9 @@
 package org.springframework.credhub.core.certificate;
 
 import org.springframework.credhub.support.CertificateSummary;
+import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
 
 import java.util.List;
 
@@ -42,4 +44,13 @@ public interface CredHubCertificateOperations {
 	 * @return the details of the retrieved certificate credential
 	 */
 	CertificateSummary getByName(final CredentialName name);
+
+	/**
+	 * Regenerate a certificate.
+	 *
+	 * @param id the CredHub-generated ID of the certificate credential; must not be {@literal null}
+	 * @param setAsTransitional make the certificate version transitional or not
+	 * @return the details of the certificate credential
+	 */
+	CredentialDetails<CertificateCredential> regenerate(final String id, final boolean setAsTransitional);
 }

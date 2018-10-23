@@ -21,19 +21,31 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CertificateSummary;
 import org.springframework.credhub.support.CertificateSummaryData;
+import org.springframework.credhub.support.CredentialDetails;
+import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.REGENERATE_URL_PATH;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.TRANSITIONAL_REQUEST_FIELD;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -82,5 +94,28 @@ public class CredHubCertificateTemplateUnitTests {
 		assertThat(response).isNotNull();
 		assertThat(response.getId()).isEqualTo("id1");
 		assertThat(response.getName()).isEqualTo("name1");
+	}
+
+	@Test
+	public void regenerate() {
+		CredentialDetails<CertificateCredential> expectedCertificates =
+				new CredentialDetails<>("id", NAME, CredentialType.CERTIFICATE,
+						new CertificateCredential("cert", "authority", "key"));
+
+		Map<String, Boolean> request = new HashMap<>();
+		request.put(TRANSITIONAL_REQUEST_FIELD, true);
+
+		when(restTemplate.exchange(eq(REGENERATE_URL_PATH), eq(HttpMethod.POST),
+				eq(new HttpEntity<Object>(request)), isA(ParameterizedTypeReference.class), eq("id")))
+				.thenReturn(new ResponseEntity<>(expectedCertificates, OK));
+
+		CredentialDetails<CertificateCredential> response = credHubTemplate.regenerate("id", true);
+
+		assertThat(response).isNotNull();
+		assertThat(response.getId()).isEqualTo("id");
+		assertThat(response.getCredentialType()).isEqualTo(CredentialType.CERTIFICATE);
+		assertThat(response.getValue().getCertificate()).isEqualTo("cert");
+		assertThat(response.getValue().getCertificateAuthority()).isEqualTo("authority");
+		assertThat(response.getValue().getPrivateKey()).isEqualTo("key");
 	}
 }

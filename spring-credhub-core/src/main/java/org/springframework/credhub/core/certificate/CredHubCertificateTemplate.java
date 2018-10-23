@@ -16,17 +16,25 @@
 
 package org.springframework.credhub.core.certificate;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CertificateSummary;
 import org.springframework.credhub.support.CertificateSummaryData;
+import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.springframework.http.HttpMethod.POST;
 
 /**
  * Implements the interactions with CredHub to retrieve, regenerate, and update
@@ -37,6 +45,8 @@ import java.util.List;
 public class CredHubCertificateTemplate implements CredHubCertificateOperations {
 	static final String BASE_URL_PATH = "/api/v1/certificates";
 	static final String NAME_URL_QUERY = BASE_URL_PATH + "?name={name}";
+	static final String REGENERATE_URL_PATH = BASE_URL_PATH + "/{id}/regenerate";
+	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 
 	private CredHubOperations credHubOperations;
 
@@ -49,6 +59,11 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		this.credHubOperations = credHubOperations;
 	}
 
+	/**
+	 * Retrieve all certificates from CredHub.
+	 *
+	 * @return a collection of certificates
+	 */
 	@Override
 	public List<CertificateSummary> getAll() {
 		return credHubOperations.doWithRest(new RestOperationsCallback<List<CertificateSummary>>() {
@@ -65,6 +80,12 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		});
 	}
 
+	/**
+	 * Retrieve a certificate using its name.
+	 *
+	 * @param name the name of the certificate credential; must not be {@literal null}
+	 * @return the details of the retrieved certificate credential
+	 */
 	@Override
 	public CertificateSummary getByName(final CredentialName name) {
 		Assert.notNull(name, "certificate name must not be null");
@@ -79,6 +100,36 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 				ExceptionUtils.throwExceptionOnError(response);
 
 				return response.getBody().getCertificates().get(0);
+			}
+		});
+	}
+
+	/**
+	 * Regenerate a certificate.
+	 *
+	 * @param id the CredHub-generated ID of the certificate credential; must not be {@literal null}
+	 * @return the details of the certificate credential
+	 */
+	@Override
+	public CredentialDetails<CertificateCredential> regenerate(final String id, final boolean setAsTransitional) {
+		Assert.notNull(id, "credential ID must not be null");
+
+		final ParameterizedTypeReference<CredentialDetails<CertificateCredential>> ref =
+				new ParameterizedTypeReference<CredentialDetails<CertificateCredential>>() {};
+
+		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialDetails<CertificateCredential>>() {
+			@Override
+			public CredentialDetails<CertificateCredential> doWithRestOperations(RestOperations restOperations) {
+				Map<String, Boolean> request = new HashMap<>();
+				request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
+
+				ResponseEntity<CredentialDetails<CertificateCredential>> response =
+						restOperations.exchange(REGENERATE_URL_PATH, POST,
+								new HttpEntity<Object>(request), ref, id);
+
+				ExceptionUtils.throwExceptionOnError(response);
+
+				return response.getBody();
 			}
 		});
 	}

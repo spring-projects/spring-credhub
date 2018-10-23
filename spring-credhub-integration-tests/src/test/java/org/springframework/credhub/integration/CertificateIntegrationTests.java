@@ -87,4 +87,24 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 		assertThat(allCertificates.size()).isGreaterThan(0);
 		assertThat(allCertificates).extracting("name").contains(CREDENTIAL_NAME.getName());
 	}
+
+	@Test
+	public void regenerateCertificate() {
+		CredentialDetails<CertificateCredential> certificate = credentials.generate(CertificateParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.parameters(CertificateParameters.builder()
+						.commonName("example.com")
+						.selfSign(true)
+						.build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+
+		CertificateSummary byName = certificates.getByName(CREDENTIAL_NAME);
+
+		CredentialDetails<CertificateCredential> regenerated = certificates.regenerate(byName.getId(), true);
+		assertThat(regenerated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(regenerated.getValue().getCertificate()).isNotEqualTo(certificate.getValue().getCertificate());
+		assertThat(regenerated.getValue().getCertificateAuthority()).isNotEqualTo(certificate.getValue().getCertificateAuthority());
+		assertThat(regenerated.getValue().getPrivateKey()).isNotEqualTo(certificate.getValue().getPrivateKey());
+	}
 }

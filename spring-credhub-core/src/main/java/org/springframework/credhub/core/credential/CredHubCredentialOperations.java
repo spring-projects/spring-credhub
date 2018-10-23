@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Scott Frederick
  */
-public interface CredHubCredentialsOperations {
+public interface CredHubCredentialOperations {
 	/**
 	 * Write a new credential to CredHub, or overwrite an existing credential with a new
 	 * value.

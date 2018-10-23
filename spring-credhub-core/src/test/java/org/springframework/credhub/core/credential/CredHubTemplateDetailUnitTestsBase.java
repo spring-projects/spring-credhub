@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
@@ -37,12 +38,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.BASE_URL_PATH;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.ID_URL_PATH;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY_CURRENT;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY_VERSIONS;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.REGENERATE_URL_PATH;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.BASE_URL_PATH;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.ID_URL_PATH;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY_CURRENT;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY_VERSIONS;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.REGENERATE_URL_PATH;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
@@ -50,7 +51,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @SuppressWarnings("unchecked")
-public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentialsTemplateUnitTestsBase {
+public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentialTemplateUnitTestsBase {
 	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 
 	protected abstract Class<T> getType();

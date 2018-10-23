@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.integration;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.credhub.core.info.CredHubInfoOperations;
+import org.springframework.credhub.support.info.VersionInfo;
 
-public class ExceptionUtils {
-	/**
-	 * Helper method to throw an appropriate exception if a request to CredHub
-	 * returns with an error code.
-	 *
-	 * @param response a {@link ResponseEntity} returned from {@link RestTemplate}
-	 */
-	public static void throwExceptionOnError(ResponseEntity<?> response) {
-		if (!response.getStatusCode().equals(HttpStatus.OK)) {
-			throw new CredHubException(response.getStatusCode());
-		}
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class InfoIntegrationTests extends CredHubIntegrationTests {
+	private CredHubInfoOperations info;
+
+	@Before
+	public void setUp() {
+		info = operations.info();
+	}
+	
+	@Test
+	public void getInfo() {
+		VersionInfo version = info.version();
+
+		assertThat(version.getVersion()).isNotNull();
 	}
 }

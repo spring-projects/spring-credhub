@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.interpolation;
 
+import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.ExceptionUtils;
+import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +42,7 @@ public class CredHubInterpolationTemplate implements CredHubInterpolationOperati
 	 *
 	 * @param credHubOperations the {@link CredHubOperations} to use for interactions with CredHub
 	 */
-	CredHubInterpolationTemplate(CredHubOperations credHubOperations) {
+	public CredHubInterpolationTemplate(CredHubOperations credHubOperations) {
 		this.credHubOperations = credHubOperations;
 	}
 

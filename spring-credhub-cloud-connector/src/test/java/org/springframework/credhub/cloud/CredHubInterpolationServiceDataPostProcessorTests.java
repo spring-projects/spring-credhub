@@ -29,7 +29,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.credhub.core.CredHubException;
-import org.springframework.credhub.core.CredHubInterpolationOperations;
+import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpStatus;
 

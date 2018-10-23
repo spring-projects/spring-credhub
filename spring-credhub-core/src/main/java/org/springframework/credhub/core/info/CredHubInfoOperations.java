@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.info;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.credhub.support.info.VersionInfo;
 
-public class ExceptionUtils {
+/**
+ * Specifies the interactions with CredHub for retrieving server information.
+ *
+ * @author Scott Frederick
+ */
+public interface CredHubInfoOperations {
+
 	/**
-	 * Helper method to throw an appropriate exception if a request to CredHub
-	 * returns with an error code.
+	 * Retrieve the version information from the CredHub server.
 	 *
-	 * @param response a {@link ResponseEntity} returned from {@link RestTemplate}
+	 * @return the server version information
 	 */
-	public static void throwExceptionOnError(ResponseEntity<?> response) {
-		if (!response.getStatusCode().equals(HttpStatus.OK)) {
-			throw new CredHubException(response.getStatusCode());
-		}
-	}
+	VersionInfo version();
+
 }

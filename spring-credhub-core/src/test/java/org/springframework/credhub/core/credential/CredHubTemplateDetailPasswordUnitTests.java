@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import java.util.List;
 
@@ -28,90 +28,89 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
-import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.ParametersRequest;
-import org.springframework.credhub.support.rsa.RsaCredential;
-import org.springframework.credhub.support.rsa.RsaCredentialRequest;
-import org.springframework.credhub.support.rsa.RsaParameters;
-import org.springframework.credhub.support.rsa.RsaParametersRequest;
+import org.springframework.credhub.support.password.PasswordCredential;
+import org.springframework.credhub.support.password.PasswordCredentialRequest;
+import org.springframework.credhub.support.password.PasswordParameters;
+import org.springframework.credhub.support.password.PasswordParametersRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
-public class CredHubTemplateDetailRsaUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<RsaCredential, RsaParameters> {
-	private static final RsaCredential CREDENTIAL = new RsaCredential("public-key", "private-key");
-	private static final RsaParameters PARAMETERS = new RsaParameters(KeyLength.LENGTH_4096);
+public class CredHubTemplateDetailPasswordUnitTests
+		extends CredHubTemplateDetailUnitTestsBase<PasswordCredential, PasswordParameters> {
+	private static final PasswordCredential CREDENTIAL = new PasswordCredential("secret");
+	private static final PasswordParameters PARAMETERS = new PasswordParameters();
 
 	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<RsaCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.RSA, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetails<PasswordCredential>>> buildDetailResponses() {
+		return buildDetailResponses(CredentialType.PASSWORD, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<RsaCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.RSA, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetailsData<PasswordCredential>>> buildDataResponses() {
+		return buildDataResponses(CredentialType.PASSWORD, CREDENTIAL);
 	}
 
 	@Override
-	public CredentialRequest<RsaCredential> getWriteRequest() {
-		return RsaCredentialRequest.builder()
+	public CredentialRequest<PasswordCredential> getWriteRequest() {
+		return PasswordCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();
 	}
 
 	@Override
-	public ParametersRequest<RsaParameters> getGenerateRequest() {
-		return RsaParametersRequest.builder()
+	protected ParametersRequest<PasswordParameters> getGenerateRequest() {
+		return PasswordParametersRequest.builder()
 				.name(NAME)
 				.parameters(PARAMETERS)
 				.build();
 	}
 
 	@Override
-	public Class<RsaCredential> getType() {
-		return RsaCredential.class;
+	public Class<PasswordCredential> getType() {
+		return PasswordCredential.class;
 	}
 
 	@Theory
 	public void write(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+					  ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@Theory
 	public void generate(@FromDataPoints("detail-responses")
-						 ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+						 ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyGenerate(expectedResponse);
 	}
 
 	@Theory
 	public void regenerate(@FromDataPoints("detail-responses")
-						 ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+						 ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyRegenerate(expectedResponse);
 	}
 
 	@Theory
 	public void getById(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@Theory
 	public void getByName(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithHistory(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithVersions(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 }

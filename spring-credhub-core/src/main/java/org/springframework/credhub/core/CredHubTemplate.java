@@ -16,6 +16,16 @@
 
 package org.springframework.credhub.core;
 
+import org.springframework.credhub.core.certificate.CredHubCertificateOperations;
+import org.springframework.credhub.core.certificate.CredHubCertificateTemplate;
+import org.springframework.credhub.core.credential.CredHubCredentialOperations;
+import org.springframework.credhub.core.credential.CredHubCredentialTemplate;
+import org.springframework.credhub.core.info.CredHubInfoOperations;
+import org.springframework.credhub.core.info.CredHubInfoTemplate;
+import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
+import org.springframework.credhub.core.interpolation.CredHubInterpolationTemplate;
+import org.springframework.credhub.core.permission.CredHubPermissionOperations;
+import org.springframework.credhub.core.permission.CredHubPermissionTemplate;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -35,7 +45,7 @@ public class CredHubTemplate implements CredHubOperations {
 	 *
 	 * @param restTemplate the {@link RestTemplate} to use for interactions with CredHub
 	 */
-	CredHubTemplate(RestTemplate restTemplate) {
+	public CredHubTemplate(RestTemplate restTemplate) {
 		Assert.notNull(restTemplate, "restTemplate must not be null");
 
 		this.restTemplate = restTemplate;
@@ -64,8 +74,8 @@ public class CredHubTemplate implements CredHubOperations {
 	 * @return the credentials operations
 	 */
 	@Override
-	public CredHubCredentialsOperations credentials() {
-		return new CredHubCredentialsTemplate(this);
+	public CredHubCredentialOperations credentials() {
+		return new CredHubCredentialTemplate(this);
 	}
 
 	/**
@@ -74,8 +84,8 @@ public class CredHubTemplate implements CredHubOperations {
 	 * @return the permissions operations
 	 */
 	@Override
-	public CredHubPermissionsOperations permissions() {
-		return new CredHubPermissionsTemplate(this);
+	public CredHubPermissionOperations permissions() {
+		return new CredHubPermissionTemplate(this);
 	}
 
 	/**
@@ -89,13 +99,23 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	/**
-	 * Get the operations interpolating service binding credentials.
+	 * Get the operations for interpolating service binding credentials.
 	 *
 	 * @return the interpolation operations
 	 */
 	@Override
 	public CredHubInterpolationOperations interpolation() {
 		return new CredHubInterpolationTemplate(this);
+	}
+
+	/**
+	 * Get the operations for retrieving CredHub server information.
+	 *
+	 * @return the info operations
+	 */
+	@Override
+	public CredHubInfoOperations info() {
+		return new CredHubInfoTemplate(this);
 	}
 
 	/**

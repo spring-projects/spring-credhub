@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_LIKE_URL_QUERY;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.PATH_URL_QUERY;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_LIKE_URL_QUERY;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.PATH_URL_QUERY;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RunWith(Theories.class)
-public class CredHubCredentialsTemplateSummaryUnitTests extends CredHubCredentialsTemplateUnitTestsBase {
+public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> successfulResponse =
 			new ResponseEntity<>(new CredentialSummaryData(new CredentialSummary(NAME)), OK);

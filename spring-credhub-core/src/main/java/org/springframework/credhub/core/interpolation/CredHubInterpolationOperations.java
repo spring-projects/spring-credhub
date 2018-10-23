@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.interpolation;
 
 import org.springframework.credhub.support.ServicesData;
 

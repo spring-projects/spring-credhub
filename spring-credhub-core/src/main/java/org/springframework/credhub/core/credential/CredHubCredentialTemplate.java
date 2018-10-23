@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.ExceptionUtils;
+import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialName;
@@ -45,7 +48,7 @@ import static org.springframework.http.HttpMethod.PUT;
  *
  * @author Scott Frederick 
  */
-public class CredHubCredentialsTemplate implements CredHubCredentialsOperations {
+public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	static final String BASE_URL_PATH = "/api/v1/data";
 	static final String ID_URL_PATH = BASE_URL_PATH + "/{id}";
 	static final String NAME_URL_QUERY = BASE_URL_PATH + "?name={name}";
@@ -59,11 +62,11 @@ public class CredHubCredentialsTemplate implements CredHubCredentialsOperations 
 	private CredHubOperations credHubOperations;
 
 	/**
-	 * Create a new {@link CredHubCredentialsTemplate}.
+	 * Create a new {@link CredHubCredentialTemplate}.
 	 *
 	 * @param credHubOperations the {@link CredHubOperations} to use for interactions with CredHub
 	 */
-	CredHubCredentialsTemplate(CredHubOperations credHubOperations) {
+	public CredHubCredentialTemplate(CredHubOperations credHubOperations) {
 		this.credHubOperations = credHubOperations;
 	}
 

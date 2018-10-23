@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import java.util.List;
 
@@ -30,88 +30,88 @@ import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.ParametersRequest;
-import org.springframework.credhub.support.ssh.SshCredential;
-import org.springframework.credhub.support.ssh.SshCredentialRequest;
-import org.springframework.credhub.support.ssh.SshParameters;
-import org.springframework.credhub.support.ssh.SshParametersRequest;
+import org.springframework.credhub.support.rsa.RsaCredential;
+import org.springframework.credhub.support.rsa.RsaCredentialRequest;
+import org.springframework.credhub.support.rsa.RsaParameters;
+import org.springframework.credhub.support.rsa.RsaParametersRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
-public class CredHubTemplateDetailSshUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<SshCredential, SshParameters> {
-	private static final SshCredential CREDENTIAL = new SshCredential("public-key", "private-key");
-	private static final SshParameters PARAMETERS = new SshParameters(KeyLength.LENGTH_2048, "comment");
+public class CredHubTemplateDetailRsaUnitTests
+		extends CredHubTemplateDetailUnitTestsBase<RsaCredential, RsaParameters> {
+	private static final RsaCredential CREDENTIAL = new RsaCredential("public-key", "private-key");
+	private static final RsaParameters PARAMETERS = new RsaParameters(KeyLength.LENGTH_4096);
 
 	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<SshCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.SSH, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetails<RsaCredential>>> buildDetailResponses() {
+		return buildDetailResponses(CredentialType.RSA, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<SshCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.SSH, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetailsData<RsaCredential>>> buildDataResponses() {
+		return buildDataResponses(CredentialType.RSA, CREDENTIAL);
 	}
 
 	@Override
-	public CredentialRequest<SshCredential> getWriteRequest() {
-		return SshCredentialRequest.builder()
+	public CredentialRequest<RsaCredential> getWriteRequest() {
+		return RsaCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();
 	}
 
 	@Override
-	public ParametersRequest<SshParameters> getGenerateRequest() {
-		return SshParametersRequest.builder()
+	public ParametersRequest<RsaParameters> getGenerateRequest() {
+		return RsaParametersRequest.builder()
 				.name(NAME)
 				.parameters(PARAMETERS)
 				.build();
 	}
 
 	@Override
-	public Class<SshCredential> getType() {
-		return SshCredential.class;
+	public Class<RsaCredential> getType() {
+		return RsaCredential.class;
 	}
 
 	@Theory
 	public void write(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+					  ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@Theory
 	public void generate(@FromDataPoints("detail-responses")
-						 ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+						 ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
 		verifyGenerate(expectedResponse);
 	}
 
 	@Theory
 	public void regenerate(@FromDataPoints("detail-responses")
-						 ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+						 ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
 		verifyRegenerate(expectedResponse);
 	}
 
 	@Theory
 	public void getById(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetails<RsaCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@Theory
 	public void getByName(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithHistory(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithVersions(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<RsaCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.certificate;
 
 import org.springframework.credhub.support.CertificateSummary;
 import org.springframework.credhub.support.CredentialName;

@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.permission;
 
+import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.permissions.Actor;
@@ -35,7 +37,7 @@ import static org.springframework.http.HttpMethod.POST;
  *
  * @author Scott Frederick 
  */
-public class CredHubPermissionsTemplate implements CredHubPermissionsOperations {
+public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 	static final String PERMISSIONS_URL_PATH = "/api/v1/permissions";
 	static final String PERMISSIONS_URL_QUERY = PERMISSIONS_URL_PATH + "?credential_name={name}";
 	static final String PERMISSIONS_ACTOR_URL_QUERY = PERMISSIONS_URL_QUERY + "&actor={actor}";
@@ -43,11 +45,11 @@ public class CredHubPermissionsTemplate implements CredHubPermissionsOperations 
 	private CredHubOperations credHubOperations;
 
 	/**
-	 * Create a new {@link CredHubPermissionsTemplate}.
+	 * Create a new {@link CredHubPermissionTemplate}.
 	 *
 	 * @param credHubOperations the {@link CredHubOperations} to use for interactions with CredHub
 	 */
-	CredHubPermissionsTemplate(CredHubOperations credHubOperations) {
+	public CredHubPermissionTemplate(CredHubOperations credHubOperations) {
 		this.credHubOperations = credHubOperations;
 	}
 

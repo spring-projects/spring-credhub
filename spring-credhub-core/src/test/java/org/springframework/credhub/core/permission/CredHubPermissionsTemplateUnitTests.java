@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.permission;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.permissions.Actor;
@@ -36,9 +37,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubPermissionsTemplate.PERMISSIONS_ACTOR_URL_QUERY;
-import static org.springframework.credhub.core.CredHubPermissionsTemplate.PERMISSIONS_URL_PATH;
-import static org.springframework.credhub.core.CredHubPermissionsTemplate.PERMISSIONS_URL_QUERY;
+import static org.springframework.credhub.core.permission.CredHubPermissionTemplate.PERMISSIONS_ACTOR_URL_QUERY;
+import static org.springframework.credhub.core.permission.CredHubPermissionTemplate.PERMISSIONS_URL_PATH;
+import static org.springframework.credhub.core.permission.CredHubPermissionTemplate.PERMISSIONS_URL_QUERY;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -49,7 +50,7 @@ public class CredHubPermissionsTemplateUnitTests {
 	@Mock
 	private RestTemplate restTemplate;
 
-	private CredHubPermissionsOperations credHubTemplate;
+	private CredHubPermissionOperations credHubTemplate;
 
 	@Before
 	public void setUp() {

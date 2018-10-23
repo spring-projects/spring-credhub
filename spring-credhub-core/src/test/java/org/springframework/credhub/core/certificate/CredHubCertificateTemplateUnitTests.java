@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.certificate;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CertificateSummary;
 import org.springframework.credhub.support.CertificateSummaryData;
 import org.springframework.credhub.support.SimpleCredentialName;
@@ -31,8 +32,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubCertificateTemplate.BASE_URL_PATH;
-import static org.springframework.credhub.core.CredHubCertificateTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.BASE_URL_PATH;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.NAME_URL_QUERY;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)

@@ -16,6 +16,11 @@
 
 package org.springframework.credhub.core;
 
+import org.springframework.credhub.core.certificate.CredHubCertificateOperations;
+import org.springframework.credhub.core.credential.CredHubCredentialOperations;
+import org.springframework.credhub.core.info.CredHubInfoOperations;
+import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
+import org.springframework.credhub.core.permission.CredHubPermissionOperations;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -29,14 +34,14 @@ public interface CredHubOperations {
 	 *
 	 * @return the credentials operations
 	 */
-	CredHubCredentialsOperations credentials();
+	CredHubCredentialOperations credentials();
 
 	/**
 	 * Get the operations for adding, retrieving, and deleting credential permissions.
 	 *
 	 * @return the permissions operations
 	 */
-	CredHubPermissionsOperations permissions();
+	CredHubPermissionOperations permissions();
 
 	/**
 	 * Get the operations for retrieving, regenerating, and updating certificates.
@@ -46,11 +51,18 @@ public interface CredHubOperations {
 	CredHubCertificateOperations certificates();
 
 	/**
-	 * Get the operations interpolating service binding credentials.
+	 * Get the operations for interpolating service binding credentials.
 	 *
 	 * @return the interpolation operations
 	 */
 	CredHubInterpolationOperations interpolation();
+
+	/**
+	 * Get the operations for retrieving CredHub server information.
+	 *
+	 * @return the info operations
+	 */
+	CredHubInfoOperations info();
 
 	/**
 	 * Allow interaction with the configured {@link RestTemplate} not provided

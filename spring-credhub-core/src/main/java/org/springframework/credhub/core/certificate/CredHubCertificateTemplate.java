@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.certificate;
 
+import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.ExceptionUtils;
+import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CertificateSummary;
 import org.springframework.credhub.support.CertificateSummaryData;
 import org.springframework.credhub.support.CredentialName;
@@ -42,7 +45,7 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 	 *
 	 * @param credHubOperations the {@link CredHubOperations} to use for interactions with CredHub
 	 */
-	CredHubCertificateTemplate(CredHubOperations credHubOperations) {
+	public CredHubCertificateTemplate(CredHubOperations credHubOperations) {
 		this.credHubOperations = credHubOperations;
 	}
 

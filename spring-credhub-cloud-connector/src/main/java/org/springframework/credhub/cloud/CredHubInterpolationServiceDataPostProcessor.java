@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import org.springframework.cloud.cloudfoundry.CloudFoundryRawServiceData;
 import org.springframework.cloud.cloudfoundry.ServiceDataPostProcessor;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
-import org.springframework.credhub.core.CredHubInterpolationOperations;
+import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.support.ServicesData;
@@ -82,7 +82,7 @@ public class CredHubInterpolationServiceDataPostProcessor
 	/**
 	 * Process the provided {@literal serviceData} parsed from {@literal VCAP_SERVICES} by
 	 * Spring Cloud Connectors using the
-	 * {@link org.springframework.credhub.core.CredHubInterpolationOperations#interpolateServiceData(ServicesData)} API.
+	 * {@link CredHubInterpolationOperations#interpolateServiceData(ServicesData)} API.
 	 *
 	 * @param serviceData raw service data parsed from {@literal VCAP_SERVICES}
 	 * @return serviceData with CredHub references replaced by stored credentials

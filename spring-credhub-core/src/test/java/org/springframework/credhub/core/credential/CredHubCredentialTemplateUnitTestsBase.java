@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,10 +23,11 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 
+import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.web.client.RestTemplate;
 
-public abstract class CredHubCredentialsTemplateUnitTestsBase {
+public abstract class CredHubCredentialTemplateUnitTestsBase {
 	protected static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
 
 	@Rule
@@ -35,7 +36,7 @@ public abstract class CredHubCredentialsTemplateUnitTestsBase {
 	@Mock
 	protected RestTemplate restTemplate;
 
-	protected CredHubCredentialsOperations credHubTemplate;
+	protected CredHubCredentialOperations credHubTemplate;
 
 	@Before
 	public void setUpCredHubTemplateUnitTests() {

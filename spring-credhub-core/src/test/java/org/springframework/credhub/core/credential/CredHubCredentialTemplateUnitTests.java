@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 
 import org.junit.Test;
@@ -29,12 +29,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.NAME_URL_QUERY;
-import static org.springframework.credhub.core.CredHubCredentialsTemplate.SHOW_ALL_URL_QUERY;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.SHOW_ALL_URL_QUERY;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CredHubCredentialsTemplateUnitTests extends CredHubCredentialsTemplateUnitTestsBase {
+public class CredHubCredentialTemplateUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 	@Test
 	public void getAllPaths() {
 		when(restTemplate.getForEntity(SHOW_ALL_URL_QUERY, CredentialPathData.class))

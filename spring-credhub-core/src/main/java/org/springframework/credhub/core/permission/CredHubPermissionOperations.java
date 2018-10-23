@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.permission;
 
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.permissions.Actor;
@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Scott Frederick
  */
-public interface CredHubPermissionsOperations {
+public interface CredHubPermissionOperations {
 	/**
 	 * Get the permissions associated with a credential.
 	 *

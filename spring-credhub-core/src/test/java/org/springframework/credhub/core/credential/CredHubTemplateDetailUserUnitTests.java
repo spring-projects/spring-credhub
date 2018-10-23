@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.credential;
 
 import java.util.List;
 
@@ -28,70 +28,65 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialType;
-import org.springframework.credhub.support.json.JsonCredential;
-import org.springframework.credhub.support.json.JsonCredentialRequest;
+import org.springframework.credhub.support.user.UserCredential;
+import org.springframework.credhub.support.user.UserCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
 @RunWith(Theories.class)
-public class CredHubTemplateDetailJsonUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<JsonCredential, Void> {
-	private static final JsonCredential CREDENTIAL = new JsonCredential() {
-		{
-			put("data", "value");
-			put("test", true);
-		}
-	};
+public class CredHubTemplateDetailUserUnitTests
+		extends CredHubTemplateDetailUnitTestsBase<UserCredential, Void> {
+	private static final UserCredential CREDENTIAL = new UserCredential("myname", "secret");
 
 	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<JsonCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.JSON, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetails<UserCredential>>> buildDetailResponses() {
+		return buildDetailResponses(CredentialType.USER, CREDENTIAL);
 	}
 
 	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<JsonCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.JSON, CREDENTIAL);
+	public static List<ResponseEntity<CredentialDetailsData<UserCredential>>> buildDataResponses() {
+		return buildDataResponses(CredentialType.USER, CREDENTIAL);
 	}
 
 	@Override
-	public CredentialRequest<JsonCredential> getWriteRequest() {
-		return JsonCredentialRequest.builder()
+	public CredentialRequest<UserCredential> getWriteRequest() {
+		return UserCredentialRequest.builder()
 				.name(NAME)
 				.value(CREDENTIAL)
 				.build();
 	}
 
 	@Override
-	public Class<JsonCredential> getType() {
-		return JsonCredential.class;
+	public Class<UserCredential> getType() {
+		return UserCredential.class;
 	}
 
 	@Theory
 	public void write(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+					  ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@Theory
 	public void getById(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@Theory
 	public void getByName(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithHistory(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@Theory
 	public void getByNameWithVersions(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+						ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.core;
+package org.springframework.credhub.core.interpolation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -26,6 +26,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
+import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ServiceInstanceCredentialName;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.credhub.support.utils.JsonUtils;
@@ -37,7 +38,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.CredHubInterpolationTemplate.INTERPOLATE_URL_PATH;
+import static org.springframework.credhub.core.interpolation.CredHubInterpolationTemplate.INTERPOLATE_URL_PATH;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 

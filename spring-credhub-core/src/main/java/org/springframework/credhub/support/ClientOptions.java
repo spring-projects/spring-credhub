@@ -40,6 +40,7 @@ public class ClientOptions {
 		this.connectionTimeout = null;
 		this.readTimeout = null;
 		this.trustSelfSignedCerts = false;
+		this.caCertFiles = null;
 	}
 
 	/**
@@ -50,6 +51,7 @@ public class ClientOptions {
 	 * @param readTimeout          read timeout in {@link TimeUnit#MILLISECONDS}, must be greater
 	 *                             {@literal 0}
 	 * @param trustSelfSignedCerts trust self-signed SSL certficates
+	 * @param caCertFiles          one or more CA certificate files to use when connecting
 	 */
 	public ClientOptions(int connectionTimeout, int readTimeout, boolean trustSelfSignedCerts,
 						 String[] caCertFiles) {

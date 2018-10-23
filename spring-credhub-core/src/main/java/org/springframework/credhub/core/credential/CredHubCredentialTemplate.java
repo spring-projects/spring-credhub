@@ -113,8 +113,9 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	}
 
 	@Override
-	public <T> CredentialDetails<T> regenerate(final CredentialName name) {
+	public <T> CredentialDetails<T> regenerate(final CredentialName name, Class<T> credentialType) {
 		Assert.notNull(name, "credential name must not be null");
+		Assert.notNull(credentialType, "credential type must not be null");
 
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};

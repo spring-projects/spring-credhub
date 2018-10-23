@@ -21,4 +21,11 @@ public abstract class CredHubIntegrationTests {
 	@Autowired
 	protected CredHubOperations operations;
 
+	protected boolean serverApiIsV1() {
+		return operations.info().version().isVersion1();
+	}
+
+	protected boolean serverApiIsV2() {
+		return operations.info().version().isVersion2();
+	}
 }

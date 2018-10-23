@@ -139,7 +139,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
-				credHubTemplate.regenerate(NAME);
+				credHubTemplate.regenerate(NAME, getType());
 				fail("Exception should have been thrown");
 			}
 			catch (CredHubException e) {
@@ -147,7 +147,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 			}
 		}
 		else {
-			CredentialDetails<T> response = credHubTemplate.regenerate(NAME);
+			CredentialDetails<T> response = credHubTemplate.regenerate(NAME, getType());
 
 			assertDetailsResponseContainsExpectedCredential(expectedResponse, response);
 		}

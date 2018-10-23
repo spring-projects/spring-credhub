@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.integration;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.credhub.core.CredHubException;
@@ -43,15 +44,32 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 
 	private CredHubCredentialOperations credentials;
 
+	private PasswordParameters.PasswordParametersBuilder passwordParameters;
+
 	@Before
 	public void setUp() {
 		credentials = operations.credentials();
+
+		passwordParameters = PasswordParameters.builder()
+				.length(12)
+				.excludeLower(false)
+				.excludeUpper(false)
+				.excludeNumber(false)
+				.includeSpecial(true);
 
 		try {
 			credentials.deleteByName(CREDENTIAL_NAME);
 		} catch (CredHubException e) {
 			// ignore failing deletes on cleanup
 		}
+	}
+
+	@After
+	public void tearDown() {
+		credentials.deleteByName(CREDENTIAL_NAME);
+
+		List<CredentialSummary> afterDelete = credentials.findByName(CREDENTIAL_NAME);
+		assertThat(afterDelete).hasSize(0);
 	}
 
 	@Test
@@ -82,11 +100,6 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 		List<CredentialSummary> foundByPath = credentials.findByPath("/spring-credhub/integration-test");
 		assertThat(foundByPath).hasSize(1);
 		assertThat(foundByPath).extracting("name").extracting("name").containsExactly(CREDENTIAL_NAME.getName());
-
-		credentials.deleteByName(CREDENTIAL_NAME);
-
-		List<CredentialSummary> afterDelete = credentials.findByName(CREDENTIAL_NAME);
-		assertThat(afterDelete).hasSize(0);
 	}
 
 	@Test
@@ -137,13 +150,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 		CredentialDetails<UserCredential> generated = credentials.generate(UserParametersRequest.builder()
 				.name(CREDENTIAL_NAME)
 				.username("test-user")
-				.parameters(PasswordParameters.builder()
-						.length(12)
-						.excludeLower(false)
-						.excludeUpper(false)
-						.excludeNumber(false)
-						.includeSpecial(true)
-						.build())
+				.parameters(passwordParameters.build())
 				.build());
 		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(generated.getCredentialType()).isEqualTo(CredentialType.USER);
@@ -160,10 +167,86 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 		assertThat(regenerated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
 		assertThat(regenerated.getValue().getPassword()).isNotEqualTo(generated.getValue().getPassword());
 		assertThat(regenerated.getValue().getPasswordHash()).isNotEqualTo(generated.getValue().getPasswordHash());
+	}
 
-		credentials.deleteByName(CREDENTIAL_NAME);
+	@Test
+	public void generateNoOverwriteCredential() {
+		CredentialDetails<UserCredential> generated = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(generated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+		assertThat(generated.getValue().getPasswordHash()).isNotNull();
 
-		List<CredentialSummary> afterDelete = credentials.findByName(CREDENTIAL_NAME);
-		assertThat(afterDelete).hasSize(0);
+		CredentialDetails<UserCredential> noOverwrite = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.mode(WriteMode.NO_OVERWRITE)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(noOverwrite.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(noOverwrite.getValue().getPassword()).isEqualTo(generated.getValue().getPassword());
+		assertThat(noOverwrite.getValue().getPasswordHash()).isEqualTo(generated.getValue().getPasswordHash());
+	}
+
+	@Test
+	public void generateOverwriteCredential() {
+		CredentialDetails<UserCredential> generated = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(generated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+		assertThat(generated.getValue().getPasswordHash()).isNotNull();
+
+		CredentialDetails<UserCredential> overwrite = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.mode(WriteMode.OVERWRITE)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(overwrite.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(overwrite.getValue().getPassword()).isNotEqualTo(generated.getValue().getPassword());
+		assertThat(overwrite.getValue().getPasswordHash()).isNotEqualTo(generated.getValue().getPasswordHash());
+	}
+
+	@Test
+	public void generateConvergeCredential() {
+		CredentialDetails<UserCredential> generated = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(generated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+		assertThat(generated.getValue().getPasswordHash()).isNotNull();
+
+		CredentialDetails<UserCredential> convergeWithoutChanges = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.mode(WriteMode.CONVERGE)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(convergeWithoutChanges.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(convergeWithoutChanges.getValue().getPassword()).isEqualTo(generated.getValue().getPassword());
+		assertThat(convergeWithoutChanges.getValue().getPasswordHash()).isEqualTo(generated.getValue().getPasswordHash());
+
+		passwordParameters.includeSpecial(false);
+		
+		CredentialDetails<UserCredential> convergeWithChanges = credentials.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.mode(WriteMode.CONVERGE)
+				.username("test-user")
+				.parameters(passwordParameters.build())
+				.build());
+		assertThat(convergeWithChanges.getValue().getUsername()).isEqualTo("test-user");
+		assertThat(convergeWithChanges.getValue().getPassword()).isNotEqualTo(generated.getValue().getPassword());
+		assertThat(convergeWithChanges.getValue().getPasswordHash()).isNotEqualTo(generated.getValue().getPasswordHash());
 	}
 }

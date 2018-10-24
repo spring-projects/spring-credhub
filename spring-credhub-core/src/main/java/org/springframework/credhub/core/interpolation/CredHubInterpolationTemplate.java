@@ -21,11 +21,10 @@ import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-
-import static org.springframework.http.HttpMethod.POST;
 
 /**
  * Implements the main interaction with CredHub to interpolate service binding credentials.
@@ -54,7 +53,7 @@ public class CredHubInterpolationTemplate implements CredHubInterpolationOperati
 			@Override
 			public ServicesData doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<ServicesData> response = restOperations
-						.exchange(INTERPOLATE_URL_PATH, POST,
+						.exchange(INTERPOLATE_URL_PATH, HttpMethod.POST,
 								new HttpEntity<>(serviceData), ServicesData.class);
 
 				ExceptionUtils.throwExceptionOnError(response);

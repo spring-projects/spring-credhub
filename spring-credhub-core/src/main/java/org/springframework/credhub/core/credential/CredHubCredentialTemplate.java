@@ -30,6 +30,7 @@ import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
 import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
@@ -37,10 +38,6 @@ import org.springframework.web.client.RestOperations;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
 
 /**
  * Implements the interactions with CredHub to save, retrieve,
@@ -81,7 +78,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(BASE_URL_PATH, PUT,
+						restOperations.exchange(BASE_URL_PATH, HttpMethod.PUT,
 								new HttpEntity<>(credentialRequest), ref);
 
 				ExceptionUtils.throwExceptionOnError(response);
@@ -102,7 +99,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(BASE_URL_PATH, POST,
+						restOperations.exchange(BASE_URL_PATH, HttpMethod.POST,
 								new HttpEntity<>(parametersRequest), ref);
 
 				ExceptionUtils.throwExceptionOnError(response);
@@ -127,7 +124,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 				request.put("name", name.getName());
 
 				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(REGENERATE_URL_PATH, POST,
+						restOperations.exchange(REGENERATE_URL_PATH, HttpMethod.POST,
 								new HttpEntity<>(request), ref);
 
 				ExceptionUtils.throwExceptionOnError(response);
@@ -149,7 +146,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(ID_URL_PATH, GET, null, ref, id);
+						restOperations.exchange(ID_URL_PATH, HttpMethod.GET, null, ref, id);
 
 				ExceptionUtils.throwExceptionOnError(response);
 
@@ -170,7 +167,8 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY_CURRENT, GET, null, ref, name.getName());
+						restOperations.exchange(NAME_URL_QUERY_CURRENT, HttpMethod.GET,
+								null, ref, name.getName());
 
 				ExceptionUtils.throwExceptionOnError(response);
 
@@ -191,7 +189,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY, GET, null, ref, name.getName());
+						restOperations.exchange(NAME_URL_QUERY, HttpMethod.GET, null, ref, name.getName());
 
 				ExceptionUtils.throwExceptionOnError(response);
 
@@ -213,7 +211,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY_VERSIONS, GET, null, ref,
+						restOperations.exchange(NAME_URL_QUERY_VERSIONS, HttpMethod.GET, null, ref,
 								name.getName(), versions);
 
 				ExceptionUtils.throwExceptionOnError(response);

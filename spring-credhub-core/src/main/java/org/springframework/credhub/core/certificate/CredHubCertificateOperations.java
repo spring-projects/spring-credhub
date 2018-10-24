@@ -17,9 +17,8 @@
 package org.springframework.credhub.core.certificate;
 
 import org.springframework.credhub.support.CertificateSummary;
-import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
-import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 
 import java.util.List;
 
@@ -48,9 +47,25 @@ public interface CredHubCertificateOperations {
 	/**
 	 * Regenerate a certificate.
 	 *
-	 * @param id the CredHub-generated ID of the certificate credential; must not be {@literal null}
-	 * @param setAsTransitional make the certificate version transitional or not
+	 * @param id                the CredHub-generated ID of the certificate credential; must not be {@literal null}
+	 *                          and must be an ID returned by {@link #getAll()}
+	 *                          or {@link #getByName(CredentialName)}
+	 * @param setAsTransitional {@code true} to mark the certificate version transitional;
+	 *                          {@code false} otherwise
 	 * @return the details of the certificate credential
 	 */
-	CredentialDetails<CertificateCredential> regenerate(final String id, final boolean setAsTransitional);
+	CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional);
+
+	/**
+	 * Make the specified version of a certificate the {@literal transitional} version.
+	 *
+	 * @param id        the CredHub-generated ID of the certificate credential; must not be {@literal null}
+	 *                  and must be an ID returned by {@link #getAll()}
+	 *                  or {@link #getByName(CredentialName)}
+	 * @param versionId the CredHub-generated ID of the version of the certificate credential that should be
+	 *                  marked {@literal transitional}, or {@literal null} to indicate that no version
+	 *                  is {@literal transitional}
+	 * @return the details of the certificate credential, including all versions
+	 */
+	List<CertificateCredentialDetails> updateTransitionalVersion(final String id, final String versionId);
 }

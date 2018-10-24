@@ -25,15 +25,16 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CertificateSummary;
 import org.springframework.credhub.support.CertificateSummaryData;
-import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,8 @@ import static org.springframework.credhub.core.certificate.CredHubCertificateTem
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.NAME_URL_QUERY;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.REGENERATE_URL_PATH;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.TRANSITIONAL_REQUEST_FIELD;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.UPDATE_TRANSITIONAL_URL_PATH;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.VERSION_REQUEST_FIELD;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -97,25 +100,57 @@ public class CredHubCertificateTemplateUnitTests {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void regenerate() {
-		CredentialDetails<CertificateCredential> expectedCertificates =
-				new CredentialDetails<>("id", NAME, CredentialType.CERTIFICATE,
+		CertificateCredentialDetails expectedCertificate =
+				new CertificateCredentialDetails("id", NAME, CredentialType.CERTIFICATE, true,
 						new CertificateCredential("cert", "authority", "key"));
 
 		Map<String, Boolean> request = new HashMap<>();
 		request.put(TRANSITIONAL_REQUEST_FIELD, true);
 
 		when(restTemplate.exchange(eq(REGENERATE_URL_PATH), eq(HttpMethod.POST),
-				eq(new HttpEntity<Object>(request)), isA(ParameterizedTypeReference.class), eq("id")))
-				.thenReturn(new ResponseEntity<>(expectedCertificates, OK));
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id")))
+				.thenReturn(new ResponseEntity<>(expectedCertificate, OK));
 
-		CredentialDetails<CertificateCredential> response = credHubTemplate.regenerate("id", true);
+		CertificateCredentialDetails response = credHubTemplate.regenerate("id", true);
 
 		assertThat(response).isNotNull();
 		assertThat(response.getId()).isEqualTo("id");
 		assertThat(response.getCredentialType()).isEqualTo(CredentialType.CERTIFICATE);
+		assertThat(response.isTransitional()).isTrue();
 		assertThat(response.getValue().getCertificate()).isEqualTo("cert");
 		assertThat(response.getValue().getCertificateAuthority()).isEqualTo("authority");
 		assertThat(response.getValue().getPrivateKey()).isEqualTo("key");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void updateTransitionalVersion() {
+		List<CertificateCredentialDetails> expectedCertificates = Arrays.asList(
+				new CertificateCredentialDetails("id1", NAME, CredentialType.CERTIFICATE, false,
+						new CertificateCredential("cert1", "authority1", "key1")),
+				new CertificateCredentialDetails("id2", NAME, CredentialType.CERTIFICATE, true,
+						new CertificateCredential("cert2", "authority2", "key2"))
+				);
+
+		Map<String, String> request = new HashMap<>();
+		request.put(VERSION_REQUEST_FIELD, "id2");
+
+		when(restTemplate.exchange(eq(UPDATE_TRANSITIONAL_URL_PATH), eq(HttpMethod.PUT),
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id1")))
+				.thenReturn(new ResponseEntity<>(expectedCertificates, OK));
+
+		List<CertificateCredentialDetails> response =
+				credHubTemplate.updateTransitionalVersion("id1", "id2");
+
+		assertThat(response).hasSize(2);
+		assertThat(response).extracting("id").contains("id1", "id2");
+		assertThat(response).extracting("credentialType").contains(CredentialType.CERTIFICATE,
+				CredentialType.CERTIFICATE);
+		assertThat(response).extracting("transitional").contains(false, true);
+		assertThat(response).extracting("value.certificate").contains("cert1", "cert2");
+		assertThat(response).extracting("value.certificateAuthority").contains("authority1", "authority2");
+		assertThat(response).extracting("value.privateKey").contains("key1", "key2");
 	}
 }

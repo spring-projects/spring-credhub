@@ -22,8 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.Objects;
 
 /**
- * The details of a credential that has been written to CredHub. Clients don't
- * typically instantiate objects of this type, but will receive them in response
+ * The details of a credential that has been written to CredHub.
+ *
+ * Clients don't typically instantiate objects of this type, but will receive them in response
  * to write and retrieve requests. The {@literal id} and {@literal name} fields
  * can be used in subsequent requests.
  *

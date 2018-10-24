@@ -28,6 +28,7 @@ import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 import org.springframework.credhub.support.certificate.CertificateParameters;
 import org.springframework.credhub.support.certificate.CertificateParametersRequest;
 
@@ -101,10 +102,56 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 		CertificateSummary byName = certificates.getByName(CREDENTIAL_NAME);
 
-		CredentialDetails<CertificateCredential> regenerated = certificates.regenerate(byName.getId(), true);
+		CertificateCredentialDetails regenerated = certificates.regenerate(byName.getId(), true);
+		assertThat(regenerated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(regenerated.isTransitional()).isTrue();
+		assertThat(regenerated.getValue().getCertificate()).isNotEqualTo(certificate.getValue().getCertificate());
+		assertThat(regenerated.getValue().getCertificateAuthority()).isNotEqualTo(certificate.getValue().getCertificateAuthority());
+		assertThat(regenerated.getValue().getPrivateKey()).isNotEqualTo(certificate.getValue().getPrivateKey());
+	}
+
+	@Test
+	public void rotateCertificate() {
+		CredentialDetails<CertificateCredential> certificate = credentials.generate(CertificateParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.parameters(CertificateParameters.builder()
+						.commonName("example.com")
+						.selfSign(true)
+						.build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+
+		String credentialVersion0Id = certificate.getId();
+
+		List<CredentialDetails<CertificateCredential>> allVersions =
+				credentials.getByNameWithHistory(CREDENTIAL_NAME, CertificateCredential.class);
+		assertThat(allVersions).hasSize(1);
+		assertThat(allVersions.get(0).getId()).isEqualTo(credentialVersion0Id);
+
+		CertificateSummary byName = certificates.getByName(CREDENTIAL_NAME);
+		String certificateId = byName.getId();
+
+		CertificateCredentialDetails regenerated = certificates.regenerate(certificateId, true);
 		assertThat(regenerated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(regenerated.getValue().getCertificate()).isNotEqualTo(certificate.getValue().getCertificate());
 		assertThat(regenerated.getValue().getCertificateAuthority()).isNotEqualTo(certificate.getValue().getCertificateAuthority());
 		assertThat(regenerated.getValue().getPrivateKey()).isNotEqualTo(certificate.getValue().getPrivateKey());
+
+		String credentialVersion1Id = regenerated.getId();
+
+		allVersions = credentials.getByNameWithHistory(CREDENTIAL_NAME, CertificateCredential.class);
+		assertThat(allVersions).hasSize(2);
+		assertThat(allVersions).extracting("id").contains(credentialVersion1Id, credentialVersion0Id);
+
+		List<CertificateCredentialDetails> updatedCertificate =
+				certificates.updateTransitionalVersion(certificateId, credentialVersion0Id);
+		assertThat(updatedCertificate).hasSize(2);
+		assertThat(updatedCertificate).extracting("id").contains(credentialVersion1Id, credentialVersion0Id);
+		assertThat(updatedCertificate).extracting("transitional").contains(false, true);
+
+		updatedCertificate = certificates.updateTransitionalVersion(certificateId, null);
+		assertThat(updatedCertificate).hasSize(1);
+		assertThat(updatedCertificate).extracting("id").contains(credentialVersion1Id);
+		assertThat(updatedCertificate).extracting("transitional").contains(false);
 	}
 }

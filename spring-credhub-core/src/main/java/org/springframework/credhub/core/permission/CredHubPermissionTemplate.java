@@ -23,13 +23,12 @@ import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
 
 import java.util.List;
-
-import static org.springframework.http.HttpMethod.POST;
 
 /**
  * Implements the main interaction with CredHub to add, retrieve,
@@ -78,7 +77,7 @@ public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 		credHubOperations.doWithRest(new RestOperationsCallback<Void>() {
 			@Override
 			public Void doWithRestOperations(RestOperations restOperations) {
-				restOperations.exchange(PERMISSIONS_URL_PATH, POST,
+				restOperations.exchange(PERMISSIONS_URL_PATH, HttpMethod.POST,
 						new HttpEntity<>(credentialPermissions),
 						CredentialPermissions.class);
 				return null;

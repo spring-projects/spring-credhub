@@ -17,6 +17,7 @@
 package org.springframework.credhub.support;
 
 import org.junit.Test;
+import org.springframework.credhub.support.certificate.CertificateSummaryData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.core.certificate;
 
-import org.springframework.credhub.support.CertificateSummary;
+import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 

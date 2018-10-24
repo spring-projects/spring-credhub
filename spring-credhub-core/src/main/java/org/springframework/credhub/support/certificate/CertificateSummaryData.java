@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.credhub.support;
+package org.springframework.credhub.support.certificate;
 
 import java.util.Arrays;
 import java.util.List;

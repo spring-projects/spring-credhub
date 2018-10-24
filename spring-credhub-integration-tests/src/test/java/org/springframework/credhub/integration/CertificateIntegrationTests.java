@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.certificate.CredHubCertificateOperations;
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
-import org.springframework.credhub.support.CertificateSummary;
+import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialType;

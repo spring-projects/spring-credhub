@@ -36,6 +36,7 @@ import org.springframework.credhub.support.certificate.CertificateParametersRequ
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 public class CertificateIntegrationTests extends CredHubIntegrationTests {
 	private static final SimpleCredentialName CREDENTIAL_NAME =
@@ -46,6 +47,8 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Before
 	public void setUp() {
+		assumeTrue(serverApiIsV2());
+
 		credentials = operations.credentials();
 		certificates = operations.certificates();
 

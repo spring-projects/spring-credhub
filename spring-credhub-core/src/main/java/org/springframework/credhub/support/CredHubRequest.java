@@ -17,6 +17,7 @@
 package org.springframework.credhub.support;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.credhub.core.permission.CredHubPermissionOperations;
 import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.util.Assert;
 
@@ -206,6 +207,9 @@ public class CredHubRequest<T> {
 		 * Sets a value indicating the action CredHub should take when a credential being written
 		 * or generated already exists.
 		 *
+		 * As of CredHub 2.0, this value must not be set on write requests (write requests always
+		 * overwrite the credential that already exists) but may be set on generate requests.
+		 *
 		 * @param mode the {@link WriteMode} to use when a credential exists
 		 * @return the builder
 		 */
@@ -218,9 +222,10 @@ public class CredHubRequest<T> {
 		 * Add an {@link CredentialPermission} to the permissions that will be assigned to the
 		 * credential.
 		 *
-		 * @param permission a {@link CredentialPermission} to assign to the
-		 * credential
+		 * @param permission a {@link CredentialPermission} to assign to the credential
 		 * @return the builder
+		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to assign
+		 * permissions to a credential after it is created
 		 */
 		public B permission(CredentialPermission permission) {
 			targetObj.getAdditionalPermissions().add(permission);
@@ -234,6 +239,8 @@ public class CredHubRequest<T> {
 		 * @param permissions a collection of {@link CredentialPermission}s to
 		 * assign to the credential
 		 * @return the builder
+		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to assign
+		 * permissions to a credential after it is created
 		 */
 		public B permissions(Collection<? extends CredentialPermission> permissions) {
 			targetObj.getAdditionalPermissions().addAll(permissions);
@@ -247,6 +254,8 @@ public class CredHubRequest<T> {
 		 * @param permissions a collection of {@link CredentialPermission}s to
 		 * assign to the credential
 		 * @return the builder
+		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to assign
+		 * permissions to a credential after it is created
 		 */
 		public B permissions(CredentialPermission... permissions) {
 			targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));

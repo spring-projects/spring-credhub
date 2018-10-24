@@ -34,6 +34,7 @@ public abstract class CredHubRequestUnitTestsBase {
 	protected CredHubRequestBuilder requestBuilder;
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void serializationWithOnePermission() {
 		requestBuilder
 				.permission(CredentialPermission.builder()
@@ -50,7 +51,7 @@ public abstract class CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "deprecation"})
 	public void serializationWithThreePermissions() {
 		requestBuilder
 				.permission(CredentialPermission.builder()

@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubTemplate;
+import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.certificate.CertificateSummaryData;
 import org.springframework.credhub.support.CredentialType;
@@ -35,6 +36,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +46,15 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.BASE_URL_PATH;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.BULK_REGENERATE_URL_PATH;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.NAME_URL_QUERY;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.REGENERATED_CREDENTIALS_RESPONSE_FIELD;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.REGENERATE_URL_PATH;
+import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.SIGNED_BY_REQUEST_FIELD;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.TRANSITIONAL_REQUEST_FIELD;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.UPDATE_TRANSITIONAL_URL_PATH;
 import static org.springframework.credhub.core.certificate.CredHubCertificateTemplate.VERSION_REQUEST_FIELD;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -122,6 +128,29 @@ public class CredHubCertificateTemplateUnitTests {
 		assertThat(response.getValue().getCertificate()).isEqualTo("cert");
 		assertThat(response.getValue().getCertificateAuthority()).isEqualTo("authority");
 		assertThat(response.getValue().getPrivateKey()).isEqualTo("key");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void bulkRegenerate() {
+		Map<String, List<CredentialName>> expectedResponse =
+				Collections.singletonMap(REGENERATED_CREDENTIALS_RESPONSE_FIELD,
+						Arrays.<CredentialName>asList(
+								new SimpleCredentialName("example-certificate1"),
+								new SimpleCredentialName("example-certificate2")));
+
+		Map<String, Object> request = new HashMap<String, Object>() {{
+			put(SIGNED_BY_REQUEST_FIELD, NAME.getName());
+		}};
+
+		when(restTemplate.exchange(eq(BULK_REGENERATE_URL_PATH), eq(POST),
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
+				.thenReturn(new ResponseEntity<>(expectedResponse, OK));
+
+		List<CredentialName> response = credHubTemplate.regenerate(NAME);
+
+		assertThat(response).isNotNull();
+		assertThat(response).isEqualTo(expectedResponse.get(REGENERATED_CREDENTIALS_RESPONSE_FIELD));
 	}
 
 	@Test

@@ -56,6 +56,8 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	static final String SHOW_ALL_URL_QUERY = BASE_URL_PATH + "?paths=true";
 	static final String REGENERATE_URL_PATH = "/api/v1/regenerate";
 
+	static final String NAME_REQUEST_FIELD = "name";
+
 	private CredHubOperations credHubOperations;
 
 	/**
@@ -121,7 +123,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			@Override
 			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
 				Map<String, Object> request = new HashMap<>(1);
-				request.put("name", name.getName());
+				request.put(NAME_REQUEST_FIELD, name.getName());
 
 				ResponseEntity<CredentialDetails<T>> response =
 						restOperations.exchange(REGENERATE_URL_PATH, HttpMethod.POST,

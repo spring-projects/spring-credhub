@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.integration;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
@@ -42,6 +43,13 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 	public void setUp() {
 		credentials = operations.credentials();
 		permissions = operations.permissions();
+		
+		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+	}
+
+	@After
+	public void tearDown() {
+		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
 	}
 
 	@Test
@@ -80,7 +88,5 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 
 		List<CredentialPermission> afterDelete = permissions.getPermissions(CREDENTIAL_NAME);
 		assertThat(afterDelete).hasSize(0);
-
-		operations.credentials().deleteByName(CREDENTIAL_NAME);
 	}
 }

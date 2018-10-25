@@ -57,6 +57,14 @@ public interface CredHubCertificateOperations {
 	CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional);
 
 	/**
+	 * Regenerate all certificates in CredHub that were signed by the specified certificate.
+	 *
+	 * @param certificateName the name of the signing certificate credential; must not be {@literal null}
+	 * @return the names of all regenerated certificate credentials
+	 */
+	List<CredentialName> regenerate(CredentialName certificateName);
+
+	/**
 	 * Make the specified version of a certificate the {@literal transitional} version.
 	 *
 	 * @param id        the CredHub-generated ID of the certificate credential; must not be {@literal null}

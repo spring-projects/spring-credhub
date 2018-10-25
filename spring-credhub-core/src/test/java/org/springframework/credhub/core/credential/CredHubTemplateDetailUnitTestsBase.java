@@ -40,6 +40,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.BASE_URL_PATH;
 import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.ID_URL_PATH;
+import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_REQUEST_FIELD;
 import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY;
 import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY_CURRENT;
 import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_URL_QUERY_VERSIONS;
@@ -130,7 +131,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	void verifyRegenerate(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		Map<String, Object> request = new HashMap<String, Object>() {{
-				put("name", NAME.getName());
+				put(NAME_REQUEST_FIELD, NAME.getName());
 		}};
 
 		when(restTemplate.exchange(eq(REGENERATE_URL_PATH), eq(POST),

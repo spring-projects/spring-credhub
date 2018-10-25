@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.certificate;
 
+import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.KeyParameters;
 import org.springframework.util.Assert;
@@ -43,6 +44,7 @@ public class CertificateParameters extends KeyParameters {
 	/**
 	 * Create a {@link CertificateParameters} using defaults for all parameter values. Intended for internal use.
 	 */
+	@SuppressWarnings("unused")
 	private CertificateParameters() {
 		this.commonName = null;
 		this.alternativeNames = null;
@@ -345,6 +347,18 @@ public class CertificateParameters extends KeyParameters {
 		public CertificateParametersBuilder certificateAuthorityCredential(String certificateAuthorityCredential) {
 			Assert.notNull(certificateAuthorityCredential, "certificateAuthorityCredential must not be null");
 			this.certificateAuthorityCredential = certificateAuthorityCredential;
+			return this;
+		}
+
+		/**
+		 * Set the name of a certificate authority credential in CredHub to sign the generated certificate with.
+		 *
+		 * @param certificateAuthorityCredential the parameter value; must not be {@literal null}
+		 * @return the builder
+		 */
+		public CertificateParametersBuilder certificateAuthorityCredential(CredentialName certificateAuthorityCredential) {
+			Assert.notNull(certificateAuthorityCredential, "certificateAuthorityCredential must not be null");
+			this.certificateAuthorityCredential = certificateAuthorityCredential.getName();
 			return this;
 		}
 

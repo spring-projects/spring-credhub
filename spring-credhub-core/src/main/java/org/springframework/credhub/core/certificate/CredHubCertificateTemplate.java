@@ -36,7 +36,7 @@ import java.util.Map;
 
 /**
  * Implements the interactions with CredHub to retrieve, regenerate, and update
- *  * certificates.
+ * certificates.
  *
  * @author Scott Frederick 
  */
@@ -45,9 +45,12 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 	static final String NAME_URL_QUERY = BASE_URL_PATH + "?name={name}";
 	static final String REGENERATE_URL_PATH = BASE_URL_PATH + "/{id}/regenerate";
 	static final String UPDATE_TRANSITIONAL_URL_PATH = BASE_URL_PATH + "/{id}/update_transitional_version";
+	static final String BULK_REGENERATE_URL_PATH = "/api/v1/bulk-regenerate";
 
 	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 	static final String VERSION_REQUEST_FIELD = "version";
+	static final String SIGNED_BY_REQUEST_FIELD = "signed_by";
+	static final String REGENERATED_CREDENTIALS_RESPONSE_FIELD = "regenerated_credentials";
 
 	private CredHubOperations credHubOperations;
 
@@ -60,11 +63,6 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		this.credHubOperations = credHubOperations;
 	}
 
-	/**
-	 * Retrieve all certificates from CredHub.
-	 *
-	 * @return a collection of certificates
-	 */
 	@Override
 	public List<CertificateSummary> getAll() {
 		return credHubOperations.doWithRest(new RestOperationsCallback<List<CertificateSummary>>() {
@@ -81,12 +79,6 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		});
 	}
 
-	/**
-	 * Retrieve a certificate using its name.
-	 *
-	 * @param name the name of the certificate credential; must not be {@literal null}
-	 * @return the details of the retrieved certificate credential
-	 */
 	@Override
 	public CertificateSummary getByName(final CredentialName name) {
 		Assert.notNull(name, "certificate name must not be null");
@@ -105,14 +97,6 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		});
 	}
 
-	/**
-	 * Regenerate a certificate.
-	 *
-	 * @param id the CredHub-generated ID of the certificate credential; must not be {@literal null}
-	 * @param setAsTransitional {@code true} to mark the certificate version transitional;
-	 *                          {@code false} otherwise
-	 * @return the details of the certificate credential
-	 */
 	@Override
 	public CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional) {
 		Assert.notNull(id, "credential ID must not be null");
@@ -123,7 +107,7 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		return credHubOperations.doWithRest(new RestOperationsCallback<CertificateCredentialDetails>() {
 			@Override
 			public CertificateCredentialDetails doWithRestOperations(RestOperations restOperations) {
-				Map<String, Boolean> request = new HashMap<>();
+				Map<String, Boolean> request = new HashMap<>(1);
 				request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
 
 				ResponseEntity<CertificateCredentialDetails> response =
@@ -137,16 +121,30 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		});
 	}
 
-	/**
-	 * Make the specified version of a certificate the {@literal transitional} version.
-	 *
-	 * @param id        the CredHub-generated ID of the certificate credential; must not be {@literal null}
-	 *                  and must be an ID returned by {@link #getAll()}
-	 *                  or {@link #getByName(CredentialName)}
-	 * @param versionId the CredHub-generated ID of the version of the certificate credential that should be
-	 *                  marked {@literal transitional}
-	 * @return the details of the certificate credential, including all versions
-	 */
+	@Override
+	public List<CredentialName> regenerate(final CredentialName certificateName) {
+		Assert.notNull(certificateName, "certificate name must not be null");
+
+		final ParameterizedTypeReference<Map<String, List<CredentialName>>> ref =
+				new ParameterizedTypeReference<Map<String, List<CredentialName>>>() {};
+
+		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialName>>() {
+			@Override
+			public List<CredentialName> doWithRestOperations(RestOperations restOperations) {
+				Map<String, Object> request = new HashMap<>(1);
+				request.put(SIGNED_BY_REQUEST_FIELD, certificateName.getName());
+
+				ResponseEntity<Map<String, List<CredentialName>>> response =
+						restOperations.exchange(BULK_REGENERATE_URL_PATH, HttpMethod.POST,
+								new HttpEntity<>(request), ref);
+
+				ExceptionUtils.throwExceptionOnError(response);
+
+				return response.getBody().get(REGENERATED_CREDENTIALS_RESPONSE_FIELD);
+			}
+		});
+	}
+
 	public List<CertificateCredentialDetails> updateTransitionalVersion(final String id,
 																		final String versionId) {
 		Assert.notNull(id, "credential ID must not be null");
@@ -157,7 +155,7 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		return credHubOperations.doWithRest(new RestOperationsCallback<List<CertificateCredentialDetails>>() {
 			@Override
 			public List<CertificateCredentialDetails> doWithRestOperations(RestOperations restOperations) {
-				Map<String, String> request = new HashMap<>();
+				Map<String, String> request = new HashMap<>(1);
 				request.put(VERSION_REQUEST_FIELD, versionId);
 
 				ResponseEntity<List<CertificateCredentialDetails>> response =

@@ -132,6 +132,7 @@ public interface CredHubCredentialOperations {
 	 * Retrieve a collection of all paths that contain credentials.
 	 *
 	 * @return a collection of paths
+	 * @deprecated as of CredHub 2.0 this operation is not supported
 	 */
 	List<CredentialPath> getAllPaths();
 

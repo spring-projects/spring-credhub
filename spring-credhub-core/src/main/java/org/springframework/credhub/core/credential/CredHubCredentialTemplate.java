@@ -262,6 +262,7 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	}
 
 	@Override
+	@Deprecated
 	public List<CredentialPath> getAllPaths() {
 		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialPath>>() {
 			@Override

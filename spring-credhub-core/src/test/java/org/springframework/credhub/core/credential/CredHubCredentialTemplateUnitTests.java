@@ -36,6 +36,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubCredentialTemplateUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 	@Test
+	@SuppressWarnings("deprecation")
 	public void getAllPaths() {
 		when(restTemplate.getForEntity(SHOW_ALL_URL_QUERY, CredentialPathData.class))
 				.thenReturn(new ResponseEntity<>(new CredentialPathData(new CredentialPath("/path1"), new CredentialPath("/path2")), OK));

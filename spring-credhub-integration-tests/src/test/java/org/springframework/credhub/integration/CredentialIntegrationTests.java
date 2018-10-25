@@ -125,7 +125,6 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 		CredentialDetails<ValueCredential> written = credentials.write(ValueCredentialRequest.builder()
 				.name(CREDENTIAL_NAME)
 				.value(CREDENTIAL_VALUE)
-				.mode(WriteMode.OVERWRITE)
 				.build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(written.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
@@ -135,6 +134,15 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 		CredentialDetails<ValueCredential> overwritten = credentials.write(ValueCredentialRequest.builder()
 				.name(CREDENTIAL_NAME)
 				.value("new-value")
+				.mode(WriteMode.NO_OVERWRITE)
+				.build());
+		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(overwritten.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+
+		overwritten = credentials.write(ValueCredentialRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.value("new-value")
+				.mode(WriteMode.OVERWRITE)
 				.build());
 		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(overwritten.getValue().getValue()).isEqualTo("new-value");

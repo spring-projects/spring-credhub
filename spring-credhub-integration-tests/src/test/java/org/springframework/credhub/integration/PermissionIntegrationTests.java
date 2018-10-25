@@ -78,15 +78,17 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 				clientPermission);
 
 		List<CredentialPermission> retrievedPermissions = permissions.getPermissions(CREDENTIAL_NAME);
-		assertThat(retrievedPermissions).hasSize(3);
+		// CredHub 1.x will automatically add a permission for the authenticated user;
+		// CredHub 2.x will not
+		assertThat(retrievedPermissions.size()).isBetween(3, 4);
 
-		assertThat(retrievedPermissions).containsExactlyInAnyOrder(appPermission, userPermission, clientPermission);
+		assertThat(retrievedPermissions).contains(appPermission, userPermission, clientPermission);
 
 		permissions.deletePermission(CREDENTIAL_NAME, Actor.app("app1"));
 		permissions.deletePermission(CREDENTIAL_NAME, Actor.user("user1"));
 		permissions.deletePermission(CREDENTIAL_NAME, Actor.client("client1"));
 
 		List<CredentialPermission> afterDelete = permissions.getPermissions(CREDENTIAL_NAME);
-		assertThat(afterDelete).hasSize(0);
+		assertThat(afterDelete.size()).isBetween(0, 1);
 	}
 }

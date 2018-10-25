@@ -17,6 +17,7 @@
 package org.springframework.credhub.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
@@ -47,7 +48,12 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 		this.interpolation = operations.interpolation();
 		this.credentials = operations.credentials();
 	}
-	
+
+	@After
+	public void tearDown() {
+		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+	}
+
 	@Test
 	@SuppressWarnings("unchecked")
 	public void interpolate() throws IOException {

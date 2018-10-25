@@ -48,8 +48,6 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Before
 	public void setUp() {
-		assumeTrue(serverApiIsV2());
-
 		credentials = operations.credentials();
 		certificates = operations.certificates();
 
@@ -65,6 +63,8 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void generateCertificate() {
+		assumeTrue(serverApiIsV2());
+
 		CredentialDetails<CertificateCredential> certificate =
 				credentials.generate(CertificateParametersRequest.builder()
 						.name(TEST_CERT_NAME)
@@ -91,6 +91,8 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void regenerateCertificate() {
+		assumeTrue(serverApiIsV2());
+
 		CredentialDetails<CertificateCredential> certificate =
 				credentials.generate(CertificateParametersRequest.builder()
 						.name(TEST_CERT_NAME)
@@ -116,6 +118,8 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void rotateCertificate() {
+		assumeTrue(serverApiIsV2());
+
 		CredentialDetails<CertificateCredential> certificate =
 				credentials.generate(CertificateParametersRequest.builder()
 						.name(TEST_CERT_NAME)

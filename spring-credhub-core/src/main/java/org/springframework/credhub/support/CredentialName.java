@@ -96,4 +96,11 @@ public class CredentialName {
 	public int hashCode() {
 		return Objects.hashCode(segments);
 	}
+
+	@Override
+	public String toString() {
+		return "CredentialName{" +
+				getName() + 
+				'}';
+	}
 }

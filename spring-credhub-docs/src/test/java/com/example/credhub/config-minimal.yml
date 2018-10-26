@@ -1,0 +1,3 @@
+spring:
+  credhub:
+    url: [CredHub server URL]

@@ -1,0 +1,31 @@
+= Spring CredHub
+Scott Frederick;
+:revdate: {localdate}
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+:examples-dir: ../../test/java/com/example/credhub/
+:credhub-home: https://docs.cloudfoundry.org/credhub/
+:credhub-api: https://credhub-api.cfapps.io/
+:cloudfoundry-home: https://www.cloudfoundry.org/
+
+(C) 2017-2018 The original authors.
+
+NOTE: _Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically._
+
+[[abstract]]
+
+Spring CredHub provides client-side support for storing, retrieving, and deleting credentials from a {credhub-home}[CredHub] server running in a {cloudfoundry-home}[Cloud Foundry] platform.
+
+CredHub provides an {credhub-api}[HTTP API] to securely store, generate, retrieve, and delete credentials of various types. Spring CredHub provides a Java binding for the CredHub API, making it easy to integrate Spring applications with CredHub.
+
+toc::[]
+
+include::getting-started.adoc[]
+include::boot-configuration.adoc[]
+include::operations.adoc[]
+include::http-clients.adoc[]

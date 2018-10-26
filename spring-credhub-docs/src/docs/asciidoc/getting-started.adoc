@@ -1,0 +1,29 @@
+[[getting-started]]
+== Getting started
+
+Spring CredHub supports CredHub server version 1.x and 2.x.
+This library is intended to provide full coverage of the CredHub API - all operations on all credential types.
+
+Spring CredHub has been optimized to work with Spring Boot applications.
+To include Spring CredHub in a Spring Boot application, add a dependency to the project build file.
+
+=== Maven dependencies
+
+Add the Spring CredHub starter to the `dependencies` section of the build file:
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.credhub</groupId>
+            <artifactId>spring-credhub-starter</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
+
+=== Gradle dependencies
+
+Add the Spring CredHub starter to the `dependencies` section of the build file:
+
+    dependencies {
+        compile('org.springframework.credhub:spring-credhub-starter:${version}')
+    }
+

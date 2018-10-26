@@ -1,0 +1,43 @@
+[[operations]]
+== Introduction to CredHubOperations
+
+The interface `org.springframework.credhub.core.CredHubOperations` and the implementation `org.springframework.credhub.core.CredHubTemplate` are the central class in Spring CredHub.
+A Spring bean of this type is created using Spring Boot auto-configuration when application properties are properly configured.
+Application classes can autowire an instance of this bean to interact with a CredHub server.
+
+[source,java,%autofit]
+----
+include::{examples-dir}/CredHubService.java[]
+----
+
+`CredHubOperations` provides access to additional operations interfaces that model the full CredHub API:
+
+[source,java,%autofit]
+----
+/**
+ * Get the operations for saving, retrieving, and deleting credentials.
+ */
+CredHubCredentialOperations credentials();
+
+/**
+ * Get the operations for adding, retrieving, and deleting credential permissions.
+ */
+CredHubPermissionOperations permissions();
+
+/**
+ * Get the operations for retrieving, regenerating, and updating certificates.
+ */
+CredHubCertificateOperations certificates();
+
+/**
+ * Get the operations for interpolating service binding credentials.
+ */
+CredHubInterpolationOperations interpolation();
+
+/**
+ * Get the operations for retrieving CredHub server information.
+ */
+CredHubInfoOperations info();
+----
+
+

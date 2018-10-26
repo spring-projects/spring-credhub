@@ -1,0 +1,7 @@
+spring:
+  credhub:
+    url: [CredHub server URL]
+    oauth2:
+      client-id: [OAuth2 client ID]
+      client-secret: [OAuth2 client secret]
+      access-token-uri: [OAuth2 token server endpoint]

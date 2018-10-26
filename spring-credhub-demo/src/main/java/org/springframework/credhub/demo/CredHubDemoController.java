@@ -24,8 +24,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.credhub.core.CredHubOperations;
-import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.core.credential.CredHubCredentialOperations;
+import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
+import org.springframework.credhub.core.permission.CredHubPermissionOperations;
 import org.springframework.credhub.support.permissions.CredentialPermission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
@@ -34,25 +37,23 @@ import org.springframework.credhub.support.json.JsonCredential;
 import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.ServicesData;
+import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.credhub.support.permissions.Operation.DELETE;
-import static org.springframework.credhub.support.permissions.Operation.READ;
-import static org.springframework.credhub.support.permissions.Operation.READ_ACL;
-import static org.springframework.credhub.support.permissions.Operation.WRITE;
-import static org.springframework.credhub.support.permissions.Operation.WRITE_ACL;
-
 @RestController
 public class CredHubDemoController {
-	private static final String APP_GUID_1 = UUID.randomUUID().toString();
 	private static final String APP_GUID_2 = UUID.randomUUID().toString();
 
-	private CredHubOperations credHubTemplate;
+	private CredHubCredentialOperations credentialOperations;
+	private final CredHubPermissionOperations permissionOperations;
+	private final CredHubInterpolationOperations interpolationOperations;
 
-	public CredHubDemoController(CredHubOperations credHubTemplate) {
-		this.credHubTemplate = credHubTemplate;
+	public CredHubDemoController(CredHubOperations credHubOperations) {
+		this.credentialOperations = credHubOperations.credentials();
+		this.permissionOperations = credHubOperations.permissions();
+		this.interpolationOperations = credHubOperations.interpolation();
 	}
 
 	@PostMapping("/test")
@@ -60,8 +61,11 @@ public class CredHubDemoController {
 		Results results = new Results();
 
 		try {
-			CredentialDetails<JsonCredential> credentialDetails = writeCredentials(value, results);
-			CredentialName credentialName = credentialDetails.getName();
+			SimpleCredentialName credentialName =
+					new SimpleCredentialName("spring-credhub", "demo", "credentials_json");
+
+			CredentialDetails<JsonCredential> credentialDetails =
+					writeCredentials(credentialName, value, results);
 
 			getCredentialsById(credentialDetails.getId(), results);
 
@@ -69,13 +73,11 @@ public class CredHubDemoController {
 
 			findCredentialsByName(credentialName, results);
 
-			findCredentialsByPath(credentialName.getName(), results);
+			findCredentialsByPath("/spring-credhub/demo", results);
 
 			getCredentialPermissions(credentialName, results);
 
 			addCredentialPermissions(credentialName, results);
-
-			deleteCredentialPermission(credentialName, results);
 
 			getCredentialPermissions(credentialName, results);
 
@@ -89,20 +91,16 @@ public class CredHubDemoController {
 		return results;
 	}
 
-	private CredentialDetails<JsonCredential> writeCredentials(Map<String, Object> value, Results results) {
+	private CredentialDetails<JsonCredential> writeCredentials(SimpleCredentialName name,
+															   Map<String, Object> value,
+															   Results results) {
 		try {
 			JsonCredentialRequest request = JsonCredentialRequest.builder()
-					.overwrite(true)
-					.name(new SimpleCredentialName("spring-credhub", "demo", "credentials_json"))
+					.name(name)
 					.value(value)
-					.permission(CredentialPermission.builder()
-							.app(APP_GUID_1)
-							.operation(READ)
-							.operation(WRITE)
-							.build())
 					.build();
 
-			CredentialDetails<JsonCredential> credentialDetails = credHubTemplate.write(request);
+			CredentialDetails<JsonCredential> credentialDetails = credentialOperations.write(request);
 			saveResults(results, "Successfully wrote credentials: ", credentialDetails);
 
 			return credentialDetails;
@@ -116,7 +114,7 @@ public class CredHubDemoController {
 	private void getCredentialsById(String id, Results results) {
 		try {
 			CredentialDetails<JsonCredential> retrievedDetails =
-					credHubTemplate.getById(id, JsonCredential.class);
+					credentialOperations.getById(id, JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by ID: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error retrieving credentials by ID: ", e.getMessage());
@@ -126,7 +124,7 @@ public class CredHubDemoController {
 	private void getCredentialsByName(CredentialName name, Results results) {
 		try {
 			CredentialDetails<JsonCredential> retrievedDetails =
-					credHubTemplate.getByName(name, JsonCredential.class);
+					credentialOperations.getByName(name, JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by name: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error retrieving credentials by name: ", e.getMessage());
@@ -135,7 +133,7 @@ public class CredHubDemoController {
 
 	private void findCredentialsByName(CredentialName name, Results results) {
 		try {
-			List<CredentialSummary> retrievedDetails = credHubTemplate.findByName(name);
+			List<CredentialSummary> retrievedDetails = credentialOperations.findByName(name);
 			saveResults(results, "Successfully found credentials by name: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error finding credentials by name: ", e.getMessage());
@@ -144,7 +142,7 @@ public class CredHubDemoController {
 
 	private void findCredentialsByPath(String path, Results results) {
 		try {
-			List<CredentialSummary> retrievedDetails = credHubTemplate.findByPath(path);
+			List<CredentialSummary> retrievedDetails = credentialOperations.findByPath(path);
 			saveResults(results, "Successfully found credentials by path: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error finding credentials by path: ", e.getMessage());
@@ -153,7 +151,7 @@ public class CredHubDemoController {
 
 	private void getCredentialPermissions(CredentialName name, Results results) {
 		try {
-			List<CredentialPermission> retrievedDetails = credHubTemplate.getPermissions(name);
+			List<CredentialPermission> retrievedDetails = permissionOperations.getPermissions(name);
 			saveResults(results, "Successfully retrieved credential permissions: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error retrieving credential permissions: ", e.getMessage());
@@ -164,28 +162,20 @@ public class CredHubDemoController {
 		try {
 			CredentialPermission permission = CredentialPermission.builder()
 					.app(APP_GUID_2)
-					.operations(READ_ACL, WRITE_ACL, DELETE)
+					.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
 					.build();
 
-			List<CredentialPermission> permissions = credHubTemplate.addPermissions(name, permission);
-			saveResults(results, "Successfully added permissions: ", permissions);
+			permissionOperations.addPermissions(name, permission);
+			saveResults(results, "Successfully added permissions");
 		} catch (Exception e) {
 			saveResults(results, "Error adding permission: ", e.getMessage());
-		}	}
-
-	private void deleteCredentialPermission(CredentialName name, Results results) {
-		try {
-			credHubTemplate.deletePermission(name, Actor.app(APP_GUID_1));
-			saveResults(results, "Successfully deleted permission");
-		} catch (Exception e) {
-			saveResults(results, "Error deleting permission: ", e.getMessage());
 		}
 	}
 
 	private void interpolateServiceData(CredentialName name, Results results) {
 		try {
 			ServicesData request = buildServicesData(name.getName());
-			ServicesData interpolatedServiceData = credHubTemplate.interpolateServiceData(request);
+			ServicesData interpolatedServiceData = interpolationOperations.interpolateServiceData(request);
 			saveResults(results, "Successfully interpolated service data: ", interpolatedServiceData);
 		} catch (Exception e) {
 			saveResults(results, "Error interpolating service data: ", e.getMessage());
@@ -194,7 +184,7 @@ public class CredHubDemoController {
 
 	private void deleteCredentials(CredentialName name, Results results) {
 		try {
-			credHubTemplate.deleteByName(name);
+			credentialOperations.deleteByName(name);
 			saveResults(results, "Successfully deleted credentials");
 		} catch (Exception e) {
 			saveResults(results, "Error deleting credentials by name: ", e.getMessage());

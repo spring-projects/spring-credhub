@@ -19,11 +19,11 @@ description = 'Spring CredHub Cloud Connector'
 dependencies {
 	compile project(':spring-credhub-core')
 
-	compile group: 'org.springframework', name: 'spring-core', version: "${springVersion}"
-	compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: "${springCloudConnectorsVersion}"
+	compile "org.springframework:spring-core:${springVersion}"
+	compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
 
-	testCompile group: 'org.springframework', name: 'spring-test', version: "${springVersion}"
-	testCompile group: 'junit', name: 'junit', version: "${junitVersion}"
-	testCompile group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
-	testCompile group: 'org.assertj', name: 'assertj-core', version: "${assertJVersion}"
+	testImplementation("org.springframework:spring-test:${springVersion}")
+	testImplementation("junit:junit:${junitVersion}")
+	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+	testImplementation("org.assertj:assertj-core:${assertJVersion}")
 }

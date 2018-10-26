@@ -44,10 +44,10 @@ apply plugin: 'propdeps-eclipse'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	compile group: 'org.springframework.credhub', name: 'spring-credhub-starter', version: '1.0.0.RELEASE'
+	compile("org.springframework.credhub:spring-credhub-starter:1.0.0.RELEASE")
 
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+	compile("org.springframework.boot:spring-boot-starter-web")
+	compile("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 repositories {

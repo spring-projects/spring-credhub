@@ -29,8 +29,6 @@ public class ClientOptions {
 
 	private Integer readTimeout;
 
-	private boolean trustSelfSignedCerts;
-
 	private String[] caCertFiles;
 
 	/**
@@ -39,7 +37,6 @@ public class ClientOptions {
 	public ClientOptions() {
 		this.connectionTimeout = null;
 		this.readTimeout = null;
-		this.trustSelfSignedCerts = false;
 		this.caCertFiles = null;
 	}
 
@@ -50,14 +47,11 @@ public class ClientOptions {
 	 *                             be greater {@literal 0}
 	 * @param readTimeout          read timeout in {@link TimeUnit#MILLISECONDS}, must be greater
 	 *                             {@literal 0}
-	 * @param trustSelfSignedCerts trust self-signed SSL certficates
 	 * @param caCertFiles          one or more CA certificate files to use when connecting
 	 */
-	public ClientOptions(int connectionTimeout, int readTimeout, boolean trustSelfSignedCerts,
-						 String[] caCertFiles) {
+	public ClientOptions(int connectionTimeout, int readTimeout, String[] caCertFiles) {
 		this.connectionTimeout = connectionTimeout;
 		this.readTimeout = readTimeout;
-		this.trustSelfSignedCerts = trustSelfSignedCerts;
 		this.caCertFiles = caCertFiles;
 	}
 
@@ -85,14 +79,6 @@ public class ClientOptions {
 
 	public void setReadTimeout(Integer readTimeout) {
 		this.readTimeout = readTimeout;
-	}
-
-	public boolean isTrustSelfSignedCerts() {
-		return this.trustSelfSignedCerts;
-	}
-
-	public void setTrustSelfSignedCerts(boolean trustSelfSignedCerts) {
-		this.trustSelfSignedCerts = trustSelfSignedCerts;
 	}
 
 	public String[] getCaCertFiles() {

@@ -18,23 +18,23 @@ package org.springframework.credhub.configuration;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.SslProvider;
 import okhttp3.OkHttpClient.Builder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 
@@ -57,6 +57,8 @@ import org.springframework.util.ClassUtils;
  */
 public class ClientHttpRequestFactoryFactory {
 	private static final Log logger = LogFactory.getLog(ClientHttpRequestFactoryFactory.class);
+
+	private static SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
 
 	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent(
 			"org.apache.http.client.HttpClient",
@@ -96,9 +98,8 @@ public class ClientHttpRequestFactoryFactory {
 				logger.info("Using Netty for HTTP connections");
 				return Netty.usingNetty(options);
 			}
-		}
-		catch (Exception e) {
-			logger.warn("Exception caught while configuring HTTP connections", e);
+		} catch (GeneralSecurityException | IOException e) {
+			logger.warn("Error configuring HTTP connections", e);
 		}
 
 		logger.info("Defaulting to java.net.HttpUrlConnection for HTTP connections");
@@ -131,11 +132,23 @@ public class ClientHttpRequestFactoryFactory {
 	 */
 	static class HttpComponents {
 		static ClientHttpRequestFactory usingHttpComponents(ClientOptions options)
-				throws GeneralSecurityException, IOException {
+				throws GeneralSecurityException {
 
-			HttpClientBuilder httpClientBuilder = HttpClients.custom()
-					.setSSLContext(SSLContext.getDefault())
-					.useSystemProperties();
+			HttpClientBuilder httpClientBuilder = HttpClients.custom();
+
+			if (usingCustomCerts(options)) {
+				SSLContext sslContext = sslCertificateUtils.getSSLContext(options.getCaCertFiles());
+				SSLConnectionSocketFactory sslSocketFactory =
+						new SSLConnectionSocketFactory(sslContext);
+
+				httpClientBuilder
+						.setSSLSocketFactory(sslSocketFactory)
+						.setSSLContext(sslContext);
+			} else {
+				httpClientBuilder
+						.setSSLContext(SSLContext.getDefault())
+						.useSystemProperties();
+			}
 
 			RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
 					.setAuthenticationEnabled(true);
@@ -161,12 +174,23 @@ public class ClientHttpRequestFactoryFactory {
 	 */
 	static class OkHttp3 {
 		static ClientHttpRequestFactory usingOkHttp3(ClientOptions options)
-				throws IOException, GeneralSecurityException {
+				throws GeneralSecurityException {
 
-			SSLSocketFactory socketFactory = SSLContext.getDefault().getSocketFactory();
-			X509TrustManager trustManager = getTrustManager();
+			Builder builder = new Builder();
 
-			Builder builder = new Builder().sslSocketFactory(socketFactory, trustManager);
+			if (usingCustomCerts(options)) {
+				SSLSocketFactory socketFactory =
+						sslCertificateUtils.getSSLContext(options.getCaCertFiles()).getSocketFactory();
+				X509TrustManager trustManager =
+						sslCertificateUtils.createTrustManager(options.getCaCertFiles());
+
+				builder.sslSocketFactory(socketFactory, trustManager);
+			} else {
+				SSLSocketFactory socketFactory = SSLContext.getDefault().getSocketFactory();
+				X509TrustManager trustManager = sslCertificateUtils.getDefaultX509TrustManager();
+
+				builder.sslSocketFactory(socketFactory, trustManager);
+			}
 
 			if (options.getConnectionTimeout() != null) {
 				builder.connectTimeout(options.getConnectionTimeout(), TimeUnit.MILLISECONDS);
@@ -178,27 +202,6 @@ public class ClientHttpRequestFactoryFactory {
 			return new OkHttp3ClientHttpRequestFactory(builder.build());
 		}
 
-		private static X509TrustManager getTrustManager() {
-			try {
-				TrustManagerFactory trustManagerFactory =
-						TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-				trustManagerFactory.init((KeyStore) null);
-
-				TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-				
-				for (TrustManager trustManager : trustManagers) {
-					if (trustManager instanceof X509TrustManager) {
-						return (X509TrustManager) trustManager;
-					}
-				}
-
-				throw new IllegalStateException("Unable to setup SSL with OkHttp3; no X509TrustManager found in: " +
-						Arrays.toString(trustManagers));
-			} catch (GeneralSecurityException e) {
-				throw new IllegalStateException("Unable to setup SSL with OkHttp3; error getting a X509TrustManager: " +
-						e.getMessage(), e);
-			}
-		}
 	}
 
 	/**
@@ -209,13 +212,11 @@ public class ClientHttpRequestFactoryFactory {
 	 */
 	static class Netty {
 
+		@SuppressWarnings("deprecation")
 		static ClientHttpRequestFactory usingNetty(ClientOptions options)
 				throws IOException, GeneralSecurityException {
 
-			SslContext sslContext = new JdkSslContext(SSLContext.getDefault(), true, ClientAuth.REQUIRE);
-
 			final Netty4ClientHttpRequestFactory requestFactory = new Netty4ClientHttpRequestFactory();
-			requestFactory.setSslContext(sslContext);
 
 			if (options.getConnectionTimeout() != null) {
 				requestFactory.setConnectTimeout(options.getConnectionTimeout());
@@ -224,7 +225,29 @@ public class ClientHttpRequestFactoryFactory {
 				requestFactory.setReadTimeout(options.getReadTimeout());
 			}
 
+			if (usingCustomCerts(options)) {
+				TrustManagerFactory trustManagerFactory =
+						sslCertificateUtils.createTrustManagerFactory(options.getCaCertFiles());
+				
+				SslContext sslContext = SslContextBuilder
+						.forClient()
+						.sslProvider(SslProvider.JDK)
+						.trustManager(trustManagerFactory)
+						.build();
+
+				requestFactory.setSslContext(sslContext);
+			} else {
+				SslContext sslContext = new JdkSslContext(SSLContext.getDefault(), true, ClientAuth.REQUIRE);
+
+				requestFactory.setSslContext(sslContext);
+			}
+
 			return requestFactory;
 		}
+
+	}
+	
+	private static boolean usingCustomCerts(ClientOptions options) {
+		return options.getCaCertFiles() != null;
 	}
 }

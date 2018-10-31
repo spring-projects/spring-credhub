@@ -1,15 +1,21 @@
+:apidocs-credentials: {apidocs-home}?org/springframework/credhub/core/credential/CredHubCredentialOperations.html
+:apidocs-certificates: {apidocs-home}?org/springframework/credhub/core/certificate/CredHubCertificateOperations.html
+:apidocs-permissions: {apidocs-home}?org/springframework/credhub/core/permission/CredHubPermissionOperations.html
+:apidocs-permissionsV2: {apidocs-home}?org/springframework/credhub/core/permissionV2/CredHubPermissionV2Operations.html
+:apidocs-interpolation: {apidocs-home}?org/springframework/credhub/core/interpolation/CredHubInterpolationOperations.html
+:apidocs-info: {apidocs-home}?org/springframework/credhub/core/info/CredHubInfoOperations.html
+
+:credhub-api-credentials: {credhub-api-home}version/2.0/#credentials
+:credhub-api-certificates: {credhub-api-home}version/2.0/#certificates
+:credhub-api-permissions: {credhub-api-home}version/1.9/#permissions
+:credhub-api-permissionsV2: {credhub-api-home}version/2.0/#permissions
+:credhub-api-interpolation: {credhub-api-home}version/2.0/#interpolate-endpoint
+:credhub-api-info: {credhub-api-home}version/2.0/#get-version
+
 [[operations]]
 == Introduction to CredHubOperations
 
 The interface `org.springframework.credhub.core.CredHubOperations` and the implementation `org.springframework.credhub.core.CredHubTemplate` are the central class in Spring CredHub.
-A Spring bean of this type is created using Spring Boot auto-configuration when application properties are properly configured.
-Application classes can autowire an instance of this bean to interact with a CredHub server.
-
-[source,java,%autofit]
-----
-include::{examples-dir}/CredHubService.java[]
-----
-
 `CredHubOperations` provides access to additional operations interfaces that model the full CredHub API:
 
 [source,java,%autofit]
@@ -23,6 +29,11 @@ CredHubCredentialOperations credentials();
  * Get the operations for adding, retrieving, and deleting credential permissions.
  */
 CredHubPermissionOperations permissions();
+
+/**
+ * Get the operations for adding, retrieving, and deleting credential permissions.
+ */
+CredHubPermissionV2Operations permissionsV2();
 
 /**
  * Get the operations for retrieving, regenerating, and updating certificates.
@@ -39,5 +50,31 @@ CredHubInterpolationOperations interpolation();
  */
 CredHubInfoOperations info();
 ----
+
+=== Mapping to CredHub API
+
+Each method of the `Operations` interfaces maps directly to one endpoint of the CredHub HTTP API.
+The following table shows the mapping between the CredHub API and the appropriate Spring CredHub `Operations` interface.
+
+|=======
+| {credhub-api-credentials}[CredHub Credentials API] | {apidocs-credentials}[CredHubCredentialOperations]
+| {credhub-api-permissions}[CredHub Permissions API] (v1) | {apidocs-permissions}[CredHubPermissionOperations]
+| {credhub-api-permissionsV2}[CredHub Permissions API] (v2) | {apidocs-permissionsV2}[CredHubPermissionV2Operations]
+| {credhub-api-certificates}[CredHub Certificates API] | {apidocs-certificates}[CredHubCertificateOperations]
+| {credhub-api-interpolation}[CredHub Interpolation API] | {apidocs-interpolation}[CredHubInterpolationOperations]
+| {credhub-api-info}[CredHub Information API] | {apidocs-info}[CredHubInfoOperations]
+|=======
+
+=== CredHubOperations Auto-configuration
+
+A `CredHubOperations` Spring bean is created using Spring Boot auto-configuration when application properties are properly configured.
+Application classes can autowire an instance of this bean to interact with a CredHub server.
+
+[source,java,%autofit]
+----
+include::{examples-dir}/CredHubService.java[]
+----
+
+
 
 

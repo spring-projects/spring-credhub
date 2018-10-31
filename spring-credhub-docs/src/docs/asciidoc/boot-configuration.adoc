@@ -1,3 +1,6 @@
+:credhub-api-mtls: {credhub-api-home}version/2.0/#mutual-tls
+:credhub-api-oauth: {credhub-api-home}version/2.0/#uaa-oauth2
+
 [[boot-configuration]]
 == Spring Boot Configuration
 
@@ -6,7 +9,7 @@ With the proper configuration, Spring CredHub will auto-configure a connection t
 
 === Mutual TLS Authentication
 
-An application running on Cloud Foundry can authenticate to a CredHub server deployed to the same platform using https://github.com/cloudfoundry-incubator/credhub/blob/master/docs/mutual-tls.md[mutual TLS].
+An application running on Cloud Foundry can authenticate to a CredHub server deployed to the same platform using mutual TLS.
 Mutual TLS is the default authentication scheme when no other authentication credentials are provided.
 To use mutual TLS authentication to a CredHub server, simply provide the URL of the CredHub server as an application property:
 
@@ -14,6 +17,8 @@ To use mutual TLS authentication to a CredHub server, simply provide the URL of 
 ----
 include::{examples-dir}/config-minimal.yml[]
 ----
+
+See the {credhub-api-mtls}[CredHub documentation] for more information on mutual TLS authentication.
 
 An application running on Cloud Foundry can use the internal address `https://credhub.service.cf.internal:8844` to communicate with a CredHub server deployed to the same platform.
 
@@ -27,6 +32,7 @@ Spring CredHub supports client credentials grant tokens for authentication with 
 include::{examples-dir}/config-oauth2.yml[]
 ----
 
-The OAuth2 client identified by the `client-id` must have CredHub scopes such as `credhub.read` or `credhub.write` to perform most operations. 
+The OAuth2 client identified by the `client-id` must have CredHub scopes such as `credhub.read` or `credhub.write` to perform most operations.
+See the {credhub-api-oauth}[CredHub documentation] for more information on OAuth2 authentication with UAA.
 
 

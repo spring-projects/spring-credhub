@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.configuration;
 
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -67,13 +66,10 @@ class SslCertificateUtils {
 
 	SSLContext getSSLContext(String[] caCertFiles) {
 		try {
-			KeyManagerFactory keyManagerFactory = createKeyManagerFactory(caCertFiles);
 			TrustManagerFactory trustManagerFactory = createTrustManagerFactory(caCertFiles);
 
 			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(keyManagerFactory.getKeyManagers(),
-					trustManagerFactory.getTrustManagers(),
-					null);
+			sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 
 			return sslContext;
 		} catch (GeneralSecurityException e) {
@@ -100,25 +96,11 @@ class SslCertificateUtils {
 				.getTrustManagers();
 
 		if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-			throw new IllegalStateException("Unexpected default trust managers:"
+			throw new IllegalStateException("Unexpected default trust managers: "
 					+ Arrays.toString(trustManagers));
 		}
 
 		return (X509TrustManager) trustManagers[0];
-	}
-
-	private KeyManagerFactory createKeyManagerFactory(String[] caCertFiles) {
-		try {
-			KeyStore keyStore = loadCertificateStore(caCertFiles);
-
-			KeyManagerFactory keyManagerFactory = KeyManagerFactory
-					.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-			keyManagerFactory.init(keyStore, new char[0]);
-
-			return keyManagerFactory;
-		} catch (GeneralSecurityException e) {
-			throw new IllegalStateException("Error creating KeyManagerFactory: " + e.getMessage(), e);
-		}
 	}
 
 	private KeyStore loadCertificateStore(String[] caCertFiles) {
@@ -139,7 +121,7 @@ class SslCertificateUtils {
 		List<X509Certificate> certs = new ArrayList<>();
 		for (String fileName : caCertFiles) {
 			BufferedInputStream bufferedStream = getFileStream(fileName);
-			certs.add(generateCertificate(fileName, bufferedStream));
+			certs.addAll(generateCertificates(fileName, bufferedStream));
 		}
 		return certs.toArray(new X509Certificate[0]);
 	}
@@ -149,15 +131,23 @@ class SslCertificateUtils {
 			FileInputStream fileStream = new FileInputStream(new File(fileName));
 			return new BufferedInputStream(fileStream);
 		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("CA cert file not found: " + fileName, e);
+			throw new IllegalArgumentException("Certificate file not found: " + fileName, e);
 		}
 	}
 
-	private X509Certificate generateCertificate(String fileName, InputStream inputStream) {
+	private List<X509Certificate> generateCertificates(String fileName, InputStream inputStream) {
+		int minCertLength = ("-----BEGIN CERTIFICATE-----" + "-----END CERTIFICATE-----").length();
+
 		try {
-			return (X509Certificate) CertificateFactory.getInstance("X.509")
-					.generateCertificate(inputStream);
-		} catch (CertificateException e) {
+			CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+			List<X509Certificate> certs = new ArrayList<>();
+
+			do {
+				certs.add((X509Certificate) certificateFactory.generateCertificate(inputStream));
+			} while (inputStream.available() > minCertLength);
+
+			return certs;
+		} catch (CertificateException | IOException e) {
 			throw new IllegalStateException("Error reading certificate from file "
 					+ fileName + ": " + e.getMessage(), e);
 		}
@@ -165,12 +155,12 @@ class SslCertificateUtils {
 
 	private void addCertsToCertificateStore(KeyStore keyStore, X509Certificate[] certs) {
 		try {
-			int count = 0;
 			for (X509Certificate cert : certs) {
-				keyStore.setCertificateEntry("" + count++, cert);
+				String alias = cert.getSubjectX500Principal().getName();
+				keyStore.setCertificateEntry(alias, cert);
 			}
 		} catch (KeyStoreException e) {
-			throw new IllegalStateException("Error creating new truststore: " + e.getMessage(), e);
+			throw new IllegalStateException("Error creating new certificate store: " + e.getMessage(), e);
 		}
 	}
 }

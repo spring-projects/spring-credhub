@@ -7,7 +7,7 @@ This library is intended to provide full coverage of the CredHub API - all opera
 Spring CredHub has been optimized to work with Spring Boot applications.
 To include Spring CredHub in a Spring Boot application, add a dependency to the project build file.
 
-=== Maven dependencies
+=== Maven Dependencies
 
 Add the Spring CredHub starter to the `dependencies` section of the build file:
 
@@ -19,7 +19,7 @@ Add the Spring CredHub starter to the `dependencies` section of the build file:
         </dependency>
     </dependencies>
 
-=== Gradle dependencies
+=== Gradle Dependencies
 
 Add the Spring CredHub starter to the `dependencies` section of the build file:
 

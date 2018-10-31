@@ -46,6 +46,7 @@ public interface CredHubPermissionV2Operations {
 	/**
 	 * Add permissions to an existing credential.
 	 *
+	 * @param id the CredHub-assigned ID of the permission; must not be {@literal null}
 	 * @param path the path of the credentials; must not be {@literal null}
 	 * @param permission a permission to add
 	 * @return the details if the added permission

@@ -33,3 +33,5 @@ asciidoctor {
 			'nofooter': true,
 			'allow-uri-read': ''
 }
+
+configurations.archives.artifacts.clear()

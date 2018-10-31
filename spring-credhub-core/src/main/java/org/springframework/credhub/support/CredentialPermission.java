@@ -18,6 +18,7 @@
 
 package org.springframework.credhub.support;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.credhub.support.permissions.Permission;
 
@@ -31,6 +32,7 @@ import java.util.Objects;
  * @author Scott Frederick
  */
 public class CredentialPermission {
+	@JsonProperty("uuid")
 	private final String uuid;
 	private final CredentialName path;
 

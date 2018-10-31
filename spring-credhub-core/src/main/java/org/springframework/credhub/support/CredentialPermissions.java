@@ -18,22 +18,22 @@
 
 package org.springframework.credhub.support;
 
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * A collection of {@link CredentialPermission}s. Clients don't typically instantiate
- * objects of this type, but will receive them in response to write and retrieve
- * requests.
+ * A collection of {@link Permission}s associated with a credential. Clients don't
+ * typically instantiate objects of this type, but will receive them in response
+ * to write and retrieve requests.
  *
  * @author Scott Frederick
  */
 public class CredentialPermissions {
 	private final CredentialName credentialName;
-	private final List<CredentialPermission> permissions;
+	private final List<Permission> permissions;
 
 	/**
 	 * Create a {@link CredentialPermissions}.
@@ -50,9 +50,9 @@ public class CredentialPermissions {
 	 * CredHub responses.
 	 *
 	 * @param credentialName the name of the credential that the permissions will apply to
-	 * @param permissions a collection of {@link CredentialPermission}s
+	 * @param permissions a collection of {@link Permission}s
 	 */
-	public CredentialPermissions(CredentialName credentialName, CredentialPermission... permissions) {
+	public CredentialPermissions(CredentialName credentialName, Permission... permissions) {
 		this.credentialName = credentialName;
 		this.permissions = Arrays.asList(permissions);
 	}
@@ -67,11 +67,11 @@ public class CredentialPermissions {
 	}
 
 	/**
-	 * Get the collection of {@link CredentialPermission}s.
+	 * Get the collection of {@link Permission}s.
 	 *
-	 * @return the collection of {@link CredentialPermission}s
+	 * @return the collection of {@link Permission}s
 	 */
-	public List<CredentialPermission> getPermissions() {
+	public List<Permission> getPermissions() {
 		return this.permissions;
 	}
 

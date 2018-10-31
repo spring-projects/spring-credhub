@@ -38,7 +38,7 @@ import java.util.Objects;
  *
  * @author Scott Frederick
  */
-public class CredentialPermission {
+public class Permission {
 	private final Actor actor;
 
 	@JsonProperty
@@ -48,7 +48,7 @@ public class CredentialPermission {
 	 * Create a {@literal CredentialPermission}.
 	 */
 	@SuppressWarnings("unused")
-	private CredentialPermission() {
+	private Permission() {
 		this.actor = null;
 		this.operations = null;
 	}
@@ -61,7 +61,7 @@ public class CredentialPermission {
 	 * @param operations the operations that the actor will be allowed to perform on the
 	 * credential
 	 */
-	private CredentialPermission(Actor actor, List<Operation> operations) {
+	private Permission(Actor actor, List<Operation> operations) {
 		this.actor = actor;
 		this.operations = operations;
 	}
@@ -97,7 +97,7 @@ public class CredentialPermission {
 			return null;
 		}
 		
-		List<String> operationValues = new ArrayList<String>(operations.size());
+		List<String> operationValues = new ArrayList<>(operations.size());
 		for (Operation operation : operations) {
 			operationValues.add(operation.operation());
 		}
@@ -106,7 +106,7 @@ public class CredentialPermission {
 
 	/**
 	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link CredentialPermission}.
+	 * to construct a {@link Permission}.
 	 *
 	 * @return a builder
 	 */
@@ -118,10 +118,10 @@ public class CredentialPermission {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof CredentialPermission))
+		if (!(o instanceof Permission))
 			return false;
 
-		CredentialPermission that = (CredentialPermission) o;
+		Permission that = (Permission) o;
 
 		if (actor != null ? !actor.equals(that.actor) : that.actor != null)
 			return false;
@@ -143,7 +143,7 @@ public class CredentialPermission {
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link CredentialPermission}
+	 * A builder that provides a fluent API for constructing {@link Permission}
 	 * instances.
 	 */
 	public static class CredentialPermissionBuilder {
@@ -253,15 +253,15 @@ public class CredentialPermission {
 		}
 
 		private void initOperations() {
-			if (this.operations == null) this.operations = new ArrayList<Operation>();
+			if (this.operations == null) this.operations = new ArrayList<>();
 		}
 
 		/**
-		 * Construct a {@link CredentialPermission} with the provided values.
+		 * Construct a {@link Permission} with the provided values.
 		 *
-		 * @return a {@link CredentialPermission}
+		 * @return a {@link Permission}
 		 */
-		public CredentialPermission build() {
+		public Permission build() {
 			List<Operation> operations;
 			switch (this.operations == null ? 0 : this.operations.size()) {
 				case 0:
@@ -271,10 +271,10 @@ public class CredentialPermission {
 					operations = java.util.Collections.singletonList(this.operations.get(0));
 					break;
 				default:
-					operations = java.util.Collections.unmodifiableList(new ArrayList<Operation>(this.operations));
+					operations = java.util.Collections.unmodifiableList(new ArrayList<>(this.operations));
 			}
 
-			return new CredentialPermission(actor, operations);
+			return new Permission(actor, operations);
 		}
 	}
 }

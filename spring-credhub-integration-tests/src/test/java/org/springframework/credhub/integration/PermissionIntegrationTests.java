@@ -23,7 +23,7 @@ import org.springframework.credhub.core.credential.CredHubCredentialOperations;
 import org.springframework.credhub.core.permission.CredHubPermissionOperations;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.permissions.Actor;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.credhub.support.value.ValueCredentialRequest;
 
@@ -59,15 +59,15 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 				.value(CREDENTIAL_VALUE)
 				.build());
 
-		CredentialPermission appPermission = CredentialPermission.builder()
+		Permission appPermission = Permission.builder()
 				.app("app1")
 				.operation(Operation.READ)
 				.build();
-		CredentialPermission userPermission = CredentialPermission.builder()
+		Permission userPermission = Permission.builder()
 				.user("user1")
 				.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
 				.build();
-		CredentialPermission clientPermission = CredentialPermission.builder()
+		Permission clientPermission = Permission.builder()
 				.client("client1")
 				.operations(Operation.READ_ACL, Operation.WRITE_ACL)
 				.build();
@@ -77,7 +77,7 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 				userPermission,
 				clientPermission);
 
-		List<CredentialPermission> retrievedPermissions = permissions.getPermissions(CREDENTIAL_NAME);
+		List<Permission> retrievedPermissions = permissions.getPermissions(CREDENTIAL_NAME);
 		// CredHub 1.x will automatically add a permission for the authenticated user;
 		// CredHub 2.x will not
 		assertThat(retrievedPermissions.size()).isBetween(3, 4);
@@ -88,7 +88,7 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 		permissions.deletePermission(CREDENTIAL_NAME, Actor.user("user1"));
 		permissions.deletePermission(CREDENTIAL_NAME, Actor.client("client1"));
 
-		List<CredentialPermission> afterDelete = permissions.getPermissions(CREDENTIAL_NAME);
+		List<Permission> afterDelete = permissions.getPermissions(CREDENTIAL_NAME);
 		assertThat(afterDelete.size()).isBetween(0, 1);
 	}
 }

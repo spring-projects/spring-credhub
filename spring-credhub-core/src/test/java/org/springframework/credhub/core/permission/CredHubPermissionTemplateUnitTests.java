@@ -26,7 +26,7 @@ import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.ActorType;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +44,7 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CredHubPermissionsTemplateUnitTests {
+public class CredHubPermissionTemplateUnitTests {
 	private static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
 
 	@Mock
@@ -61,12 +61,12 @@ public class CredHubPermissionsTemplateUnitTests {
 	public void getPermissions() {
 		CredentialPermissions expectedResponse = new CredentialPermissions(
 				NAME,
-				CredentialPermission.builder()
+				Permission.builder()
 						.app("app-id")
 						.operation(Operation.READ)
 						.operation(Operation.WRITE)
 				.build(),
-				CredentialPermission.builder()
+				Permission.builder()
 						.user("zone1", "user-id")
 						.operations(Operation.READ_ACL)
 						.operations(Operation.WRITE_ACL)
@@ -77,7 +77,7 @@ public class CredHubPermissionsTemplateUnitTests {
 		when(restTemplate.getForEntity(PERMISSIONS_URL_QUERY, CredentialPermissions.class, NAME.getName()))
 				.thenReturn(new ResponseEntity<>(expectedResponse, OK));
 
-		List<CredentialPermission> response = credHubTemplate.getPermissions(NAME);
+		List<Permission> response = credHubTemplate.getPermissions(NAME);
 
 		assertThat(response).isNotNull();
 		assertThat(response).hasSize(expectedResponse.getPermissions().size());
@@ -86,13 +86,13 @@ public class CredHubPermissionsTemplateUnitTests {
 
 	@Test
 	public void addPermissions() {
-		CredentialPermission permission1 = CredentialPermission.builder()
+		Permission permission1 = Permission.builder()
 				.app("app-id")
 				.operation(Operation.READ)
 				.operation(Operation.WRITE)
 				.build();
 		
-		CredentialPermission permission2 = CredentialPermission.builder()
+		Permission permission2 = Permission.builder()
 				.user("zone1", "user-id")
 				.operations(Operation.READ_ACL)
 				.operations(Operation.WRITE_ACL)

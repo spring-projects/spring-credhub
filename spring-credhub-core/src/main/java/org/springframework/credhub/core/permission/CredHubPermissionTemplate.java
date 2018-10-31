@@ -21,7 +21,7 @@ import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.permissions.Actor;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -53,12 +53,12 @@ public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 	}
 
 	@Override
-	public List<CredentialPermission> getPermissions(final CredentialName name) {
+	public List<Permission> getPermissions(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialPermission>>() {
+		return credHubOperations.doWithRest(new RestOperationsCallback<List<Permission>>() {
 			@Override
-			public List<CredentialPermission> doWithRestOperations(RestOperations restOperations) {
+			public List<Permission> doWithRestOperations(RestOperations restOperations) {
 				ResponseEntity<CredentialPermissions> response =
 						restOperations.getForEntity(PERMISSIONS_URL_QUERY,
 								CredentialPermissions.class, name.getName());
@@ -69,7 +69,7 @@ public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 
 	@Override
 	public void addPermissions(final CredentialName name,
-							   final CredentialPermission... permissions) {
+							   final Permission... permissions) {
 		Assert.notNull(name, "credential name must not be null");
 
 		final CredentialPermissions credentialPermissions = new CredentialPermissions(name, permissions);

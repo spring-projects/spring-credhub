@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequest.CredHubRequestBuilder;
 import org.springframework.credhub.support.permissions.Actor;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 
 import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
@@ -37,7 +37,7 @@ public abstract class CredHubRequestUnitTestsBase {
 	@SuppressWarnings("deprecation")
 	public void serializationWithOnePermission() {
 		requestBuilder
-				.permission(CredentialPermission.builder()
+				.permission(Permission.builder()
 						.app("app-id")
 						.operation(READ)
 						.build());
@@ -54,15 +54,15 @@ public abstract class CredHubRequestUnitTestsBase {
 	@SuppressWarnings({"unchecked", "deprecation"})
 	public void serializationWithThreePermissions() {
 		requestBuilder
-				.permission(CredentialPermission.builder()
+				.permission(Permission.builder()
 						.app("app-id")
 						.operation(READ).operation(WRITE)
 						.build())
-				.permission(CredentialPermission.builder()
+				.permission(Permission.builder()
 						.user("zone1", "user-id")
 						.operations(READ_ACL, WRITE_ACL)
 						.build())
-				.permission(CredentialPermission.builder()
+				.permission(Permission.builder()
 						.client("client-id")
 						.operations(READ, WRITE, READ_ACL, WRITE_ACL)
 						.build());

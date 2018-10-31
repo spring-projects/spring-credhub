@@ -32,11 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 import static org.springframework.credhub.support.permissions.ActorType.APP;
 import static org.springframework.credhub.support.permissions.ActorType.USER;
-import static org.springframework.credhub.support.permissions.Operation.DELETE;
-import static org.springframework.credhub.support.permissions.Operation.READ;
-import static org.springframework.credhub.support.permissions.Operation.READ_ACL;
-import static org.springframework.credhub.support.permissions.Operation.WRITE;
-import static org.springframework.credhub.support.permissions.Operation.WRITE_ACL;
 
 public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 	@Test
@@ -66,13 +61,14 @@ public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(permissions.getCredentialName()).isEqualTo("/c/example");
 		assertThat(permissions.getPermissions().size()).isEqualTo(2);
 
-		CredentialPermission permission = permissions.getPermissions().get(0);
+		Permission permission = permissions.getPermissions().get(0);
 		assertThat(permission.getActor().getAuthType()).isEqualTo(APP);
 		assertThat(permission.getActor().getPrimaryIdentifier()).isEqualTo("appid1");
 
 		List<Operation> operations = permission.getOperations();
 		assertThat(operations.size()).isEqualTo(5);
-		assertThat(operations).contains(READ, WRITE, DELETE, READ_ACL, WRITE_ACL);
+		assertThat(operations).contains(Operation.READ, Operation.WRITE, Operation.DELETE,
+				Operation.READ_ACL, Operation.WRITE_ACL);
 
 		permission = permissions.getPermissions().get(1);
 		assertThat(permission.getActor().getAuthType()).isEqualTo(USER);
@@ -80,7 +76,7 @@ public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 
 		operations = permission.getOperations();
 		assertThat(operations.size()).isEqualTo(1);
-		assertThat(operations).contains(READ);
+		assertThat(operations).contains(Operation.READ);
 	}
 
 	@Test
@@ -94,11 +90,12 @@ public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void serialize() {
-		CredentialPermissions permissions = new CredentialPermissions(new SimpleCredentialName("example", "credentialName"),
-				CredentialPermission.builder()
-						.app("appid1")
-						.operations(READ, WRITE)
-						.build());
+		CredentialPermissions permissions =
+				new CredentialPermissions(new SimpleCredentialName("example", "credentialName"),
+						Permission.builder()
+								.app("appid1")
+								.operations(Operation.READ, Operation.WRITE)
+								.build());
 
 		DocumentContext json = JsonTestUtils.toJsonPath(permissions);
 

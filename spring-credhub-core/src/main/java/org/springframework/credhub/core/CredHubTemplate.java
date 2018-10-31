@@ -26,6 +26,8 @@ import org.springframework.credhub.core.interpolation.CredHubInterpolationOperat
 import org.springframework.credhub.core.interpolation.CredHubInterpolationTemplate;
 import org.springframework.credhub.core.permission.CredHubPermissionOperations;
 import org.springframework.credhub.core.permission.CredHubPermissionTemplate;
+import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Operations;
+import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -86,6 +88,16 @@ public class CredHubTemplate implements CredHubOperations {
 	@Override
 	public CredHubPermissionOperations permissions() {
 		return new CredHubPermissionTemplate(this);
+	}
+
+	/**
+	 * Get the operations for adding, retrieving, and deleting permissions from a credential.
+	 *
+	 * @return the permissions operations
+	 */
+	@Override
+	public CredHubPermissionV2Operations permissionsV2() {
+		return new CredHubPermissionV2Template(this);
 	}
 
 	/**

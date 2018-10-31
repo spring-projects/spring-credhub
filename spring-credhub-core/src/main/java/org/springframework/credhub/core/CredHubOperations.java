@@ -21,6 +21,7 @@ import org.springframework.credhub.core.credential.CredHubCredentialOperations;
 import org.springframework.credhub.core.info.CredHubInfoOperations;
 import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
 import org.springframework.credhub.core.permission.CredHubPermissionOperations;
+import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Operations;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -42,6 +43,13 @@ public interface CredHubOperations {
 	 * @return the permissions operations
 	 */
 	CredHubPermissionOperations permissions();
+
+	/**
+	 * Get the operations for adding, retrieving, and deleting credential permissions.
+	 *
+	 * @return the permissions operations
+	 */
+	CredHubPermissionV2Operations permissionsV2();
 
 	/**
 	 * Get the operations for retrieving, regenerating, and updating certificates.

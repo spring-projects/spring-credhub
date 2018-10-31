@@ -18,7 +18,7 @@ package org.springframework.credhub.core.permission;
 
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.permissions.Actor;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public interface CredHubPermissionOperations {
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return the collection of permissions associated with the credential
 	 */
-	List<CredentialPermission> getPermissions(final CredentialName name);
+	List<Permission> getPermissions(final CredentialName name);
 
 	/**
 	 * Add permissions to an existing credential.
@@ -42,7 +42,7 @@ public interface CredHubPermissionOperations {
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param permissions a collection of permissions to add
 	 */
-	void addPermissions(final CredentialName name, final CredentialPermission... permissions);
+	void addPermissions(final CredentialName name, final Permission... permissions);
 
 	/**
 	 * Delete a permission associated with a credential.

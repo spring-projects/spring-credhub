@@ -18,7 +18,7 @@ package org.springframework.credhub.support;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.credhub.core.permission.CredHubPermissionOperations;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class CredHubRequest<T> {
 	protected WriteMode mode;
 	protected CredentialName name;
 	protected CredentialType credentialType;
-	protected List<CredentialPermission> additionalPermissions;
+	protected List<Permission> additionalPermissions;
 	protected T details;
 
 	public CredHubRequest() {
@@ -105,11 +105,11 @@ public class CredHubRequest<T> {
 	}
 
 	/**
-	 * Get the set of {@link CredentialPermission} to assign to the credential.
+	 * Get the set of {@link Permission} to assign to the credential.
 	 *
-	 * @return the set of {@link CredentialPermission}
+	 * @return the set of {@link Permission}
 	 */
-	public List<CredentialPermission> getAdditionalPermissions() {
+	public List<Permission> getAdditionalPermissions() {
 		return this.additionalPermissions;
 	}
 
@@ -219,45 +219,45 @@ public class CredHubRequest<T> {
 		}
 
 		/**
-		 * Add an {@link CredentialPermission} to the permissions that will be assigned to the
+		 * Add an {@link Permission} to the permissions that will be assigned to the
 		 * credential.
 		 *
-		 * @param permission a {@link CredentialPermission} to assign to the credential
+		 * @param permission a {@link Permission} to assign to the credential
 		 * @return the builder
 		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to assign
 		 * permissions to a credential after it is created
 		 */
-		public B permission(CredentialPermission permission) {
+		public B permission(Permission permission) {
 			targetObj.getAdditionalPermissions().add(permission);
 			return thisObj;
 		}
 
 		/**
-		 * Add a collection of {@link CredentialPermission}s to the controls that will be
+		 * Add a collection of {@link Permission}s to the controls that will be
 		 * assigned to the credential.
 		 *
-		 * @param permissions a collection of {@link CredentialPermission}s to
+		 * @param permissions a collection of {@link Permission}s to
 		 * assign to the credential
 		 * @return the builder
 		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to assign
 		 * permissions to a credential after it is created
 		 */
-		public B permissions(Collection<? extends CredentialPermission> permissions) {
+		public B permissions(Collection<? extends Permission> permissions) {
 			targetObj.getAdditionalPermissions().addAll(permissions);
 			return thisObj;
 		}
 
 		/**
-		 * Add a collection of {@link CredentialPermission}s to the controls that will be
+		 * Add a collection of {@link Permission}s to the controls that will be
 		 * assigned to the credential.
 		 *
-		 * @param permissions a collection of {@link CredentialPermission}s to
+		 * @param permissions a collection of {@link Permission}s to
 		 * assign to the credential
 		 * @return the builder
 		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to assign
 		 * permissions to a credential after it is created
 		 */
-		public B permissions(CredentialPermission... permissions) {
+		public B permissions(Permission... permissions) {
 			targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));
 			return thisObj;
 		}

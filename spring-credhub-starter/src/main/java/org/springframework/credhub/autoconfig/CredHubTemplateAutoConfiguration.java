@@ -34,7 +34,6 @@ import org.springframework.credhub.core.CredHubTemplate;
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
-
 @Configuration
 @AutoConfigureAfter(CredHubOAuth2TemplateAutoConfiguration.class)
 @ConditionalOnProperty(value = "spring.credhub.url")
@@ -45,9 +44,9 @@ public class CredHubTemplateAutoConfiguration {
 	 * Create the {@link CredHubTemplate} that the application will use to interact
 	 * with CredHub.
 	 *
-	 * @param credHubProperties {@link CredHubProperties} for CredHub
+	 * @param credHubProperties    {@link CredHubProperties} for CredHub
 	 * @param clientFactoryWrapper a {@link ClientFactoryWrapper} to customize CredHub
-	 * http requests
+	 *                             http requests
 	 * @return the {@link CredHubTemplate} bean
 	 */
 	@Bean

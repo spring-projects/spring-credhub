@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,9 +26,9 @@ import java.util.concurrent.TimeUnit;
  * @author Scott Frederick
  */
 public class ClientOptions {
-	private Integer connectionTimeout;
+	private Duration connectionTimeout;
 
-	private Integer readTimeout;
+	private Duration readTimeout;
 
 	private String[] caCertFiles;
 
@@ -49,7 +50,7 @@ public class ClientOptions {
 	 *                             {@literal 0}
 	 * @param caCertFiles          one or more CA certificate files to use when connecting
 	 */
-	public ClientOptions(int connectionTimeout, int readTimeout, String[] caCertFiles) {
+	public ClientOptions(Duration connectionTimeout, Duration readTimeout, String[] caCertFiles) {
 		this.connectionTimeout = connectionTimeout;
 		this.readTimeout = readTimeout;
 		this.caCertFiles = caCertFiles;
@@ -60,11 +61,20 @@ public class ClientOptions {
 	 *
 	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
-	public Integer getConnectionTimeout() {
+	public Duration getConnectionTimeout() {
 		return this.connectionTimeout;
 	}
 
-	public void setConnectionTimeout(Integer connectionTimeout) {
+	/**
+	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
+	 *
+	 * @return the connection timeout; can be {@literal null if not explicitly set}
+	 */
+	public Integer getConnectionTimeoutMillis() {
+		return this.connectionTimeout == null ? null : Math.toIntExact(this.connectionTimeout.toMillis());
+	}
+
+	public void setConnectionTimeout(Duration connectionTimeout) {
 		this.connectionTimeout = connectionTimeout;
 	}
 
@@ -73,11 +83,20 @@ public class ClientOptions {
 	 *
 	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
-	public Integer getReadTimeout() {
+	public Duration getReadTimeout() {
 		return this.readTimeout;
 	}
 
-	public void setReadTimeout(Integer readTimeout) {
+	/**
+	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
+	 *
+	 * @return the read timeout; can be {@literal null if not explicitly set}
+	 */
+	public Integer getReadTimeoutMillis() {
+		return this.readTimeout == null ? null : Math.toIntExact(this.readTimeout.toMillis());
+	}
+
+	public void setReadTimeout(Duration readTimeout) {
 		this.readTimeout = readTimeout;
 	}
 

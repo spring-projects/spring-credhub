@@ -66,7 +66,7 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(apiUriBase, "apiUriBase must not be null");
 		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
 
-		this.restTemplate = CredHubClient.createRestTemplate(apiUriBase,
+		this.restTemplate = CredHubClientFactory.createRestTemplate(apiUriBase,
 				clientHttpRequestFactory);
 	}
 

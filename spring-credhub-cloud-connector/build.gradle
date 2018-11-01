@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework:spring-framework-bom:${springVersion}"
+		mavenBom "io.projectreactor:reactor-bom:${reactorVersion}"
+	}
+}
+
 description = 'Spring CredHub Cloud Connector'
 
 dependencies {
 	compile project(':spring-credhub-core')
 
-	compile "org.springframework:spring-core:${springVersion}"
+	compile "org.springframework:spring-core"
 	compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector:${springCloudConnectorsVersion}"
 
-	testImplementation("org.springframework:spring-test:${springVersion}")
-	testImplementation("junit:junit:${junitVersion}")
-	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+	testImplementation("org.springframework:spring-test")
+	testImplementation("junit:junit")
+	testImplementation("org.mockito:mockito-core")
 	testImplementation("org.assertj:assertj-core:${assertJVersion}")
 }

@@ -28,7 +28,7 @@ import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
 import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
 import org.springframework.credhub.core.permission.CredHubPermissionOperations;
-import org.springframework.credhub.support.permissions.CredentialPermission;
+import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialSummary;
@@ -150,7 +150,7 @@ public class CredHubDemoController {
 
 	private void getCredentialPermissions(CredentialName name, Results results) {
 		try {
-			List<CredentialPermission> retrievedDetails = permissionOperations.getPermissions(name);
+			List<Permission> retrievedDetails = permissionOperations.getPermissions(name);
 			saveResults(results, "Successfully retrieved credential permissions: ", retrievedDetails);
 		} catch (Exception e) {
 			saveResults(results, "Error retrieving credential permissions: ", e.getMessage());
@@ -159,7 +159,7 @@ public class CredHubDemoController {
 
 	private void addCredentialPermissions(CredentialName name, Results results) {
 		try {
-			CredentialPermission permission = CredentialPermission.builder()
+			Permission permission = Permission.builder()
 					.app(APP_GUID_2)
 					.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
 					.build();

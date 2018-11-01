@@ -19,7 +19,6 @@ package org.springframework.credhub.core.credential;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
-import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialName;
@@ -33,7 +32,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,17 +74,14 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
-			@Override
-			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(BASE_URL_PATH, HttpMethod.PUT,
-								new HttpEntity<>(credentialRequest), ref);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialDetails<T>> response =
+					restOperations.exchange(BASE_URL_PATH, HttpMethod.PUT,
+							new HttpEntity<>(credentialRequest), ref);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 
@@ -97,17 +92,14 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
-			@Override
-			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(BASE_URL_PATH, HttpMethod.POST,
-								new HttpEntity<>(parametersRequest), ref);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialDetails<T>> response =
+					restOperations.exchange(BASE_URL_PATH, HttpMethod.POST,
+							new HttpEntity<>(parametersRequest), ref);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 
@@ -119,20 +111,17 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
-			@Override
-			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				Map<String, Object> request = new HashMap<>(1);
-				request.put(NAME_REQUEST_FIELD, name.getName());
+		return credHubOperations.doWithRest(restOperations -> {
+			Map<String, Object> request = new HashMap<>(1);
+			request.put(NAME_REQUEST_FIELD, name.getName());
 
-				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(REGENERATE_URL_PATH, HttpMethod.POST,
-								new HttpEntity<>(request), ref);
+			ResponseEntity<CredentialDetails<T>> response =
+					restOperations.exchange(REGENERATE_URL_PATH, HttpMethod.POST,
+							new HttpEntity<>(request), ref);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 
@@ -144,16 +133,13 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetails<T>> ref =
 				new ParameterizedTypeReference<CredentialDetails<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
-			@Override
-			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetails<T>> response =
-						restOperations.exchange(ID_URL_PATH, HttpMethod.GET, null, ref, id);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialDetails<T>> response =
+					restOperations.exchange(ID_URL_PATH, HttpMethod.GET, null, ref, id);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 
@@ -165,17 +151,14 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetailsData<T>> ref =
 				new ParameterizedTypeReference<CredentialDetailsData<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialDetails<T>>() {
-			@Override
-			public CredentialDetails<T> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY_CURRENT, HttpMethod.GET,
-								null, ref, name.getName());
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialDetailsData<T>> response =
+					restOperations.exchange(NAME_URL_QUERY_CURRENT, HttpMethod.GET,
+							null, ref, name.getName());
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getData().get(0);
-			}
+			return response.getBody().getData().get(0);
 		});
 	}
 
@@ -187,16 +170,13 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetailsData<T>> ref =
 				new ParameterizedTypeReference<CredentialDetailsData<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialDetails<T>>>() {
-			@Override
-			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY, HttpMethod.GET, null, ref, name.getName());
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialDetailsData<T>> response =
+					restOperations.exchange(NAME_URL_QUERY, HttpMethod.GET, null, ref, name.getName());
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getData();
-			}
+			return response.getBody().getData();
 		});
 	}
 
@@ -209,17 +189,14 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		final ParameterizedTypeReference<CredentialDetailsData<T>> ref =
 				new ParameterizedTypeReference<CredentialDetailsData<T>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialDetails<T>>>() {
-			@Override
-			public List<CredentialDetails<T>> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialDetailsData<T>> response =
-						restOperations.exchange(NAME_URL_QUERY_VERSIONS, HttpMethod.GET, null, ref,
-								name.getName(), versions);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialDetailsData<T>> response =
+					restOperations.exchange(NAME_URL_QUERY_VERSIONS, HttpMethod.GET, null, ref,
+							name.getName(), versions);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getData();
-			}
+			return response.getBody().getData();
 		});
 	}
 
@@ -227,18 +204,14 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	public List<CredentialSummary> findByName(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialSummary>>() {
-			@Override
-			public List<CredentialSummary> doWithRestOperations(
-					RestOperations restOperations) {
-				ResponseEntity<CredentialSummaryData> response = restOperations
-						.getForEntity(NAME_LIKE_URL_QUERY,
-								CredentialSummaryData.class, name.getName());
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialSummaryData> response = restOperations
+					.getForEntity(NAME_LIKE_URL_QUERY,
+							CredentialSummaryData.class, name.getName());
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getCredentials();
-			}
+			return response.getBody().getCredentials();
 		});
 	}
 
@@ -246,35 +219,27 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	public List<CredentialSummary> findByPath(final String path) {
 		Assert.notNull(path, "credential path must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialSummary>>() {
-			@Override
-			public List<CredentialSummary> doWithRestOperations(
-					RestOperations restOperations) {
-				ResponseEntity<CredentialSummaryData> response = restOperations
-						.getForEntity(PATH_URL_QUERY, CredentialSummaryData.class,
-								path);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialSummaryData> response = restOperations
+					.getForEntity(PATH_URL_QUERY, CredentialSummaryData.class,
+							path);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getCredentials();
-			}
+			return response.getBody().getCredentials();
 		});
 	}
 
 	@Override
 	@Deprecated
 	public List<CredentialPath> getAllPaths() {
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialPath>>() {
-			@Override
-			public List<CredentialPath> doWithRestOperations(
-					RestOperations restOperations) {
-				ResponseEntity<CredentialPathData> response = restOperations
-						.getForEntity(SHOW_ALL_URL_QUERY, CredentialPathData.class);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialPathData> response = restOperations
+					.getForEntity(SHOW_ALL_URL_QUERY, CredentialPathData.class);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getPaths();
-			}
+			return response.getBody().getPaths();
 		});
 	}
 
@@ -282,15 +247,9 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	public void deleteByName(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
 
-		final String name1 = name.getName();
-		Assert.notNull(name1, "credential name must not be null");
-
-		credHubOperations.doWithRest(new RestOperationsCallback<Void>() {
-			@Override
-			public Void doWithRestOperations(RestOperations restOperations) {
-				restOperations.delete(NAME_URL_QUERY, name1);
-				return null;
-			}
+		credHubOperations.doWithRest(restOperations -> {
+			restOperations.delete(NAME_URL_QUERY, name.getName());
+			return null;
 		});
 	}
 }

@@ -48,7 +48,7 @@ import org.springframework.web.util.UriTemplateHandler;
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
-public class CredHubClient {
+class CredHubClientFactory {
 	/**
 	 * Create a {@link RestTemplate} configured for communication with a CredHub server.
 	 *
@@ -57,8 +57,8 @@ public class CredHubClient {
 	 * creating new connections
 	 * @return a configured {@link RestTemplate}
 	 */
-	public static RestTemplate createRestTemplate(String baseUri,
-			ClientHttpRequestFactory clientHttpRequestFactory) {
+	static RestTemplate createRestTemplate(String baseUri,
+										   ClientHttpRequestFactory clientHttpRequestFactory) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		configureRestTemplate(restTemplate, baseUri, clientHttpRequestFactory);
@@ -68,13 +68,14 @@ public class CredHubClient {
 	
 	/**
 	 * Configure a {@link RestTemplate} for communication with a CredHub server.
+	 *
 	 * @param restTemplate an existing {@link RestTemplate} to configure
 	 * @param baseUri the base URI for the CredHub server
 	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
 	 * creating new connections
 	 */
-	public static void configureRestTemplate(RestTemplate restTemplate, String baseUri,
-			ClientHttpRequestFactory clientHttpRequestFactory) {
+	static void configureRestTemplate(RestTemplate restTemplate, String baseUri,
+									  ClientHttpRequestFactory clientHttpRequestFactory) {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 		restTemplate.setUriTemplateHandler(createUriTemplateHandler(baseUri));
 		restTemplate.setMessageConverters(createMessageConverters());
@@ -101,7 +102,7 @@ public class CredHubClient {
 	 * @return the list of {@link HttpMessageConverter}s
 	 */
 	private static List<HttpMessageConverter<?>> createMessageConverters() {
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>(3);
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>(3);
 		messageConverters.add(new ByteArrayHttpMessageConverter());
 		messageConverters.add(new StringHttpMessageConverter());
 		messageConverters.add(new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper()));
@@ -115,7 +116,7 @@ public class CredHubClient {
 	 * @return the list of {@link ClientHttpRequestInterceptor}s
 	 */
 	private static List<ClientHttpRequestInterceptor> createInterceptors() {
-		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>(1);
+		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(1);
 		interceptors.add(new CredHubRequestInterceptor());
 		return interceptors;
 	}

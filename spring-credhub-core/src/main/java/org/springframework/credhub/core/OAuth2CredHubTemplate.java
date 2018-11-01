@@ -23,7 +23,7 @@ public class OAuth2CredHubTemplate extends CredHubTemplate {
 			String apiUriBase, ClientHttpRequestFactory clientHttpRequestFactory) {
 		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource);
 
-		CredHubClient.configureRestTemplate(restTemplate, apiUriBase,
+		CredHubClientFactory.configureRestTemplate(restTemplate, apiUriBase,
 				clientHttpRequestFactory);
 
 		return restTemplate;

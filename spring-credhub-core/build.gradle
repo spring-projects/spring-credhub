@@ -14,24 +14,38 @@
  * limitations under the License.
  */
 
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework:spring-framework-bom:${springVersion}"
+		mavenBom "io.projectreactor:reactor-bom:${reactorVersion}"
+	}
+}
+
 description = 'Spring CredHub Core'
 
 dependencies {
-	compile("org.springframework:spring-core:${springVersion}")
-	compile("org.springframework:spring-beans:${springVersion}")
-	compile("org.springframework:spring-web:${springVersion}")
-	compile("com.fasterxml.jackson.core:jackson-databind:2.8.7")
+	compile("org.springframework:spring-core")
+	compile("org.springframework:spring-beans")
+	compile("org.springframework:spring-context")
+	compile("org.springframework:spring-web")
+	compile("com.fasterxml.jackson.core:jackson-databind:2.9.7")
 
-	optional("org.springframework.security.oauth:spring-security-oauth2:2.0.14.RELEASE")
+	optional("org.springframework:spring-webflux")
+	optional("io.projectreactor.ipc:reactor-netty")
+
+	optional("org.springframework.security.oauth:spring-security-oauth2:2.0.14.RELEASE") {
+		exclude(group: 'org.springframework')
+	}
+
 	optional("org.apache.httpcomponents:httpclient:4.5.3") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
 	optional("com.squareup.okhttp3:okhttp:3.6.0")
-	optional("io.netty:netty-all:4.1.8.Final")
+	optional("io.netty:netty-all:4.1.30.Final")
 
-	testImplementation("org.springframework:spring-test:${springVersion}")
-	testImplementation("junit:junit:${junitVersion}")
-	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+	testImplementation("org.springframework:spring-test")
+	testImplementation("junit:junit")
+	testImplementation("org.mockito:mockito-core")
 	testImplementation("org.assertj:assertj-core:${assertJVersion}")
 	testImplementation("com.jayway.jsonpath:json-path:2.4.0")
 }

@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.boot:spring-boot-dependencies:2.0.6.RELEASE"
+	}
+}
+
 description = 'Spring CredHub Starter'
-
-apply plugin: 'org.springframework.boot'
-
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
-	}
-}
-
-bootRepackage {
-    enabled = false
-}
 
 dependencies {
 	compile project(':spring-credhub-core')
-	compile("org.springframework.boot:spring-boot-starter")
+	compile("org.springframework.boot:spring-boot-autoconfigure")
 
-	optional("org.springframework.security.oauth:spring-security-oauth2")
-	optional("org.apache.httpcomponents:httpclient:4.5.3") {
+	optional("org.springframework.boot:spring-boot-starter-webflux")
+
+	optional("org.springframework.boot:spring-boot-starter-security")
+	optional("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE")
+	
+	optional("org.apache.httpcomponents:httpclient") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
 	optional("com.squareup.okhttp3:okhttp:3.6.0")
-	optional("io.netty:netty-all:4.1.8.Final")
+	optional("io.netty:netty-all:4.1.30.Final")
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")

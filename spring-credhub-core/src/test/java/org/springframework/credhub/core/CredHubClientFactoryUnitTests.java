@@ -30,7 +30,7 @@ import org.springframework.web.util.AbstractUriTemplateHandler;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CredHubClientUnitTests {
+public class CredHubClientFactoryUnitTests {
 	private static final String CREDHUB_URI = "https://credhub.cf.example.com:8844";
 
 	@Mock
@@ -38,7 +38,7 @@ public class CredHubClientUnitTests {
 
 	@Test
 	public void restTemplateIsCreated() {
-		RestTemplate restTemplate = CredHubClient.createRestTemplate(CREDHUB_URI,
+		RestTemplate restTemplate = CredHubClientFactory.createRestTemplate(CREDHUB_URI,
 				clientHttpRequestFactory);
 
 		assertThat(restTemplate.getUriTemplateHandler())

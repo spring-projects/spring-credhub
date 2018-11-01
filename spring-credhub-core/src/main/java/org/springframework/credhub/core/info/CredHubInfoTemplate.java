@@ -18,10 +18,8 @@ package org.springframework.credhub.core.info;
 
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
-import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.info.VersionInfo;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestOperations;
 
 /**
  * Implements the interaction with CredHub retrieve server information.
@@ -49,16 +47,13 @@ public class CredHubInfoTemplate implements CredHubInfoOperations {
 	 */
 	@Override
 	public VersionInfo version() {
-		return credHubOperations.doWithRest(new RestOperationsCallback<VersionInfo>() {
-			@Override
-			public VersionInfo doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<VersionInfo> response = restOperations
-						.getForEntity(VERSION_URL_PATH, VersionInfo.class);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<VersionInfo> response = restOperations
+					.getForEntity(VERSION_URL_PATH, VersionInfo.class);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 }

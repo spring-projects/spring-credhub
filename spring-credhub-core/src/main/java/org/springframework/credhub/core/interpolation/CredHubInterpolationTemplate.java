@@ -18,13 +18,11 @@ package org.springframework.credhub.core.interpolation;
 
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
-import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.ServicesData;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
 
 /**
  * Implements the main interaction with CredHub to interpolate service binding credentials.
@@ -49,17 +47,14 @@ public class CredHubInterpolationTemplate implements CredHubInterpolationOperati
 	public ServicesData interpolateServiceData(final ServicesData serviceData) {
 		Assert.notNull(serviceData, "serviceData must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<ServicesData>() {
-			@Override
-			public ServicesData doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<ServicesData> response = restOperations
-						.exchange(INTERPOLATE_URL_PATH, HttpMethod.POST,
-								new HttpEntity<>(serviceData), ServicesData.class);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<ServicesData> response = restOperations
+					.exchange(INTERPOLATE_URL_PATH, HttpMethod.POST,
+							new HttpEntity<>(serviceData), ServicesData.class);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 }

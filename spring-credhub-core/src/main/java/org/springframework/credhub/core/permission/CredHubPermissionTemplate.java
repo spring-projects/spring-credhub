@@ -17,7 +17,6 @@
 package org.springframework.credhub.core.permission;
 
 import org.springframework.credhub.core.CredHubOperations;
-import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.permissions.Actor;
@@ -26,7 +25,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
 
 import java.util.List;
 
@@ -56,14 +54,11 @@ public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 	public List<Permission> getPermissions(final CredentialName name) {
 		Assert.notNull(name, "credential name must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<Permission>>() {
-			@Override
-			public List<Permission> doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialPermissions> response =
-						restOperations.getForEntity(PERMISSIONS_URL_QUERY,
-								CredentialPermissions.class, name.getName());
-				return response.getBody().getPermissions();
-			}
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialPermissions> response =
+					restOperations.getForEntity(PERMISSIONS_URL_QUERY,
+							CredentialPermissions.class, name.getName());
+			return response.getBody().getPermissions();
 		});
 	}
 
@@ -74,14 +69,11 @@ public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 
 		final CredentialPermissions credentialPermissions = new CredentialPermissions(name, permissions);
 
-		credHubOperations.doWithRest(new RestOperationsCallback<Void>() {
-			@Override
-			public Void doWithRestOperations(RestOperations restOperations) {
-				restOperations.exchange(PERMISSIONS_URL_PATH, HttpMethod.POST,
-						new HttpEntity<>(credentialPermissions),
-						CredentialPermissions.class);
-				return null;
-			}
+		credHubOperations.doWithRest(restOperations -> {
+			restOperations.exchange(PERMISSIONS_URL_PATH, HttpMethod.POST,
+					new HttpEntity<>(credentialPermissions),
+					CredentialPermissions.class);
+			return null;
 		});
 	}
 
@@ -90,12 +82,9 @@ public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(actor, "actor must not be null");
 
-		credHubOperations.doWithRest(new RestOperationsCallback<Void>() {
-			@Override
-			public Void doWithRestOperations(RestOperations restOperations) {
-				restOperations.delete(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity());
-				return null;
-			}
+		credHubOperations.doWithRest(restOperations -> {
+			restOperations.delete(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity());
+			return null;
 		});
 	}
 }

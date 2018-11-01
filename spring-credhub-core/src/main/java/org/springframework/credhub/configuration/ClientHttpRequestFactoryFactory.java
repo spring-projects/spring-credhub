@@ -114,10 +114,10 @@ public class ClientHttpRequestFactoryFactory {
 			SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 			
 			if (options.getConnectionTimeout() != null) {
-				factory.setConnectTimeout(options.getConnectionTimeout());
+				factory.setConnectTimeout(options.getConnectionTimeoutMillis());
 			}
 			if (options.getReadTimeout() != null) {
-				factory.setReadTimeout(options.getReadTimeout());
+				factory.setReadTimeout(options.getReadTimeoutMillis());
 			}
 
 			return factory;
@@ -154,10 +154,10 @@ public class ClientHttpRequestFactoryFactory {
 					.setAuthenticationEnabled(true);
 
 			if (options.getConnectionTimeout() != null) {
-				requestConfigBuilder.setConnectTimeout(options.getConnectionTimeout());
+				requestConfigBuilder.setConnectTimeout(options.getConnectionTimeoutMillis());
 			}
 			if (options.getReadTimeout() != null) {
-				requestConfigBuilder.setSocketTimeout(options.getReadTimeout());
+				requestConfigBuilder.setSocketTimeout(options.getReadTimeoutMillis());
 			}
 
 			httpClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
@@ -193,10 +193,10 @@ public class ClientHttpRequestFactoryFactory {
 			}
 
 			if (options.getConnectionTimeout() != null) {
-				builder.connectTimeout(options.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+				builder.connectTimeout(options.getConnectionTimeoutMillis(), TimeUnit.MILLISECONDS);
 			}
 			if (options.getReadTimeout() != null) {
-				builder.readTimeout(options.getReadTimeout(), TimeUnit.MILLISECONDS);
+				builder.readTimeout(options.getReadTimeoutMillis(), TimeUnit.MILLISECONDS);
 			}
 
 			return new OkHttp3ClientHttpRequestFactory(builder.build());
@@ -219,10 +219,10 @@ public class ClientHttpRequestFactoryFactory {
 			final Netty4ClientHttpRequestFactory requestFactory = new Netty4ClientHttpRequestFactory();
 
 			if (options.getConnectionTimeout() != null) {
-				requestFactory.setConnectTimeout(options.getConnectionTimeout());
+				requestFactory.setConnectTimeout(options.getConnectionTimeoutMillis());
 			}
 			if (options.getReadTimeout() != null) {
-				requestFactory.setReadTimeout(options.getReadTimeout());
+				requestFactory.setReadTimeout(options.getReadTimeoutMillis());
 			}
 
 			if (usingCustomCerts(options)) {

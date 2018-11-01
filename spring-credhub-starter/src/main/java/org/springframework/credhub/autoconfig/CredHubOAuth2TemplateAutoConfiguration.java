@@ -46,7 +46,8 @@ public class CredHubOAuth2TemplateAutoConfiguration {
 	 *
 	 * @param credHubProperties {@link CredHubProperties} for CredHub
 	 * @param credHubCredentialsDetails OAuth2 credentials for use with the {@link OAuth2RestTemplate}
-	 * @param clientFactoryWrapper a {@link ClientFactoryWrapper} to customize CredHub http requests
+	 * @param clientFactoryWrapper a {@link ClientFactoryWrapper}
+	 *                                to customize CredHub http requests
 	 *
 	 * @return the {@link CredHubOperations} bean
 	 */

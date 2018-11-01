@@ -30,7 +30,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 public class CredHubTemplateFactory {
 
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
-			ClientHttpRequestFactory clientHttpRequestFactory) {
+										   ClientHttpRequestFactory clientHttpRequestFactory) {
 		return new CredHubTemplate(credHubProperties.getUrl(), clientHttpRequestFactory);
 	}
 
@@ -38,30 +38,18 @@ public class CredHubTemplateFactory {
 	 * Create a {@link ClientHttpRequestFactory}.
 	 *
 	 * @return the {@link ClientHttpRequestFactory} instance.
-	 * 
-	 * @see #clientOptions()
 	 */
 	public ClientHttpRequestFactory clientHttpRequestFactoryWrapper() {
-		return ClientHttpRequestFactoryFactory.create(clientOptions());
+		return ClientHttpRequestFactoryFactory.create(new ClientOptions());
 	}
 
 	/**
 	 * Create a {@link ClientHttpRequestFactory}.
 	 *
-	 * @return the {@link ClientHttpRequestFactory} instance.
-	 *
 	 * @param clientOptions options for creating the client connection
+	 * @return the {@link ClientHttpRequestFactory} instance.
 	 */
 	public ClientHttpRequestFactory clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
 		return ClientHttpRequestFactoryFactory.create(clientOptions);
-	}
-
-	/**
-	 * Create the default {@link ClientOptions} to configure communication parameters.
-	 *
-	 * @return the default {@link ClientOptions}
-	 */
-	private ClientOptions clientOptions() {
-		return new ClientOptions();
 	}
 }

@@ -29,8 +29,9 @@ buildscript {
 }
 
 ext {
-	springVersion = "4.3.8.RELEASE"
+	springVersion = "5.0.10.RELEASE"
 	springCloudConnectorsVersion = "1.2.5.RELEASE"
+	reactorVersion = "Bismuth-SR13"
 
 	junitVersion = "4.12"
 	mockitoVersion = "2.7.22"
@@ -52,6 +53,7 @@ allprojects {
 	apply plugin: 'propdeps-maven'
 	apply plugin: 'propdeps-idea'
 	apply plugin: 'propdeps-eclipse'
+	apply plugin: "io.spring.dependency-management"
 	apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
 	group = 'org.springframework.credhub'

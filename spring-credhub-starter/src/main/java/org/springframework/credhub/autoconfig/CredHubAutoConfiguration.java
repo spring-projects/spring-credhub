@@ -21,6 +21,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
@@ -35,8 +36,8 @@ import org.springframework.http.client.ClientHttpRequestFactory;
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
-
 @Configuration
+@EnableConfigurationProperties
 @ConditionalOnProperty(value = "spring.credhub.url")
 public class CredHubAutoConfiguration {
 	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();

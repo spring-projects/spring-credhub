@@ -17,7 +17,6 @@
 package org.springframework.credhub.core.permissionV2;
 
 import org.springframework.credhub.core.CredHubOperations;
-import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.permissions.Permission;
@@ -25,7 +24,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
 
 /**
  * Implements the main interaction with CredHub to add, retrieve,
@@ -52,14 +50,11 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 	public CredentialPermission getPermissions(final String id) {
 		Assert.notNull(id, "credential ID must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialPermission>() {
-			@Override
-			public CredentialPermission doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialPermission> response =
-						restOperations.getForEntity(PERMISSIONS_ID_URL_PATH,
-								CredentialPermission.class, id);
-				return response.getBody();
-			}
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialPermission> response =
+					restOperations.getForEntity(PERMISSIONS_ID_URL_PATH,
+							CredentialPermission.class, id);
+			return response.getBody();
 		});
 	}
 
@@ -71,15 +66,12 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialPermission>() {
-			@Override
-			public CredentialPermission doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialPermission> response =
-						restOperations.exchange(PERMISSIONS_URL_PATH, HttpMethod.POST,
-								new HttpEntity<>(credentialPermission),
-								CredentialPermission.class);
-				return response.getBody();
-			}
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialPermission> response =
+					restOperations.exchange(PERMISSIONS_URL_PATH, HttpMethod.POST,
+							new HttpEntity<>(credentialPermission),
+							CredentialPermission.class);
+			return response.getBody();
 		});
 	}
 
@@ -92,15 +84,12 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CredentialPermission>() {
-			@Override
-			public CredentialPermission doWithRestOperations(RestOperations restOperations) {
-				ResponseEntity<CredentialPermission> response =
-						restOperations.exchange(PERMISSIONS_ID_URL_PATH, HttpMethod.PUT,
-								new HttpEntity<>(credentialPermission),
-								CredentialPermission.class, id);
-				return response.getBody();
-			}
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialPermission> response =
+					restOperations.exchange(PERMISSIONS_ID_URL_PATH, HttpMethod.PUT,
+							new HttpEntity<>(credentialPermission),
+							CredentialPermission.class, id);
+			return response.getBody();
 		});
 	}
 
@@ -108,12 +97,9 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 	public void deletePermission(final String id) {
 		Assert.notNull(id, "credential ID must not be null");
 
-		credHubOperations.doWithRest(new RestOperationsCallback<Void>() {
-			@Override
-			public Void doWithRestOperations(RestOperations restOperations) {
-				restOperations.delete(PERMISSIONS_ID_URL_PATH, id);
-				return null;
-			}
+		credHubOperations.doWithRest(restOperations -> {
+			restOperations.delete(PERMISSIONS_ID_URL_PATH, id);
+			return null;
 		});
 	}
 }

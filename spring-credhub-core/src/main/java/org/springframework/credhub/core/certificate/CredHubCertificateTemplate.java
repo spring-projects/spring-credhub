@@ -19,7 +19,6 @@ package org.springframework.credhub.core.certificate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
-import org.springframework.credhub.core.RestOperationsCallback;
 import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.certificate.CertificateSummaryData;
 import org.springframework.credhub.support.CredentialName;
@@ -28,7 +27,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,17 +63,13 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	@Override
 	public List<CertificateSummary> getAll() {
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CertificateSummary>>() {
-			@Override
-			public List<CertificateSummary> doWithRestOperations(
-					RestOperations restOperations) {
-				ResponseEntity<CertificateSummaryData> response = restOperations
-						.getForEntity(BASE_URL_PATH, CertificateSummaryData.class);
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CertificateSummaryData> response = restOperations
+					.getForEntity(BASE_URL_PATH, CertificateSummaryData.class);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getCertificates();
-			}
+			return response.getBody().getCertificates();
 		});
 	}
 
@@ -83,17 +77,13 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 	public CertificateSummary getByName(final CredentialName name) {
 		Assert.notNull(name, "certificate name must not be null");
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CertificateSummary>() {
-			@Override
-			public CertificateSummary doWithRestOperations(
-					RestOperations restOperations) {
-				ResponseEntity<CertificateSummaryData> response = restOperations
-						.getForEntity(NAME_URL_QUERY, CertificateSummaryData.class, name.getName());
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CertificateSummaryData> response = restOperations
+					.getForEntity(NAME_URL_QUERY, CertificateSummaryData.class, name.getName());
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().getCertificates().get(0);
-			}
+			return response.getBody().getCertificates().get(0);
 		});
 	}
 
@@ -104,20 +94,17 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		final ParameterizedTypeReference<CertificateCredentialDetails> ref =
 				new ParameterizedTypeReference<CertificateCredentialDetails>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<CertificateCredentialDetails>() {
-			@Override
-			public CertificateCredentialDetails doWithRestOperations(RestOperations restOperations) {
-				Map<String, Boolean> request = new HashMap<>(1);
-				request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
+		return credHubOperations.doWithRest(restOperations -> {
+			Map<String, Boolean> request = new HashMap<>(1);
+			request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
 
-				ResponseEntity<CertificateCredentialDetails> response =
-						restOperations.exchange(REGENERATE_URL_PATH, HttpMethod.POST,
-								new HttpEntity<Object>(request), ref, id);
+			ResponseEntity<CertificateCredentialDetails> response =
+					restOperations.exchange(REGENERATE_URL_PATH, HttpMethod.POST,
+							new HttpEntity<Object>(request), ref, id);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 
@@ -128,20 +115,17 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		final ParameterizedTypeReference<Map<String, List<CredentialName>>> ref =
 				new ParameterizedTypeReference<Map<String, List<CredentialName>>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CredentialName>>() {
-			@Override
-			public List<CredentialName> doWithRestOperations(RestOperations restOperations) {
-				Map<String, Object> request = new HashMap<>(1);
-				request.put(SIGNED_BY_REQUEST_FIELD, certificateName.getName());
+		return credHubOperations.doWithRest(restOperations -> {
+			Map<String, Object> request = new HashMap<>(1);
+			request.put(SIGNED_BY_REQUEST_FIELD, certificateName.getName());
 
-				ResponseEntity<Map<String, List<CredentialName>>> response =
-						restOperations.exchange(BULK_REGENERATE_URL_PATH, HttpMethod.POST,
-								new HttpEntity<>(request), ref);
+			ResponseEntity<Map<String, List<CredentialName>>> response =
+					restOperations.exchange(BULK_REGENERATE_URL_PATH, HttpMethod.POST,
+							new HttpEntity<>(request), ref);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody().get(REGENERATED_CREDENTIALS_RESPONSE_FIELD);
-			}
+			return response.getBody().get(REGENERATED_CREDENTIALS_RESPONSE_FIELD);
 		});
 	}
 
@@ -152,20 +136,17 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		final ParameterizedTypeReference<List<CertificateCredentialDetails>> ref =
 				new ParameterizedTypeReference<List<CertificateCredentialDetails>>() {};
 
-		return credHubOperations.doWithRest(new RestOperationsCallback<List<CertificateCredentialDetails>>() {
-			@Override
-			public List<CertificateCredentialDetails> doWithRestOperations(RestOperations restOperations) {
-				Map<String, String> request = new HashMap<>(1);
-				request.put(VERSION_REQUEST_FIELD, versionId);
+		return credHubOperations.doWithRest(restOperations -> {
+			Map<String, String> request = new HashMap<>(1);
+			request.put(VERSION_REQUEST_FIELD, versionId);
 
-				ResponseEntity<List<CertificateCredentialDetails>> response =
-						restOperations.exchange(UPDATE_TRANSITIONAL_URL_PATH, HttpMethod.PUT,
-								new HttpEntity<Object>(request), ref, id);
+			ResponseEntity<List<CertificateCredentialDetails>> response =
+					restOperations.exchange(UPDATE_TRANSITIONAL_URL_PATH, HttpMethod.PUT,
+							new HttpEntity<Object>(request), ref, id);
 
-				ExceptionUtils.throwExceptionOnError(response);
+			ExceptionUtils.throwExceptionOnError(response);
 
-				return response.getBody();
-			}
+			return response.getBody();
 		});
 	}
 }

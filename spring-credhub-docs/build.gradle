@@ -20,7 +20,7 @@ plugins {
 
 dependencyManagement {
 	imports {
-		mavenBom "org.springframework.boot:spring-boot-dependencies:2.0.6.RELEASE"
+		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
 	}
 }
 

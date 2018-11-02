@@ -44,12 +44,12 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 		credentials = operations.credentials();
 		permissions = operations.permissions();
 		
-		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@After
 	public void tearDown() {
-		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@Test

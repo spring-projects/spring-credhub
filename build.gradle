@@ -30,6 +30,7 @@ buildscript {
 
 ext {
 	springVersion = "5.0.10.RELEASE"
+	springBootVersion = "2.0.6.RELEASE"
 	springCloudConnectorsVersion = "1.2.5.RELEASE"
 	reactorVersion = "Bismuth-SR13"
 

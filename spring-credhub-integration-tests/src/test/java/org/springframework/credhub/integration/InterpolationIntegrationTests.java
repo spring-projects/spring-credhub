@@ -51,7 +51,7 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 
 	@After
 	public void tearDown() {
-		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@Test

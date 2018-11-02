@@ -16,7 +16,7 @@
 
 dependencyManagement {
 	imports {
-		mavenBom "org.springframework.boot:spring-boot-dependencies:2.0.6.RELEASE"
+		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
 	}
 }
 
@@ -26,9 +26,6 @@ dependencies {
 	compile project(':spring-credhub-core')
 	compile("org.springframework.boot:spring-boot-autoconfigure")
 
-	optional("org.springframework.boot:spring-boot-starter-webflux")
-
-	optional("org.springframework.boot:spring-boot-starter-security")
 	optional("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE")
 	
 	optional("org.apache.httpcomponents:httpclient") {

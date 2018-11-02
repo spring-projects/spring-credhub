@@ -56,12 +56,12 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 				.excludeNumber(false)
 				.includeSpecial(true);
 
-		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@After
 	public void tearDown() {
-		deleteCredentialIfExists(credentials, CREDENTIAL_NAME);
+		deleteCredentialIfExists(CREDENTIAL_NAME);
 
 		List<CredentialSummary> afterDelete = credentials.findByName(CREDENTIAL_NAME);
 		assertThat(afterDelete).hasSize(0);

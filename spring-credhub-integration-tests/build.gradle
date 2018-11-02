@@ -17,10 +17,6 @@
 description = 'Spring CredHub Integration Tests'
 
 buildscript {
-	ext {
-		springBootVersion = "1.5.8.RELEASE"
-	}
-
 	dependencies {
 		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
 		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
@@ -47,7 +43,8 @@ dependencies {
 	compile project(":spring-credhub-starter")
 	compile("org.springframework.boot:spring-boot-starter")
 	compile("org.springframework.security.oauth:spring-security-oauth2")
-	
+	compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE")
+
 	if (project.hasProperty("useHttpComponents")) {
 		compile("org.apache.httpcomponents:httpclient:4.5.3")
 	}
@@ -55,7 +52,7 @@ dependencies {
 		compile("com.squareup.okhttp3:okhttp:3.6.0")
 	}
 	if (project.hasProperty("useNetty")) {
-		compile("io.netty:netty-all:4.1.8.Final")
+		compile("io.netty:netty-all:4.1.30.Final")
 	}
 
 	testCompile("org.springframework.boot:spring-boot-starter-test")

@@ -51,14 +51,14 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 		credentials = operations.credentials();
 		certificates = operations.certificates();
 
-		deleteCredentialIfExists(credentials, TEST_CERT_NAME);
-		deleteCredentialIfExists(credentials, ROOT_CERT_NAME);
+		deleteCredentialIfExists(TEST_CERT_NAME);
+		deleteCredentialIfExists(ROOT_CERT_NAME);
 	}
 
 	@After
 	public void tearDown() {
-		deleteCredentialIfExists(credentials, TEST_CERT_NAME);
-		deleteCredentialIfExists(credentials, ROOT_CERT_NAME);
+		deleteCredentialIfExists(TEST_CERT_NAME);
+		deleteCredentialIfExists(ROOT_CERT_NAME);
 	}
 
 	@Test

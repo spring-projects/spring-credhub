@@ -8,8 +8,7 @@ import org.springframework.credhub.autoconfig.CredHubOAuth2TemplateAutoConfigura
 import org.springframework.credhub.autoconfig.CredHubTemplateAutoConfiguration;
 import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.CredHubOperations;
-import org.springframework.credhub.core.credential.CredHubCredentialOperations;
-import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.CredentialName;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -32,9 +31,9 @@ public abstract class CredHubIntegrationTests {
 		return operations.info().version().isVersion2();
 	}
 
-	void deleteCredentialIfExists(CredHubCredentialOperations credentialOperations, SimpleCredentialName credentialName) {
+	void deleteCredentialIfExists(CredentialName credentialName) {
 		try {
-			credentialOperations.deleteByName(credentialName);
+			operations.credentials().deleteByName(credentialName);
 		} catch (CredHubException e) {
 			// ignore failing deletes on cleanup
 		}

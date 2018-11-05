@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,31 +19,42 @@ package org.springframework.credhub.integration;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.credhub.autoconfig.CredHubAutoConfiguration;
+import org.springframework.credhub.autoconfig.CredHubOAuth2TemplateAutoConfiguration;
+import org.springframework.credhub.autoconfig.CredHubTemplateAutoConfiguration;
 import org.springframework.credhub.core.CredHubException;
-import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.info.VersionInfo;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {TestApplication.class})
+@SpringBootTest(classes = {TestApplication.class,
+		CredHubAutoConfiguration.class,
+		CredHubOAuth2TemplateAutoConfiguration.class,
+		CredHubTemplateAutoConfiguration.class})
 @ActiveProfiles("test")
-public abstract class CredHubIntegrationTests {
+public abstract class ReactiveCredHubIntegrationTests {
 
 	@Autowired
-	protected CredHubOperations operations;
+	protected ReactiveCredHubOperations operations;
 
 	boolean serverApiIsV1() {
-		return operations.info().version().isVersion1();
+		return getVersion().isVersion1();
 	}
 
 	boolean serverApiIsV2() {
-		return operations.info().version().isVersion2();
+		return getVersion().isVersion2();
+	}
+
+	private VersionInfo getVersion() {
+		return operations.info().version().single().block();
 	}
 
 	void deleteCredentialIfExists(CredentialName credentialName) {
 		try {
-			operations.credentials().deleteByName(credentialName);
+			operations.credentials().deleteByName(credentialName).block();
 		} catch (CredHubException e) {
 			// ignore failing deletes on cleanup
 		}

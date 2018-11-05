@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.core;
 
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -25,7 +24,7 @@ import org.springframework.web.client.HttpStatusCodeException;
  *
  * @author Scott Frederick
  */
-public class CredHubException extends NestedRuntimeException {
+public class CredHubException extends HttpStatusCodeException {
 	/**
 	 * Create a new exception with the provided root cause.
 	 *
@@ -33,8 +32,7 @@ public class CredHubException extends NestedRuntimeException {
 	 * with CredHub
 	 */
 	public CredHubException(HttpStatusCodeException e) {
-		super("Error calling CredHub: " + e.getStatusCode() + ": "
-				+ e.getResponseBodyAsString());
+		super(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
 	}
 
 	/**
@@ -44,6 +42,6 @@ public class CredHubException extends NestedRuntimeException {
 	 * communicate with CredHub
 	 */
 	public CredHubException(HttpStatus statusCode) {
-		super("Error calling CredHub: " + statusCode);
+		super(statusCode);
 	}
 }

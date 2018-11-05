@@ -14,7 +14,19 @@
  * limitations under the License.
  */
 
-/**
- * Spring auto configuration support for Spring CredHub.
- */
-package org.springframework.credhub.autoconfig.security;
+package org.springframework.credhub.configuration;
+
+import org.junit.Test;
+import org.springframework.credhub.support.ClientOptions;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ClientHttpConnectorFactoryTests {
+	@Test
+	public void nettyClientIsCreated() {
+		ClientHttpConnector clientHttpConnector = ClientHttpConnectorFactory.create(new ClientOptions());
+
+		assertThat(clientHttpConnector).isNotNull();
+	}
+}

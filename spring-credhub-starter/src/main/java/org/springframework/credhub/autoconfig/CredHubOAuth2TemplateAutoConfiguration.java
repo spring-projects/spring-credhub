@@ -16,64 +16,84 @@
 
 package org.springframework.credhub.autoconfig;
 
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.credhub.autoconfig.CredHubAutoConfiguration.ClientFactoryWrapper;
-import org.springframework.credhub.autoconfig.security.CredHubCredentialsDetails;
-import org.springframework.credhub.configuration.OAuth2CredHubTemplateFactory;
+import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+import org.springframework.credhub.core.ReactiveCredHubOperations;
+import org.springframework.credhub.core.ReactiveCredHubTemplate;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link CredHubTemplate} with
- * OAuth2 credentials if spring-security-oauth2 and OAuth2 properties are provided.
- * 
+ * OAuth2 credentials.
+ *
  * @author Daniel Lavoie
+ * @author Scott Frederick
  */
 @Configuration
-@AutoConfigureBefore(CredHubTemplateAutoConfiguration.class)
+@AutoConfigureAfter({CredHubAutoConfiguration.class,
+		CredHubOAuth2AutoConfiguration.class,
+		OAuth2ClientAutoConfiguration.class,
+		ReactiveOAuth2ClientAutoConfiguration.class})
 @ConditionalOnProperty("spring.credhub.oauth2.client-id")
-@ConditionalOnClass(name = "org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails")
 public class CredHubOAuth2TemplateAutoConfiguration {
-	private final OAuth2CredHubTemplateFactory credHubTemplateFactory = new OAuth2CredHubTemplateFactory();
+	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
 
 	/**
-	 * Bean that holds OAuth2 credential information for CredHub.
+	 * Create the {@link CredHubTemplate} that the application will use to interact
+	 * with CredHub.
 	 *
-	 * @return the {@link ClientCredentialsResourceDetails} bean
-	 */
-	@Bean
-	@CredHubCredentialsDetails
-	@ConfigurationProperties("spring.credhub.oauth2")
-	public ClientCredentialsResourceDetails credHubCredentialsDetails() {
-		return new ClientCredentialsResourceDetails();
-	}
-
-	/**
-	 * Preconfigured {@link OAuth2RestTemplate} with OAuth2 credentials for CredHub.
-	 *
-	 * @param credHubProperties {@link CredHubProperties} for CredHub
-	 * @param credHubCredentialsDetails OAuth2 credentials for use with the {@link OAuth2RestTemplate}
-	 * @param clientFactoryWrapper a {@link ClientFactoryWrapper}
-	 *                                to customize CredHub http requests
-	 *
+	 * @param credHubProperties            {@link CredHubProperties} for CredHub
+	 * @param clientFactoryWrapper         a {@link ClientFactoryWrapper}
+	 *                                     to customize CredHub http requests
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param authorizedClientService      a repository of authorized OAuth2 clients
 	 * @return the {@link CredHubOperations} bean
 	 */
 	@Bean
-	public CredHubOperations credHubTemplate(
-			CredHubProperties credHubProperties,
-			@CredHubCredentialsDetails ClientCredentialsResourceDetails credHubCredentialsDetails,
-			ClientFactoryWrapper clientFactoryWrapper) {
-		return credHubTemplateFactory.credHubTemplate(credHubCredentialsDetails,
-				credHubProperties,
-				clientFactoryWrapper.getClientHttpRequestFactory());
+	public CredHubOperations oAuth2credHubTemplate(CredHubProperties credHubProperties,
+												   ClientFactoryWrapper clientFactoryWrapper,
+												   ClientRegistrationRepository clientRegistrationRepository,
+												   OAuth2AuthorizedClientService authorizedClientService) {
+		return credHubTemplateFactory.credHubTemplate(credHubProperties,
+				clientFactoryWrapper.getClientHttpRequestFactory(),
+				clientRegistrationRepository,
+				authorizedClientService);
+	}
+
+	/**
+	 * Create the {@link ReactiveCredHubTemplate} that the application will use to interact
+	 * with CredHub.
+	 *
+	 * @param credHubProperties            {@link CredHubProperties} for CredHub
+	 * @param clientHttpConnector          a {@link ClientHttpConnector} to customize CredHub
+	 *                                     http requests
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param authorizedClientRepository   a repository of OAuth2 authorized clients
+	 * @return the {@link CredHubTemplate} bean
+	 */
+	@Bean
+	@ConditionalOnClass(WebClient.class)
+	public ReactiveCredHubOperations oAuth2reactiveCredHubTemplate(CredHubProperties credHubProperties,
+																   ClientHttpConnector clientHttpConnector,
+																   ReactiveClientRegistrationRepository clientRegistrationRepository,
+																   ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+		return credHubTemplateFactory.credHubTemplate(credHubProperties, clientHttpConnector,
+				clientRegistrationRepository, authorizedClientRepository);
 	}
 }

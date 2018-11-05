@@ -37,12 +37,14 @@ public class CredHubAutoConfigurationTests {
 				.withPropertyValues(
 						"spring.credhub.url=https://localhost",
 						"spring.credhub.connection-timeout=30",
-						"spring.credhub.read-timeout=60"
+						"spring.credhub.read-timeout=60",
+						"spring.credhub.oauth2.client-id=test-client"
 				)
 				.run((context) -> {
 					assertThat(context).hasSingleBean(CredHubProperties.class);
 					CredHubProperties properties = context.getBean(CredHubProperties.class);
 					assertThat(properties.getUrl()).isEqualTo("https://localhost");
+					assertThat(properties.getOauth2().getClientId()).isEqualTo("test-client");
 
 					assertThat(context).hasSingleBean(ClientOptions.class);
 					ClientOptions options = context.getBean(ClientOptions.class);

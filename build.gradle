@@ -29,10 +29,11 @@ buildscript {
 }
 
 ext {
-	springVersion = "5.0.10.RELEASE"
-	springBootVersion = "2.0.6.RELEASE"
+	springVersion = "5.1.2.RELEASE"
+	springBootVersion = "2.1.0.RELEASE"
+	springSecurityVersion = "5.1.1.RELEASE"
 	springCloudConnectorsVersion = "1.2.5.RELEASE"
-	reactorVersion = "Bismuth-SR13"
+	reactorVersion = "Californium-SR2"
 
 	junitVersion = "4.12"
 	mockitoVersion = "2.7.22"
@@ -44,6 +45,7 @@ ext {
 			'http://docs.spring.io/spring/docs/current/javadoc-api/',
 	] as String[]
 }
+ext['spring-security.version'] = springSecurityVersion
 
 allprojects {
 	apply plugin: 'java'

@@ -31,11 +31,10 @@ dependencies {
 	compile("com.fasterxml.jackson.core:jackson-databind:2.9.7")
 
 	optional("org.springframework:spring-webflux")
-	optional("io.projectreactor.ipc:reactor-netty")
+	optional("io.projectreactor.netty:reactor-netty")
 
-	optional("org.springframework.security.oauth:spring-security-oauth2:2.0.14.RELEASE") {
-		exclude(group: 'org.springframework')
-	}
+	optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
+	optional("org.springframework.security:spring-security-oauth2-client:${springSecurityVersion}")
 
 	optional("org.apache.httpcomponents:httpclient:4.5.3") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
@@ -44,6 +43,7 @@ dependencies {
 	optional("io.netty:netty-all:4.1.30.Final")
 
 	testImplementation("org.springframework:spring-test")
+	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("junit:junit")
 	testImplementation("org.mockito:mockito-core")
 	testImplementation("org.assertj:assertj-core:${assertJVersion}")

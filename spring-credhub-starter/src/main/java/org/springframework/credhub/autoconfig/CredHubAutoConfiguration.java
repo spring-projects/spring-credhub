@@ -19,6 +19,7 @@ package org.springframework.credhub.autoconfig;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,6 +30,8 @@ import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link CredHubTemplate}.
@@ -79,6 +82,18 @@ public class CredHubAutoConfiguration {
 	public ClientFactoryWrapper clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
 		return new ClientFactoryWrapper(
 				credHubTemplateFactory.clientHttpRequestFactoryWrapper(clientOptions));
+	}
+
+	/**
+	 * Create a {@link ClientHttpConnector}.
+	 *
+	 * @param clientOptions the populated {@link ClientOptions} bean
+	 * @return the {@link ClientHttpConnector}
+	 */
+	@Bean
+	@ConditionalOnClass(WebClient.class)
+	public ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
+		return credHubTemplateFactory.clientHttpConnector(clientOptions);
 	}
 
 	/**

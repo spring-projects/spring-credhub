@@ -18,8 +18,15 @@ package org.springframework.credhub.configuration;
 
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
+import org.springframework.credhub.core.ReactiveCredHubOperations;
+import org.springframework.credhub.core.ReactiveCredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 
 /**
  * Factory for {@link CredHubTemplate} used to communicate with CredHub.
@@ -29,9 +36,34 @@ import org.springframework.http.client.ClientHttpRequestFactory;
  */
 public class CredHubTemplateFactory {
 
+	/**
+	 * Create a {@link CredHubTemplate} for interaction with a CredHub server.
+	 *
+	 * @param credHubProperties connection properties
+	 * @param clientHttpRequestFactory a factory for HTTP connections
+	 * @return a {@code CredHubTemplate}
+	 */
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
 										   ClientHttpRequestFactory clientHttpRequestFactory) {
-		return new CredHubTemplate(credHubProperties.getUrl(), clientHttpRequestFactory);
+		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory);
+	}
+
+	/**
+	 * Create a {@link CredHubTemplate} for interaction with a CredHub server
+	 * using OAuth2 for authentication.
+	 *
+	 * @param credHubProperties connection properties
+	 * @param clientHttpRequestFactory a factory for HTTP connections
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param authorizedClientService  a repository of authorized OAuth2 clients
+	 * @return a {@code CredHubTemplate}
+	 */
+	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
+										   ClientHttpRequestFactory clientHttpRequestFactory,
+										   ClientRegistrationRepository clientRegistrationRepository,
+										   OAuth2AuthorizedClientService authorizedClientService) {
+		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory,
+				clientRegistrationRepository, authorizedClientService);
 	}
 
 	/**
@@ -41,6 +73,46 @@ public class CredHubTemplateFactory {
 	 */
 	public ClientHttpRequestFactory clientHttpRequestFactoryWrapper() {
 		return ClientHttpRequestFactoryFactory.create(new ClientOptions());
+	}
+
+	/**
+	 * Create a {@link ReactiveCredHubTemplate} for interaction with a CredHub server.
+	 *
+	 * @param credHubProperties connection properties
+	 * @param clientHttpConnector a factory for HTTP connections
+	 * @return a {@code ReactiveCredHubTemplate}
+	 */
+	public ReactiveCredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
+												   ClientHttpConnector clientHttpConnector) {
+		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector);
+	}
+
+	/**
+	 * Create a {@link ReactiveCredHubTemplate} for interaction with a CredHub server
+	 * using OAuth2 for authentication.
+	 *
+	 * @param credHubProperties connection properties
+	 * @param clientHttpConnector a factory for HTTP connections
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param authorizedClientRepository a repository of OAuth2 client authorizations
+	 * @return a {@code ReactiveCredHubTemplate}
+	 */
+	public ReactiveCredHubOperations credHubTemplate(CredHubProperties credHubProperties,
+													 ClientHttpConnector clientHttpConnector,
+													 ReactiveClientRegistrationRepository clientRegistrationRepository,
+													 ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector,
+				clientRegistrationRepository, authorizedClientRepository);
+	}
+
+	/**
+	 * Create a {@link ClientHttpRequestFactory}.
+	 *
+	 * @param clientOptions options for creating the client connection
+	 * @return the {@link ClientHttpRequestFactory} instance.
+	 */
+	public ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
+		return ClientHttpConnectorFactory.create(clientOptions);
 	}
 
 	/**

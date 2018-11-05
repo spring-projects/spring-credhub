@@ -26,8 +26,11 @@ dependencies {
 	compile project(':spring-credhub-core')
 	compile("org.springframework.boot:spring-boot-autoconfigure")
 
-	optional("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE")
-	
+	optional("org.springframework.boot:spring-boot-starter-webflux")
+
+	optional("org.springframework.security:spring-security-config")
+	optional("org.springframework.security:spring-security-oauth2-client")
+
 	optional("org.apache.httpcomponents:httpclient") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}

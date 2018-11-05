@@ -22,32 +22,21 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.Re
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.credhub.autoconfig.CredHubAutoConfiguration;
 import org.springframework.credhub.autoconfig.CredHubOAuth2AutoConfiguration;
-import org.springframework.credhub.autoconfig.CredHubOAuth2TemplateAutoConfiguration;
-import org.springframework.credhub.autoconfig.CredHubTemplateAutoConfiguration;
-import org.springframework.credhub.core.CredHubTemplate;
-import org.springframework.credhub.core.ReactiveCredHubTemplate;
-import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author Daniel Lavoie
- */
-public class CredHubOAuth2TemplateAutoConfigurationTests {
+public class CredHubOAuth2AutoConfigurationTests {
 
 	private ApplicationContextRunner context = new ApplicationContextRunner()
 			.withConfiguration(AutoConfigurations.of(
-					ReactiveOAuth2ClientAutoConfiguration.class,
 					CredHubAutoConfiguration.class,
 					CredHubOAuth2AutoConfiguration.class,
-					CredHubOAuth2TemplateAutoConfiguration.class,
-					CredHubTemplateAutoConfiguration.class))
+					ReactiveOAuth2ClientAutoConfiguration.class))
 			.withPropertyValues(
-					"spring.credhub.url=https://localhost",
-					"spring.credhub.oauth2.client-id=credhub-client",
 					"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
 					"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 					"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
@@ -57,20 +46,10 @@ public class CredHubOAuth2TemplateAutoConfigurationTests {
 			);
 
 	@Test
-	public void credHubTemplateConfiguredWithOAuth2() {
+	public void oauth2ContextConfigured() {
 		context.run((context) -> {
-			assertThat(context).hasSingleBean(CredHubTemplate.class);
-			assertThat(context).hasSingleBean(CredHubAutoConfiguration.ClientFactoryWrapper.class);
-
 			assertThat(context).hasSingleBean(ClientRegistrationRepository.class);
-		});
-	}
-
-	@Test
-	public void reactiveCredHubTemplateConfiguredWithOAuth2() {
-		context.run((context) -> {
-			assertThat(context).hasSingleBean(ReactiveCredHubTemplate.class);
-			assertThat(context).hasSingleBean(ClientHttpConnector.class);
+			assertThat(context).hasSingleBean(OAuth2AuthorizedClientService.class);
 
 			assertThat(context).hasSingleBean(ReactiveClientRegistrationRepository.class);
 			assertThat(context).hasSingleBean(ServerOAuth2AuthorizedClientRepository.class);

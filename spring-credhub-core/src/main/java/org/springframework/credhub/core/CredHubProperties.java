@@ -26,22 +26,12 @@ package org.springframework.credhub.core;
  */
 public class CredHubProperties {
 	private String url;
+	private OAuth2 oauth2;
 
 	/**
 	 * Create a new instance without initializing properties.
 	 */
 	public CredHubProperties() {
-
-	}
-
-	/**
-	 * Create a new instance with the provided properties. Intended to be used internally
-	 * for testing.
-	 *
-	 * @param url the base URI for the CredHub server
-	 */
-	CredHubProperties(String url) {
-		this.url = url;
 	}
 
 	/**
@@ -62,5 +52,54 @@ public class CredHubProperties {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	/**
+	 * Get the OAuth2 properties.
+	 *
+	 * @return the OAuth2 properties.
+	 */
+	public OAuth2 getOauth2() {
+		return oauth2;
+	}
+
+	/**
+	 * Set the OAuth2 properties.
+	 *
+	 * @param oauth2 the OAuth2 properties
+	 */
+	public void setOauth2(OAuth2 oauth2) {
+		this.oauth2 = oauth2;
+	}
+
+	/**
+	 * Properties containing OAuth2 credentials for CredHub connectivity.
+	 */
+	public static class OAuth2 {
+		private String clientId;
+
+		/**
+		 * Create a new instance without initializing properties.
+		 */
+		public OAuth2() {
+		}
+
+		/**
+		 * Get the OAuth2 client ID used to authenticate with CredHub.
+		 *
+		 * @return the OAuth2 client ID
+		 */
+		public String getClientId() {
+			return clientId;
+		}
+
+		/**
+		 * Set the OAuth2 client ID used to authentiate with CredHub.
+		 *
+		 * @param clientId the OAuth2 client ID
+		 */
+		public void setClientId(String clientId) {
+			this.clientId = clientId;
+		}
 	}
 }

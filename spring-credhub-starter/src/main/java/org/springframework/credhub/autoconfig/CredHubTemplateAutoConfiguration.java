@@ -18,6 +18,7 @@ package org.springframework.credhub.autoconfig;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,10 @@ import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
+import org.springframework.credhub.core.ReactiveCredHubOperations;
+import org.springframework.credhub.core.ReactiveCredHubTemplate;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link CredHubTemplate}.
@@ -35,7 +40,7 @@ import org.springframework.credhub.core.CredHubTemplate;
  * @author Daniel Lavoie
  */
 @Configuration
-@AutoConfigureAfter(CredHubOAuth2TemplateAutoConfiguration.class)
+@AutoConfigureAfter({CredHubAutoConfiguration.class, CredHubOAuth2TemplateAutoConfiguration.class})
 @ConditionalOnProperty(value = "spring.credhub.url")
 public class CredHubTemplateAutoConfiguration {
 	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
@@ -46,7 +51,7 @@ public class CredHubTemplateAutoConfiguration {
 	 *
 	 * @param credHubProperties    {@link CredHubProperties} for CredHub
 	 * @param clientFactoryWrapper a {@link ClientFactoryWrapper} to customize CredHub
-	 *                             http requests
+	 *                             HTTP requests
 	 * @return the {@link CredHubTemplate} bean
 	 */
 	@Bean
@@ -56,4 +61,22 @@ public class CredHubTemplateAutoConfiguration {
 		return credHubTemplateFactory.credHubTemplate(credHubProperties,
 				clientFactoryWrapper.getClientHttpRequestFactory());
 	}
+
+	/**
+	 * Create the {@link ReactiveCredHubTemplate} that the application will use to interact
+	 * with CredHub.
+	 *
+	 * @param credHubProperties   {@link CredHubProperties} for CredHub
+	 * @param clientHttpConnector a {@link ClientHttpConnector} to customize CredHub
+	 *                            HTTP requests
+	 * @return the {@link CredHubTemplate} bean
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	@ConditionalOnClass(WebClient.class)
+	public ReactiveCredHubOperations reactiveCredHubTemplate(CredHubProperties credHubProperties,
+															 ClientHttpConnector clientHttpConnector) {
+		return credHubTemplateFactory.credHubTemplate(credHubProperties, clientHttpConnector);
+	}
+
 }

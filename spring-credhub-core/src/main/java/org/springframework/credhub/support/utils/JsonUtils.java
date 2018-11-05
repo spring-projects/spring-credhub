@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import org.springframework.credhub.support.CredentialType;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class JsonUtils {
 	 */
 	public static ObjectMapper buildObjectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setDateFormat(new ISO8601DateFormat());
+		objectMapper.setDateFormat(new StdDateFormat());
 		objectMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy());
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -61,7 +61,7 @@ public class JsonUtils {
 	 * @param objectMapper the {@link ObjectMapper} to configure
 	 */
 	private static void configureCredentialDetailTypeMapping(ObjectMapper objectMapper) {
-		List<NamedType> subtypes = new ArrayList<NamedType>();
+		List<NamedType> subtypes = new ArrayList<>();
 		for (CredentialType type : CredentialType.values()) {
 			subtypes.add(new NamedType(type.getModelClass(), type.getValueType()));
 		}

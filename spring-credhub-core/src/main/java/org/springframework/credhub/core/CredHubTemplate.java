@@ -29,6 +29,8 @@ import org.springframework.credhub.core.permission.CredHubPermissionTemplate;
 import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Operations;
 import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.util.Assert;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -54,20 +56,41 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	/**
-	 * Create a new {@link CredHubTemplate} using the provided base URI and
+	 * Create a new {@link CredHubTemplate} using the provided connection properties and
 	 * {@link ClientHttpRequestFactory}.
 	 *
-	 * @param apiUriBase the base URI for the CredHub server (scheme, host, and port);
-	 * must not be {@literal null}
+	 * @param properties               CredHub connection properties; must not be {@literal null}
 	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
-	 * creating new connections
+	 *                                 creating new connections
 	 */
-	public CredHubTemplate(String apiUriBase, ClientHttpRequestFactory clientHttpRequestFactory) {
-		Assert.notNull(apiUriBase, "apiUriBase must not be null");
+	public CredHubTemplate(CredHubProperties properties, ClientHttpRequestFactory clientHttpRequestFactory) {
+		Assert.notNull(properties, "properties must not be null");
 		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
 
-		this.restTemplate = CredHubClientFactory.createRestTemplate(apiUriBase,
+		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
 				clientHttpRequestFactory);
+	}
+
+	/**
+	 * Create a new {@link CredHubTemplate} using the provided connection properties,
+	 * {@link ClientHttpRequestFactory}, and OAuth2 support.
+	 *
+	 * @param properties                   CredHub connection properties; must not be {@literal null}
+	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
+	 *                                     creating new connections
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param authorizedClientService      a repository of authorized OAuth2 clients
+	 */
+	public CredHubTemplate(CredHubProperties properties,
+						   ClientHttpRequestFactory clientHttpRequestFactory,
+						   ClientRegistrationRepository clientRegistrationRepository,
+						   OAuth2AuthorizedClientService authorizedClientService) {
+		Assert.notNull(properties, "properties must not be null");
+		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
+		Assert.notNull(clientRegistrationRepository, "clientRegistrationRepository must not be null");
+
+		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
+				clientHttpRequestFactory, clientRegistrationRepository, authorizedClientService);
 	}
 
 	/**

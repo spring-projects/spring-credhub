@@ -82,7 +82,7 @@ class CredHubWebClientFactory {
 		return buildWebClient(properties.getUrl(), clientHttpConnector)
 				.filter(oauth)
 				.defaultRequest(requestHeadersSpec ->
-						requestHeadersSpec.attributes(clientRegistrationId(properties.getOauth2().getClientId())))
+						requestHeadersSpec.attributes(clientRegistrationId(properties.getOauth2().getRegistrationId())))
 				.build();
 	}
 

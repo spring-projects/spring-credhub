@@ -76,7 +76,7 @@ public class CredHubProperties {
 	 * Properties containing OAuth2 credentials for CredHub connectivity.
 	 */
 	public static class OAuth2 {
-		private String clientId;
+		private String registrationId;
 
 		/**
 		 * Create a new instance without initializing properties.
@@ -85,21 +85,21 @@ public class CredHubProperties {
 		}
 
 		/**
-		 * Get the OAuth2 client ID used to authenticate with CredHub.
+		 * Get the OAuth2 client registration ID used to authenticate with CredHub.
 		 *
-		 * @return the OAuth2 client ID
+		 * @return the OAuth2 registration ID
 		 */
-		public String getClientId() {
-			return clientId;
+		public String getRegistrationId() {
+			return registrationId;
 		}
 
 		/**
-		 * Set the OAuth2 client ID used to authentiate with CredHub.
+		 * Set the OAuth2 client registration ID used to authentiate with CredHub.
 		 *
-		 * @param clientId the OAuth2 client ID
+		 * @param registrationId the OAuth2 client registration ID
 		 */
-		public void setClientId(String clientId) {
-			this.clientId = clientId;
+		public void setRegistrationId(String registrationId) {
+			this.registrationId = registrationId;
 		}
 	}
 }

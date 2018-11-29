@@ -1,0 +1,69 @@
+:apidocs-reactive-credentials: {apidocs-home}?org/springframework/credhub/core/credential/ReactiveCredHubCredentialOperations.html
+:apidocs-reactive-certificates: {apidocs-home}?org/springframework/credhub/core/certificate/ReactiveCredHubCertificateOperations.html
+:apidocs-reactive-permissions: {apidocs-home}?org/springframework/credhub/core/permission/ReactiveCredHubPermissionOperations.html
+:apidocs-reactive-permissionsV2: {apidocs-home}?org/springframework/credhub/core/permissionV2/ReactiveCredHubPermissionV2Operations.html
+:apidocs-reactive-interpolation: {apidocs-home}?org/springframework/credhub/core/interpolation/ReactiveCredHubInterpolationOperations.html
+:apidocs-reactive-info: {apidocs-home}?org/springframework/credhub/core/info/ReactiveCredHubInfoOperations.html
+
+[[reactive-operations]]
+== Introduction to ReactiveCredHubOperations
+
+The interface `org.springframework.credhub.core.ReactiveCredHubOperations` and the implementation `org.springframework.credhub.core.ReactiveCredHubTemplate` are the central classes in Spring CredHub reactive support.
+`ReactiveCredHubOperations` provides access to additional operations interfaces that model the full CredHub API:
+
+[source,java,%autofit]
+----
+/**
+ * Get the operations for saving, retrieving, and deleting credentials.
+ */
+ReactiveCredHubCredentialOperations credentials();
+
+/**
+ * Get the operations for adding, retrieving, and deleting credential permissions.
+ */
+ReactiveCredHubPermissionOperations permissions();
+
+/**
+ * Get the operations for adding, retrieving, and deleting credential permissions.
+ */
+ReactiveCredHubPermissionV2Operations permissionsV2();
+
+/**
+ * Get the operations for retrieving, regenerating, and updating certificates.
+ */
+ReactiveCredHubCertificateOperations certificates();
+
+/**
+ * Get the operations for interpolating service binding credentials.
+ */
+ReactiveCredHubInterpolationOperations interpolation();
+
+/**
+ * Get the operations for retrieving CredHub server information.
+ */
+ReactiveCredHubInfoOperations info();
+----
+
+=== Mapping to CredHub API
+
+Each method of the `Reactive...Operations` interfaces maps directly to one endpoint of the CredHub HTTP API.
+The following table shows the mapping between the CredHub API and the appropriate Spring CredHub `Reactive...Operations` interface.
+
+|=======
+| {credhub-api-credentials}[CredHub Credentials API] | {apidocs-reactive-credentials}[ReactiveCredHubCredentialOperations]
+| {credhub-api-permissions}[CredHub Permissions API] (v1) | {apidocs-reactive-permissions}[ReactiveCredHubPermissionOperations]
+| {credhub-api-permissionsV2}[CredHub Permissions API] (v2) | {apidocs-reactive-permissionsV2}[ReactiveCredHubPermissionV2Operations]
+| {credhub-api-certificates}[CredHub Certificates API] | {apidocs-reactive-certificates}[ReactiveCredHubCertificateOperations]
+| {credhub-api-interpolation}[CredHub Interpolation API] | {apidocs-reactive-interpolation}[ReactiveCredHubInterpolationOperations]
+| {credhub-api-info}[CredHub Information API] | {apidocs-reactive-info}[CredHubInfoOperations]
+|=======
+
+=== ReactiveCredHubOperations Auto-configuration
+
+A `ReactiveCredHubOperations` Spring bean is created using Spring Boot auto-configuration when application properties are properly configured and the Spring WebFlux library is on the classpath.
+Application classes can autowire an instance of this bean to interact with a CredHub server.
+
+[source,java,%autofit]
+----
+include::{examples-dir}/ReactiveCredHubService.java[]
+----

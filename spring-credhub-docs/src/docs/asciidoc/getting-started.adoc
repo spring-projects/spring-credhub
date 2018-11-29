@@ -1,3 +1,6 @@
+:spring-webflux: https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/web-reactive.html#spring-webflux
+:spring-security: https://spring.io/projects/spring-security
+
 [[getting-started]]
 == Getting started
 
@@ -5,7 +8,7 @@ Spring CredHub supports CredHub server version 1.x and 2.x.
 This library is intended to provide full coverage of the CredHub API - all operations on all credential types.
 
 Spring CredHub has been optimized to work with Spring Boot applications.
-To include Spring CredHub in a Spring Boot application, add a dependency to the project build file.
+To include Spring CredHub in a Spring Boot application, add some dependencies to the project build file.
 
 === Maven Dependencies
 
@@ -19,11 +22,49 @@ Add the Spring CredHub starter to the `dependencies` section of the build file:
         </dependency>
     </dependencies>
 
+To enable reactive support in Spring CredHub, add the following {spring-webflux}[Spring WebFlux] dependency to the build file:
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <version>5.1.0.RELEASE</version>
+        </dependency>
+    </dependencies>
+
+To use OAuth2 authentication to CredHub, add the following {spring-security}[Spring Security] dependencies to the build file:
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.1.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+            <version>5.1.0.RELEASE</version>
+        </dependency>
+    </dependencies>
+
 === Gradle Dependencies
 
 Add the Spring CredHub starter to the `dependencies` section of the build file:
 
     dependencies {
         compile('org.springframework.credhub:spring-credhub-starter:${version}')
+    }
+
+To enable reactive support in Spring CredHub, add the following {spring-webflux}[Spring WebFlux] dependency to the build file:
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter-webflux:5.1.0.RELEASE")
+    }
+
+To use OAuth2 authentication to CredHub, add the following {spring-security}[Spring Security] dependencies to the build file:
+
+    dependencies {
+        compile("org.springframework.security:spring-security-config:5.1.0.RELEASE")
+        compile("org.springframework.security:spring-security-oauth2-client:5.1.0.RELEASE")
     }
 

@@ -87,7 +87,7 @@ class CredHubRestTemplateFactory {
 
 		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
 		configureOAuth2(restTemplate, clientHttpRequestFactory,
-				properties.getOauth2().getClientId(),
+				properties.getOauth2().getRegistrationId(),
 				clientRegistrationRepository,
 				authorizedClientService);
 

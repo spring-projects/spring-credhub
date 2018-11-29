@@ -1,11 +1,12 @@
 :credhub-api-mtls: {credhub-api-home}version/2.0/#mutual-tls
 :credhub-api-oauth: {credhub-api-home}version/2.0/#uaa-oauth2
+:spring-boot-oauth: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security-oauth2
 
 [[boot-configuration]]
 == Spring Boot Configuration
 
-When using the Spring CredHub starter dependency, Spring CredHub can be configured with https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-application-property-files[Spring Boot application properties file].
-With the proper configuration, Spring CredHub will auto-configure a connection to a CredHub server.
+When using the Spring CredHub starter dependency, Spring CredHub can be configured with https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-application-property-files[Spring Boot application properties].
+With the proper configuration properties, Spring CredHub will auto-configure a connection to a CredHub server.
 
 === Mutual TLS Authentication
 
@@ -24,15 +25,20 @@ An application running on Cloud Foundry can use the internal address `https://cr
 
 === OAuth2 Authentication
 
-OAuth2 can be used to authenticate via UAA to any CredHub server via UAA.
-Spring CredHub supports client credentials grant tokens for authentication with the following configuration: 
+OAuth2 can be used to authenticate via UAA to any CredHub server.
+Spring CredHub supports client credentials grant tokens for authentication using the following Spring CredHub and Spring Security configuration:
 
 [source,properties,%autofit]
 ----
 include::{examples-dir}/config-oauth2.yml[]
 ----
 
-The OAuth2 client identified by the `client-id` must have CredHub scopes such as `credhub.read` or `credhub.write` to perform most operations.
+The ID provided in `spring.credhub.oauth2.registration-id` must refer to a client configured under `spring.security.oauth2.client.registration`.
+See the {spring-boot-oauth}[Spring Boot documentation] for more information on Spring Boot OAuth2 client configuration.
+
+The OAuth2 client specified in the Spring Security client registration must have CredHub scopes such as `credhub.read` or `credhub.write` to perform most operations.
 See the {credhub-api-oauth}[CredHub documentation] for more information on OAuth2 authentication with UAA.
+
+
 
 

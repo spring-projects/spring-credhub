@@ -21,6 +21,7 @@ plugins {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+		mavenBom "io.projectreactor:reactor-bom:${reactorVersion}"
 	}
 }
 
@@ -30,6 +31,7 @@ apply plugin: 'org.asciidoctor.convert'
 
 dependencies {
 	compile project(":spring-credhub-core")
+	compile("io.projectreactor:reactor-core")
 }
 
 asciidoctor {

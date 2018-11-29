@@ -40,6 +40,7 @@ public class ExceptionUtils {
 	 * Helper method to return an appropriate error if a request to CredHub
 	 * returns with an error code.
 	 *
+	 * @return the generated error
 	 * @param response a {@link ClientResponse} returned from {@link WebClient}
 	 */
 	public static Mono<Throwable> buildError(ClientResponse response) {

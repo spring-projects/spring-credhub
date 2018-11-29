@@ -50,7 +50,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 		CredHubOAuth2AutoConfiguration.class,
 		OAuth2ClientAutoConfiguration.class,
 		ReactiveOAuth2ClientAutoConfiguration.class})
-@ConditionalOnProperty("spring.credhub.oauth2.client-id")
+@ConditionalOnProperty("spring.credhub.oauth2.registration-id")
 public class CredHubOAuth2TemplateAutoConfiguration {
 	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
 

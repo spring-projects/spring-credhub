@@ -47,7 +47,8 @@ public class CredHubOAuth2TemplateAutoConfigurationTests {
 					CredHubTemplateAutoConfiguration.class))
 			.withPropertyValues(
 					"spring.credhub.url=https://localhost",
-					"spring.credhub.oauth2.client-id=credhub-client",
+					"spring.credhub.oauth2.registration-id=credhub-client",
+					
 					"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
 					"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 					"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",

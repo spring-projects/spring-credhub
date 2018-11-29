@@ -1,7 +1,7 @@
 [[http-clients]]
 == HTTP Client Support
 
-Spring CredHub supports multiple HTTP client libraries to communicate with the CredHub API. The following libraries are supported:
+Spring CredHub `CredHubOperations` supports multiple HTTP client libraries to communicate with the CredHub API. The following libraries are supported:
 
 * Java’s builtin `HttpURLConnection` (default)
 * https://hc.apache.org/[Apache HttpComponents]
@@ -10,6 +10,8 @@ Spring CredHub supports multiple HTTP client libraries to communicate with the C
 
 Choosing a specific client library requires the appropriate dependency to be available on the application classpath.
 The application classpath will be inspected for each client library in the order listed above.
+
+Spring CredHub `ReactiveCredHubOperations` only supports the Netty HTTP client library.
 
 === Apache HttpComponents
 

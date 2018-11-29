@@ -11,6 +11,12 @@ Scott Frederick;
 :examples-dir: ../../test/java/com/example/credhub/
 :credhub-home: https://docs.cloudfoundry.org/credhub/
 :credhub-api-home: https://credhub-api.cfapps.io/
+:credhub-api-credentials: {credhub-api-home}version/2.0/#credentials
+:credhub-api-certificates: {credhub-api-home}version/2.0/#certificates
+:credhub-api-permissions: {credhub-api-home}version/1.9/#permissions
+:credhub-api-permissionsV2: {credhub-api-home}version/2.0/#permissions
+:credhub-api-interpolation: {credhub-api-home}version/2.0/#interpolate-endpoint
+:credhub-api-info: {credhub-api-home}version/2.0/#get-version
 :cloudfoundry-home: https://www.cloudfoundry.org/
 :apidocs-home: https://docs.spring.io/spring-credhub/docs/{revnumber}/api/index.html
 
@@ -29,4 +35,5 @@ toc::[]
 include::getting-started.adoc[]
 include::boot-configuration.adoc[]
 include::operations.adoc[]
+include::reactive-operations.adoc[]
 include::http-clients.adoc[]

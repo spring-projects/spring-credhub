@@ -5,17 +5,10 @@
 :apidocs-interpolation: {apidocs-home}?org/springframework/credhub/core/interpolation/CredHubInterpolationOperations.html
 :apidocs-info: {apidocs-home}?org/springframework/credhub/core/info/CredHubInfoOperations.html
 
-:credhub-api-credentials: {credhub-api-home}version/2.0/#credentials
-:credhub-api-certificates: {credhub-api-home}version/2.0/#certificates
-:credhub-api-permissions: {credhub-api-home}version/1.9/#permissions
-:credhub-api-permissionsV2: {credhub-api-home}version/2.0/#permissions
-:credhub-api-interpolation: {credhub-api-home}version/2.0/#interpolate-endpoint
-:credhub-api-info: {credhub-api-home}version/2.0/#get-version
-
 [[operations]]
 == Introduction to CredHubOperations
 
-The interface `org.springframework.credhub.core.CredHubOperations` and the implementation `org.springframework.credhub.core.CredHubTemplate` are the central class in Spring CredHub.
+The interface `org.springframework.credhub.core.CredHubOperations` and the implementation `org.springframework.credhub.core.CredHubTemplate` are the central classes in Spring CredHub.
 `CredHubOperations` provides access to additional operations interfaces that model the full CredHub API:
 
 [source,java,%autofit]
@@ -74,7 +67,3 @@ Application classes can autowire an instance of this bean to interact with a Cre
 ----
 include::{examples-dir}/CredHubService.java[]
 ----
-
-
-
-

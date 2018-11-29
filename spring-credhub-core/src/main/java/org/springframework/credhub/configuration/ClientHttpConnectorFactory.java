@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.configuration;
 
+import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProvider;
 import org.springframework.credhub.support.ClientOptions;
@@ -48,20 +49,20 @@ public class ClientHttpConnectorFactory {
 			TrustManagerFactory trustManagerFactory =
 					sslCertificateUtils.createTrustManagerFactory(options.getCaCertFiles());
 
-			httpClient.secure(sslContextSpec -> sslContextSpec
+			httpClient = httpClient.secure(sslContextSpec -> sslContextSpec
 					.sslContext(SslContextBuilder.forClient()
 							.sslProvider(SslProvider.JDK)
 							.trustManager(trustManagerFactory)));
 		} else {
-			httpClient.secure(sslContextSpec -> sslContextSpec
+			httpClient = httpClient.secure(sslContextSpec -> sslContextSpec
 					.sslContext(SslContextBuilder.forClient()
 							.sslProvider(SslProvider.JDK)));
 		}
 
 		if (options.getConnectionTimeout() != null) {
-//			httpClient.sslHandshakeTimeout(options.getConnectionTimeout());
-//			httpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
-//					Math.toIntExact(options.getConnectionTimeout().toMillis()));
+			httpClient = httpClient.tcpConfiguration(tcpClient ->
+					tcpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+							Math.toIntExact(options.getConnectionTimeout().toMillis())));
 		}
 
 		return new ReactorClientHttpConnector(httpClient);

@@ -2,6 +2,16 @@ spring:
   credhub:
     url: [CredHub server URL]
     oauth2:
-      client-id: [OAuth2 client ID]
-      client-secret: [OAuth2 client secret]
-      access-token-uri: [OAuth2 token server endpoint]
+      registration-id: credhub-client
+  security:
+    oauth2:
+      client:
+        registration:
+          credhub-client:
+            provider: uaa
+            client-id: [OAuth2 client ID]
+            client-secret: [OAuth2 client secret]
+            authorization-grant-type: client_credentials
+        provider:
+          uaa:
+            token-uri: [UAA token server endpoint]

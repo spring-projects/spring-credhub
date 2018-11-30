@@ -30,6 +30,7 @@ import org.springframework.credhub.support.value.ValueCredentialRequest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 public class PermissionIntegrationTests extends CredHubIntegrationTests {
 	private static final SimpleCredentialName CREDENTIAL_NAME =
@@ -53,7 +54,9 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void managePermissions() {
+	public void managePermissionsServerV1() {
+		assumeTrue(serverApiIsV1());
+
 		credentials.write(ValueCredentialRequest.builder()
 				.name(CREDENTIAL_NAME)
 				.value(CREDENTIAL_VALUE)
@@ -79,8 +82,7 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 
 		List<Permission> retrievedPermissions = permissions.getPermissions(CREDENTIAL_NAME);
 		// CredHub 1.x will automatically add a permission for the authenticated user;
-		// CredHub 2.x will not
-		assertThat(retrievedPermissions.size()).isBetween(3, 4);
+		assertThat(retrievedPermissions.size()).isEqualTo(4);
 
 		assertThat(retrievedPermissions).contains(appPermission, userPermission, clientPermission);
 
@@ -89,6 +91,46 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 		permissions.deletePermission(CREDENTIAL_NAME, Actor.client("client1"));
 
 		List<Permission> afterDelete = permissions.getPermissions(CREDENTIAL_NAME);
-		assertThat(afterDelete.size()).isBetween(0, 1);
+		assertThat(afterDelete.size()).isEqualTo(1);
+	}
+
+	@Test
+	public void managePermissionsServerV2() {
+		assumeTrue(serverApiIsV2());
+
+		credentials.write(ValueCredentialRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.value(CREDENTIAL_VALUE)
+				.build());
+
+		Permission appPermission = Permission.builder()
+				.app("app1")
+				.operation(Operation.READ)
+				.build();
+		Permission userPermission = Permission.builder()
+				.user("user1")
+				.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+				.build();
+		Permission clientPermission = Permission.builder()
+				.client("client1")
+				.operations(Operation.READ_ACL, Operation.WRITE_ACL)
+				.build();
+
+		permissions.addPermissions(CREDENTIAL_NAME,
+				appPermission,
+				userPermission,
+				clientPermission);
+
+		List<Permission> retrievedPermissions = permissions.getPermissions(CREDENTIAL_NAME);
+		assertThat(retrievedPermissions.size()).isEqualTo(3);
+
+		assertThat(retrievedPermissions).contains(appPermission, userPermission, clientPermission);
+
+		permissions.deletePermission(CREDENTIAL_NAME, Actor.app("app1"));
+		permissions.deletePermission(CREDENTIAL_NAME, Actor.user("user1"));
+		permissions.deletePermission(CREDENTIAL_NAME, Actor.client("client1"));
+
+		List<Permission> afterDelete = permissions.getPermissions(CREDENTIAL_NAME);
+		assertThat(afterDelete.size()).isEqualTo(0);
 	}
 }

@@ -58,7 +58,8 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 				.uri(PERMISSIONS_URL_QUERY, name.getName())
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
-				.bodyToFlux(Permission.class));
+				.bodyToMono(CredentialPermissions.class)
+				.flatMapMany(data -> Flux.fromIterable(data.getPermissions())));
 	}
 
 	@Override

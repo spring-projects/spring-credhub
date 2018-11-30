@@ -95,10 +95,10 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 				.verifyComplete();
 
 		StepVerifier.create(credentials.getByName(CREDENTIAL_NAME, ValueCredential.class))
-				.assertNext(byName -> {
-					assertThat(byName.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(byName.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(byName.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				.assertNext(response -> {
+					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
 				})
 				.verifyComplete();
 

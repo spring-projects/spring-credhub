@@ -22,6 +22,7 @@ import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 import org.springframework.credhub.support.certificate.CertificateSummary;
+import org.springframework.credhub.support.certificate.CertificateSummaryData;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
@@ -67,7 +68,8 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 				.uri(BASE_URL_PATH)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
-				.bodyToFlux(CertificateSummary.class));
+				.bodyToMono(CertificateSummaryData.class)
+				.flatMapMany(data -> Flux.fromIterable(data.getCertificates())));
 	}
 
 	@Override
@@ -79,8 +81,9 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 				.uri(NAME_URL_QUERY, name.getName())
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
-				.bodyToFlux(CertificateSummary.class)
-				.single());
+				.bodyToMono(CertificateSummaryData.class)
+				.flatMapMany(data -> Flux.fromIterable(data.getCertificates())))
+				.single();
 	}
 
 	@Override
@@ -94,7 +97,7 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
 
 		return credHubOperations.doWithWebClient(webClient -> webClient
-				.put()
+				.post()
 				.uri(REGENERATE_URL_PATH, id)
 				.syncBody(request)
 				.retrieve()
@@ -113,7 +116,7 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		request.put(SIGNED_BY_REQUEST_FIELD, certificateName.getName());
 
 		return credHubOperations.doWithWebClient(webClient -> webClient
-				.put()
+				.post()
 				.uri(BULK_REGENERATE_URL_PATH)
 				.syncBody(request)
 				.retrieve()

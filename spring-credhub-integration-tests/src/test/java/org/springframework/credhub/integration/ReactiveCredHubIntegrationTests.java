@@ -22,12 +22,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.credhub.autoconfig.CredHubAutoConfiguration;
 import org.springframework.credhub.autoconfig.CredHubOAuth2TemplateAutoConfiguration;
 import org.springframework.credhub.autoconfig.CredHubTemplateAutoConfiguration;
-import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.info.VersionInfo;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestApplication.class,
@@ -53,10 +53,8 @@ public abstract class ReactiveCredHubIntegrationTests {
 	}
 
 	void deleteCredentialIfExists(CredentialName credentialName) {
-		try {
-			operations.credentials().deleteByName(credentialName).block();
-		} catch (CredHubException e) {
-			// ignore failing deletes on cleanup
-		}
+		operations.credentials().deleteByName(credentialName)
+				.onErrorResume(e -> Mono.empty())
+				.block();
 	}
 }

@@ -116,6 +116,8 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 				.build());
 		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(overwritten.getValue().getValue()).isEqualTo("new-value");
+
+		verifyHistory();
 	}
 
 	@Test
@@ -146,6 +148,25 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 				.build());
 		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(overwritten.getValue().getValue()).isEqualTo("new-value");
+
+		verifyHistory();
+	}
+
+	private void verifyHistory() {
+		List<CredentialDetails<ValueCredential>> history =
+				credentials.getByNameWithHistory(CREDENTIAL_NAME, ValueCredential.class);
+		assertThat(history).hasSize(2);
+		assertThat(history.get(0).getName()).isEqualTo(CREDENTIAL_NAME);
+		assertThat(history.get(0).getValue().getValue()).isEqualTo("new-value");
+		assertThat(history.get(1).getName()).isEqualTo(CREDENTIAL_NAME);
+		assertThat(history.get(1).getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+
+		history = credentials.getByNameWithHistory(CREDENTIAL_NAME, 2, ValueCredential.class);
+		assertThat(history).hasSize(2);
+		assertThat(history.get(0).getName()).isEqualTo(CREDENTIAL_NAME);
+		assertThat(history.get(0).getValue().getValue()).isEqualTo("new-value");
+		assertThat(history.get(1).getName()).isEqualTo(CREDENTIAL_NAME);
+		assertThat(history.get(1).getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
 	}
 
 	@Test

@@ -141,6 +141,8 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 					assertThat(response.getValue().getValue()).isEqualTo("new-value");
 				})
 				.verifyComplete();
+
+		verifyHistory();
 	}
 
 	@Test
@@ -177,6 +179,36 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 				.assertNext(response -> {
 					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 					assertThat(response.getValue().getValue()).isEqualTo("new-value");
+				})
+				.verifyComplete();
+
+		verifyHistory();
+	}
+
+	private void verifyHistory() {
+		StepVerifier.create(credentials.getByNameWithHistory(CREDENTIAL_NAME, ValueCredential.class))
+				.assertNext(response -> {
+					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+					assertThat(response.getValue().getValue()).isEqualTo("new-value");
+					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				})
+				.assertNext(response -> {
+					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				})
+				.verifyComplete();
+
+		StepVerifier.create(credentials.getByNameWithHistory(CREDENTIAL_NAME, 2, ValueCredential.class))
+				.assertNext(response -> {
+					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+					assertThat(response.getValue().getValue()).isEqualTo("new-value");
+					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				})
+				.assertNext(response -> {
+					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
 				})
 				.verifyComplete();
 	}

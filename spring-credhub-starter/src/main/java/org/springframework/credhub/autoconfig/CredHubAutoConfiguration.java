@@ -19,7 +19,9 @@ package org.springframework.credhub.autoconfig;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,21 +29,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubProperties;
-import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for {@link CredHubTemplate}.
+ * {@link EnableAutoConfiguration Auto-configuration} for Spring CredHub support beans.
  * 
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
 @Configuration
 @EnableConfigurationProperties
-@ConditionalOnProperty(value = "spring.credhub.url")
 public class CredHubAutoConfiguration {
 	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
 
@@ -51,6 +51,8 @@ public class CredHubAutoConfiguration {
 	 * @return a {@link CredHubProperties} bean
 	 */
 	@Bean
+	@ConditionalOnMissingBean
+	@ConditionalOnProperty(value = "spring.credhub.url")
 	@ConfigurationProperties(prefix = "spring.credhub")
 	public CredHubProperties credHubProperties() {
 		return new CredHubProperties();
@@ -62,6 +64,8 @@ public class CredHubAutoConfiguration {
 	 * @return a {@link ClientOptions} bean
 	 */
 	@Bean
+	@ConditionalOnMissingBean
+	@ConditionalOnProperty(value = "spring.credhub.url")
 	@ConfigurationProperties(prefix = "spring.credhub")
 	public ClientOptions clientOptions() {
 		return new ClientOptions();
@@ -79,6 +83,7 @@ public class CredHubAutoConfiguration {
 	 * instance
 	 */
 	@Bean
+	@ConditionalOnBean(ClientOptions.class)
 	public ClientFactoryWrapper clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
 		return new ClientFactoryWrapper(
 				credHubTemplateFactory.clientHttpRequestFactoryWrapper(clientOptions));
@@ -91,6 +96,7 @@ public class CredHubAutoConfiguration {
 	 * @return the {@link ClientHttpConnector}
 	 */
 	@Bean
+	@ConditionalOnBean(ClientOptions.class)
 	@ConditionalOnClass(WebClient.class)
 	public ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
 		return credHubTemplateFactory.clientHttpConnector(clientOptions);
@@ -103,7 +109,7 @@ public class CredHubAutoConfiguration {
 
 		private final ClientHttpRequestFactory clientHttpRequestFactory;
 
-		public ClientFactoryWrapper(ClientHttpRequestFactory clientHttpRequestFactory) {
+		ClientFactoryWrapper(ClientHttpRequestFactory clientHttpRequestFactory) {
 			this.clientHttpRequestFactory = clientHttpRequestFactory;
 		}
 
@@ -121,7 +127,7 @@ public class CredHubAutoConfiguration {
 			}
 		}
 
-		public ClientHttpRequestFactory getClientHttpRequestFactory() {
+		ClientHttpRequestFactory getClientHttpRequestFactory() {
 			return clientHttpRequestFactory;
 		}
 	}

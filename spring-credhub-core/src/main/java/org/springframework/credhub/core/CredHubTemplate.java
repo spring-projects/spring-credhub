@@ -38,10 +38,11 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Implements the main interaction with CredHub.
  *
- * @author Scott Frederick 
+ * @author Scott Frederick
  */
 public class CredHubTemplate implements CredHubOperations {
 	private final RestTemplate restTemplate;
+	private final boolean usingOAuth2;
 
 	/**
 	 * Create a new {@link CredHubTemplate} using the provided {@link RestTemplate}.
@@ -53,6 +54,7 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(restTemplate, "restTemplate must not be null");
 
 		this.restTemplate = restTemplate;
+		this.usingOAuth2 = false;
 	}
 
 	/**
@@ -69,6 +71,7 @@ public class CredHubTemplate implements CredHubOperations {
 
 		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
 				clientHttpRequestFactory);
+		this.usingOAuth2 = false;
 	}
 
 	/**
@@ -91,6 +94,7 @@ public class CredHubTemplate implements CredHubOperations {
 
 		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
 				clientHttpRequestFactory, clientRegistrationRepository, authorizedClientService);
+		this.usingOAuth2 = true;
 	}
 
 	/**
@@ -171,5 +175,9 @@ public class CredHubTemplate implements CredHubOperations {
 		catch (HttpStatusCodeException e) {
 			throw new CredHubException(e);
 		}
+	}
+
+	public boolean isUsingOAuth2() {
+		return this.usingOAuth2;
 	}
 }

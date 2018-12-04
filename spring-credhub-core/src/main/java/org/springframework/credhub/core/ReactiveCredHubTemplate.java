@@ -42,10 +42,11 @@ import java.util.function.Function;
 /**
  * Implements the main interaction with CredHub.
  *
- * @author Scott Frederick 
+ * @author Scott Frederick
  */
 public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	private final WebClient webClient;
+	private final boolean usingOAuth2;
 
 	/**
 	 * Create a new {@link ReactiveCredHubTemplate} using the provided {@link WebClient}.
@@ -57,6 +58,7 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 		Assert.notNull(webClient, "webClient must not be null");
 
 		this.webClient = webClient;
+		this.usingOAuth2 = false;
 	}
 
 	/**
@@ -72,6 +74,7 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 		Assert.notNull(clientHttpConnector, "clientHttpConnector must not be null");
 
 		this.webClient = CredHubWebClientFactory.createWebClient(credHubProperties, clientHttpConnector);
+		this.usingOAuth2 = false;
 	}
 
 	/**
@@ -94,6 +97,7 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 		this.webClient = CredHubWebClientFactory.createWebClient(credHubProperties, clientHttpConnector,
 				clientRegistrationRepository, authorizedClientRepository);
+		this.usingOAuth2 = true;
 	}
 
 	/**
@@ -174,5 +178,9 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 		catch (HttpStatusCodeException e) {
 			throw new CredHubException(e);
 		}
+	}
+
+	public boolean isUsingOAuth2() {
+		return this.usingOAuth2;
 	}
 }

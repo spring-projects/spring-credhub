@@ -33,6 +33,8 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.server.UnAuthenticatedServerOAuth2AuthorizedClientRepository;
 
@@ -57,6 +59,12 @@ public class CredHubOAuth2AutoConfiguration {
 		this.properties = properties;
 	}
 
+	/**
+	 * Create a {@code ClientRegistrationRepository} bean for use with an OAuth2-enabled
+	 * {@code CredHubTemplate}.
+	 *
+	 * @return the {@code ClientRegistrationRepository}
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public ClientRegistrationRepository credHubClientRegistrationRepository() {
@@ -66,6 +74,13 @@ public class CredHubOAuth2AutoConfiguration {
 		return new InMemoryClientRegistrationRepository(registrations);
 	}
 
+	/**
+	 * Create an {@code OAuth2AuthorizedClientService} bean for use with an OAuth2-enabled
+	 * {@code CredHubTemplate}.
+	 *
+	 * @param clientRegistrationRepository a {@code ClientRegistrationRepository}
+	 * @return the {@code OAuth2AuthorizedClientService}
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public OAuth2AuthorizedClientService credHubAuthorizedClientService(
@@ -74,8 +89,25 @@ public class CredHubOAuth2AutoConfiguration {
 	}
 
 	/**
-	 * Create a {@code ServerOAuth2AuthorizedClientRepository} bean to override the default
-	 * provided by Spring Boot auto-configuration.
+	 * Create a {@code ReactiveClientRegistrationRepository} bean for use with an OAuth2-enabled
+	 * {@code ReactiveCredHubTemplate}, in case
+	 * {@link ReactiveOAuth2ClientAutoConfiguration} doesn't configure one.
+	 *
+	 * @return the {@code ReactiveClientRegistrationRepository}
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	public ReactiveClientRegistrationRepository clientRegistrationRepository() {
+		List<ClientRegistration> registrations = new ArrayList<>(
+				OAuth2ClientPropertiesRegistrationAdapter
+						.getClientRegistrations(this.properties).values());
+		return new InMemoryReactiveClientRegistrationRepository(registrations);
+	}
+
+	/**
+	 * Create a {@code ServerOAuth2AuthorizedClientRepository} bean for use with an OAuth2-enabled
+	 * {@code ReactiveCredHubTemplate}, to override the default provided by
+	 * {@link ReactiveOAuth2ClientAutoConfiguration}.
 	 *
 	 * @return the {@code ServerOAuth2AuthorizedClientRepository}
 	 */

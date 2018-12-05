@@ -20,8 +20,11 @@ import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
 import org.springframework.boot.test.context.FilteredClassLoader;
-import org.springframework.boot.test.context.assertj.AssertableApplicationContext;
+import org.springframework.boot.test.context.assertj.ApplicationContextAssertProvider;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.boot.test.context.runner.ReactiveWebApplicationContextRunner;
+import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -32,49 +35,77 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredHubOAuth2AutoConfigurationTests {
 
+	private final Class[] configurations = {
+			CredHubAutoConfiguration.class,
+			CredHubOAuth2AutoConfiguration.class,
+			ReactiveOAuth2ClientAutoConfiguration.class
+	};
+
+	private final String[] oAuth2ClientProperties = {
+			"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
+			"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
+			"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
+			"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
+			"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+	};
+
 	private final ApplicationContextRunner context = new ApplicationContextRunner()
 			.withPropertyValues(
 					"debug=true"
 			)
 			.withConfiguration(AutoConfigurations.of(
-					CredHubAutoConfiguration.class,
-					CredHubOAuth2AutoConfiguration.class,
-					ReactiveOAuth2ClientAutoConfiguration.class
+					configurations
 			));
 
 	@Test
-	public void oauth2ContextConfigured() {
+	public void oauth2ContextConfiguredWithNonWebApp() {
 		context
-				.withPropertyValues(
-						"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
-						"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
-						"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
-						"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
-						"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
-				)
-				.run(context -> {
-					assertThat(context).hasSingleBean(ClientRegistrationRepository.class);
-					assertThat(context).hasSingleBean(OAuth2AuthorizedClientService.class);
+				.withPropertyValues(oAuth2ClientProperties)
+				.run(this::assertOAuth2ContextConfigured);
+	}
 
-					assertThat(context).hasSingleBean(ReactiveClientRegistrationRepository.class);
-					assertThat(context).hasSingleBean(ServerOAuth2AuthorizedClientRepository.class);
-				});
+	@Test
+	public void oauth2ContextConfiguredWithServletApp() {
+		new WebApplicationContextRunner()
+				.withConfiguration(AutoConfigurations.of(configurations))
+				.withPropertyValues(oAuth2ClientProperties)
+				.run(this::assertOAuth2ContextConfigured);
+	}
+
+	@Test
+	public void oauth2ContextConfiguredWithNonServletApp() {
+		new ReactiveWebApplicationContextRunner()
+				.withConfiguration(AutoConfigurations.of(configurations))
+				.withPropertyValues(oAuth2ClientProperties)
+				.run(this::assertOAuth2ContextConfigured);
 	}
 
 	@Test
 	public void oauth2ContextNotConfiguredWithoutProperties() {
 		context
-				.run(this::assertNoOAuth2ContextConfigured);
+				.run(this::assertOAuth2ContextNotConfigured);
 	}
 
 	@Test
 	public void oauth2ContextNotConfiguredWithoutSpringSecurity() {
 		context
 				.withClassLoader(new FilteredClassLoader(ClientRegistration.class))
-				.run(this::assertNoOAuth2ContextConfigured);
+				.run(this::assertOAuth2ContextNotConfigured);
 	}
 
-	private void assertNoOAuth2ContextConfigured(AssertableApplicationContext context) {
+	private void assertOAuth2ContextConfigured(
+			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+
+		assertThat(context).hasSingleBean(ClientRegistrationRepository.class);
+		assertThat(context).hasSingleBean(OAuth2AuthorizedClientService.class);
+
+		assertThat(context).hasSingleBean(ReactiveClientRegistrationRepository.class);
+		assertThat(context).hasSingleBean(ServerOAuth2AuthorizedClientRepository.class);
+	}
+
+	private void assertOAuth2ContextNotConfigured(
+			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+
 		assertThat(context).doesNotHaveBean(ClientRegistrationRepository.class);
 		assertThat(context).doesNotHaveBean(OAuth2AuthorizedClientService.class);
 

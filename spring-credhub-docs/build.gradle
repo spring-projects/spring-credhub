@@ -30,7 +30,7 @@ description = "Spring CredHub Documentation"
 apply plugin: 'org.asciidoctor.convert'
 
 repositories {
-	maven { url "https://repo.spring.io/libs-snapshot-local" }
+	maven { url "https://repo.spring.io/libs-release-local" }
 	mavenCentral()
 }
 
@@ -42,7 +42,7 @@ dependencies {
 	compile project(":spring-credhub-core")
 	compile("io.projectreactor:reactor-core")
 
-	docs("io.spring.docresources:spring-doc-resources:0.1.1.BUILD-SNAPSHOT@zip")
+	docs("io.spring.docresources:spring-doc-resources:0.1.0.RELEASE@zip")
 }
 
 task prepareAsciidocBuild(type: Sync) {

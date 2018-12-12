@@ -65,5 +65,5 @@ Application classes can autowire an instance of this bean to interact with a Cre
 
 [source,java,%autofit]
 ----
-include::{examples-dir}/ReactiveCredHubService.java[]
+include::{examples-dir}ReactiveCredHubService.java[]
 ----

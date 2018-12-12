@@ -16,7 +16,7 @@ To use mutual TLS authentication to a CredHub server, simply provide the URL of 
 
 [source,properties,%autofit]
 ----
-include::{examples-dir}/config-minimal.yml[]
+include::{examples-dir}config-minimal.yml[]
 ----
 
 See the {credhub-api-mtls}[CredHub documentation] for more information on mutual TLS authentication.
@@ -30,7 +30,7 @@ Spring CredHub supports client credentials grant tokens for authentication using
 
 [source,properties,%autofit]
 ----
-include::{examples-dir}/config-oauth2.yml[]
+include::{examples-dir}config-oauth2.yml[]
 ----
 
 The ID provided in `spring.credhub.oauth2.registration-id` must refer to a client configured under `spring.security.oauth2.client.registration`.

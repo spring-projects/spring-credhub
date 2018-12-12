@@ -8,7 +8,7 @@ Scott Frederick;
 :toclevels: 3
 :sectlinks:
 
-:examples-dir: ../../test/java/com/example/credhub/
+:examples-dir: ../../src/test/java/com/example/credhub/
 :credhub-home: https://docs.cloudfoundry.org/credhub/
 :credhub-api-home: https://credhub-api.cfapps.io/
 :credhub-api-credentials: {credhub-api-home}version/2.0/#credentials

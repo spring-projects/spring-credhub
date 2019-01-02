@@ -40,12 +40,12 @@ public class CredHubTemplateFactory {
 	 * Create a {@link CredHubTemplate} for interaction with a CredHub server.
 	 *
 	 * @param credHubProperties connection properties
-	 * @param clientHttpRequestFactory a factory for HTTP connections
+	 * @param clientOptions connection options
 	 * @return a {@code CredHubTemplate}
 	 */
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
-										   ClientHttpRequestFactory clientHttpRequestFactory) {
-		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory);
+										   ClientOptions clientOptions) {
+		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions));
 	}
 
 	/**
@@ -53,38 +53,29 @@ public class CredHubTemplateFactory {
 	 * using OAuth2 for authentication.
 	 *
 	 * @param credHubProperties connection properties
-	 * @param clientHttpRequestFactory a factory for HTTP connections
+	 * @param clientOptions connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientService  a repository of authorized OAuth2 clients
 	 * @return a {@code CredHubTemplate}
 	 */
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
-										   ClientHttpRequestFactory clientHttpRequestFactory,
+										   ClientOptions clientOptions,
 										   ClientRegistrationRepository clientRegistrationRepository,
 										   OAuth2AuthorizedClientService authorizedClientService) {
-		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory,
+		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions),
 				clientRegistrationRepository, authorizedClientService);
-	}
-
-	/**
-	 * Create a {@link ClientHttpRequestFactory}.
-	 *
-	 * @return the {@link ClientHttpRequestFactory} instance.
-	 */
-	public ClientHttpRequestFactory clientHttpRequestFactoryWrapper() {
-		return ClientHttpRequestFactoryFactory.create(new ClientOptions());
 	}
 
 	/**
 	 * Create a {@link ReactiveCredHubTemplate} for interaction with a CredHub server.
 	 *
 	 * @param credHubProperties connection properties
-	 * @param clientHttpConnector a factory for HTTP connections
+	 * @param clientOptions connection options
 	 * @return a {@code ReactiveCredHubTemplate}
 	 */
-	public ReactiveCredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
-												   ClientHttpConnector clientHttpConnector) {
-		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector);
+	public ReactiveCredHubTemplate reactiveCredHubTemplate(CredHubProperties credHubProperties,
+														   ClientOptions clientOptions) {
+		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector(clientOptions));
 	}
 
 	/**
@@ -92,16 +83,16 @@ public class CredHubTemplateFactory {
 	 * using OAuth2 for authentication.
 	 *
 	 * @param credHubProperties connection properties
-	 * @param clientHttpConnector a factory for HTTP connections
+	 * @param clientOptions connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientRepository a repository of OAuth2 client authorizations
 	 * @return a {@code ReactiveCredHubTemplate}
 	 */
-	public ReactiveCredHubOperations credHubTemplate(CredHubProperties credHubProperties,
-													 ClientHttpConnector clientHttpConnector,
-													 ReactiveClientRegistrationRepository clientRegistrationRepository,
-													 ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
-		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector,
+	public ReactiveCredHubOperations reactiveCredHubTemplate(CredHubProperties credHubProperties,
+															 ClientOptions clientOptions,
+															 ReactiveClientRegistrationRepository clientRegistrationRepository,
+															 ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector(clientOptions),
 				clientRegistrationRepository, authorizedClientRepository);
 	}
 
@@ -111,8 +102,8 @@ public class CredHubTemplateFactory {
 	 * @param clientOptions options for creating the client connection
 	 * @return the {@link ClientHttpRequestFactory} instance.
 	 */
-	public ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
-		return ClientHttpConnectorFactory.create(clientOptions);
+	private ClientHttpRequestFactory clientHttpRequestFactory(ClientOptions clientOptions) {
+		return ClientHttpRequestFactoryFactory.create(clientOptions);
 	}
 
 	/**
@@ -121,7 +112,7 @@ public class CredHubTemplateFactory {
 	 * @param clientOptions options for creating the client connection
 	 * @return the {@link ClientHttpRequestFactory} instance.
 	 */
-	public ClientHttpRequestFactory clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
-		return ClientHttpRequestFactoryFactory.create(clientOptions);
+	private ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
+		return ClientHttpConnectorFactory.create(clientOptions);
 	}
 }

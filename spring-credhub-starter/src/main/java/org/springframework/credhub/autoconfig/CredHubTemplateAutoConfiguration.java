@@ -26,14 +26,13 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.Re
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.credhub.autoconfig.CredHubAutoConfiguration.ClientFactoryWrapper;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.core.ReactiveCredHubTemplate;
-import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.credhub.support.ClientOptions;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
@@ -60,8 +59,7 @@ public class CredHubTemplateAutoConfiguration {
 	 * with CredHub.
 	 *
 	 * @param credHubProperties            {@link CredHubProperties} for CredHub
-	 * @param clientFactoryWrapper         a {@link ClientFactoryWrapper}
-	 *                                     to customize CredHub  HTTP requests
+	 * @param clientOptions                client connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientService      a repository of authorized OAuth2 clients
 	 * @return the {@link CredHubOperations} bean
@@ -69,24 +67,20 @@ public class CredHubTemplateAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public CredHubOperations credHubTemplate(
-			CredHubProperties credHubProperties,
-			ClientFactoryWrapper clientFactoryWrapper,
+			CredHubProperties credHubProperties, ClientOptions clientOptions,
 			@Autowired(required = false) ClientRegistrationRepository clientRegistrationRepository,
 			@Autowired(required = false) OAuth2AuthorizedClientService authorizedClientService) {
 
 		if (credHubProperties.getOauth2() == null || credHubProperties.getOauth2().getRegistrationId() == null) {
-			return credHubTemplateFactory.credHubTemplate(credHubProperties,
-					clientFactoryWrapper.getClientHttpRequestFactory());
+			return credHubTemplateFactory.credHubTemplate(credHubProperties, clientOptions);
 		}
 
 		if (clientRegistrationRepository == null || authorizedClientService == null) {
 			throw misconfiguredException();
 		}
 
-		return credHubTemplateFactory.credHubTemplate(credHubProperties,
-				clientFactoryWrapper.getClientHttpRequestFactory(),
-				clientRegistrationRepository,
-				authorizedClientService);
+		return credHubTemplateFactory.credHubTemplate(credHubProperties, clientOptions,
+				clientRegistrationRepository, authorizedClientService);
 	}
 
 	/**
@@ -94,8 +88,7 @@ public class CredHubTemplateAutoConfiguration {
 	 * with CredHub.
 	 *
 	 * @param credHubProperties            {@link CredHubProperties} for CredHub
-	 * @param clientHttpConnector          a {@link ClientHttpConnector} to customize CredHub
-	 *                                     HTTP requests
+	 * @param clientOptions                client connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientRepository   a repository of OAuth2 authorized clients
 	 * @return the {@link CredHubTemplate} bean
@@ -104,19 +97,18 @@ public class CredHubTemplateAutoConfiguration {
 	@ConditionalOnMissingBean
 	@ConditionalOnClass(WebClient.class)
 	public ReactiveCredHubOperations reactiveCredHubTemplate(
-			CredHubProperties credHubProperties,
-			ClientHttpConnector clientHttpConnector,
+			CredHubProperties credHubProperties, ClientOptions clientOptions,
 			@Autowired(required = false) ReactiveClientRegistrationRepository clientRegistrationRepository,
 			@Autowired(required = false) ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
 
 		if (credHubProperties.getOauth2() == null || credHubProperties.getOauth2().getRegistrationId() == null) {
-			return credHubTemplateFactory.credHubTemplate(credHubProperties, clientHttpConnector);
+			return credHubTemplateFactory.reactiveCredHubTemplate(credHubProperties, clientOptions);
 		}
 
 		if (clientRegistrationRepository == null || authorizedClientRepository == null) {
 			throw misconfiguredException();
 		}
-		return credHubTemplateFactory.credHubTemplate(credHubProperties, clientHttpConnector,
+		return credHubTemplateFactory.reactiveCredHubTemplate(credHubProperties, clientOptions,
 				clientRegistrationRepository, authorizedClientRepository);
 	}
 

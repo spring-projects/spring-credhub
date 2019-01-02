@@ -16,23 +16,15 @@
 
 package org.springframework.credhub.autoconfig;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.support.ClientOptions;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.reactive.ClientHttpConnector;
-import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Spring CredHub support beans.
@@ -43,8 +35,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 @EnableConfigurationProperties
 public class CredHubAutoConfiguration {
-	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
-
 	/**
 	 * Create a {@link CredHubProperties} bean and populate it from properties.
 	 * 
@@ -69,66 +59,5 @@ public class CredHubAutoConfiguration {
 	@ConfigurationProperties(prefix = "spring.credhub")
 	public ClientOptions clientOptions() {
 		return new ClientOptions();
-	}
-
-	/**
-	 * Create a {@link ClientFactoryWrapper} containing a
-	 * {@link ClientHttpRequestFactory}. {@link ClientHttpRequestFactory} is not exposed
-	 * as root bean because {@link ClientHttpRequestFactory} is configured with
-	 * {@link ClientOptions} which are not necessarily applicable for the whole
-	 * application.
-	 *
-	 * @param clientOptions the populated {@link ClientOptions} bean
-	 * @return the {@link ClientFactoryWrapper} to wrap a {@link ClientHttpRequestFactory}
-	 * instance
-	 */
-	@Bean
-	@ConditionalOnBean(ClientOptions.class)
-	public ClientFactoryWrapper clientHttpRequestFactoryWrapper(ClientOptions clientOptions) {
-		return new ClientFactoryWrapper(
-				credHubTemplateFactory.clientHttpRequestFactoryWrapper(clientOptions));
-	}
-
-	/**
-	 * Create a {@link ClientHttpConnector}.
-	 *
-	 * @param clientOptions the populated {@link ClientOptions} bean
-	 * @return the {@link ClientHttpConnector}
-	 */
-	@Bean
-	@ConditionalOnBean(ClientOptions.class)
-	@ConditionalOnClass(WebClient.class)
-	public ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
-		return credHubTemplateFactory.clientHttpConnector(clientOptions);
-	}
-
-	/**
-	 * Wrapper for {@link ClientHttpRequestFactory} to not expose the bean globally.
-	 */
-	public static class ClientFactoryWrapper implements InitializingBean, DisposableBean {
-
-		private final ClientHttpRequestFactory clientHttpRequestFactory;
-
-		ClientFactoryWrapper(ClientHttpRequestFactory clientHttpRequestFactory) {
-			this.clientHttpRequestFactory = clientHttpRequestFactory;
-		}
-
-		@Override
-		public void destroy() throws Exception {
-			if (clientHttpRequestFactory instanceof DisposableBean) {
-				((DisposableBean) clientHttpRequestFactory).destroy();
-			}
-		}
-
-		@Override
-		public void afterPropertiesSet() throws Exception {
-			if (clientHttpRequestFactory instanceof InitializingBean) {
-				((InitializingBean) clientHttpRequestFactory).afterPropertiesSet();
-			}
-		}
-
-		ClientHttpRequestFactory getClientHttpRequestFactory() {
-			return clientHttpRequestFactory;
-		}
 	}
 }

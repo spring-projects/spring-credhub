@@ -25,7 +25,6 @@ import org.springframework.boot.test.context.assertj.AssertableApplicationContex
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.credhub.autoconfig.CredHubAutoConfiguration.ClientFactoryWrapper;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.reactive.ClientHttpConnector;
@@ -91,9 +90,6 @@ public class CredHubAutoConfigurationTests {
 		ClientOptions options = context.getBean(ClientOptions.class);
 		assertThat(options.getConnectionTimeout()).isEqualTo(Duration.ofMillis(30));
 		assertThat(options.getReadTimeout()).isEqualTo(Duration.ofMillis(60));
-
-		assertThat(context).hasSingleBean(ClientFactoryWrapper.class);
-		assertThat(context).hasSingleBean(ClientHttpConnector.class);
 	}
 
 	@Configuration

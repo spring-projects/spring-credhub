@@ -25,6 +25,7 @@ import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
+import org.springframework.credhub.support.ClientOptions;
 import org.springframework.credhub.support.ServicesData;
 
 /**
@@ -46,16 +47,16 @@ public class CredHubInterpolationServiceDataPostProcessor
 	 */
 	public CredHubInterpolationServiceDataPostProcessor() {
 		try {
-			CredHubTemplateFactory credHubTemplateFactroy = new CredHubTemplateFactory();
+			CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
 			CredHubProperties credHubProperties = new CredHubProperties();
 
 			credHubProperties.setUrl(System.getProperty("spring.credhub.url"));
 
 			if (credHubProperties.getUrl() != null
 					&& !credHubProperties.getUrl().isEmpty()) {
-				credHubOperations = credHubTemplateFactroy.credHubTemplate(
+				credHubOperations = credHubTemplateFactory.credHubTemplate(
 						credHubProperties,
-						credHubTemplateFactroy.clientHttpRequestFactoryWrapper())
+						new ClientOptions())
 						.interpolation();
 			}
 			else {

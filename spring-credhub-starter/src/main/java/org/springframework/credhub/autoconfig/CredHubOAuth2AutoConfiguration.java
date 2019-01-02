@@ -49,7 +49,7 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
 @AutoConfigureBefore(ReactiveOAuth2ClientAutoConfiguration.class)
-@ConditionalOnClass(ClientRegistration.class)
+@ConditionalOnClass(name = "org.springframework.security.oauth2.client.registration.ClientRegistration")
 @Conditional(ClientsConfiguredCondition.class)
 public class CredHubOAuth2AutoConfiguration {
 

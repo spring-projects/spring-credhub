@@ -95,7 +95,7 @@ public class CredHubTemplateAutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnClass(WebClient.class)
+	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
 	public ReactiveCredHubOperations reactiveCredHubTemplate(
 			CredHubProperties credHubProperties, ClientOptions clientOptions,
 			@Autowired(required = false) ReactiveClientRegistrationRepository clientRegistrationRepository,

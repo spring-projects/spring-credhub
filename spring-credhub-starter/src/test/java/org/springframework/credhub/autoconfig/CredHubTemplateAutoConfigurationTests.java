@@ -29,6 +29,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredHubTemplateAutoConfigurationTests {
 
+	private static final FilteredClassLoader SPRING_SECURITY_FILTERED_CLASS_LOADER =
+			new FilteredClassLoader("org.springframework.security.oauth2.client");
+
 	private final ApplicationContextRunner context = new ApplicationContextRunner()
 			.withConfiguration(AutoConfigurations.of(
 					ReactiveOAuth2ClientAutoConfiguration.class,
@@ -46,6 +49,7 @@ public class CredHubTemplateAutoConfigurationTests {
 				.withPropertyValues(
 						"spring.credhub.url=https://localhost"
 				)
+				.withClassLoader(SPRING_SECURITY_FILTERED_CLASS_LOADER)
 				.run(context -> {
 					assertThat(context).hasSingleBean(CredHubTemplate.class);
 					CredHubTemplate credHubTemplate = context.getBean(CredHubTemplate.class);
@@ -98,12 +102,29 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplatesNotConfiguredWithoutClientRegistration() {
+	public void credHubTemplatesNotConfiguredWithMissingClientRegistration() {
 		context
 				.withPropertyValues(
 						"spring.credhub.url=https://localhost",
 						"spring.credhub.oauth2.registration-id=credhub-client"
 				)
+				.run(context -> assertThat(context).hasFailed());
+	}
+
+	@Test
+	public void credHubTemplatesNotConfiguredWithOAuth2ButMissingSpringSecurity() {
+		context
+				.withPropertyValues(
+						"spring.credhub.url=https://localhost",
+						"spring.credhub.oauth2.registration-id=credhub-client",
+
+						"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
+						"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
+						"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
+						"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
+						"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+				)
+				.withClassLoader(SPRING_SECURITY_FILTERED_CLASS_LOADER)
 				.run(context -> assertThat(context).hasFailed());
 	}
 }

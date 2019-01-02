@@ -97,7 +97,7 @@ public class CredHubOAuth2AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
-	public ReactiveClientRegistrationRepository clientRegistrationRepository() {
+	public ReactiveClientRegistrationRepository credHubReactiveClientRegistrationRepository() {
 		List<ClientRegistration> registrations = new ArrayList<>(
 				OAuth2ClientPropertiesRegistrationAdapter
 						.getClientRegistrations(this.properties).values());

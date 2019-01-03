@@ -22,7 +22,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -52,32 +51,7 @@ import org.springframework.security.oauth2.client.web.server.ServerOAuth2Authori
 		ReactiveOAuth2ClientAutoConfiguration.class})
 @ConditionalOnBean(CredHubProperties.class)
 public class CredHubTemplateAutoConfiguration {
-	private static final String CREDHUB_TEMPLATE_BEAN_NAME = "credHubTemplate";
-	private static final String REACTIVE_CREDHUB_TEMPLATE_BEAN_NAME = "reactiveCredHubTemplate";
-
 	private final CredHubTemplateFactory credHubTemplateFactory = new CredHubTemplateFactory();
-
-	/**
-	 * Create the {@link CredHubTemplate} that the application will use to interact
-	 * with CredHub.
-	 *
-	 * @param credHubProperties            {@link CredHubProperties} for CredHub
-	 * @param clientOptions                client connection options
-	 * @return the {@link CredHubOperations} bean
-	 */
-	@Bean(CREDHUB_TEMPLATE_BEAN_NAME)
-	@ConditionalOnMissingBean
-	@ConditionalOnMissingClass({
-			"org.springframework.security.oauth2.client.registration.ClientRegistrationRepository",
-			"org.springframework.security.oauth2.client.OAuth2AuthorizedClientService"})
-	public CredHubOperations credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions) {
-
-		if (credHubProperties.getOauth2() == null || credHubProperties.getOauth2().getRegistrationId() == null) {
-			return credHubTemplateFactory.credHubTemplate(credHubProperties, clientOptions);
-		}
-
-		throw misconfiguredException();
-	}
 
 	/**
 	 * Create the {@link CredHubTemplate} that the application will use to interact
@@ -89,12 +63,9 @@ public class CredHubTemplateAutoConfiguration {
 	 * @param authorizedClientService      a repository of authorized OAuth2 clients
 	 * @return the {@link CredHubOperations} bean
 	 */
-	@Bean(CREDHUB_TEMPLATE_BEAN_NAME)
+	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnClass(name = {
-			"org.springframework.security.oauth2.client.registration.ClientRegistrationRepository",
-			"org.springframework.security.oauth2.client.OAuth2AuthorizedClientService"})
-	public CredHubOperations credHubOAuth2Template(
+	public CredHubOperations credHubTemplate(
 			CredHubProperties credHubProperties, ClientOptions clientOptions,
 			@Autowired(required = false) ClientRegistrationRepository clientRegistrationRepository,
 			@Autowired(required = false) OAuth2AuthorizedClientService authorizedClientService) {
@@ -117,42 +88,14 @@ public class CredHubTemplateAutoConfiguration {
 	 *
 	 * @param credHubProperties            {@link CredHubProperties} for CredHub
 	 * @param clientOptions                client connection options
-	 * @return the {@link CredHubTemplate} bean
-	 */
-	@Bean(REACTIVE_CREDHUB_TEMPLATE_BEAN_NAME)
-	@ConditionalOnMissingBean
-	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
-	@ConditionalOnMissingClass({
-			"org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository",
-			"org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository"})
-	public ReactiveCredHubOperations reactiveCredHubTemplate(
-			CredHubProperties credHubProperties,
-			ClientOptions clientOptions) {
-
-		if (credHubProperties.getOauth2() == null || credHubProperties.getOauth2().getRegistrationId() == null) {
-			return credHubTemplateFactory.reactiveCredHubTemplate(credHubProperties, clientOptions);
-		}
-
-		throw misconfiguredException();
-	}
-
-	/**
-	 * Create the {@link ReactiveCredHubTemplate} that the application will use to interact
-	 * with CredHub.
-	 *
-	 * @param credHubProperties            {@link CredHubProperties} for CredHub
-	 * @param clientOptions                client connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientRepository   a repository of OAuth2 authorized clients
 	 * @return the {@link CredHubTemplate} bean
 	 */
-	@Bean(REACTIVE_CREDHUB_TEMPLATE_BEAN_NAME)
+	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnClass(name = {
-			"org.springframework.web.reactive.function.client.WebClient",
-			"org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository",
-			"org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository"})
-	public ReactiveCredHubOperations reactiveCredHubOAuth2Template(
+	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
+	public ReactiveCredHubOperations reactiveCredHubTemplate(
 			CredHubProperties credHubProperties, ClientOptions clientOptions,
 			@Autowired(required = false) ReactiveClientRegistrationRepository clientRegistrationRepository,
 			@Autowired(required = false) ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
@@ -164,7 +107,6 @@ public class CredHubTemplateAutoConfiguration {
 		if (clientRegistrationRepository == null || authorizedClientRepository == null) {
 			throw misconfiguredException();
 		}
-
 		return credHubTemplateFactory.reactiveCredHubTemplate(credHubProperties, clientOptions,
 				clientRegistrationRepository, authorizedClientRepository);
 	}

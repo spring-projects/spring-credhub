@@ -33,8 +33,10 @@ dependencies {
 	optional("org.springframework:spring-webflux")
 	optional("io.projectreactor.netty:reactor-netty")
 
+	compile("org.springframework.security:spring-security-oauth2-client:${springSecurityVersion}") {
+		exclude module: "spring-security-web"
+	}
 	optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
-	optional("org.springframework.security:spring-security-oauth2-client:${springSecurityVersion}")
 
 	optional("org.apache.httpcomponents:httpclient:4.5.3") {
 		exclude(group: 'commons-logging', module: 'commons-logging')

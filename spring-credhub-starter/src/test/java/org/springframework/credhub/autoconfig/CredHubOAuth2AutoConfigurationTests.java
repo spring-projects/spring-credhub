@@ -18,18 +18,14 @@ package org.springframework.credhub.autoconfig;
 
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.assertj.ApplicationContextAssertProvider;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.test.context.runner.ReactiveWebApplicationContextRunner;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,8 +33,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 
 	private final Class[] configurations = {
 			CredHubAutoConfiguration.class,
-			CredHubOAuth2AutoConfiguration.class,
-			ReactiveOAuth2ClientAutoConfiguration.class
+			CredHubOAuth2AutoConfiguration.class
 	};
 
 	private final String[] oAuth2ClientProperties = {
@@ -58,26 +53,46 @@ public class CredHubOAuth2AutoConfigurationTests {
 			));
 
 	@Test
-	public void oauth2ContextConfiguredWithNonWebApp() {
+	public void oauth2ContextConfigured() {
 		context
 				.withPropertyValues(oAuth2ClientProperties)
-				.run(this::assertOAuth2ContextConfigured);
+				.run(context -> {
+					assertServletOAuth2ContextConfigured(context);
+					assertReactiveOAuth2ContextConfigured(context);
+				});
 	}
 
 	@Test
-	public void oauth2ContextConfiguredWithServletApp() {
+	public void oauth2ContextConfiguredWithoutWebClient() {
+		context
+				.withClassLoader(new FilteredClassLoader(WebClient.class))
+				.withPropertyValues(oAuth2ClientProperties)
+				.run(context -> {
+					assertServletOAuth2ContextConfigured(context);
+					assertReactiveOAuth2ContextNotConfigured(context);
+				});
+	}
+
+	@Test
+	public void oauth2ContextConfiguredWithWebApp() {
 		new WebApplicationContextRunner()
 				.withConfiguration(AutoConfigurations.of(configurations))
 				.withPropertyValues(oAuth2ClientProperties)
-				.run(this::assertOAuth2ContextConfigured);
+				.run(context -> {
+					assertServletOAuth2ContextConfigured(context);
+					assertReactiveOAuth2ContextConfigured(context);
+				});
 	}
 
 	@Test
-	public void oauth2ContextConfiguredWithNonServletApp() {
+	public void oauth2ContextConfiguredWithReactiveWebApp() {
 		new ReactiveWebApplicationContextRunner()
 				.withConfiguration(AutoConfigurations.of(configurations))
 				.withPropertyValues(oAuth2ClientProperties)
-				.run(this::assertOAuth2ContextConfigured);
+				.run(context -> {
+					assertServletOAuth2ContextConfigured(context);
+					assertReactiveOAuth2ContextConfigured(context);
+				});
 	}
 
 	@Test
@@ -93,23 +108,38 @@ public class CredHubOAuth2AutoConfigurationTests {
 				.run(this::assertOAuth2ContextNotConfigured);
 	}
 
-	private void assertOAuth2ContextConfigured(
+	private void assertServletOAuth2ContextConfigured(
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
-		assertThat(context).hasSingleBean(ClientRegistrationRepository.class);
-		assertThat(context).hasSingleBean(OAuth2AuthorizedClientService.class);
+		assertThat(context).hasBean("credHubClientRegistrationRepository");
+		assertThat(context).hasBean("credHubAuthorizedClientService");
+	}
 
-		assertThat(context).hasSingleBean(ReactiveClientRegistrationRepository.class);
-		assertThat(context).hasSingleBean(ServerOAuth2AuthorizedClientRepository.class);
+	private void assertServletOAuth2ContextNotConfigured(
+			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+
+		assertThat(context).doesNotHaveBean("credHubClientRegistrationRepository");
+		assertThat(context).doesNotHaveBean("credHubAuthorizedClientService");
+	}
+
+	private void assertReactiveOAuth2ContextConfigured(
+			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+
+		assertThat(context).hasBean("credHubReactiveClientRegistrationRepository");
+		assertThat(context).hasBean("credHubAuthorizedClientRepository");
+	}
+
+	private void assertReactiveOAuth2ContextNotConfigured(
+			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+
+		assertThat(context).doesNotHaveBean("credHubReactiveClientRegistrationRepository");
+		assertThat(context).doesNotHaveBean("credHubAuthorizedClientRepository");
 	}
 
 	private void assertOAuth2ContextNotConfigured(
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
-		assertThat(context).doesNotHaveBean(ClientRegistrationRepository.class);
-		assertThat(context).doesNotHaveBean(OAuth2AuthorizedClientService.class);
-
-		assertThat(context).doesNotHaveBean(ReactiveClientRegistrationRepository.class);
-		assertThat(context).doesNotHaveBean(ServerOAuth2AuthorizedClientRepository.class);
+		assertServletOAuth2ContextNotConfigured(context);
+		assertReactiveOAuth2ContextNotConfigured(context);
 	}
 }

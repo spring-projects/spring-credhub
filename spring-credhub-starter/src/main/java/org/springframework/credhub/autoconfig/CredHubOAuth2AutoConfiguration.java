@@ -97,6 +97,7 @@ public class CredHubOAuth2AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
+	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
 	public ReactiveClientRegistrationRepository credHubReactiveClientRegistrationRepository() {
 		List<ClientRegistration> registrations = new ArrayList<>(
 				OAuth2ClientPropertiesRegistrationAdapter
@@ -113,6 +114,7 @@ public class CredHubOAuth2AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
+	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
 	public ServerOAuth2AuthorizedClientRepository credHubAuthorizedClientRepository() {
 		return new UnAuthenticatedServerOAuth2AuthorizedClientRepository();
 	}

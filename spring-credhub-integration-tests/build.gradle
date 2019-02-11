@@ -48,14 +48,12 @@ dependencies {
 	compile("org.springframework.security:spring-security-config")
 	compile("org.springframework.security:spring-security-oauth2-client")
 
-	if (project.hasProperty("useHttpComponents")) {
-		compile("org.apache.httpcomponents:httpclient:4.5.3")
-	}
 	if (project.hasProperty("useOkHttp3")) {
 		compile("com.squareup.okhttp3:okhttp:3.6.0")
-	}
-	if (project.hasProperty("useNetty")) {
+	} else if (project.hasProperty("useNetty")) {
 		compile("io.netty:netty-all:4.1.30.Final")
+	} else {
+		compile("org.apache.httpcomponents:httpclient:4.5.3")
 	}
 
 	testCompile("org.springframework.boot:spring-boot-starter-test")

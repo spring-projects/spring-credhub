@@ -111,6 +111,13 @@ public class ClientHttpRequestFactoryFactory {
 	 */
 	static class HttpURLConnection {
 		static ClientHttpRequestFactory usingJdk(ClientOptions options) {
+			if (usingCustomCerts(options)) {
+				logger.warn("Trust material will not be configured when using " +
+						"java.net.HttpUrlConnection. Use an alternate HTTP Client " +
+						"(Apache HttpComponents HttpClient, OkHttp3, or Netty) when " +
+						"configuring CA certificates.");
+			}
+
 			SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 			
 			if (options.getConnectionTimeout() != null) {

@@ -33,10 +33,12 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 		assertThat(versionInfo.getVersion()).isEqualTo("1.9.0");
 		assertThat(versionInfo.isVersion1()).isTrue();
 		assertThat(versionInfo.isVersion2()).isFalse();
+		assertThat(versionInfo.isVersion2_0()).isFalse();
+		assertThat(versionInfo.isVersion2_1()).isFalse();
 	}
 
 	@Test
-	public void deserializeWithV2() {
+	public void deserializeWithV2_0() {
 		String json = "{\n" +
 				"  \"version\": \"2.0.2\"\n" +
 				"}";
@@ -46,5 +48,22 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 		assertThat(versionInfo.getVersion()).isEqualTo("2.0.2");
 		assertThat(versionInfo.isVersion1()).isFalse();
 		assertThat(versionInfo.isVersion2()).isTrue();
+		assertThat(versionInfo.isVersion2_0()).isTrue();
+		assertThat(versionInfo.isVersion2_1()).isFalse();
+	}
+
+	@Test
+	public void deserializeWithV2_1() {
+		String json = "{\n" +
+				"  \"version\": \"2.1.2\"\n" +
+				"}";
+
+		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
+
+		assertThat(versionInfo.getVersion()).isEqualTo("2.1.2");
+		assertThat(versionInfo.isVersion1()).isFalse();
+		assertThat(versionInfo.isVersion2()).isTrue();
+		assertThat(versionInfo.isVersion2_0()).isFalse();
+		assertThat(versionInfo.isVersion2_1()).isTrue();
 	}
 }

@@ -18,6 +18,7 @@ package org.springframework.credhub.core.permissionV2;
 
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
+import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Permission;
 import reactor.core.publisher.Mono;
 
@@ -25,6 +26,7 @@ import reactor.core.publisher.Mono;
  * Specifies the interactions with CredHub to add, retrieve, and delete permissions.
  *
  * @author Scott Frederick
+ * @author Alberto C. Ríos
  */
 public interface ReactiveCredHubPermissionV2Operations {
 	/**
@@ -34,6 +36,16 @@ public interface ReactiveCredHubPermissionV2Operations {
 	 * @return the details if the specified permission
 	 */
 	Mono<CredentialPermission> getPermissions(final String id);
+
+	/**
+	 * Get a permission by path and actor.
+	 * @since API 2.1
+	 *
+	 * @param path the path of the credentials; must not be {@literal null}
+	 * @param actor the actor of the credentials; must not be {@literal null}
+	 * @return the details if the specified permission
+	 */
+	Mono<CredentialPermission> getPermissionsByPathAndActor(final CredentialName path, final Actor actor);
 
 	/**
 	 * Add permissions to an credential path.

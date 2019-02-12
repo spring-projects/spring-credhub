@@ -4,6 +4,7 @@ include ':spring-credhub-core'
 include ':spring-credhub-cloud-connector'
 include ':spring-credhub-starter'
 include ':spring-credhub-integration-tests'
+include ':spring-credhub-reactive-integration-tests'
 include ':spring-credhub-docs'
 
 project(':spring-credhub-core').projectDir = "$rootDir/spring-credhub-core" as File

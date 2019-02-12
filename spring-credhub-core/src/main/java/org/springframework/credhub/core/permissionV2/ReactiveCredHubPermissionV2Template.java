@@ -16,24 +16,28 @@
 
 package org.springframework.credhub.core.permissionV2;
 
+import reactor.core.publisher.Mono;
+
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
+import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
-import reactor.core.publisher.Mono;
 
 /**
  * Implements the main interaction with CredHub to add, retrieve,
  * and delete permissions.
  *
  * @author Scott Frederick
+ * @author Alberto C. Ríos
  */
 public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermissionV2Operations {
 	private static final String PERMISSIONS_URL_PATH = "/api/v2/permissions";
 	private static final String PERMISSIONS_ID_URL_PATH = PERMISSIONS_URL_PATH + "/{id}";
+	static final String PERMISSIONS_PATH_ACTOR_URL_QUERY = PERMISSIONS_URL_PATH + "?path={path}&actor={actor}";
 
 	private ReactiveCredHubOperations credHubOperations;
 
@@ -69,6 +73,19 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 				.post()
 				.uri(PERMISSIONS_URL_PATH)
 				.syncBody(credentialPermission)
+				.retrieve()
+				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+				.bodyToMono(CredentialPermission.class));
+	}
+
+	@Override
+	public Mono<CredentialPermission> getPermissionsByPathAndActor(final CredentialName path, final Actor actor) {
+		Assert.notNull(path, "credential path must not be null");
+		Assert.notNull(actor, "credential actor must not be null");
+
+		return credHubOperations.doWithWebClient(webClient -> webClient
+				.get()
+				.uri(PERMISSIONS_PATH_ACTOR_URL_QUERY, path.getName(), actor.getIdentity())
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(CredentialPermission.class));

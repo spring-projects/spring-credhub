@@ -19,6 +19,7 @@ package org.springframework.credhub.core.permissionV2;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
+import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -30,10 +31,12 @@ import org.springframework.util.Assert;
  * and delete permissions.
  *
  * @author Scott Frederick 
+ * @author Alberto C. Ríos
  */
 public class CredHubPermissionV2Template implements CredHubPermissionV2Operations {
 	static final String PERMISSIONS_URL_PATH = "/api/v2/permissions";
 	static final String PERMISSIONS_ID_URL_PATH = PERMISSIONS_URL_PATH + "/{id}";
+	static final String PERMISSIONS_PATH_ACTOR_URL_QUERY = PERMISSIONS_URL_PATH + "?path={path}&actor={actor}";
 
 	private CredHubOperations credHubOperations;
 
@@ -54,6 +57,19 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 			ResponseEntity<CredentialPermission> response =
 					restOperations.getForEntity(PERMISSIONS_ID_URL_PATH,
 							CredentialPermission.class, id);
+			return response.getBody();
+		});
+	}
+
+	@Override
+	public CredentialPermission getPermissionsByPathAndActor(final CredentialName path, final Actor actor) {
+		Assert.notNull(path, "credential path must not be null");
+		Assert.notNull(actor, "credential actor must not be null");
+
+		return credHubOperations.doWithRest(restOperations -> {
+			ResponseEntity<CredentialPermission> response =
+					restOperations.getForEntity(PERMISSIONS_PATH_ACTOR_URL_QUERY,
+							CredentialPermission.class, path.getName(), actor.getIdentity());
 			return response.getBody();
 		});
 	}

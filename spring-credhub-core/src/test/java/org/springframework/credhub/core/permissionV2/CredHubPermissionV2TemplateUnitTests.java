@@ -21,9 +21,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.http.HttpEntity;
@@ -33,9 +35,11 @@ import org.springframework.web.client.RestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template.PERMISSIONS_PATH_ACTOR_URL_QUERY;
 import static org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH;
 import static org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template.PERMISSIONS_URL_PATH;
 import static org.springframework.credhub.support.permissions.ActorType.APP;
+import static org.springframework.credhub.support.permissions.ActorType.OAUTH_CLIENT;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
@@ -75,6 +79,31 @@ public class CredHubPermissionV2TemplateUnitTests {
 		assertThat(response).isNotNull();
 		assertThat(response.getPath()).isEqualTo(PATH.getName());
 		assertThat(response.getPermission().getActor().getAuthType()).isEqualTo(APP);
+		assertThat(response.getPermission().getOperations()).contains(Operation.READ, Operation.WRITE);
+	}
+
+	@Test
+	public void getPermissionsByPathAndActor() {
+		String clientId = "client-id";
+
+		CredentialPermission expectedResponse = new CredentialPermission(
+				PATH,
+				Permission.builder()
+						  .operation(Operation.READ)
+						  .operation(Operation.WRITE)
+						  .client(clientId)
+						  .build());
+
+		String actor = OAUTH_CLIENT + ":" + clientId;
+		when(restTemplate.getForEntity(PERMISSIONS_PATH_ACTOR_URL_QUERY, CredentialPermission.class, PATH.getName(), actor))
+				.thenReturn(new ResponseEntity<>(expectedResponse, OK));
+
+		CredentialPermission response = credHubTemplate.getPermissionsByPathAndActor(PATH, Actor.client(clientId));
+
+		assertThat(response).isNotNull();
+		assertThat(response.getPath()).isEqualTo(PATH.getName());
+		assertThat(response.getPermission().getActor().getAuthType()).isEqualTo(OAUTH_CLIENT);
+		assertThat(response.getPermission().getActor().getPrimaryIdentifier()).isEqualTo(clientId);
 		assertThat(response.getPermission().getOperations()).contains(Operation.READ, Operation.WRITE);
 	}
 

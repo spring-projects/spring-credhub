@@ -6,7 +6,7 @@ image::https://spring.io/badges/spring-credhub/snapshot.svg[link=http://projects
 
 Spring CredHub provides client-side support for storing, retrieving, and deleting credentials from a https://github.com/cloudfoundry-incubator/credhub[CredHub] server running in a https://www.cloudfoundry.org/[Cloud Foundry] platform.
 
-See the https://spring.io/projects/spring-credhub[project site] for more information.
+See the https://spring.io/projects/spring-credhub[project site] and https://docs.spring.io/spring-credhub/docs/current/reference/html5/[reference documentation] for more information.
 
 === Demo Application
 

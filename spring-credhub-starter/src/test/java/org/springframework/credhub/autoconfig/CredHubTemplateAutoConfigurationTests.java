@@ -102,13 +102,33 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
+	public void credHubTemplatesNotConfiguredWithInvalidClientRegistration() {
+		context
+				.withPropertyValues(
+						"spring.credhub.url=https://localhost",
+						"spring.credhub.oauth2.registration-id=invalid-credhub-client",
+
+						"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
+						"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
+						"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
+						"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
+						"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+				)
+				.run(context -> assertThat(context)
+						.getFailure()
+						.hasMessageContaining("The CredHub OAuth2 client registration ID 'invalid-credhub-client' is not a valid"));
+	}
+
+	@Test
 	public void credHubTemplatesNotConfiguredWithMissingClientRegistration() {
 		context
 				.withPropertyValues(
 						"spring.credhub.url=https://localhost",
 						"spring.credhub.oauth2.registration-id=credhub-client"
 				)
-				.run(context -> assertThat(context).hasFailed());
+				.run(context -> assertThat(context)
+						.getFailure()
+						.hasMessageContaining("A CredHub OAuth2 client registration is configured but"));
 	}
 
 	@Test

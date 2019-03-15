@@ -130,6 +130,11 @@ class CredHubRestTemplateFactory {
 										OAuth2AuthorizedClientService authorizedClientService) {
 		ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(clientId);
 
+		if (clientRegistration == null) {
+			throw new IllegalStateException("The CredHub OAuth2 client registration ID '" + clientId +
+					"' is not a valid Spring Security OAuth2 client registration");
+		}
+
 		RestOperations tokenServerRestTemplate = createTokenServerRestTemplate(clientHttpRequestFactory);
 
 		restTemplate.getInterceptors()

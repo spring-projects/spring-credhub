@@ -31,8 +31,6 @@ import org.springframework.security.oauth2.client.web.server.ServerOAuth2Authori
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId;
-
 /**
  * Factory for creating a {@link WebClient} configured for communication with
  * a CredHub server.
@@ -82,7 +80,9 @@ class CredHubWebClientFactory {
 		return buildWebClient(properties.getUrl(), clientHttpConnector)
 				.filter(oauth)
 				.defaultRequest(requestHeadersSpec ->
-						requestHeadersSpec.attributes(clientRegistrationId(properties.getOauth2().getRegistrationId())))
+						requestHeadersSpec.attributes(
+								ServerOAuth2AuthorizedClientExchangeFilterFunction
+										.clientRegistrationId(properties.getOauth2().getRegistrationId())))
 				.build();
 	}
 

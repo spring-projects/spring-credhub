@@ -1,6 +1,6 @@
 = Spring CredHub Demo
 
-This application can be used to test CredHub connectivity by deploying it to a Cloud Foundry platform that has CredHub installed. The demo application includes a deployment manifest that makes it simple to deploy the application. Use the http://docs.cloudfoundry.org/cf-cli/getting-started.html[`cf` CLI] to target and authenticate to a Cloud Foundry platform, and run the following commands:
+This application can be used to test CredHub connectivity by deploying it to a Cloud Foundry platform that has CredHub installed. The demo application includes a deployment manifest that makes it simple to deploy the application. Use the https://docs.cloudfoundry.org/cf-cli/getting-started.html[`cf` CLI] to target and authenticate to a Cloud Foundry platform, and run the following commands:
 
 ----
 $ ../gradlew assemble
@@ -10,7 +10,7 @@ $ cf push -f manifest.yml
 After deploying the application, send an HTTP request to the demo application with this command:
 
 ----
-$ curl -X POST http://spring-credhub-demo.cf.example.com/test -d @demo.json -H "Content-type: application/json"
+$ curl -X POST https://spring-credhub-demo.cf.example.com/test -d @demo.json -H "Content-type: application/json"
 ----
 
 The application will write, retrieve, and delete a set of JSON credentials in CredHub and show the results of each request.

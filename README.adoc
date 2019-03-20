@@ -1,6 +1,6 @@
 image::https://build.spring.io/plugins/servlet/wittified/build-status/SPRINGCREDHUB-CORE[Build Status,link=https://build.spring.io/browse/SPRINGCREDHUB-CORE]
 
-image::https://spring.io/badges/spring-credhub/snapshot.svg[link=http://projects.spring.io/spring-credhub#quick-start]
+image::https://spring.io/badges/spring-credhub/snapshot.svg[link=https://projects.spring.io/spring-credhub#quick-start]
 
 = Spring CredHub
 
@@ -27,7 +27,7 @@ $ ./gradlew install
 === Working with the code
 
 If you don't have an IDE preference we would recommend that you use
-http://www.springsource.com/developer/sts[Spring Tools Suite] or
-http://eclipse.org[Eclipse] when working with the code. 
+https://www.springsource.com/developer/sts[Spring Tools Suite] or
+https://eclipse.org[Eclipse] when working with the code. 
 
 

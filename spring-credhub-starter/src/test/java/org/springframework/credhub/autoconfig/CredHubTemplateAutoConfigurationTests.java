@@ -88,7 +88,7 @@ public class CredHubTemplateAutoConfigurationTests {
 						"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 						"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
 						"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
-						"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+						"spring.security.oauth2.client.provider.uaa.token-uri=https://example.com/uaa/oauth/token"
 				)
 				.run(context -> {
 					assertThat(context).hasSingleBean(CredHubTemplate.class);
@@ -112,7 +112,7 @@ public class CredHubTemplateAutoConfigurationTests {
 						"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 						"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
 						"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
-						"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+						"spring.security.oauth2.client.provider.uaa.token-uri=https://example.com/uaa/oauth/token"
 				)
 				.run(context -> assertThat(context)
 						.getFailure()
@@ -142,7 +142,7 @@ public class CredHubTemplateAutoConfigurationTests {
 						"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 						"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
 						"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
-						"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+						"spring.security.oauth2.client.provider.uaa.token-uri=https://example.com/uaa/oauth/token"
 				)
 				.withClassLoader(SPRING_SECURITY_FILTERED_CLASS_LOADER)
 				.run(context -> assertThat(context).hasFailed());

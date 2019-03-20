@@ -48,7 +48,7 @@ import java.util.Map;
  *       "plan": "standard",
  *       "tags": [ "rabbitmq", "messaging" ],
  *       "credentials": {
- *         "http_api_uri": "http://username:password@rabbitmq-broker:12345/api",
+ *         "http_api_uri": "https://username:password@rabbitmq-broker:12345/api",
  *         "uri": "amqp://username:password@rabbitmq-broker/vhost",
  *       }
  *     }

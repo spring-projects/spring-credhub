@@ -41,7 +41,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 			"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 			"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",
 			"spring.security.oauth2.client.registration.credhub-client.authorization-grant-type=client_credentials",
-			"spring.security.oauth2.client.provider.uaa.token-uri=http://example.com/uaa/oauth/token"
+			"spring.security.oauth2.client.provider.uaa.token-uri=https://example.com/uaa/oauth/token"
 	};
 
 	private final ApplicationContextRunner context = new ApplicationContextRunner()

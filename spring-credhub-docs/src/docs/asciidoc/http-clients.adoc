@@ -5,7 +5,7 @@ Spring CredHub `CredHubOperations` supports multiple HTTP client libraries to co
 
 * Java’s builtin `HttpURLConnection` (default)
 * https://hc.apache.org/[Apache HttpComponents]
-* http://square.github.io/okhttp/[OkHttp 3]
+* https://square.github.io/okhttp/[OkHttp 3]
 * https://netty.io/[Netty]
 
 Choosing a specific client library requires the appropriate dependency to be available on the application classpath.

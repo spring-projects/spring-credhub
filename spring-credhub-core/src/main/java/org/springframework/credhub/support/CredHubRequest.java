@@ -135,7 +135,7 @@ public class CredHubRequest<T> {
 		if (name != null ? !name.equals(that.name) : that.name != null) return false;
 		if (credentialType != that.credentialType) return false;
 		if (additionalPermissions != null ?
-				additionalPermissions.equals(that.additionalPermissions) : that.additionalPermissions == null) return false;
+				!additionalPermissions.equals(that.additionalPermissions) : that.additionalPermissions == null) return false;
 		if (details != null ? !details.equals(that.details) : that.details != null) return false;
 		if (mode != null ? !mode.equals(that.mode) : that.mode != null) return false;
 

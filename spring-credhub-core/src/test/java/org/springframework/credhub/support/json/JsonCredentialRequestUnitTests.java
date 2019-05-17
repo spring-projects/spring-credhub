@@ -23,6 +23,9 @@ import org.junit.Test;
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
+import org.springframework.credhub.support.json.JsonCredentialRequest.JsonCredentialRequestBuilder;
+
+import java.util.Collections;
 
 import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
@@ -32,22 +35,36 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	public void setUp() {
 		requestBuilder = JsonCredentialRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))
-				.value(new JsonCredential() {
-					{
-						put("data", "value");
-						put("test", true);
-					}
-				})
 				.mode(WriteMode.OVERWRITE);
 	}
 
 	@Test
 	public void serializeWithJsonValue() {
+		((JsonCredentialRequestBuilder) requestBuilder).value(new JsonCredential() {
+			{
+				put("data", "value");
+				put("test", true);
+			}
+		});
+
 		DocumentContext json = toJsonPath(requestBuilder);
 
 		assertCommonRequestFields(json, null, WriteMode.OVERWRITE, "/example/credential", "json");
 		assertThat(json).hasPath("$.value.data").isEqualTo("value");
 		assertThat(json).hasPath("$.value.test").isEqualTo(true);
+
+		assertNoPermissions(json);
+	}
+
+	@Test
+	public void serializeWithEmptyValue() {
+		((JsonCredentialRequestBuilder) requestBuilder).value(new JsonCredential() {
+		});
+
+		DocumentContext json = toJsonPath(requestBuilder);
+
+		assertCommonRequestFields(json, null, WriteMode.OVERWRITE, "/example/credential", "json");
+		assertThat(json).hasPath("$.value").isEqualTo(Collections.EMPTY_MAP);
 
 		assertNoPermissions(json);
 	}

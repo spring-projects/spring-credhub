@@ -18,6 +18,8 @@
 
 package org.springframework.credhub.support;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * The details of a request to write a new or update an existing credential in CredHub.
  *
@@ -39,6 +41,7 @@ public class CredentialRequest<T> extends CredHubRequest<T> {
 	 *
 	 * @return the value of the credential
 	 */
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public T getValue() {
 		return this.details;
 	}

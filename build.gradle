@@ -25,6 +25,7 @@ buildscript {
 		classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
 		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
+		classpath 'io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE'
 	}
 }
 
@@ -41,6 +42,12 @@ ext {
 			'https://docs.spring.io/spring/docs/current/javadoc-api/',
 	] as String[]
 }
+
+//apply plugin: 'io.spring.nohttp'
+//
+//checkstyle {
+//	toolVersion = 8.16
+//}
 
 allprojects {
 	apply plugin: 'java'
@@ -173,5 +180,5 @@ task dist(dependsOn: assemble) {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.3'
+	gradleVersion = '4.10'
 }

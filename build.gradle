@@ -24,8 +24,8 @@ buildscript {
 		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
 		classpath 'io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE'
 		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
-		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.8'
-		classpath("io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE")
+		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.12'
+		classpath 'io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE'
 	}
 }
 
@@ -48,8 +48,7 @@ ext {
 }
 ext['spring-security.version'] = springSecurityVersion
 
-
-apply plugin: "io.spring.nohttp"
+apply plugin: 'io.spring.nohttp'
 
 checkstyle {
 	toolVersion = 8.16
@@ -189,8 +188,4 @@ configure(rootProject) {
 		group = "Distribution"
 		description = "Builds -dist and -docs distribution archives."
 	}
-}
-
-wrapper {
-	gradleVersion = '4.10'
 }

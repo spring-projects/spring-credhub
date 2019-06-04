@@ -42,7 +42,7 @@ dependencies {
 	compile project(":spring-credhub-core")
 	compile("io.projectreactor:reactor-core")
 
-	docs("io.spring.docresources:spring-doc-resources:0.1.0.RELEASE@zip")
+	docs("io.spring.docresources:spring-doc-resources:0.1.2.RELEASE@zip")
 }
 
 task prepareAsciidocBuild(type: Sync) {

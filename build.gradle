@@ -25,6 +25,7 @@ buildscript {
 		classpath 'io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE'
 		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.8'
+		classpath("io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE")
 	}
 }
 
@@ -46,6 +47,13 @@ ext {
 	] as String[]
 }
 ext['spring-security.version'] = springSecurityVersion
+
+
+apply plugin: "io.spring.nohttp"
+
+checkstyle {
+	toolVersion = 8.16
+}
 
 allprojects {
 	apply plugin: 'java'

@@ -25,6 +25,8 @@ To use Apache HttpComponents to communicate with CredHub, add the following depe
 </dependency>
 ----
 
+WARNING: Apache HttpClient's https://hc.apache.org/httpcomponents-client-4.5.x/logging.html[wire logging] can be enabled through logging configuration. Make sure to not accidentally enable wire logging as logs may expose traffic (including tokens and secrets) between your application and CredHub in plain text.
+
 === OkHttp 3
 
 To use OkHttp 3 to communicate with CredHub, add the following dependency to the application:

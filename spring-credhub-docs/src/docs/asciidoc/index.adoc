@@ -11,12 +11,12 @@ Scott Frederick;
 :examples-dir: ../../src/test/java/com/example/credhub/
 :credhub-home: https://docs.cloudfoundry.org/credhub/
 :credhub-api-home: https://credhub-api.cfapps.io/
-:credhub-api-credentials: {credhub-api-home}version/2.0/#credentials
-:credhub-api-certificates: {credhub-api-home}version/2.0/#certificates
-:credhub-api-permissions: {credhub-api-home}version/1.9/#permissions
-:credhub-api-permissionsV2: {credhub-api-home}version/2.0/#permissions
-:credhub-api-interpolation: {credhub-api-home}version/2.0/#interpolate-endpoint
-:credhub-api-info: {credhub-api-home}version/2.0/#get-version
+:credhub-api-credentials: {credhub-api-home}version/master/#_credentials_endpoint
+:credhub-api-certificates: {credhub-api-home}version/master/#_certificates_endpoint
+:credhub-api-permissions: {credhub-api-home}version/master/#_permissions_v1_deprecated
+:credhub-api-permissionsV2: {credhub-api-home}version/master/#_permissions_v2_endpoint
+:credhub-api-interpolation: {credhub-api-home}version/master/#_interpolation_endpoint
+:credhub-api-info: {credhub-api-home}version/master/#_info_endpoint
 :cloudfoundry-home: https://www.cloudfoundry.org/
 :apidocs-home: https://docs.spring.io/spring-credhub/docs/{revnumber}/api/index.html
 

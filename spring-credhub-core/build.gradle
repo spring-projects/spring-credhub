@@ -38,11 +38,11 @@ dependencies {
 	}
 	optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
 
-	optional("org.apache.httpcomponents:httpclient:4.5.3") {
+	optional("org.apache.httpcomponents:httpclient:${httpClientVersion}") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
-	optional("com.squareup.okhttp3:okhttp:3.6.0")
-	optional("io.netty:netty-all:4.1.30.Final")
+	optional("com.squareup.okhttp3:okhttp:${okHttp3Version}")
+	optional("io.netty:netty-all:${nettyVersion}")
 
 	testImplementation("org.springframework:spring-test")
 	testImplementation("io.projectreactor:reactor-test")

@@ -22,7 +22,7 @@ buildscript {
 	}
 	dependencies {
 		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
-		classpath 'io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE'
+		classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
 		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.12'
 		classpath 'io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE'
@@ -30,14 +30,18 @@ buildscript {
 }
 
 ext {
-	springVersion = "5.1.2.RELEASE"
-	springBootVersion = "2.1.0.RELEASE"
-	springSecurityVersion = "5.1.1.RELEASE"
+	springVersion = "5.2.1.RELEASE"
+	springBootVersion = "2.2.1.RELEASE"
+	springSecurityVersion = "5.2.1.RELEASE"
 	springCloudConnectorsVersion = "1.2.5.RELEASE"
-	reactorVersion = "Californium-SR2"
+	reactorVersion = "Dysprosium-SR1"
+
+	okHttp3Version = "4.2.2"
+	httpClientVersion = "4.5.10"
+	nettyVersion = "4.1.43.Final"
 
 	junitVersion = "4.12"
-	mockitoVersion = "2.7.22"
+	mockitoVersion = "3.1.0"
 	assertJVersion = "3.6.1"
 
 	javadocLinks = [

@@ -23,9 +23,9 @@ import org.springframework.credhub.core.ReactiveCredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ClientHttpConnector;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 
 /**
@@ -55,15 +55,15 @@ public class CredHubTemplateFactory {
 	 * @param credHubProperties connection properties
 	 * @param clientOptions connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientService  a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository  a repository of authorized OAuth2 clients
 	 * @return a {@code CredHubTemplate}
 	 */
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
 										   ClientOptions clientOptions,
 										   ClientRegistrationRepository clientRegistrationRepository,
-										   OAuth2AuthorizedClientService authorizedClientService) {
+										   OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions),
-				clientRegistrationRepository, authorizedClientService);
+				clientRegistrationRepository, authorizedClientRepository);
 	}
 
 	/**

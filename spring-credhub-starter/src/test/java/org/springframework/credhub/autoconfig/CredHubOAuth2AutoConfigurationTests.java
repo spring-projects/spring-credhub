@@ -96,6 +96,18 @@ public class CredHubOAuth2AutoConfigurationTests {
 	}
 
 	@Test
+	public void oauth2ContextConfiguredWithReactiveWebAppNoServlet() {
+		new ReactiveWebApplicationContextRunner()
+				.withClassLoader(new FilteredClassLoader("javax.servlet"))
+				.withConfiguration(AutoConfigurations.of(configurations))
+				.withPropertyValues(oAuth2ClientProperties)
+				.run(context -> {
+					assertServletOAuth2ContextNotConfigured(context);
+					assertReactiveOAuth2ContextConfigured(context);
+				});
+	}
+
+	@Test
 	public void oauth2ContextNotConfiguredWithoutProperties() {
 		context
 				.run(this::assertOAuth2ContextNotConfigured);
@@ -112,28 +124,28 @@ public class CredHubOAuth2AutoConfigurationTests {
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
 		assertThat(context).hasBean("credHubClientRegistrationRepository");
-		assertThat(context).hasBean("credHubAuthorizedClientService");
+		assertThat(context).hasBean("credHubAuthorizedClientRepository");
 	}
 
 	private void assertServletOAuth2ContextNotConfigured(
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
 		assertThat(context).doesNotHaveBean("credHubClientRegistrationRepository");
-		assertThat(context).doesNotHaveBean("credHubAuthorizedClientService");
+		assertThat(context).doesNotHaveBean("credHubAuthorizedClientRepository");
 	}
 
 	private void assertReactiveOAuth2ContextConfigured(
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
 		assertThat(context).hasBean("credHubReactiveClientRegistrationRepository");
-		assertThat(context).hasBean("credHubAuthorizedClientRepository");
+		assertThat(context).hasBean("credHubReactiveAuthorizedClientRepository");
 	}
 
 	private void assertReactiveOAuth2ContextNotConfigured(
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
 		assertThat(context).doesNotHaveBean("credHubReactiveClientRegistrationRepository");
-		assertThat(context).doesNotHaveBean("credHubAuthorizedClientRepository");
+		assertThat(context).doesNotHaveBean("credHubReactiveAuthorizedClientRepository");
 	}
 
 	private void assertOAuth2ContextNotConfigured(

@@ -34,7 +34,7 @@ ext {
 	springBootVersion = "2.2.1.RELEASE"
 	springSecurityVersion = "5.2.1.RELEASE"
 	springCloudConnectorsVersion = "1.2.5.RELEASE"
-	reactorVersion = "Dysprosium-SR1"
+	reactorVersion = "Dysprosium-SR2"
 
 	okHttp3Version = "4.2.2"
 	httpClientVersion = "4.5.10"

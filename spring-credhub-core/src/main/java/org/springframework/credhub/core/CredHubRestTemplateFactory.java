@@ -34,12 +34,18 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.endpoint.DefaultClientCredentialsTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2ClientCredentialsGrantRequest;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
-import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -76,20 +82,21 @@ class CredHubRestTemplateFactory {
 	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
 	 *                                     creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientService      a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
 	 * @return a configured {@link RestTemplate}
 	 */
 	static RestTemplate createRestTemplate(CredHubProperties properties,
 										   ClientHttpRequestFactory clientHttpRequestFactory,
 										   ClientRegistrationRepository clientRegistrationRepository,
-										   OAuth2AuthorizedClientService authorizedClientService) {
+										   OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
-		configureOAuth2(restTemplate, clientHttpRequestFactory,
+		configureOAuth2(restTemplate,
+				clientHttpRequestFactory,
 				properties.getOauth2().getRegistrationId(),
 				clientRegistrationRepository,
-				authorizedClientService);
+				authorizedClientRepository);
 
 		return restTemplate;
 	}
@@ -121,13 +128,13 @@ class CredHubRestTemplateFactory {
 	 *                                     creating new connections
 	 * @param clientId                     the OAuth2 client ID for authentication
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientService      a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
 	 */
 	private static void configureOAuth2(RestTemplate restTemplate,
 										ClientHttpRequestFactory clientHttpRequestFactory,
 										String clientId,
 										ClientRegistrationRepository clientRegistrationRepository,
-										OAuth2AuthorizedClientService authorizedClientService) {
+										OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(clientId);
 
 		if (clientRegistration == null) {
@@ -135,11 +142,39 @@ class CredHubRestTemplateFactory {
 					"' is not a valid Spring Security OAuth2 client registration");
 		}
 
-		RestOperations tokenServerRestTemplate = createTokenServerRestTemplate(clientHttpRequestFactory);
+		OAuth2AuthorizedClientManager clientManager =
+				buildClientManager(clientRegistrationRepository, authorizedClientRepository, clientHttpRequestFactory);
 
 		restTemplate.getInterceptors()
-				.add(new CredHubOAuth2RequestInterceptor(tokenServerRestTemplate,
-						clientRegistration, authorizedClientService));
+				.add(new CredHubOAuth2RequestInterceptor(clientRegistration, clientManager));
+	}
+
+	private static OAuth2AuthorizedClientManager buildClientManager(
+			ClientRegistrationRepository clientRegistrationRepository,
+			OAuth2AuthorizedClientRepository authorizedClientRepository,
+			ClientHttpRequestFactory clientHttpRequestFactory) {
+
+		OAuth2AuthorizedClientProvider authorizedClientProvider =
+				OAuth2AuthorizedClientProviderBuilder.builder()
+						.authorizationCode()
+						.clientCredentials(b ->
+								b.accessTokenResponseClient(buildTokenResponseClient(clientHttpRequestFactory)))
+						.build();
+
+		DefaultOAuth2AuthorizedClientManager authorizedClientManager =
+				new DefaultOAuth2AuthorizedClientManager(
+						clientRegistrationRepository, authorizedClientRepository);
+		authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+		return authorizedClientManager;
+	}
+
+	private static OAuth2AccessTokenResponseClient<OAuth2ClientCredentialsGrantRequest> buildTokenResponseClient(
+			ClientHttpRequestFactory clientHttpRequestFactory) {
+		DefaultClientCredentialsTokenResponseClient tokenResponseClient =
+				new DefaultClientCredentialsTokenResponseClient();
+		tokenResponseClient.setRestOperations(createTokenServerRestTemplate(clientHttpRequestFactory));
+		return tokenResponseClient;
 	}
 
 	private static RestTemplate createTokenServerRestTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {

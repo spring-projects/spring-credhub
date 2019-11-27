@@ -29,8 +29,8 @@ import org.springframework.credhub.core.permission.CredHubPermissionTemplate;
 import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Operations;
 import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.util.Assert;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -82,18 +82,18 @@ public class CredHubTemplate implements CredHubOperations {
 	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
 	 *                                     creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientService      a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
 	 */
 	public CredHubTemplate(CredHubProperties properties,
 						   ClientHttpRequestFactory clientHttpRequestFactory,
 						   ClientRegistrationRepository clientRegistrationRepository,
-						   OAuth2AuthorizedClientService authorizedClientService) {
+						   OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		Assert.notNull(properties, "properties must not be null");
 		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
 		Assert.notNull(clientRegistrationRepository, "clientRegistrationRepository must not be null");
 
 		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
-				clientHttpRequestFactory, clientRegistrationRepository, authorizedClientService);
+				clientHttpRequestFactory, clientRegistrationRepository, authorizedClientRepository);
 		this.usingOAuth2 = true;
 	}
 

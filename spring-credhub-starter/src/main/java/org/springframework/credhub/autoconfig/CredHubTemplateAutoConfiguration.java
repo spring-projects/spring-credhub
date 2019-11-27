@@ -33,9 +33,9 @@ import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.core.ReactiveCredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 
 /**
@@ -60,26 +60,27 @@ public class CredHubTemplateAutoConfiguration {
 	 * @param credHubProperties            {@link CredHubProperties} for CredHub
 	 * @param clientOptions                client connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientService      a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
 	 * @return the {@link CredHubOperations} bean
 	 */
 	@Bean
 	@ConditionalOnMissingBean
+	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
 	public CredHubOperations credHubTemplate(
 			CredHubProperties credHubProperties, ClientOptions clientOptions,
 			@Autowired(required = false) ClientRegistrationRepository clientRegistrationRepository,
-			@Autowired(required = false) OAuth2AuthorizedClientService authorizedClientService) {
+			@Autowired(required = false) OAuth2AuthorizedClientRepository authorizedClientRepository) {
 
 		if (credHubProperties.getOauth2() == null || credHubProperties.getOauth2().getRegistrationId() == null) {
 			return credHubTemplateFactory.credHubTemplate(credHubProperties, clientOptions);
 		}
 
-		if (clientRegistrationRepository == null || authorizedClientService == null) {
+		if (clientRegistrationRepository == null || authorizedClientRepository == null) {
 			throw misconfiguredException();
 		}
 
 		return credHubTemplateFactory.credHubTemplate(credHubProperties, clientOptions,
-				clientRegistrationRepository, authorizedClientService);
+				clientRegistrationRepository, authorizedClientRepository);
 	}
 
 	/**

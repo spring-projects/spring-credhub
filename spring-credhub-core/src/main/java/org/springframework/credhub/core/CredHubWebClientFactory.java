@@ -17,7 +17,6 @@
 package org.springframework.credhub.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.credhub.security.oauth2.client.endpoint.WebClientReactiveClientCredentialsTokenResponseClient;
 import org.springframework.credhub.support.utils.JsonUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,7 +24,11 @@ import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.codec.CodecConfigurer;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.endpoint.WebClientReactiveClientCredentialsTokenResponseClient;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -56,26 +59,24 @@ class CredHubWebClientFactory {
 	/**
 	 * Create a {@link WebClient} configured for communication with a CredHub server.
 	 *
-	 * @param properties          CredHub connection properties
-	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when
-	 *                            creating new connections
+	 * @param properties                   CredHub connection properties
+	 * @param clientHttpConnector          the {@link ClientHttpConnector} to use when
+	 *                                     creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientRepository a repository of OAuth2 authorized clients
+	 * @param authorizedClientRepository   a repository of OAuth2 authorized clients
 	 * @return a configured {@link WebClient}
 	 */
 	static WebClient createWebClient(CredHubProperties properties, ClientHttpConnector clientHttpConnector,
 									 ReactiveClientRegistrationRepository clientRegistrationRepository,
 									 ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
-		WebClientReactiveClientCredentialsTokenResponseClient tokenResponseClient =
-				new WebClientReactiveClientCredentialsTokenResponseClient();
-		tokenResponseClient.setWebClient(WebClient.builder()
-				.clientConnector(clientHttpConnector)
-				.build());
+		ReactiveOAuth2AuthorizedClientProvider clientProvider =
+				buildClientProvider(clientHttpConnector);
+
+		DefaultReactiveOAuth2AuthorizedClientManager clientManager =
+				buildClientManager(clientRegistrationRepository, authorizedClientRepository, clientProvider);
 
 		ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
-				new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository,
-						authorizedClientRepository);
-		oauth.setClientCredentialsTokenResponseClient(tokenResponseClient);
+				new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientManager);
 
 		return buildWebClient(properties.getUrl(), clientHttpConnector)
 				.filter(oauth)
@@ -84,6 +85,36 @@ class CredHubWebClientFactory {
 								ServerOAuth2AuthorizedClientExchangeFilterFunction
 										.clientRegistrationId(properties.getOauth2().getRegistrationId())))
 				.build();
+	}
+
+	private static ReactiveOAuth2AuthorizedClientProvider buildClientProvider(
+			ClientHttpConnector clientHttpConnector) {
+		return ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+				.authorizationCode()
+				.clientCredentials(b ->
+						b.accessTokenResponseClient(buildTokenResponseClient(clientHttpConnector)))
+				.build();
+	}
+
+	private static WebClientReactiveClientCredentialsTokenResponseClient buildTokenResponseClient(
+			ClientHttpConnector clientHttpConnector) {
+		WebClientReactiveClientCredentialsTokenResponseClient tokenResponseClient =
+				new WebClientReactiveClientCredentialsTokenResponseClient();
+		tokenResponseClient.setWebClient(WebClient.builder()
+				.clientConnector(clientHttpConnector)
+				.build());
+		return tokenResponseClient;
+	}
+
+	private static DefaultReactiveOAuth2AuthorizedClientManager buildClientManager(
+			ReactiveClientRegistrationRepository clientRegistrationRepository,
+			ServerOAuth2AuthorizedClientRepository authorizedClientRepository,
+			ReactiveOAuth2AuthorizedClientProvider clientProvider) {
+		DefaultReactiveOAuth2AuthorizedClientManager clientManager =
+				new DefaultReactiveOAuth2AuthorizedClientManager(clientRegistrationRepository,
+						authorizedClientRepository);
+		clientManager.setAuthorizedClientProvider(clientProvider);
+		return clientManager;
 	}
 
 	private static WebClient.Builder buildWebClient(String baseUri, ClientHttpConnector clientHttpConnector) {

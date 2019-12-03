@@ -73,7 +73,7 @@ public class ReactiveCredHubCredentialTemplate implements ReactiveCredHubCredent
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.put()
 				.uri(BASE_URL_PATH)
-				.syncBody(credentialRequest)
+				.bodyValue(credentialRequest)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(ref));
@@ -90,7 +90,7 @@ public class ReactiveCredHubCredentialTemplate implements ReactiveCredHubCredent
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.post()
 				.uri(BASE_URL_PATH)
-				.syncBody(parametersRequest)
+				.bodyValue(parametersRequest)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(ref));
@@ -110,7 +110,7 @@ public class ReactiveCredHubCredentialTemplate implements ReactiveCredHubCredent
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.post()
 				.uri(REGENERATE_URL_PATH)
-				.syncBody(request)
+				.bodyValue(request)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(ref));

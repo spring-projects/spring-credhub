@@ -72,7 +72,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.post()
 				.uri(PERMISSIONS_URL_PATH)
-				.syncBody(credentialPermission)
+				.bodyValue(credentialPermission)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(CredentialPermission.class));
@@ -103,7 +103,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.put()
 				.uri(PERMISSIONS_ID_URL_PATH, id)
-				.syncBody(credentialPermission)
+				.bodyValue(credentialPermission)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(CredentialPermission.class));

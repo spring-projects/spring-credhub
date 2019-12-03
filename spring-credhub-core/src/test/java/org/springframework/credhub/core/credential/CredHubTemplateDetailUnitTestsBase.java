@@ -64,22 +64,24 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {
 		return Arrays.asList(
-				new ResponseEntity<>(
-						new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential),
-						OK),
-				new ResponseEntity<>(new CredentialDetails<T>(), UNAUTHORIZED)
+				ResponseEntity
+						.ok()
+						.body(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential)),
+				ResponseEntity
+						.status(UNAUTHORIZED)
+						.body(new CredentialDetails<>())
 		);
 	}
 
 	static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(CredentialType type, T credential) {
 		return Arrays.asList(
-				new ResponseEntity<>(
-						new CredentialDetailsData<>(
-								new CredentialDetails<>(CREDENTIAL_ID, NAME,
-										type, credential)),
-						OK),
-				new ResponseEntity<>(
-						new CredentialDetailsData<T>(), UNAUTHORIZED)
+				ResponseEntity
+						.ok()
+						.body(new CredentialDetailsData<>(
+								new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential))),
+				ResponseEntity
+						.status(UNAUTHORIZED)
+						.body(new CredentialDetailsData<>())
 		);
 	}
 

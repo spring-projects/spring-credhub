@@ -88,7 +88,8 @@ public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrat
 
 		StepVerifier.create(certificates.getAll())
 				.assertNext(response -> assertThat(response.getName()).isEqualTo(TEST_CERT_NAME.getName()))
-				.verifyComplete();
+				.thenCancel()
+				.verify();
 	}
 
 	@Test

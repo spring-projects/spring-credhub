@@ -41,11 +41,15 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> successfulResponse =
-			new ResponseEntity<>(new CredentialSummaryData(new CredentialSummary(NAME)), OK);
+			ResponseEntity
+					.ok()
+					.body(new CredentialSummaryData(new CredentialSummary(NAME)));
 
 	@DataPoint("responses")
 	public static ResponseEntity<CredentialSummaryData> httpErrorResponse =
-			new ResponseEntity<>(new CredentialSummaryData(), UNAUTHORIZED);
+			ResponseEntity
+					.status(UNAUTHORIZED)
+					.body(new CredentialSummaryData());
 
 	@Theory
 	public void findByName(@FromDataPoints("responses")
@@ -57,12 +61,10 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 			try {
 				credHubTemplate.findByName(NAME);
 				fail("Exception should have been thrown");
-			}
-			catch (CredHubException e) {
+			} catch (CredHubException e) {
 				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
-		}
-		else {
+		} else {
 			List<CredentialSummary> response = credHubTemplate.findByName(NAME);
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
@@ -71,7 +73,7 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 
 	@Theory
 	public void findByPath(@FromDataPoints("responses")
-									   ResponseEntity<CredentialSummaryData> expectedResponse) {
+								   ResponseEntity<CredentialSummaryData> expectedResponse) {
 		when(restTemplate.getForEntity(PATH_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
 				.thenReturn(expectedResponse);
 
@@ -79,12 +81,10 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 			try {
 				credHubTemplate.findByPath(NAME.getName());
 				fail("Exception should have been thrown");
-			}
-			catch (CredHubException e) {
+			} catch (CredHubException e) {
 				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
-		}
-		else {
+		} else {
 			List<CredentialSummary> response = credHubTemplate.findByPath(NAME.getName());
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);

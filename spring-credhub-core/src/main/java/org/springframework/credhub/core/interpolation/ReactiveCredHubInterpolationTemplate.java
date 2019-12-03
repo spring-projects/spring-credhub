@@ -50,7 +50,7 @@ public class ReactiveCredHubInterpolationTemplate implements ReactiveCredHubInte
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.post()
 				.uri(INTERPOLATE_URL_PATH)
-				.syncBody(serviceData)
+				.bodyValue(serviceData)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(ServicesData.class));

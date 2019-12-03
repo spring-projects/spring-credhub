@@ -99,7 +99,7 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.post()
 				.uri(REGENERATE_URL_PATH, id)
-				.syncBody(request)
+				.bodyValue(request)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToMono(ref));
@@ -118,7 +118,7 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.post()
 				.uri(BULK_REGENERATE_URL_PATH)
-				.syncBody(request)
+				.bodyValue(request)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToFlux(ref)
@@ -135,7 +135,7 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		return credHubOperations.doWithWebClient(webClient -> webClient
 				.put()
 				.uri(UPDATE_TRANSITIONAL_URL_PATH, id)
-				.syncBody(request)
+				.bodyValue(request)
 				.retrieve()
 				.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
 				.bodyToFlux(CertificateCredentialDetails.class));

@@ -1,14 +1,12 @@
 rootProject.name = 'spring-credhub'
 
 include ':spring-credhub-core'
-include ':spring-credhub-cloud-connector'
 include ':spring-credhub-starter'
 include ':spring-credhub-integration-tests'
 include ':spring-credhub-reactive-integration-tests'
 include ':spring-credhub-docs'
 
 project(':spring-credhub-core').projectDir = "$rootDir/spring-credhub-core" as File
-project(':spring-credhub-cloud-connector').projectDir = "$rootDir/spring-credhub-cloud-connector" as File
 project(':spring-credhub-starter').projectDir = "$rootDir/spring-credhub-starter" as File
 project(':spring-credhub-integration-tests').projectDir = "$rootDir/spring-credhub-integration-tests" as File
 project(':spring-credhub-docs').projectDir = "$rootDir/spring-credhub-docs" as File

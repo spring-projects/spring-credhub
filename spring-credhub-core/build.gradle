@@ -17,6 +17,7 @@
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework:spring-framework-bom:${springVersion}"
+		mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
 		mavenBom "io.projectreactor:reactor-bom:${reactorVersion}"
 	}
 }
@@ -33,10 +34,10 @@ dependencies {
 	optional("org.springframework:spring-webflux")
 	optional("io.projectreactor.netty:reactor-netty")
 
-	compile("org.springframework.security:spring-security-oauth2-client:${springSecurityVersion}") {
+	compile("org.springframework.security:spring-security-oauth2-client") {
 		exclude module: "spring-security-web"
 	}
-	optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
+	optional("org.springframework.security:spring-security-config")
 
 	optional("org.apache.httpcomponents:httpclient:${httpClientVersion}") {
 		exclude(group: 'commons-logging', module: 'commons-logging')

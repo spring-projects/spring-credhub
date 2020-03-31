@@ -30,15 +30,14 @@ buildscript {
 }
 
 ext {
-	springVersion = "5.2.1.RELEASE"
-	springBootVersion = "2.2.1.RELEASE"
-	springSecurityVersion = "5.2.1.RELEASE"
-	springCloudConnectorsVersion = "1.2.5.RELEASE"
-	reactorVersion = "Dysprosium-SR2"
+	springVersion = "5.2.5.RELEASE"
+	springBootVersion = "2.2.6.RELEASE"
+	springSecurityVersion = "5.3.0.RELEASE"
+	reactorVersion = "Dysprosium-SR6"
 
-	okHttp3Version = "4.2.2"
-	httpClientVersion = "4.5.10"
-	nettyVersion = "4.1.43.Final"
+	okHttp3Version = "4.4.1"
+	httpClientVersion = "4.5.12"
+	nettyVersion = "4.1.48.Final"
 
 	junitVersion = "4.12"
 	mockitoVersion = "3.1.0"
@@ -50,7 +49,6 @@ ext {
 			'https://docs.spring.io/spring/docs/current/javadoc-api/',
 	] as String[]
 }
-ext['spring-security.version'] = springSecurityVersion
 
 apply plugin: 'io.spring.nohttp'
 
@@ -97,7 +95,6 @@ allprojects {
 			springIoTestRuntime {
 				imports {
 					mavenBom("io.spring.platform:platform-bom:${platformVersion}") {
-						bomProperty "spring-cloud-connectors.version", "${springCloudConnectorsVersion}"
 						bomProperty "mockito.version", "${mockitoVersion}"
 					}
 				}

@@ -234,9 +234,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 				.verifyComplete();
 
 		StepVerifier.create(credentials.getById(generated.get().getId(), UserCredential.class))
-				.assertNext(response -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-				})
+				.assertNext(response -> assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName()))
 				.verifyComplete();
 
 		StepVerifier.create(credentials.regenerate(CREDENTIAL_NAME, UserCredential.class))

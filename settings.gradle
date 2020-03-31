@@ -9,4 +9,5 @@ include ':spring-credhub-docs'
 project(':spring-credhub-core').projectDir = "$rootDir/spring-credhub-core" as File
 project(':spring-credhub-starter').projectDir = "$rootDir/spring-credhub-starter" as File
 project(':spring-credhub-integration-tests').projectDir = "$rootDir/spring-credhub-integration-tests" as File
+project(':spring-credhub-reactive-integration-tests').projectDir = "$rootDir/spring-credhub-reactive-integration-tests" as File
 project(':spring-credhub-docs').projectDir = "$rootDir/spring-credhub-docs" as File

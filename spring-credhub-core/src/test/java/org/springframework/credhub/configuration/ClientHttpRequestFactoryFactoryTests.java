@@ -65,6 +65,7 @@ public class ClientHttpRequestFactoryFactoryTests {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void nettyClientCreated() throws Exception {
 		ClientHttpRequestFactory factory = usingNetty(new ClientOptions());
 

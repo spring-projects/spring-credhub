@@ -150,7 +150,6 @@ public class CredHubRequest<T> {
 	/**
 	 * A builder that provides a fluent API for constructing {@link CredHubRequest}s.
 	 */
-	@SuppressWarnings("unchecked")
 	protected static abstract class CredHubRequestBuilder<T, R extends CredHubRequest<T>, B extends CredHubRequestBuilder<T, R, B>> {
 		private final B thisObj;
 		protected final R targetObj;

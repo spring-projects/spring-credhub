@@ -135,7 +135,7 @@ public class CredHubCertificateTemplateUnitTests {
 	public void bulkRegenerate() {
 		Map<String, List<CredentialName>> expectedResponse =
 				Collections.singletonMap(REGENERATED_CREDENTIALS_RESPONSE_FIELD,
-						Arrays.<CredentialName>asList(
+						Arrays.asList(
 								new SimpleCredentialName("example-certificate1"),
 								new SimpleCredentialName("example-certificate2")));
 

@@ -25,7 +25,6 @@ import java.util.Map;
  *
  * @author Scott Frederick
  */
-@SuppressWarnings("javadoc")
 public class JsonCredential extends HashMap<String, Object> {
 	/**
 	 * @see HashMap#HashMap()

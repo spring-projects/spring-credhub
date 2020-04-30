@@ -31,6 +31,7 @@ import org.springframework.credhub.core.permissionV2.ReactiveCredHubPermissionV2
 import org.springframework.credhub.core.permissionV2.ReactiveCredHubPermissionV2Template;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.util.Assert;
@@ -97,6 +98,25 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 		this.webClient = CredHubWebClientFactory.createWebClient(credHubProperties, clientHttpConnector,
 				clientRegistrationRepository, authorizedClientRepository);
+		this.usingOAuth2 = true;
+	}
+
+    /**
+     * Create a new {@link ReactiveCredHubTemplate} using the provided base URI and
+     * {@link ClientHttpRequestFactory}.
+     *
+     * @param credHubProperties            connection properties for the CredHub server
+     * @param clientHttpConnector          the {@link ClientHttpConnector} to use when
+     *                                     creating new connections
+     * @param clientManager                an OAuth2 authorization client manager
+     */
+	public ReactiveCredHubTemplate(CredHubProperties credHubProperties, ClientHttpConnector clientHttpConnector,
+								   ReactiveOAuth2AuthorizedClientManager clientManager) {
+		Assert.notNull(credHubProperties, "credHubProperties must not be null");
+		Assert.notNull(clientHttpConnector, "clientHttpConnector must not be null");
+		Assert.notNull(clientManager, "clientManager must not be null");
+
+		this.webClient = CredHubWebClientFactory.createWebClient(credHubProperties, clientHttpConnector, clientManager);
 		this.usingOAuth2 = true;
 	}
 

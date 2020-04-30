@@ -24,6 +24,7 @@ import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.codec.CodecConfigurer;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.endpoint.WebClientReactiveClientCredentialsTokenResponseClient;
@@ -72,8 +73,24 @@ class CredHubWebClientFactory {
 		ReactiveOAuth2AuthorizedClientProvider clientProvider =
 				buildClientProvider(clientHttpConnector);
 
-		DefaultReactiveOAuth2AuthorizedClientManager clientManager =
+		DefaultReactiveOAuth2AuthorizedClientManager defaultClientManager =
 				buildClientManager(clientRegistrationRepository, authorizedClientRepository, clientProvider);
+
+		return createWebClient(properties, clientHttpConnector, defaultClientManager);
+	}
+
+	/**
+	 * Create a {@link WebClient} configured for communication with a CredHub server.
+	 *
+	 * @param properties          CredHub connection properties
+	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when
+	 *                            creating new connections
+	 * @param clientManager       OAuth2 client manager to use to authenticate a client
+	 * @return a configured {@link WebClient}
+	 */
+	static WebClient createWebClient(CredHubProperties properties,
+									 ClientHttpConnector clientHttpConnector,
+									 ReactiveOAuth2AuthorizedClientManager clientManager) {
 
 		ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
 				new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientManager);

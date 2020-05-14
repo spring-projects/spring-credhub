@@ -16,14 +16,24 @@
 
 package org.springframework.credhub.configuration;
 
+import java.security.NoSuchAlgorithmException;
+
 import io.netty.channel.ChannelOption;
+import io.netty.handler.ssl.ClientAuth;
+import io.netty.handler.ssl.IdentityCipherSuiteFilter;
+import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProvider;
+
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import reactor.netty.http.client.HttpClient;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
@@ -33,8 +43,9 @@ import javax.net.ssl.TrustManagerFactory;
  * @author Scott Frederick
  */
 public class ClientHttpConnectorFactory {
+	private static final Log logger = LogFactory.getLog(ClientHttpConnectorFactory.class);
 
-	private static SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
+	private static final SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
 
 	/**
 	 * Create a {@link ClientHttpConnector} for the given {@link ClientOptions}.
@@ -54,9 +65,16 @@ public class ClientHttpConnectorFactory {
 							.sslProvider(SslProvider.JDK)
 							.trustManager(trustManagerFactory)));
 		} else {
-			httpClient = httpClient.secure(sslContextSpec -> sslContextSpec
-					.sslContext(SslContextBuilder.forClient()
-							.sslProvider(SslProvider.JDK)));
+			httpClient = httpClient.secure(sslContextSpec -> {
+				try {
+					sslContextSpec
+							.sslContext(new JdkSslContext(SSLContext.getDefault(), true, null,
+									IdentityCipherSuiteFilter.INSTANCE, null, ClientAuth.REQUIRE, null, false));
+				} catch (NoSuchAlgorithmException e) {
+					logger.error("Error configuring HTTP connections", e);
+					throw new RuntimeException("Error configuring HTTP connections", e);
+				}
+			});
 		}
 
 		if (options.getConnectionTimeout() != null) {

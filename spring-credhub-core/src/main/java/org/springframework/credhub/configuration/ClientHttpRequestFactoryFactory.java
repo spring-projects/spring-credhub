@@ -26,6 +26,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import io.netty.handler.ssl.ClientAuth;
+import io.netty.handler.ssl.IdentityCipherSuiteFilter;
 import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
@@ -58,7 +59,7 @@ import org.springframework.util.ClassUtils;
 public class ClientHttpRequestFactoryFactory {
 	private static final Log logger = LogFactory.getLog(ClientHttpRequestFactoryFactory.class);
 
-	private static SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
+	private static final SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
 
 	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent(
 			"org.apache.http.client.HttpClient",
@@ -119,7 +120,7 @@ public class ClientHttpRequestFactoryFactory {
 			}
 
 			SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-			
+
 			if (options.getConnectionTimeout() != null) {
 				factory.setConnectTimeout(options.getConnectionTimeoutMillis());
 			}
@@ -235,7 +236,7 @@ public class ClientHttpRequestFactoryFactory {
 			if (usingCustomCerts(options)) {
 				TrustManagerFactory trustManagerFactory =
 						sslCertificateUtils.createTrustManagerFactory(options.getCaCertFiles());
-				
+
 				SslContext sslContext = SslContextBuilder
 						.forClient()
 						.sslProvider(SslProvider.JDK)
@@ -244,7 +245,8 @@ public class ClientHttpRequestFactoryFactory {
 
 				requestFactory.setSslContext(sslContext);
 			} else {
-				SslContext sslContext = new JdkSslContext(SSLContext.getDefault(), true, ClientAuth.REQUIRE);
+				SslContext sslContext = new JdkSslContext(SSLContext.getDefault(), true, null,
+						IdentityCipherSuiteFilter.INSTANCE, null, ClientAuth.REQUIRE, null, false);
 
 				requestFactory.setSslContext(sslContext);
 			}
@@ -253,7 +255,7 @@ public class ClientHttpRequestFactoryFactory {
 		}
 
 	}
-	
+
 	private static boolean usingCustomCerts(ClientOptions options) {
 		return options.getCaCertFiles() != null;
 	}

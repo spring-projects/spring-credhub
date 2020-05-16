@@ -101,15 +101,15 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 		this.usingOAuth2 = true;
 	}
 
-    /**
-     * Create a new {@link ReactiveCredHubTemplate} using the provided base URI and
-     * {@link ClientHttpRequestFactory}.
-     *
-     * @param credHubProperties            connection properties for the CredHub server
-     * @param clientHttpConnector          the {@link ClientHttpConnector} to use when
-     *                                     creating new connections
-     * @param clientManager                an OAuth2 authorization client manager
-     */
+	/**
+	 * Create a new {@link ReactiveCredHubTemplate} using the provided base URI and
+	 * {@link ClientHttpRequestFactory}.
+	 *
+	 * @param credHubProperties   connection properties for the CredHub server
+	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when
+	 *                            creating new connections
+	 * @param clientManager       an OAuth2 authorization client manager
+	 */
 	public ReactiveCredHubTemplate(CredHubProperties credHubProperties, ClientHttpConnector clientHttpConnector,
 								   ReactiveOAuth2AuthorizedClientManager clientManager) {
 		Assert.notNull(credHubProperties, "credHubProperties must not be null");

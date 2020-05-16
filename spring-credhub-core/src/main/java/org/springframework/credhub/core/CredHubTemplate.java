@@ -29,6 +29,7 @@ import org.springframework.credhub.core.permission.CredHubPermissionTemplate;
 import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Operations;
 import org.springframework.credhub.core.permissionV2.CredHubPermissionV2Template;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.util.Assert;
@@ -94,6 +95,28 @@ public class CredHubTemplate implements CredHubOperations {
 
 		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
 				clientHttpRequestFactory, clientRegistrationRepository, authorizedClientRepository);
+		this.usingOAuth2 = true;
+	}
+
+	/**
+	 * Create a new {@link CredHubTemplate} using the provided connection properties,
+	 * {@link ClientHttpRequestFactory}, and OAuth2 support.
+	 *
+	 * @param properties                   CredHub connection properties; must not be {@literal null}
+	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
+	 *                                     creating new connections
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param clientManager                an OAuth2 authorization client manager
+	 */
+	public CredHubTemplate(CredHubProperties properties, ClientHttpRequestFactory clientHttpRequestFactory,
+						   ClientRegistrationRepository clientRegistrationRepository,
+						   OAuth2AuthorizedClientManager clientManager) {
+		Assert.notNull(properties, "properties must not be null");
+		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
+		Assert.notNull(clientManager, "clientManager must not be null");
+
+		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
+				clientHttpRequestFactory, clientRegistrationRepository, clientManager);
 		this.usingOAuth2 = true;
 	}
 

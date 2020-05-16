@@ -18,10 +18,30 @@ package org.springframework.credhub.integration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.ClientCredentialsReactiveOAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 
 @SpringBootApplication
-public class TestApplication  {
+public class TestApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TestApplication.class, args);
+	}
+
+	@Configuration(proxyBeanMethods = false)
+	static class ClientManagerConfiguration {
+		@Bean
+		AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager reactiveClientManager(
+				ReactiveClientRegistrationRepository clientRegistrationRepository,
+				ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+			AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager clientManager =
+					new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+							clientRegistrationRepository, authorizedClientService);
+			clientManager.setAuthorizedClientProvider(new ClientCredentialsReactiveOAuth2AuthorizedClientProvider());
+			return clientManager;
+		}
 	}
 }

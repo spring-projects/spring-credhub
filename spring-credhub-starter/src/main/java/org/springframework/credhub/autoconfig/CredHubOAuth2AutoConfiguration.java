@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
@@ -48,10 +49,11 @@ import java.util.List;
  *
  * @author Scott Frederick
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
 @AutoConfigureAfter({OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class})
 @ConditionalOnClass(name = "org.springframework.security.oauth2.client.registration.ClientRegistration")
+@ConditionalOnProperty("spring.credhub.oauth2.registration-id")
 @Conditional(ClientsConfiguredCondition.class)
 public class CredHubOAuth2AutoConfiguration {
 

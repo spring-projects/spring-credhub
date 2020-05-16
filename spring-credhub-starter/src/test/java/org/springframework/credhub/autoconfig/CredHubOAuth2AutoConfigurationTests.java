@@ -37,6 +37,8 @@ public class CredHubOAuth2AutoConfigurationTests {
 	};
 
 	private final String[] oAuth2ClientProperties = {
+			"spring.credhub.oauth2.registration-id=test-client",
+
 			"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
 			"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 			"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",

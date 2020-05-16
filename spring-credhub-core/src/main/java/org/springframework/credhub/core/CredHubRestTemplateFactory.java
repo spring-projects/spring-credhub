@@ -92,11 +92,31 @@ class CredHubRestTemplateFactory {
 		RestTemplate restTemplate = new RestTemplate();
 
 		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
-		configureOAuth2(restTemplate,
-				clientHttpRequestFactory,
-				properties.getOauth2().getRegistrationId(),
-				clientRegistrationRepository,
-				authorizedClientRepository);
+		configureOAuth2(restTemplate, properties.getOauth2().getRegistrationId(), clientRegistrationRepository,
+				buildClientManager(clientRegistrationRepository, authorizedClientRepository, clientHttpRequestFactory));
+
+		return restTemplate;
+	}
+
+	/**
+	 * Create a {@link RestTemplate} configured for communication with a CredHub server.
+	 *
+	 * @param properties                   CredHub connection properties
+	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
+	 *                                     creating new connections
+	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
+	 * @param clientManager                an OAuth2 authorization client manager
+	 * @return a configured {@link RestTemplate}
+	 */
+	public static RestTemplate createRestTemplate(CredHubProperties properties,
+												  ClientHttpRequestFactory clientHttpRequestFactory,
+												  ClientRegistrationRepository clientRegistrationRepository,
+												  OAuth2AuthorizedClientManager clientManager) {
+		RestTemplate restTemplate = new RestTemplate();
+
+		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
+		configureOAuth2(restTemplate, properties.getOauth2().getRegistrationId(), clientRegistrationRepository,
+				clientManager);
 
 		return restTemplate;
 	}
@@ -124,29 +144,31 @@ class CredHubRestTemplateFactory {
 	 * Configure OAuth2 features of a {@link RestTemplate}.
 	 *
 	 * @param restTemplate                 an existing {@link RestTemplate} to configure
-	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
-	 *                                     creating new connections
 	 * @param clientId                     the OAuth2 client ID for authentication
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
+	 * @param clientManager                an OAuth2 authorization client manager
 	 */
 	private static void configureOAuth2(RestTemplate restTemplate,
-										ClientHttpRequestFactory clientHttpRequestFactory,
 										String clientId,
 										ClientRegistrationRepository clientRegistrationRepository,
-										OAuth2AuthorizedClientRepository authorizedClientRepository) {
-		ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(clientId);
+										OAuth2AuthorizedClientManager clientManager) {
+		ClientRegistration clientRegistration = getClientRegistration(clientRegistrationRepository, clientId);
+
+		restTemplate.getInterceptors()
+				.add(new CredHubOAuth2RequestInterceptor(clientRegistration, clientManager));
+	}
+
+	private static ClientRegistration getClientRegistration(ClientRegistrationRepository clientRegistrationRepository,
+															String clientId) {
+		ClientRegistration clientRegistration = clientRegistrationRepository
+				.findByRegistrationId(clientId);
 
 		if (clientRegistration == null) {
 			throw new IllegalStateException("The CredHub OAuth2 client registration ID '" + clientId +
 					"' is not a valid Spring Security OAuth2 client registration");
 		}
 
-		OAuth2AuthorizedClientManager clientManager =
-				buildClientManager(clientRegistrationRepository, authorizedClientRepository, clientHttpRequestFactory);
-
-		restTemplate.getInterceptors()
-				.add(new CredHubOAuth2RequestInterceptor(clientRegistration, clientManager));
+		return clientRegistration;
 	}
 
 	private static OAuth2AuthorizedClientManager buildClientManager(

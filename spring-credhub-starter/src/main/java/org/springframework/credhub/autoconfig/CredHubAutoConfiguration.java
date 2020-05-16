@@ -32,7 +32,7 @@ import org.springframework.credhub.support.ClientOptions;
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties
 public class CredHubAutoConfiguration {
 	/**

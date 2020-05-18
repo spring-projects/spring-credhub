@@ -2,3 +2,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.springframework.credhub.autoconfig.CredHubAutoConfiguration,\
 org.springframework.credhub.autoconfig.CredHubOAuth2AutoConfiguration,\
 org.springframework.credhub.autoconfig.CredHubTemplateAutoConfiguration
+
+org.springframework.boot.diagnostics.FailureAnalyzer=\
+org.springframework.credhub.diagnostics.ClientNotConfiguredFailureAnalyzer

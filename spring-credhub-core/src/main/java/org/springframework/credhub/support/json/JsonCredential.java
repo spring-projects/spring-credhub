@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,13 +20,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A JSON credential consists of one or more fields in a JSON document. The JSON document is represented as a
- * {@literal Map} object, which will be converted to a JSON document before sending to CredHub.
+ * A JSON credential consists of one or more fields in a JSON document. The JSON document
+ * is represented as a {@literal Map} object, which will be converted to a JSON document
+ * before sending to CredHub.
  *
  * @author Scott Frederick
  */
 public class JsonCredential extends HashMap<String, Object> {
+
 	/**
+	 * Create a {@code JsonCredential}.
 	 * @see HashMap#HashMap()
 	 */
 	public JsonCredential() {
@@ -34,30 +37,32 @@ public class JsonCredential extends HashMap<String, Object> {
 	}
 
 	/**
+	 * Create a {@code JsonCredential} with the specified initial capacity.
+	 * @param initialCapacity the initial capacity
 	 * @see HashMap#HashMap(int)
-	 *
-	 * @param  initialCapacity the initial capacity
 	 */
 	public JsonCredential(int initialCapacity) {
 		super(initialCapacity);
 	}
 
 	/**
-	 * @see HashMap#HashMap(int, float)
-	 *
+	 * Create a {@code JsonCredential} with the specified initial capacity and load
+	 * factor.
 	 * @param initialCapacity the initial capacity
-	 * @param loadFactor      the load factor
+	 * @param loadFactor the load factor
+	 * @see HashMap#HashMap(int, float)
 	 */
 	public JsonCredential(int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
 	}
 
 	/**
-	 * @see HashMap#HashMap(Map)
-	 *
+	 * Create a {@code JsonCredential} from the provided Map.
 	 * @param m the map whose mappings are to be placed in this map
+	 * @see HashMap#HashMap(Map)
 	 */
 	public JsonCredential(Map<? extends String, ?> m) {
 		super(m);
 	}
+
 }

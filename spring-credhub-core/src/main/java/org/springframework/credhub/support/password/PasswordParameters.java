@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,40 +17,48 @@
 package org.springframework.credhub.support.password;
 
 /**
- * Parameters for generating a new password credential. All parameters are optional; if not specified,
- * CredHub-provided defaults will be used.
+ * Parameters for generating a new password credential. All parameters are optional; if
+ * not specified, CredHub-provided defaults will be used.
  *
  * @author Scott Frederick
  */
 public class PasswordParameters {
+
 	private final Integer length;
+
 	private final Boolean excludeUpper;
+
 	private final Boolean excludeLower;
+
 	private final Boolean excludeNumber;
+
 	private final Boolean includeSpecial;
 
 	/**
 	 * Create a {@link PasswordParameters} using defaults for all parameter values.
 	 */
 	public PasswordParameters() {
-		length = null;
-		excludeUpper = null;
-		excludeLower = null;
-		excludeNumber = null;
-		includeSpecial = null;
+		this.length = null;
+		this.excludeUpper = null;
+		this.excludeLower = null;
+		this.excludeNumber = null;
+		this.includeSpecial = null;
 	}
 
 	/**
 	 * Create a {@link PasswordParameters} using the specified values.
-	 *
 	 * @param length length of generated password value
-	 * @param excludeUpper {@literal true} to exclude upper case alpha characters from generated credential value
-	 * @param excludeLower {@literal true} to exclude lower case alpha characters from generated credential value
-	 * @param excludeNumber {@literal true} to exclude numeric characters from generated credential value
-	 * @param includeSpecial {@literal true} to include non-alphanumeric characters in generated credential value
+	 * @param excludeUpper {@literal true} to exclude upper case alpha characters from
+	 * generated credential value
+	 * @param excludeLower {@literal true} to exclude lower case alpha characters from
+	 * generated credential value
+	 * @param excludeNumber {@literal true} to exclude numeric characters from generated
+	 * credential value
+	 * @param includeSpecial {@literal true} to include non-alphanumeric characters in
+	 * generated credential value
 	 */
-	public PasswordParameters(int length, boolean excludeUpper, boolean excludeLower,
-							  boolean excludeNumber, boolean includeSpecial) {
+	public PasswordParameters(int length, boolean excludeUpper, boolean excludeLower, boolean excludeNumber,
+			boolean includeSpecial) {
 		this.length = length;
 		this.excludeUpper = excludeUpper;
 		this.excludeLower = excludeLower;
@@ -60,53 +68,47 @@ public class PasswordParameters {
 
 	/**
 	 * Get the value of the length parameter.
-	 *
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Integer getLength() {
-		return length;
+		return this.length;
 	}
 
 	/**
 	 * Get the value of the exclude upper case characters parameter.
-	 *
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Boolean getExcludeUpper() {
-		return excludeUpper;
+		return this.excludeUpper;
 	}
 
 	/**
 	 * Get the value of the exclude lower case characters parameter.
-	 *
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Boolean getExcludeLower() {
-		return excludeLower;
+		return this.excludeLower;
 	}
 
 	/**
 	 * Get the value of the exclude numeric characters parameter.
-	 *
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Boolean getExcludeNumber() {
-		return excludeNumber;
+		return this.excludeNumber;
 	}
 
 	/**
 	 * Get the value of the include non-alphanumeric characters parameter.
-	 *
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Boolean getIncludeSpecial() {
-		return includeSpecial;
+		return this.includeSpecial;
 	}
 
 	/**
-	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link PasswordParameters}.
-	 *
+	 * Create a builder that provides a fluent API for providing the values required to
+	 * construct a {@link PasswordParameters}.
 	 * @return a builder
 	 */
 	public static PasswordParametersBuilder builder() {
@@ -114,18 +116,23 @@ public class PasswordParameters {
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link PasswordParametersBuilder}s.
+	 * A builder that provides a fluent API for constructing
+	 * {@link PasswordParametersBuilder}s.
 	 */
 	public static class PasswordParametersBuilder {
+
 		private Integer length = null;
+
 		private Boolean excludeUpper = null;
+
 		private Boolean excludeLower = null;
+
 		private Boolean excludeNumber = null;
+
 		private Boolean includeSpecial = null;
 
 		/**
 		 * Set the value of the password length parameter.
-		 *
 		 * @param length the parameter value
 		 * @return the builder
 		 */
@@ -136,8 +143,8 @@ public class PasswordParameters {
 
 		/**
 		 * Set the value of the exclude upper case characters parameter.
-		 *
-		 * @param exclude {@literal true} to exclude upper case alpha characters from generated credential value
+		 * @param exclude {@literal true} to exclude upper case alpha characters from
+		 * generated credential value
 		 * @return the builder
 		 */
 		public PasswordParametersBuilder excludeUpper(boolean exclude) {
@@ -147,8 +154,8 @@ public class PasswordParameters {
 
 		/**
 		 * Set the value of the exclude lower case characters parameter.
-		 *
-		 * @param exclude {@literal true} to exclude lower case alpha characters from generated credential value
+		 * @param exclude {@literal true} to exclude lower case alpha characters from
+		 * generated credential value
 		 * @return the builder
 		 */
 		public PasswordParametersBuilder excludeLower(boolean exclude) {
@@ -158,8 +165,8 @@ public class PasswordParameters {
 
 		/**
 		 * Set the value of the exclude numeric characters parameter.
-		 *
-		 * @param exclude {@literal true} to exclude numeric characters from generated credential value
+		 * @param exclude {@literal true} to exclude numeric characters from generated
+		 * credential value
 		 * @return the builder
 		 */
 		public PasswordParametersBuilder excludeNumber(boolean exclude) {
@@ -169,8 +176,8 @@ public class PasswordParameters {
 
 		/**
 		 * Set the value of the include special characters parameter.
-		 *
-		 * @param include {@literal true} to include non-alphanumeric characters in generated credential value
+		 * @param include {@literal true} to include non-alphanumeric characters in
+		 * generated credential value
 		 * @return the builder
 		 */
 		public PasswordParametersBuilder includeSpecial(boolean include) {
@@ -180,11 +187,13 @@ public class PasswordParameters {
 
 		/**
 		 * Create a {@link PasswordParameters} from the provided values.
-		 *
 		 * @return the created {@link PasswordParameters}
 		 */
 		public PasswordParameters build() {
-			return new PasswordParameters(length, excludeUpper, excludeLower, excludeNumber, includeSpecial);
+			return new PasswordParameters(this.length, this.excludeUpper, this.excludeLower, this.excludeNumber,
+					this.includeSpecial);
 		}
+
 	}
+
 }

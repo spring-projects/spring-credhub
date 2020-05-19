@@ -1,11 +1,11 @@
 /*
- * Copyright 2002-2018 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,6 +24,7 @@ import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.Assertions;
 
 public class JsonPathAssert extends AbstractAssert<JsonPathAssert, DocumentContext> {
+
 	public JsonPathAssert(DocumentContext actual) {
 		super(actual, JsonPathAssert.class);
 	}
@@ -34,20 +35,23 @@ public class JsonPathAssert extends AbstractAssert<JsonPathAssert, DocumentConte
 
 	public JsonPathAssert hasNoPath(String jsonPath) {
 		try {
-			Object value = actual.read(jsonPath);
+			Object value = this.actual.read(jsonPath);
 			failWithMessage("The path '" + jsonPath + "' was not expected but evaluated to " + value);
 			return null;
-		} catch (JsonPathException e) {
+		}
+		catch (JsonPathException ex) {
 			return this;
 		}
 	}
 
 	public AbstractObjectAssert<?, Object> hasPath(String path) {
 		try {
-			return Assertions.assertThat(actual.read(path, Object.class));
-		} catch (PathNotFoundException e) {
-			failWithMessage("The JSON " + actual.jsonString() + " does not contain the path '" + path + "'");
+			return Assertions.assertThat(this.actual.read(path, Object.class));
+		}
+		catch (PathNotFoundException ex) {
+			failWithMessage("The JSON " + this.actual.jsonString() + " does not contain the path '" + path + "'");
 			return null;
 		}
 	}
+
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @author Scott Frederick
  */
 public class ClientOptions {
+
 	private Duration connectionTimeout;
 
 	private Duration readTimeout;
@@ -43,12 +44,11 @@ public class ClientOptions {
 
 	/**
 	 * Create a {@link ClientOptions} with the provided values.
-	 *
-	 * @param connectionTimeout    connection timeout in {@link TimeUnit#MILLISECONDS}, must
-	 *                             be greater {@literal 0}
-	 * @param readTimeout          read timeout in {@link TimeUnit#MILLISECONDS}, must be greater
-	 *                             {@literal 0}
-	 * @param caCertFiles          one or more CA certificate files to use when connecting
+	 * @param connectionTimeout connection timeout in {@link TimeUnit#MILLISECONDS}, must
+	 * be greater {@literal 0}
+	 * @param readTimeout read timeout in {@link TimeUnit#MILLISECONDS}, must be greater
+	 * {@literal 0}
+	 * @param caCertFiles one or more CA certificate files to use when connecting
 	 */
 	public ClientOptions(Duration connectionTimeout, Duration readTimeout, String[] caCertFiles) {
 		this.connectionTimeout = connectionTimeout;
@@ -58,7 +58,6 @@ public class ClientOptions {
 
 	/**
 	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
-	 *
 	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
 	public Duration getConnectionTimeout() {
@@ -67,11 +66,10 @@ public class ClientOptions {
 
 	/**
 	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
-	 *
 	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
 	public Integer getConnectionTimeoutMillis() {
-		return this.connectionTimeout == null ? null : Math.toIntExact(this.connectionTimeout.toMillis());
+		return (this.connectionTimeout == null) ? null : Math.toIntExact(this.connectionTimeout.toMillis());
 	}
 
 	public void setConnectionTimeout(Duration connectionTimeout) {
@@ -80,7 +78,6 @@ public class ClientOptions {
 
 	/**
 	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
-	 *
 	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
 	public Duration getReadTimeout() {
@@ -89,11 +86,10 @@ public class ClientOptions {
 
 	/**
 	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
-	 *
 	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
 	public Integer getReadTimeoutMillis() {
-		return this.readTimeout == null ? null : Math.toIntExact(this.readTimeout.toMillis());
+		return (this.readTimeout == null) ? null : Math.toIntExact(this.readTimeout.toMillis());
 	}
 
 	public void setReadTimeout(Duration readTimeout) {
@@ -101,10 +97,11 @@ public class ClientOptions {
 	}
 
 	public String[] getCaCertFiles() {
-		return caCertFiles;
+		return this.caCertFiles;
 	}
 
 	public void setCaCertFiles(String[] caCertFiles) {
 		this.caCertFiles = caCertFiles;
 	}
+
 }

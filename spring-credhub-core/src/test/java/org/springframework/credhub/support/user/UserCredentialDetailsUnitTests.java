@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,13 +26,16 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+
+	// @formatter:off
 	private static final String USER_CREDENTIALS =
 			"  \"type\": \"user\"," +
 			"  \"value\": {" +
-			"  \"username\": \"myname\"," +
-			"  \"password\": \"secret\"," +
-			"  \"password_hash\": \"secret-hash\"" +
+				"  \"username\": \"myname\"," +
+				"  \"password\": \"secret\"," +
+				"  \"password_hash\": \"secret-hash\"" +
 			"  }";
+	// @formatter:on
 
 	@Test
 	public void deserializeDetails() {
@@ -54,10 +57,11 @@ public class UserCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private void assertDetails(CredentialDetails<UserCredential> data) {
 		assertCommonDetails(data);
-		
+
 		assertThat(data.getCredentialType()).isEqualTo(CredentialType.USER);
 		assertThat(data.getValue().getUsername()).isEqualTo("myname");
 		assertThat(data.getValue().getPassword()).isEqualTo("secret");
 		assertThat(data.getValue().getPasswordHash()).isEqualTo("secret-hash");
 	}
+
 }

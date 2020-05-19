@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,6 @@
 
 package org.springframework.credhub.configuration;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,16 +32,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 /**
  * Utility methods for building custom trust material for HTTP connections.
  *
  * @author Scott Frederick
  */
 class SslCertificateUtils {
+
 	X509TrustManager getDefaultX509TrustManager() {
 		try {
-			TrustManagerFactory trustManagerFactory =
-					TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			TrustManagerFactory trustManagerFactory = TrustManagerFactory
+					.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			trustManagerFactory.init((KeyStore) null);
 
 			TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
@@ -56,11 +58,12 @@ class SslCertificateUtils {
 				}
 			}
 
-			throw new IllegalStateException("Unable to setup SSL; no X509TrustManager found in: " +
-					Arrays.toString(trustManagers));
-		} catch (GeneralSecurityException e) {
-			throw new IllegalStateException("Unable to setup SSL; error getting a X509TrustManager: " +
-					e.getMessage(), e);
+			throw new IllegalStateException(
+					"Unable to setup SSL; no X509TrustManager found in: " + Arrays.toString(trustManagers));
+		}
+		catch (GeneralSecurityException ex) {
+			throw new IllegalStateException("Unable to setup SSL; error getting a X509TrustManager: " + ex.getMessage(),
+					ex);
 		}
 	}
 
@@ -72,8 +75,9 @@ class SslCertificateUtils {
 			sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 
 			return sslContext;
-		} catch (GeneralSecurityException e) {
-			throw new IllegalStateException("Error creating SSLContext: " + e.getMessage(), e);
+		}
+		catch (GeneralSecurityException ex) {
+			throw new IllegalStateException("Error creating SSLContext: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -86,18 +90,17 @@ class SslCertificateUtils {
 			trustManagerFactory.init(trustStore);
 
 			return trustManagerFactory;
-		} catch (GeneralSecurityException e) {
-			throw new IllegalStateException("Error creating KeyManagerFactory: " + e.getMessage(), e);
+		}
+		catch (GeneralSecurityException ex) {
+			throw new IllegalStateException("Error creating KeyManagerFactory: " + ex.getMessage(), ex);
 		}
 	}
 
 	X509TrustManager createTrustManager(String[] caCertFiles) {
-		TrustManager[] trustManagers = createTrustManagerFactory(caCertFiles)
-				.getTrustManagers();
+		TrustManager[] trustManagers = createTrustManagerFactory(caCertFiles).getTrustManagers();
 
 		if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-			throw new IllegalStateException("Unexpected default trust managers: "
-					+ Arrays.toString(trustManagers));
+			throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
 		}
 
 		return (X509TrustManager) trustManagers[0];
@@ -112,8 +115,9 @@ class SslCertificateUtils {
 			addCertsToCertificateStore(keyStore, certificates);
 
 			return keyStore;
-		} catch (GeneralSecurityException | IOException e) {
-			throw new IllegalStateException("Error creating new truststore: " + e.getMessage(), e);
+		}
+		catch (GeneralSecurityException | IOException ex) {
+			throw new IllegalStateException("Error creating new truststore: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -130,8 +134,9 @@ class SslCertificateUtils {
 		try {
 			FileInputStream fileStream = new FileInputStream(new File(fileName));
 			return new BufferedInputStream(fileStream);
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("Certificate file not found: " + fileName, e);
+		}
+		catch (FileNotFoundException ex) {
+			throw new IllegalArgumentException("Certificate file not found: " + fileName, ex);
 		}
 	}
 
@@ -144,12 +149,14 @@ class SslCertificateUtils {
 
 			do {
 				certs.add((X509Certificate) certificateFactory.generateCertificate(inputStream));
-			} while (inputStream.available() > minCertLength);
+			}
+			while (inputStream.available() > minCertLength);
 
 			return certs;
-		} catch (CertificateException | IOException e) {
-			throw new IllegalStateException("Error reading certificate from file "
-					+ fileName + ": " + e.getMessage(), e);
+		}
+		catch (CertificateException | IOException ex) {
+			throw new IllegalStateException("Error reading certificate from file " + fileName + ": " + ex.getMessage(),
+					ex);
 		}
 	}
 
@@ -159,8 +166,10 @@ class SslCertificateUtils {
 				String alias = cert.getSubjectX500Principal().getName();
 				keyStore.setCertificateEntry(alias, cert);
 			}
-		} catch (KeyStoreException e) {
-			throw new IllegalStateException("Error creating new certificate store: " + e.getMessage(), e);
+		}
+		catch (KeyStoreException ex) {
+			throw new IllegalStateException("Error creating new certificate store: " + ex.getMessage(), ex);
 		}
 	}
+
 }

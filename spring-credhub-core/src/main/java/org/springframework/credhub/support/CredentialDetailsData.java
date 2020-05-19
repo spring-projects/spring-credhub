@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support;
@@ -23,13 +21,14 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A collection of {@link CredentialDetails}. Clients don't typically instantiate
- * objects of this type, but will receive them in response to write and retrieve
- * requests.
+ * A collection of {@link CredentialDetails}. Clients don't typically instantiate objects
+ * of this type, but will receive them in response to write and retrieve requests.
  *
+ * @param <T> the type of CredHub credential
  * @author Scott Frederick
  */
 public class CredentialDetailsData<T> {
+
 	private final List<CredentialDetails<T>> data;
 
 	/**
@@ -40,10 +39,9 @@ public class CredentialDetailsData<T> {
 	}
 
 	/**
-	 * Create a {@link CredentialDetailsData} from the provided parameters. Intended for internal
-	 * use. Clients will get {@link CredentialDetailsData} objects populated from
+	 * Create a {@link CredentialDetailsData} from the provided parameters. Intended for
+	 * internal use. Clients will get {@link CredentialDetailsData} objects populated from
 	 * CredHub responses.
-	 *
 	 * @param data a collection of {@link CredentialDetails}
 	 */
 	@SafeVarargs
@@ -53,7 +51,6 @@ public class CredentialDetailsData<T> {
 
 	/**
 	 * Get the collection of {@link CredentialDetails}.
-	 *
 	 * @return the collection of {@link CredentialDetails}
 	 */
 	public List<CredentialDetails<T>> getData() {
@@ -62,27 +59,29 @@ public class CredentialDetailsData<T> {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof CredentialDetailsData))
+		}
+		if (!(o instanceof CredentialDetailsData)) {
 			return false;
-		if (!super.equals(o))
+		}
+		if (!super.equals(o)) {
 			return false;
+		}
 
 		CredentialDetailsData that = (CredentialDetailsData) o;
 
-		return data != null ? data.equals(that.data) : that.data == null;
+		return (this.data != null) ? this.data.equals(that.data) : (that.data == null);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(data);
+		return Objects.hashCode(this.data);
 	}
 
 	@Override
 	public String toString() {
-		return "CredentialDetailData{"
-				+ "data=" + data
-				+ '}';
+		return "CredentialDetailData{" + "data=" + this.data + '}';
 	}
+
 }

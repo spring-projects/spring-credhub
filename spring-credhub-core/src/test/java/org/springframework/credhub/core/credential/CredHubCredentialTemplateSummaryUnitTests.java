@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,75 +27,71 @@ import org.junit.runner.RunWith;
 import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.NAME_LIKE_URL_QUERY;
-import static org.springframework.credhub.core.credential.CredHubCredentialTemplate.PATH_URL_QUERY;
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(Theories.class)
 public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
-	@DataPoint("responses")
-	public static ResponseEntity<CredentialSummaryData> successfulResponse =
-			ResponseEntity
-					.ok()
-					.body(new CredentialSummaryData(new CredentialSummary(NAME)));
 
 	@DataPoint("responses")
-	public static ResponseEntity<CredentialSummaryData> httpErrorResponse =
-			ResponseEntity
-					.status(UNAUTHORIZED)
-					.body(new CredentialSummaryData());
+	public static ResponseEntity<CredentialSummaryData> successfulResponse = ResponseEntity.ok()
+			.body(new CredentialSummaryData(new CredentialSummary(NAME)));
+
+	@DataPoint("responses")
+	public static ResponseEntity<CredentialSummaryData> httpErrorResponse = ResponseEntity
+			.status(HttpStatus.UNAUTHORIZED).body(new CredentialSummaryData());
 
 	@Theory
-	public void findByName(@FromDataPoints("responses")
-														 ResponseEntity<CredentialSummaryData> expectedResponse) {
-		when(restTemplate.getForEntity(NAME_LIKE_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
-				.thenReturn(expectedResponse);
+	public void findByName(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.NAME_LIKE_URL_QUERY, CredentialSummaryData.class,
+				NAME.getName())).willReturn(expectedResponse);
 
-		if (!expectedResponse.getStatusCode().equals(OK)) {
+		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
-				credHubTemplate.findByName(NAME);
+				this.credHubTemplate.findByName(NAME);
 				fail("Exception should have been thrown");
-			} catch (CredHubException e) {
-				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
-		} else {
-			List<CredentialSummary> response = credHubTemplate.findByName(NAME);
+			catch (CredHubException ex) {
+				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
+			}
+		}
+		else {
+			List<CredentialSummary> response = this.credHubTemplate.findByName(NAME);
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}
 	}
 
 	@Theory
-	public void findByPath(@FromDataPoints("responses")
-								   ResponseEntity<CredentialSummaryData> expectedResponse) {
-		when(restTemplate.getForEntity(PATH_URL_QUERY, CredentialSummaryData.class, NAME.getName()))
-				.thenReturn(expectedResponse);
+	public void findByPath(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.PATH_URL_QUERY, CredentialSummaryData.class,
+				NAME.getName())).willReturn(expectedResponse);
 
-		if (!expectedResponse.getStatusCode().equals(OK)) {
+		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
-				credHubTemplate.findByPath(NAME.getName());
+				this.credHubTemplate.findByPath(NAME.getName());
 				fail("Exception should have been thrown");
-			} catch (CredHubException e) {
-				assertThat(e.getMessage()).contains(expectedResponse.getStatusCode().toString());
 			}
-		} else {
-			List<CredentialSummary> response = credHubTemplate.findByPath(NAME.getName());
+			catch (CredHubException ex) {
+				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
+			}
+		}
+		else {
+			List<CredentialSummary> response = this.credHubTemplate.findByPath(NAME.getName());
 
 			assertResponseContainsExpectedCredentials(expectedResponse, response);
 		}
 	}
 
-	private void assertResponseContainsExpectedCredentials(
-			ResponseEntity<CredentialSummaryData> expectedResponse,
+	private void assertResponseContainsExpectedCredentials(ResponseEntity<CredentialSummaryData> expectedResponse,
 			List<CredentialSummary> response) {
 		assertThat(response).isNotNull();
 		assertThat(response.size()).isEqualTo(expectedResponse.getBody().getCredentials().size());
 		assertThat(response).contains(expectedResponse.getBody().getCredentials().get(0));
 	}
+
 }

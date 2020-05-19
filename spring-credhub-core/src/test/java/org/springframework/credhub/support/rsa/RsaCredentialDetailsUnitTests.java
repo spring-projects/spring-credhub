@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,12 +26,15 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+
+	// @formatter:off
 	private static final String RSA_CREDENTIALS =
 			"  \"type\": \"rsa\"," +
 			"  \"value\": {" +
 			"  \"private_key\": \"private-key\"," +
 			"  \"public_key\": \"public-key\"" +
 			"  }";
+	// @formatter:on
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() {
@@ -42,11 +45,13 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPublicKey() {
+		// @formatter:off
 		final String credentials =
 				"  \"type\": \"rsa\"," +
-						"  \"value\": {" +
-						"  \"public_key\": \"public-key\"" +
-						"  }";
+				"  \"value\": {" +
+					"  \"public_key\": \"public-key\"" +
+				"  }";
+		// @formatter:on
 		CredentialDetails<RsaCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "public-key", null);
@@ -54,11 +59,13 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPrivateKey() {
+		// @formatter:off
 		final String credentials =
 				"  \"type\": \"rsa\"," +
-						"  \"value\": {" +
-						"  \"private_key\": \"private-key\"" +
-						"  }";
+				"  \"value\": {" +
+					"  \"private_key\": \"private-key\"" +
+				"  }";
+		// @formatter:on
 		CredentialDetails<RsaCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "private-key");
@@ -77,9 +84,10 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private void assertDetails(CredentialDetails<RsaCredential> data, String publicKey, String privateKey) {
 		assertCommonDetails(data);
-		
+
 		assertThat(data.getCredentialType()).isEqualTo(CredentialType.RSA);
 		assertThat(data.getValue().getPublicKey()).isEqualTo(publicKey);
 		assertThat(data.getValue().getPrivateKey()).isEqualTo(privateKey);
 	}
+
 }

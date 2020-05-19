@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support;
@@ -21,12 +19,13 @@ package org.springframework.credhub.support;
 /**
  * The details of a request to write a new or update an existing credential in CredHub.
  *
+ * @param <T> the type of CredHub credential
  * @author Scott Frederick
  */
 public class CredentialRequest<T> extends CredHubRequest<T> {
+
 	/**
 	 * Initialize a {@link CredentialRequest}.
-	 *
 	 * @param type the credential implementation type
 	 */
 	protected CredentialRequest(CredentialType type) {
@@ -36,7 +35,6 @@ public class CredentialRequest<T> extends CredHubRequest<T> {
 
 	/**
 	 * Get the value of the credential.
-	 *
 	 * @return the value of the credential
 	 */
 	public T getValue() {
@@ -46,4 +44,5 @@ public class CredentialRequest<T> extends CredHubRequest<T> {
 	protected void setValue(T value) {
 		this.details = value;
 	}
+
 }

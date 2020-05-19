@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support.permissions;
@@ -21,9 +19,10 @@ package org.springframework.credhub.support.permissions;
 /**
  * The set of operations that are allowed on a credential.
  *
- * @author Scott Frederick 
+ * @author Scott Frederick
  */
 public enum Operation {
+
 	/**
 	 * Allows the value of a credential to be read.
 	 */
@@ -57,17 +56,18 @@ public enum Operation {
 
 	/**
 	 * Get the value of the operation.
-	 *
 	 * @return the value of the operation.
 	 */
 	public String operation() {
-		return operation;
+		return this.operation;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
-		return operation;
+		return this.operation;
 	}
+
 }

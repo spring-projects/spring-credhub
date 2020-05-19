@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,6 +25,7 @@ import java.util.Objects;
  * @author Scott Frederick
  */
 public class CredentialPath {
+
 	private final String path;
 
 	/**
@@ -36,10 +37,9 @@ public class CredentialPath {
 	}
 
 	/**
-	 * Create a {@link CredentialPath} from the provided parameters. Intended for
-	 * internal use. Clients will get {@link CredentialPath} objects populated from
-	 * CredHub responses.
-	 *
+	 * Create a {@link CredentialPath} from the provided parameters. Intended for internal
+	 * use. Clients will get {@link CredentialPath} objects populated from CredHub
+	 * responses.
 	 * @param path the name of the credential
 	 */
 	public CredentialPath(String path) {
@@ -48,7 +48,6 @@ public class CredentialPath {
 
 	/**
 	 * Get the path to the credential.
-	 *
 	 * @return the credential path
 	 */
 	public String getPath() {
@@ -57,25 +56,26 @@ public class CredentialPath {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof CredentialPath))
+		}
+		if (!(o instanceof CredentialPath)) {
 			return false;
+		}
 
 		CredentialPath that = (CredentialPath) o;
 
-		return (path != null ? !path.equals(that.path) : that.path != null);
+		return ((this.path != null) ? !this.path.equals(that.path) : (that.path != null));
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(path);
+		return Objects.hashCode(this.path);
 	}
 
 	@Override
 	public String toString() {
-		return "CredentialPath{"
-				+ "path=" + path
-				+ '}';
+		return "CredentialPath{" + "path=" + this.path + '}';
 	}
+
 }

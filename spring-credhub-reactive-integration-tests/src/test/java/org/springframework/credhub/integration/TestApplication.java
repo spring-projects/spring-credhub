@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,21 +27,24 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 
 @SpringBootApplication
 public class TestApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(TestApplication.class, args);
 	}
 
 	@Configuration(proxyBeanMethods = false)
 	static class ClientManagerConfiguration {
+
 		@Bean
 		AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager reactiveClientManager(
 				ReactiveClientRegistrationRepository clientRegistrationRepository,
 				ReactiveOAuth2AuthorizedClientService authorizedClientService) {
-			AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager clientManager =
-					new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
-							clientRegistrationRepository, authorizedClientService);
+			AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager clientManager = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+					clientRegistrationRepository, authorizedClientService);
 			clientManager.setAuthorizedClientProvider(new ClientCredentialsReactiveOAuth2AuthorizedClientProvider());
 			return clientManager;
 		}
+
 	}
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
@@ -29,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubWebClientFactoryTests {
+
 	@Mock
 	private ClientHttpConnector clientHttpConnector;
 
@@ -40,10 +42,10 @@ public class CredHubWebClientFactoryTests {
 
 	@Test
 	public void webClientIsCreated() {
-		WebClient webClient = CredHubWebClientFactory
-				.createWebClient(new CredHubProperties(), clientHttpConnector,
-						clientRegistrationRepository, authorizedClientRepository);
+		WebClient webClient = CredHubWebClientFactory.createWebClient(new CredHubProperties(), this.clientHttpConnector,
+				this.clientRegistrationRepository, this.authorizedClientRepository);
 
 		assertThat(webClient).isNotNull();
 	}
+
 }

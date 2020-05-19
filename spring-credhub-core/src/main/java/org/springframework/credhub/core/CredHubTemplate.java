@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,13 +42,14 @@ import org.springframework.web.client.RestTemplate;
  * @author Scott Frederick
  */
 public class CredHubTemplate implements CredHubOperations {
+
 	private final RestTemplate restTemplate;
+
 	private final boolean usingOAuth2;
 
 	/**
 	 * Create a new {@link CredHubTemplate} using the provided {@link RestTemplate}.
 	 * Intended for internal testing only.
-	 *
 	 * @param restTemplate the {@link RestTemplate} to use for interactions with CredHub
 	 */
 	public CredHubTemplate(RestTemplate restTemplate) {
@@ -61,68 +62,61 @@ public class CredHubTemplate implements CredHubOperations {
 	/**
 	 * Create a new {@link CredHubTemplate} using the provided connection properties and
 	 * {@link ClientHttpRequestFactory}.
-	 *
-	 * @param properties               CredHub connection properties; must not be {@literal null}
+	 * @param properties the CredHub connection properties; must not be {@literal null}
 	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
-	 *                                 creating new connections
+	 * creating new connections
 	 */
 	public CredHubTemplate(CredHubProperties properties, ClientHttpRequestFactory clientHttpRequestFactory) {
 		Assert.notNull(properties, "properties must not be null");
 		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
 
-		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
-				clientHttpRequestFactory);
+		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties, clientHttpRequestFactory);
 		this.usingOAuth2 = false;
 	}
 
 	/**
 	 * Create a new {@link CredHubTemplate} using the provided connection properties,
 	 * {@link ClientHttpRequestFactory}, and OAuth2 support.
-	 *
-	 * @param properties                   CredHub connection properties; must not be {@literal null}
-	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
-	 *                                     creating new connections
+	 * @param properties the CredHub connection properties; must not be {@literal null}
+	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
+	 * creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository a repository of authorized OAuth2 clients
 	 */
-	public CredHubTemplate(CredHubProperties properties,
-						   ClientHttpRequestFactory clientHttpRequestFactory,
-						   ClientRegistrationRepository clientRegistrationRepository,
-						   OAuth2AuthorizedClientRepository authorizedClientRepository) {
+	public CredHubTemplate(CredHubProperties properties, ClientHttpRequestFactory clientHttpRequestFactory,
+			ClientRegistrationRepository clientRegistrationRepository,
+			OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		Assert.notNull(properties, "properties must not be null");
 		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
 		Assert.notNull(clientRegistrationRepository, "clientRegistrationRepository must not be null");
 
-		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
-				clientHttpRequestFactory, clientRegistrationRepository, authorizedClientRepository);
+		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties, clientHttpRequestFactory,
+				clientRegistrationRepository, authorizedClientRepository);
 		this.usingOAuth2 = true;
 	}
 
 	/**
 	 * Create a new {@link CredHubTemplate} using the provided connection properties,
 	 * {@link ClientHttpRequestFactory}, and OAuth2 support.
-	 *
-	 * @param properties                   CredHub connection properties; must not be {@literal null}
-	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
-	 *                                     creating new connections
+	 * @param properties the CredHub connection properties; must not be {@literal null}
+	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
+	 * creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param clientManager                an OAuth2 authorization client manager
+	 * @param clientManager an OAuth2 authorization client manager
 	 */
 	public CredHubTemplate(CredHubProperties properties, ClientHttpRequestFactory clientHttpRequestFactory,
-						   ClientRegistrationRepository clientRegistrationRepository,
-						   OAuth2AuthorizedClientManager clientManager) {
+			ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientManager clientManager) {
 		Assert.notNull(properties, "properties must not be null");
 		Assert.notNull(clientHttpRequestFactory, "clientHttpRequestFactory must not be null");
 		Assert.notNull(clientManager, "clientManager must not be null");
 
-		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,
-				clientHttpRequestFactory, clientRegistrationRepository, clientManager);
+		this.restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties, clientHttpRequestFactory,
+				clientRegistrationRepository, clientManager);
 		this.usingOAuth2 = true;
 	}
 
 	/**
 	 * Get the operations for saving, retrieving, and deleting credentials.
-	 *
 	 * @return the credentials operations
 	 */
 	@Override
@@ -131,8 +125,8 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	/**
-	 * Get the operations for adding, retrieving, and deleting permissions from a credential.
-	 *
+	 * Get the operations for adding, retrieving, and deleting permissions from a
+	 * credential.
 	 * @return the permissions operations
 	 */
 	@Override
@@ -141,8 +135,8 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	/**
-	 * Get the operations for adding, retrieving, and deleting permissions from a credential.
-	 *
+	 * Get the operations for adding, retrieving, and deleting permissions from a
+	 * credential.
 	 * @return the permissions operations
 	 */
 	@Override
@@ -152,7 +146,6 @@ public class CredHubTemplate implements CredHubOperations {
 
 	/**
 	 * Get the operations for retrieving, regenerating, and updating certificates.
-	 *
 	 * @return the certificates operations
 	 */
 	@Override
@@ -162,7 +155,6 @@ public class CredHubTemplate implements CredHubOperations {
 
 	/**
 	 * Get the operations for interpolating service binding credentials.
-	 *
 	 * @return the interpolation operations
 	 */
 	@Override
@@ -172,7 +164,6 @@ public class CredHubTemplate implements CredHubOperations {
 
 	/**
 	 * Get the operations for retrieving CredHub server information.
-	 *
 	 * @return the info operations
 	 */
 	@Override
@@ -181,9 +172,8 @@ public class CredHubTemplate implements CredHubOperations {
 	}
 
 	/**
-	 * Allow interaction with the configured {@link RestTemplate} not provided
-	 * by other methods.
-	 *
+	 * Allow interaction with the configured {@link RestTemplate} not provided by other
+	 * methods.
 	 * @param callback wrapper for the callback method
 	 * @param <T> the credential implementation type
 	 * @return the return value from the callback method
@@ -193,14 +183,15 @@ public class CredHubTemplate implements CredHubOperations {
 		Assert.notNull(callback, "callback must not be null");
 
 		try {
-			return callback.doWithRestOperations(restTemplate);
+			return callback.doWithRestOperations(this.restTemplate);
 		}
-		catch (HttpStatusCodeException e) {
-			throw new CredHubException(e);
+		catch (HttpStatusCodeException ex) {
+			throw new CredHubException(ex);
 		}
 	}
 
 	public boolean isUsingOAuth2() {
 		return this.usingOAuth2;
 	}
+
 }

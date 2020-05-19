@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Service data parsed from the {@literal VCAP_SERVICES} environment variable provided to applications
- * running on Cloud Foundry.
+ * Service data parsed from the {@literal VCAP_SERVICES} environment variable provided to
+ * applications running on Cloud Foundry.
  *
- * If the {@literal VCAP_SERVICES} environment variable for an application contains the following:
+ * If the {@literal VCAP_SERVICES} environment variable for an application contains the
+ * following:
  *
  * <pre>
  * {@code
@@ -57,19 +58,22 @@ import java.util.Map;
  * }
  * </pre>
  *
- * Then the {@link ServicesData} data structure would hold the equivalent of this JSON structure parsed
- * to a {@literal Map}.
+ * Then the {@link ServicesData} data structure would hold the equivalent of this JSON
+ * structure parsed to a {@literal Map}.
+ *
+ * @author Scott Frederick
  */
 public class ServicesData extends HashMap<String, List<Map<String, Object>>> {
+
 	public ServicesData() {
 	}
 
 	/**
 	 * Initialize with the provided {@link HashMap}.
-	 *
 	 * @param data a {@literal HashMap} to initialize this data structure from
 	 */
 	public ServicesData(HashMap<String, List<Map<String, Object>>> data) {
 		super(data);
 	}
+
 }

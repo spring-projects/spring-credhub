@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,11 +16,11 @@
 
 package org.springframework.credhub.core.permission;
 
+import java.util.List;
+
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Permission;
-
-import java.util.List;
 
 /**
  * Specifies the interactions with CredHub to add, retrieve, and delete permissions.
@@ -28,27 +28,26 @@ import java.util.List;
  * @author Scott Frederick
  */
 public interface CredHubPermissionOperations {
+
 	/**
 	 * Get the permissions associated with a credential.
-	 *
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return the collection of permissions associated with the credential
 	 */
-	List<Permission> getPermissions(final CredentialName name);
+	List<Permission> getPermissions(CredentialName name);
 
 	/**
 	 * Add permissions to an existing credential.
-	 *
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param permissions a collection of permissions to add
 	 */
-	void addPermissions(final CredentialName name, final Permission... permissions);
+	void addPermissions(CredentialName name, Permission... permissions);
 
 	/**
 	 * Delete a permission associated with a credential.
-	 *
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param actor the actor of the permission; must not be {@literal null}
 	 */
-	void deletePermission(final CredentialName name, final Actor actor);
+	void deletePermission(CredentialName name, Actor actor);
+
 }

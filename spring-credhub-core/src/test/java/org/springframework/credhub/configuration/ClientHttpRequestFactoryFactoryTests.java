@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
 
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents;
+import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection;
+import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.Netty;
+import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp3;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -29,22 +33,19 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents.usingHttpComponents;
-import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection.usingJdk;
-import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.Netty.usingNetty;
-import static org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp3.usingOkHttp3;
 
 public class ClientHttpRequestFactoryFactoryTests {
+
 	@Test
 	public void jdkDefaultClientCreated() {
-		ClientHttpRequestFactory factory = usingJdk(new ClientOptions());
+		ClientHttpRequestFactory factory = HttpURLConnection.usingJdk(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(SimpleClientHttpRequestFactory.class);
 	}
 
 	@Test
 	public void httpComponentsClientCreated() throws Exception {
-		ClientHttpRequestFactory factory = usingHttpComponents(new ClientOptions());
+		ClientHttpRequestFactory factory = HttpComponents.usingHttpComponents(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(HttpComponentsClientHttpRequestFactory.class);
 
@@ -57,7 +58,7 @@ public class ClientHttpRequestFactoryFactoryTests {
 
 	@Test
 	public void okHttp3ClientCreated() throws Exception {
-		ClientHttpRequestFactory factory = usingOkHttp3(new ClientOptions());
+		ClientHttpRequestFactory factory = OkHttp3.usingOkHttp3(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(OkHttp3ClientHttpRequestFactory.class);
 
@@ -67,10 +68,11 @@ public class ClientHttpRequestFactoryFactoryTests {
 	@Test
 	@SuppressWarnings("deprecation")
 	public void nettyClientCreated() throws Exception {
-		ClientHttpRequestFactory factory = usingNetty(new ClientOptions());
+		ClientHttpRequestFactory factory = Netty.usingNetty(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(Netty4ClientHttpRequestFactory.class);
 
 		((DisposableBean) factory).destroy();
 	}
+
 }

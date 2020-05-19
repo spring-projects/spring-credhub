@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,32 +12,35 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support.permissions;
 
+import java.util.List;
+
 import com.jayway.jsonpath.DocumentContext;
 import org.junit.Test;
+
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
+import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.JsonTestUtils;
 import org.springframework.credhub.support.SimpleCredentialName;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.credhub.support.JsonPathAssert.assertThat;
 
 public class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
+
 	@Test
 	public void deserializePermission() {
+		// @formatter:off
 		String json = "{" +
 				"\"uuid\": \"uuid\",\n" +
 				"\"path\": \"/example-directory/example-specific-credential\",\n" +
 				"\"actor\": \"uaa-user:106f52e2-5d01-4675-8d7a-c05ff9a2c081\",\n" +
 				"\"operations\": [\"read\",\"write\"]" +
 				"}";
+		// @formatter:on
 
 		CredentialPermission credentialPermission = parsePermission(json);
 
@@ -58,22 +60,20 @@ public class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void serializePermission() {
-		CredentialPermission permission =
-				new CredentialPermission(new SimpleCredentialName("example", "credential", "*"),
-						Permission.builder()
-								.app("appid1")
-								.operations(Operation.READ, Operation.WRITE)
-								.build());
+		CredentialPermission permission = new CredentialPermission(
+				new SimpleCredentialName("example", "credential", "*"),
+				Permission.builder().app("appid1").operations(Operation.READ, Operation.WRITE).build());
 
 		DocumentContext json = JsonTestUtils.toJsonPath(permission);
 
-		assertThat(json).hasPath("$.path").isEqualTo("/example/credential/*");
-		assertThat(json).hasPath("$.actor").isEqualTo(Actor.app("appid1").getIdentity());
-		assertThat(json).hasPath("$.operations[0]").isEqualTo("read");
-		assertThat(json).hasPath("$.operations[1]").isEqualTo("write");
+		JsonPathAssert.assertThat(json).hasPath("$.path").isEqualTo("/example/credential/*");
+		JsonPathAssert.assertThat(json).hasPath("$.actor").isEqualTo(Actor.app("appid1").getIdentity());
+		JsonPathAssert.assertThat(json).hasPath("$.operations[0]").isEqualTo("read");
+		JsonPathAssert.assertThat(json).hasPath("$.operations[1]").isEqualTo("write");
 	}
 
 	private CredentialPermission parsePermission(String json) {
 		return JsonTestUtils.fromJson(json, CredentialPermission.class);
 	}
+
 }

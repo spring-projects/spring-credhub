@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.springframework.credhub.integration;
 
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.credhub.core.CredHubException;
@@ -26,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {TestApplication.class})
+@SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
 public abstract class CredHubIntegrationTests {
 
@@ -34,18 +35,20 @@ public abstract class CredHubIntegrationTests {
 	protected CredHubOperations operations;
 
 	boolean serverApiIsV1() {
-		return operations.info().version().isVersion1();
+		return this.operations.info().version().isVersion1();
 	}
 
 	boolean serverApiIsV2() {
-		return operations.info().version().isVersion2();
+		return this.operations.info().version().isVersion2();
 	}
 
 	void deleteCredentialIfExists(CredentialName credentialName) {
 		try {
-			operations.credentials().deleteByName(credentialName);
-		} catch (CredHubException e) {
+			this.operations.credentials().deleteByName(credentialName);
+		}
+		catch (CredHubException ex) {
 			// ignore failing deletes on cleanup
 		}
 	}
+
 }

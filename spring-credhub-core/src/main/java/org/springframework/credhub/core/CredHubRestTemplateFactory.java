@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 
 package org.springframework.credhub.core;
 
-import static java.util.Collections.singletonList;
-
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.springframework.credhub.support.utils.JsonUtils;
 import org.springframework.http.HttpHeaders;
@@ -50,24 +49,26 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 /**
- * Factory for creating a {@link RestTemplate} configured for communication with
- * a CredHub server.
+ * Factory for creating a {@link RestTemplate} configured for communication with a CredHub
+ * server.
  *
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
-class CredHubRestTemplateFactory {
+final class CredHubRestTemplateFactory {
+
+	private CredHubRestTemplateFactory() {
+	}
 
 	/**
 	 * Create a {@link RestTemplate} configured for communication with a CredHub server.
-	 *
-	 * @param properties               CredHub connection properties
+	 * @param properties the CredHub connection properties
 	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
-	 *                                 creating new connections
+	 * creating new connections
 	 * @return a configured {@link RestTemplate}
 	 */
 	static RestTemplate createRestTemplate(CredHubProperties properties,
-										   ClientHttpRequestFactory clientHttpRequestFactory) {
+			ClientHttpRequestFactory clientHttpRequestFactory) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
@@ -77,18 +78,17 @@ class CredHubRestTemplateFactory {
 
 	/**
 	 * Create a {@link RestTemplate} configured for communication with a CredHub server.
-	 *
-	 * @param properties                   CredHub connection properties
-	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
-	 *                                     creating new connections
+	 * @param properties the CredHub connection properties
+	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
+	 * creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository a repository of authorized OAuth2 clients
 	 * @return a configured {@link RestTemplate}
 	 */
 	static RestTemplate createRestTemplate(CredHubProperties properties,
-										   ClientHttpRequestFactory clientHttpRequestFactory,
-										   ClientRegistrationRepository clientRegistrationRepository,
-										   OAuth2AuthorizedClientRepository authorizedClientRepository) {
+			ClientHttpRequestFactory clientHttpRequestFactory,
+			ClientRegistrationRepository clientRegistrationRepository,
+			OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
@@ -100,18 +100,16 @@ class CredHubRestTemplateFactory {
 
 	/**
 	 * Create a {@link RestTemplate} configured for communication with a CredHub server.
-	 *
-	 * @param properties                   CredHub connection properties
-	 * @param clientHttpRequestFactory     the {@link ClientHttpRequestFactory} to use when
-	 *                                     creating new connections
+	 * @param properties the CredHub connection properties
+	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
+	 * creating new connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param clientManager                an OAuth2 authorization client manager
+	 * @param clientManager an OAuth2 authorization client manager
 	 * @return a configured {@link RestTemplate}
 	 */
-	public static RestTemplate createRestTemplate(CredHubProperties properties,
-												  ClientHttpRequestFactory clientHttpRequestFactory,
-												  ClientRegistrationRepository clientRegistrationRepository,
-												  OAuth2AuthorizedClientManager clientManager) {
+	static RestTemplate createRestTemplate(CredHubProperties properties,
+			ClientHttpRequestFactory clientHttpRequestFactory,
+			ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientManager clientManager) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		configureRestTemplate(restTemplate, properties.getUrl(), clientHttpRequestFactory);
@@ -123,49 +121,42 @@ class CredHubRestTemplateFactory {
 
 	/**
 	 * Configure a {@link RestTemplate} for communication with a CredHub server.
-	 *
-	 * @param restTemplate             an existing {@link RestTemplate} to configure
-	 * @param baseUri                  the base URI for the CredHub server
+	 * @param restTemplate an existing {@link RestTemplate} to configure
+	 * @param baseUri the base URI for the CredHub server
 	 * @param clientHttpRequestFactory the {@link ClientHttpRequestFactory} to use when
-	 *                                 creating new connections
+	 * creating new connections
 	 */
 	private static void configureRestTemplate(RestTemplate restTemplate, String baseUri,
-											  ClientHttpRequestFactory clientHttpRequestFactory) {
+			ClientHttpRequestFactory clientHttpRequestFactory) {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 		restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(baseUri));
 		restTemplate.getInterceptors().add(new CredHubRequestInterceptor());
-		restTemplate.setMessageConverters(Arrays.asList(
-				new ByteArrayHttpMessageConverter(),
-				new StringHttpMessageConverter(),
-				new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper())));
+		restTemplate.setMessageConverters(
+				Arrays.asList(new ByteArrayHttpMessageConverter(), new StringHttpMessageConverter(),
+						new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper())));
 	}
 
 	/**
 	 * Configure OAuth2 features of a {@link RestTemplate}.
-	 *
-	 * @param restTemplate                 an existing {@link RestTemplate} to configure
-	 * @param clientId                     the OAuth2 client ID for authentication
+	 * @param restTemplate an existing {@link RestTemplate} to configure
+	 * @param clientId the OAuth2 client ID for authentication
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param clientManager                an OAuth2 authorization client manager
+	 * @param clientManager an OAuth2 authorization client manager
 	 */
-	private static void configureOAuth2(RestTemplate restTemplate,
-										String clientId,
-										ClientRegistrationRepository clientRegistrationRepository,
-										OAuth2AuthorizedClientManager clientManager) {
+	private static void configureOAuth2(RestTemplate restTemplate, String clientId,
+			ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientManager clientManager) {
 		ClientRegistration clientRegistration = getClientRegistration(clientRegistrationRepository, clientId);
 
-		restTemplate.getInterceptors()
-				.add(new CredHubOAuth2RequestInterceptor(clientRegistration, clientManager));
+		restTemplate.getInterceptors().add(new CredHubOAuth2RequestInterceptor(clientRegistration, clientManager));
 	}
 
 	private static ClientRegistration getClientRegistration(ClientRegistrationRepository clientRegistrationRepository,
-															String clientId) {
-		ClientRegistration clientRegistration = clientRegistrationRepository
-				.findByRegistrationId(clientId);
+			String clientId) {
+		ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(clientId);
 
 		if (clientRegistration == null) {
-			throw new IllegalStateException("The CredHub OAuth2 client registration ID '" + clientId +
-					"' is not a valid Spring Security OAuth2 client registration");
+			throw new IllegalStateException("The CredHub OAuth2 client registration ID '" + clientId
+					+ "' is not a valid Spring Security OAuth2 client registration");
 		}
 
 		return clientRegistration;
@@ -176,16 +167,13 @@ class CredHubRestTemplateFactory {
 			OAuth2AuthorizedClientRepository authorizedClientRepository,
 			ClientHttpRequestFactory clientHttpRequestFactory) {
 
-		OAuth2AuthorizedClientProvider authorizedClientProvider =
-				OAuth2AuthorizedClientProviderBuilder.builder()
-						.authorizationCode()
-						.clientCredentials(b ->
-								b.accessTokenResponseClient(buildTokenResponseClient(clientHttpRequestFactory)))
-						.build();
+		OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
+				.authorizationCode().clientCredentials(
+						(b) -> b.accessTokenResponseClient(buildTokenResponseClient(clientHttpRequestFactory)))
+				.build();
 
-		DefaultOAuth2AuthorizedClientManager authorizedClientManager =
-				new DefaultOAuth2AuthorizedClientManager(
-						clientRegistrationRepository, authorizedClientRepository);
+		DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
+				clientRegistrationRepository, authorizedClientRepository);
 		authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
 		return authorizedClientManager;
@@ -193,16 +181,14 @@ class CredHubRestTemplateFactory {
 
 	private static OAuth2AccessTokenResponseClient<OAuth2ClientCredentialsGrantRequest> buildTokenResponseClient(
 			ClientHttpRequestFactory clientHttpRequestFactory) {
-		DefaultClientCredentialsTokenResponseClient tokenResponseClient =
-				new DefaultClientCredentialsTokenResponseClient();
+		DefaultClientCredentialsTokenResponseClient tokenResponseClient = new DefaultClientCredentialsTokenResponseClient();
 		tokenResponseClient.setRestOperations(createTokenServerRestTemplate(clientHttpRequestFactory));
 		return tokenResponseClient;
 	}
 
 	private static RestTemplate createTokenServerRestTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
-		RestTemplate restOperations = new RestTemplate(Arrays.asList(
-				new FormHttpMessageConverter(),
-				new OAuth2AccessTokenResponseHttpMessageConverter()));
+		RestTemplate restOperations = new RestTemplate(
+				Arrays.asList(new FormHttpMessageConverter(), new OAuth2AccessTokenResponseHttpMessageConverter()));
 		restOperations.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
 		restOperations.setRequestFactory(clientHttpRequestFactory);
 		return restOperations;
@@ -212,16 +198,19 @@ class CredHubRestTemplateFactory {
 	 * A request interceptor that sets headers common to all CredHub requests.
 	 */
 	private static class CredHubRequestInterceptor implements ClientHttpRequestInterceptor {
+
 		@Override
-		public ClientHttpResponse intercept(HttpRequest request, byte[] body,
-											ClientHttpRequestExecution execution) throws IOException {
+		public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+				throws IOException {
 			HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
 
 			HttpHeaders headers = requestWrapper.getHeaders();
-			headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 			headers.setContentType(MediaType.APPLICATION_JSON);
 
 			return execution.execute(requestWrapper, body);
 		}
+
 	}
+
 }

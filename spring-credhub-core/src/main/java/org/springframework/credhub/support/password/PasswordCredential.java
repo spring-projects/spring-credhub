@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ package org.springframework.credhub.support.password;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import org.springframework.credhub.support.StringCredential;
 
 /**
@@ -26,9 +27,9 @@ import org.springframework.credhub.support.StringCredential;
  * @author Scott Frederick
  */
 public class PasswordCredential extends StringCredential {
+
 	/**
 	 * Create a {@link PasswordCredential} containing the specified password value.
-	 *
 	 * @param value the password; must not be {@literal null}
 	 */
 	@JsonCreator
@@ -38,11 +39,11 @@ public class PasswordCredential extends StringCredential {
 
 	/**
 	 * Get the password value.
-	 *
 	 * @return the password value
 	 */
 	@JsonValue
 	public String getPassword() {
-		return value;
+		return this.value;
 	}
+
 }

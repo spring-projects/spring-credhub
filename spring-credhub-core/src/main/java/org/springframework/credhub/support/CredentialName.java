@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,13 +32,13 @@ import org.springframework.util.StringUtils;
  * @author Scott Frederick
  */
 public class CredentialName {
+
 	@JsonIgnore
 	final String[] segments;
 
 	/**
-	 * Create a name from the provided value. The name must consist of segments
-	 * separated by the "/" character.
-	 *
+	 * Create a name from the provided value. The name must consist of segments separated
+	 * by the "/" character.
 	 * @param name the credential name; must not be {@literal null}
 	 */
 	CredentialName(String name) {
@@ -51,14 +51,14 @@ public class CredentialName {
 		if (split[0].length() == 0) {
 			// name contains a leading "/"
 			this.segments = Arrays.copyOfRange(split, 1, split.length);
-		} else {
+		}
+		else {
 			this.segments = split;
 		}
 	}
 
 	/**
 	 * Create a name from the provided segments.
-	 *
 	 * @param segments the list of name segments; must not be {@literal null}
 	 */
 	CredentialName(String... segments) {
@@ -68,39 +68,40 @@ public class CredentialName {
 
 	/**
 	 * Builds a name from the provided segments.
-	 *
 	 * @return the credential name
 	 */
 	@JsonInclude
 	public String getName() {
-		if (segments.length == 1) {
-			return segments[0];
-		} else {
-			return "/" + StringUtils.arrayToDelimitedString(segments, "/");
+		if (this.segments.length == 1) {
+			return this.segments[0];
+		}
+		else {
+			return "/" + StringUtils.arrayToDelimitedString(this.segments, "/");
 		}
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof CredentialName))
+		}
+		if (!(o instanceof CredentialName)) {
 			return false;
+		}
 
 		CredentialName that = (CredentialName) o;
 
-		return Arrays.equals(segments, that.segments);
+		return Arrays.equals(this.segments, that.segments);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(segments);
+		return Objects.hashCode(this.segments);
 	}
 
 	@Override
 	public String toString() {
-		return "CredentialName{" +
-				getName() + 
-				'}';
+		return "CredentialName{" + getName() + '}';
 	}
+
 }

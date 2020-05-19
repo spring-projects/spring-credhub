@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,12 +38,12 @@ import org.springframework.http.ResponseEntity;
 @RunWith(Theories.class)
 public class CredHubTemplateDetailCertificateUnitTests
 		extends CredHubTemplateDetailUnitTestsBase<CertificateCredential, CertificateParameters> {
-	private static final CertificateCredential CREDENTIAL =
-			new CertificateCredential("certificate", "authority", "private-key");
-	private static final CertificateParameters PARAMETERS = CertificateParameters.builder()
-			.commonName("common")
-			.certificateAuthorityCredential("credential")
-			.build();
+
+	private static final CertificateCredential CREDENTIAL = new CertificateCredential("certificate", "authority",
+			"private-key");
+
+	private static final CertificateParameters PARAMETERS = CertificateParameters.builder().commonName("common")
+			.certificateAuthorityCredential("credential").build();
 
 	@DataPoints("detail-responses")
 	public static List<ResponseEntity<CredentialDetails<CertificateCredential>>> buildDetailResponses() {
@@ -57,18 +57,12 @@ public class CredHubTemplateDetailCertificateUnitTests
 
 	@Override
 	public CredentialRequest<CertificateCredential> getWriteRequest() {
-		return CertificateCredentialRequest.builder()
-				.name(NAME)
-				.value(CREDENTIAL)
-				.build();
+		return CertificateCredentialRequest.builder().name(NAME).value(CREDENTIAL).build();
 	}
 
 	@Override
 	public ParametersRequest<CertificateParameters> getGenerateRequest() {
-		return CertificateParametersRequest.builder()
-				.name(NAME)
-				.parameters(PARAMETERS)
-				.build();
+		return CertificateParametersRequest.builder().name(NAME).parameters(PARAMETERS).build();
 	}
 
 	@Override
@@ -77,44 +71,45 @@ public class CredHubTemplateDetailCertificateUnitTests
 	}
 
 	@Theory
-	public void write(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	public void write(
+			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@Theory
-	public void generate(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	public void generate(
+			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyGenerate(expectedResponse);
 	}
 
 	@Theory
-	public void regenerate(@FromDataPoints("detail-responses")
-					  ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	public void regenerate(
+			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyRegenerate(expectedResponse);
 	}
 
 	@Theory
-	public void getById(@FromDataPoints("detail-responses")
-						ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	public void getById(
+			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@Theory
-	public void getByName(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
+	public void getByName(
+			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@Theory
-	public void getByNameWithHistory(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
+	public void getByNameWithHistory(
+			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@Theory
-	public void getByNameWithVersions(@FromDataPoints("data-responses")
-						ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
+	public void getByNameWithVersions(
+			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
+
 }

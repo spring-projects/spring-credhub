@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,15 @@
 
 package org.springframework.credhub.integration;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
 import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
 import org.springframework.credhub.support.CredentialDetails;
@@ -30,23 +35,21 @@ import org.springframework.credhub.support.json.JsonCredential;
 import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.credhub.support.utils.JsonUtils;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InterpolationIntegrationTests extends CredHubIntegrationTests {
-	private static final SimpleCredentialName CREDENTIAL_NAME =
-			new SimpleCredentialName("spring-credhub", "integration-test", "interpolation-credential");
+
+	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
+			"integration-test", "interpolation-credential");
 
 	private CredHubInterpolationOperations interpolation;
+
 	private CredHubCredentialOperations credentials;
 
 	@Before
 	public void setUp() {
-		this.interpolation = operations.interpolation();
-		this.credentials = operations.credentials();
+		this.interpolation = this.operations.interpolation();
+		this.credentials = this.operations.credentials();
 	}
 
 	@After
@@ -57,36 +60,35 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void interpolate() throws IOException {
-		Map<String, Object> json = new HashMap<String, Object>() {{
-			put("url", "https://example.com");
-			put("username", "user");
-			put("password", "secret");
-		}};
+		Map<String, Object> json = new HashMap<String, Object>() {
+			{
+				put("url", "https://example.com");
+				put("username", "user");
+				put("password", "secret");
+			}
+		};
 
-		CredentialDetails<JsonCredential> written = credentials.write(JsonCredentialRequest.builder()
-				.name(CREDENTIAL_NAME)
-				.value(json)
-				.build());
+		CredentialDetails<JsonCredential> written = this.credentials
+				.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(json).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(written.getValue()).isEqualTo(json);
 		assertThat(written.getCredentialType()).isEqualTo(CredentialType.JSON);
 		assertThat(written.getId()).isNotNull();
 
-		ServicesData servicesData =
-				interpolation.interpolateServiceData(buildVcapServices(CREDENTIAL_NAME.getName()));
+		ServicesData servicesData = this.interpolation
+				.interpolateServiceData(buildVcapServices(CREDENTIAL_NAME.getName()));
 		assertThat(servicesData).containsKey("service-offering");
 		assertThat(servicesData.get("service-offering")).hasSize(1);
 		assertThat(servicesData.get("service-offering").get(0)).containsKey("credentials");
 
-		Map<String, Object> credentials =
-				(Map<String, Object>) servicesData.get("service-offering").get(0).get("credentials");
-		assertThat(credentials)
-				.containsEntry("url", "https://example.com")
-				.containsEntry("username", "user")
+		Map<String, Object> credentials = (Map<String, Object>) servicesData.get("service-offering").get(0)
+				.get("credentials");
+		assertThat(credentials).containsEntry("url", "https://example.com").containsEntry("username", "user")
 				.containsEntry("password", "secret");
 	}
 
 	private ServicesData buildVcapServices(String credHubReferenceName) throws IOException {
+		// @formatter:off
 		String vcapServices = "{" +
 				"  \"service-offering\": [" +
 				"   {" +
@@ -103,8 +105,10 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 				"   }" +
 				"  ]" +
 				"}";
+		// @formatter:on
 
 		ObjectMapper mapper = JsonUtils.buildObjectMapper();
 		return mapper.readValue(vcapServices, ServicesData.class);
 	}
+
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,9 +16,9 @@
 
 package org.springframework.credhub.support;
 
-import org.springframework.util.Assert;
-
 import java.util.Objects;
+
+import org.springframework.util.Assert;
 
 /**
  * A base type for a credential that contains a single string value.
@@ -26,11 +26,11 @@ import java.util.Objects;
  * @author Scott Frederick
  */
 public class StringCredential {
+
 	protected final String value;
 
 	/**
 	 * Create a credential containing the specified value.
-	 *
 	 * @param value the credential value
 	 */
 	protected StringCredential(String value) {
@@ -40,23 +40,30 @@ public class StringCredential {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof StringCredential)) return false;
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof StringCredential)) {
+			return false;
+		}
 
 		StringCredential that = (StringCredential) o;
 
-		if (value != null ? !value.equals(that.value) : that.value != null) return false;
+		if ((this.value != null) ? !this.value.equals(that.value) : (that.value != null)) {
+			return false;
+		}
 
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(value);
+		return Objects.hashCode(this.value);
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return this.value;
 	}
+
 }

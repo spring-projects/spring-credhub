@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,26 +56,26 @@ import org.springframework.util.ClassUtils;
  * @author Mark Paluch
  * @author Scott Frederick
  */
-public class ClientHttpRequestFactoryFactory {
+public final class ClientHttpRequestFactoryFactory {
+
 	private static final Log logger = LogFactory.getLog(ClientHttpRequestFactoryFactory.class);
 
 	private static final SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
 
-	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent(
-			"org.apache.http.client.HttpClient",
+	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent("org.apache.http.client.HttpClient",
 			ClientHttpRequestFactoryFactory.class.getClassLoader());
 
-	private static final boolean OKHTTP3_PRESENT = ClassUtils.isPresent(
-			"okhttp3.OkHttpClient",
+	private static final boolean OKHTTP3_PRESENT = ClassUtils.isPresent("okhttp3.OkHttpClient",
 			ClientHttpRequestFactoryFactory.class.getClassLoader());
 
-	private static final boolean NETTY_PRESENT = ClassUtils.isPresent(
-			"io.netty.channel.nio.NioEventLoopGroup",
+	private static final boolean NETTY_PRESENT = ClassUtils.isPresent("io.netty.channel.nio.NioEventLoopGroup",
 			ClientHttpRequestFactoryFactory.class.getClassLoader());
+
+	private ClientHttpRequestFactoryFactory() {
+	}
 
 	/**
 	 * Create a {@link ClientHttpRequestFactory} for the given {@link ClientOptions}.
-	 *
 	 * @param options must not be {@literal null}
 	 * @return a new {@link ClientHttpRequestFactory}. Lifecycle beans must be initialized
 	 * after obtaining.
@@ -99,24 +99,30 @@ public class ClientHttpRequestFactoryFactory {
 				logger.info("Using Netty for HTTP connections");
 				return Netty.usingNetty(options);
 			}
-		} catch (GeneralSecurityException | IOException e) {
-			logger.warn("Error configuring HTTP connections", e);
+		}
+		catch (GeneralSecurityException | IOException ex) {
+			logger.warn("Error configuring HTTP connections", ex);
 		}
 
 		logger.info("Defaulting to java.net.HttpUrlConnection for HTTP connections");
 		return HttpURLConnection.usingJdk(options);
 	}
 
+	private static boolean usingCustomCerts(ClientOptions options) {
+		return options.getCaCertFiles() != null;
+	}
+
 	/**
 	 * {@link ClientHttpRequestFactory} using {@link java.net.HttpURLConnection}.
 	 */
 	static class HttpURLConnection {
+
 		static ClientHttpRequestFactory usingJdk(ClientOptions options) {
 			if (usingCustomCerts(options)) {
-				logger.warn("Trust material will not be configured when using " +
-						"java.net.HttpUrlConnection. Use an alternate HTTP Client " +
-						"(Apache HttpComponents HttpClient, OkHttp3, or Netty) when " +
-						"configuring CA certificates.");
+				logger.warn("Trust material will not be configured when using "
+						+ "java.net.HttpUrlConnection. Use an alternate HTTP Client "
+						+ "(Apache HttpComponents HttpClient, OkHttp3, or Netty) when "
+						+ "configuring CA certificates.");
 			}
 
 			SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -130,6 +136,7 @@ public class ClientHttpRequestFactoryFactory {
 
 			return factory;
 		}
+
 	}
 
 	/**
@@ -139,27 +146,22 @@ public class ClientHttpRequestFactoryFactory {
 	 * @author Scott Frederick
 	 */
 	static class HttpComponents {
-		static ClientHttpRequestFactory usingHttpComponents(ClientOptions options)
-				throws GeneralSecurityException {
+
+		static ClientHttpRequestFactory usingHttpComponents(ClientOptions options) throws GeneralSecurityException {
 
 			HttpClientBuilder httpClientBuilder = HttpClients.custom();
 
 			if (usingCustomCerts(options)) {
 				SSLContext sslContext = sslCertificateUtils.getSSLContext(options.getCaCertFiles());
-				SSLConnectionSocketFactory sslSocketFactory =
-						new SSLConnectionSocketFactory(sslContext);
+				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
 
-				httpClientBuilder
-						.setSSLSocketFactory(sslSocketFactory)
-						.setSSLContext(sslContext);
-			} else {
-				httpClientBuilder
-						.setSSLContext(SSLContext.getDefault())
-						.useSystemProperties();
+				httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setSSLContext(sslContext);
+			}
+			else {
+				httpClientBuilder.setSSLContext(SSLContext.getDefault()).useSystemProperties();
 			}
 
-			RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
-					.setAuthenticationEnabled(true);
+			RequestConfig.Builder requestConfigBuilder = RequestConfig.custom().setAuthenticationEnabled(true);
 
 			if (options.getConnectionTimeout() != null) {
 				requestConfigBuilder.setConnectTimeout(options.getConnectionTimeoutMillis());
@@ -172,6 +174,7 @@ public class ClientHttpRequestFactoryFactory {
 
 			return new HttpComponentsClientHttpRequestFactory(httpClientBuilder.build());
 		}
+
 	}
 
 	/**
@@ -181,19 +184,19 @@ public class ClientHttpRequestFactoryFactory {
 	 * @author Scott Frederick
 	 */
 	static class OkHttp3 {
-		static ClientHttpRequestFactory usingOkHttp3(ClientOptions options)
-				throws GeneralSecurityException {
+
+		static ClientHttpRequestFactory usingOkHttp3(ClientOptions options) throws GeneralSecurityException {
 
 			Builder builder = new Builder();
 
 			if (usingCustomCerts(options)) {
-				SSLSocketFactory socketFactory =
-						sslCertificateUtils.getSSLContext(options.getCaCertFiles()).getSocketFactory();
-				X509TrustManager trustManager =
-						sslCertificateUtils.createTrustManager(options.getCaCertFiles());
+				SSLSocketFactory socketFactory = sslCertificateUtils.getSSLContext(options.getCaCertFiles())
+						.getSocketFactory();
+				X509TrustManager trustManager = sslCertificateUtils.createTrustManager(options.getCaCertFiles());
 
 				builder.sslSocketFactory(socketFactory, trustManager);
-			} else {
+			}
+			else {
 				SSLSocketFactory socketFactory = SSLContext.getDefault().getSocketFactory();
 				X509TrustManager trustManager = sslCertificateUtils.getDefaultX509TrustManager();
 
@@ -221,8 +224,7 @@ public class ClientHttpRequestFactoryFactory {
 	static class Netty {
 
 		@SuppressWarnings("deprecation")
-		static ClientHttpRequestFactory usingNetty(ClientOptions options)
-				throws IOException, GeneralSecurityException {
+		static ClientHttpRequestFactory usingNetty(ClientOptions options) throws IOException, GeneralSecurityException {
 
 			final Netty4ClientHttpRequestFactory requestFactory = new Netty4ClientHttpRequestFactory();
 
@@ -234,17 +236,15 @@ public class ClientHttpRequestFactoryFactory {
 			}
 
 			if (usingCustomCerts(options)) {
-				TrustManagerFactory trustManagerFactory =
-						sslCertificateUtils.createTrustManagerFactory(options.getCaCertFiles());
+				TrustManagerFactory trustManagerFactory = sslCertificateUtils
+						.createTrustManagerFactory(options.getCaCertFiles());
 
-				SslContext sslContext = SslContextBuilder
-						.forClient()
-						.sslProvider(SslProvider.JDK)
-						.trustManager(trustManagerFactory)
-						.build();
+				SslContext sslContext = SslContextBuilder.forClient().sslProvider(SslProvider.JDK)
+						.trustManager(trustManagerFactory).build();
 
 				requestFactory.setSslContext(sslContext);
-			} else {
+			}
+			else {
 				SslContext sslContext = new JdkSslContext(SSLContext.getDefault(), true, null,
 						IdentityCipherSuiteFilter.INSTANCE, null, ClientAuth.REQUIRE, null, false);
 
@@ -256,7 +256,4 @@ public class ClientHttpRequestFactoryFactory {
 
 	}
 
-	private static boolean usingCustomCerts(ClientOptions options) {
-		return options.getCaCertFiles() != null;
-	}
 }

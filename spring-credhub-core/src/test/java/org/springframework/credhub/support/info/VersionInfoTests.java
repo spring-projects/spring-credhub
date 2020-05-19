@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,16 +17,16 @@
 package org.springframework.credhub.support.info;
 
 import org.junit.Test;
+
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class VersionInfoTests extends JsonParsingUnitTestsBase {
+
 	@Test
 	public void deserializeWithV1() {
-		String json = "{\n" +
-				"  \"version\": \"1.9.0\"\n" +
-				"}";
+		String json = "{\n" + "  \"version\": \"1.9.0\"\n" + "}";
 
 		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
 
@@ -39,9 +39,7 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithV2_0() {
-		String json = "{\n" +
-				"  \"version\": \"2.0.2\"\n" +
-				"}";
+		String json = "{\n" + "  \"version\": \"2.0.2\"\n" + "}";
 
 		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
 
@@ -54,9 +52,7 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithV2_1() {
-		String json = "{\n" +
-				"  \"version\": \"2.1.2\"\n" +
-				"}";
+		String json = "{\n" + "  \"version\": \"2.1.2\"\n" + "}";
 
 		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
 
@@ -66,4 +62,5 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 		assertThat(versionInfo.isVersion2_0()).isFalse();
 		assertThat(versionInfo.isVersion2_1()).isTrue();
 	}
+
 }

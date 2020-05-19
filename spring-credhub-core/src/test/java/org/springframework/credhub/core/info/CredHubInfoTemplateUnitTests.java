@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,18 +25,19 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
+
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.info.VersionInfo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-import static org.springframework.credhub.core.info.CredHubInfoTemplate.VERSION_URL_PATH;
-import static org.springframework.http.HttpStatus.OK;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CredHubInfoTemplateUnitTests {
+
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
@@ -47,15 +48,15 @@ public class CredHubInfoTemplateUnitTests {
 
 	@Before
 	public void setUp() {
-		credHubTemplate = new CredHubTemplate(restTemplate).info();
+		this.credHubTemplate = new CredHubTemplate(this.restTemplate).info();
 	}
 
 	@Test
 	public void getVersion() {
-		when(restTemplate.getForEntity(VERSION_URL_PATH, VersionInfo.class))
-				.thenReturn(new ResponseEntity<>(new VersionInfo("2.0.0"), OK));
+		given(this.restTemplate.getForEntity(CredHubInfoTemplate.VERSION_URL_PATH, VersionInfo.class))
+				.willReturn(new ResponseEntity<>(new VersionInfo("2.0.0"), HttpStatus.OK));
 
-		VersionInfo response = credHubTemplate.version();
+		VersionInfo response = this.credHubTemplate.version();
 
 		assertThat(response.getVersion()).isEqualTo("2.0.0");
 	}

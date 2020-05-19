@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,23 +26,37 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
-public class CertificateParameters extends KeyParameters {
-	private String commonName;
-	private String[] alternativeNames;
-	private String organization;
-	private String organizationUnit;
-	private String locality;
-	private String state;
-	private String country;
-	private String certificateAuthorityCredential;
-	private Boolean certificateAuthority;
-	private Boolean selfSign;
-	private Integer duration;
-	private KeyUsage[] keyUsage;
-	private ExtendedKeyUsage[] extendedKeyUsage;
+public final class CertificateParameters extends KeyParameters {
+
+	private final String commonName;
+
+	private final String[] alternativeNames;
+
+	private final String organization;
+
+	private final String organizationUnit;
+
+	private final String locality;
+
+	private final String state;
+
+	private final String country;
+
+	private final String certificateAuthorityCredential;
+
+	private final Boolean certificateAuthority;
+
+	private final Boolean selfSign;
+
+	private final Integer duration;
+
+	private final KeyUsage[] keyUsage;
+
+	private final ExtendedKeyUsage[] extendedKeyUsage;
 
 	/**
-	 * Create a {@link CertificateParameters} using defaults for all parameter values. Intended for internal use.
+	 * Create a {@link CertificateParameters} using defaults for all parameter values.
+	 * Intended for internal use.
 	 */
 	@SuppressWarnings("unused")
 	private CertificateParameters() {
@@ -62,13 +76,27 @@ public class CertificateParameters extends KeyParameters {
 	}
 
 	/**
-	 * Create a {@link CertificateParameters} using the specified parameter values. Intended for internal use.
+	 * Create a {@link CertificateParameters} using the specified parameter values.
+	 * Intended for internal use.
+	 * @param keyLength the parameter value; must not be {@literal null}
+	 * @param commonName the parameter value; must not be {@literal null}
+	 * @param alternativeNames the parameter value; must not be {@literal null}
+	 * @param organization the parameter value; must not be {@literal null}
+	 * @param organizationUnit the parameter value; must not be {@literal null}
+	 * @param locality the parameter value; must not be {@literal null}
+	 * @param state the parameter value; must not be {@literal null}
+	 * @param country the parameter value; must not be {@literal null}
+	 * @param duration the parameter value
+	 * @param certificateAuthorityCredential the parameter value; must not be
+	 * @param certificateAuthority the parameter value
+	 * @param selfSign the parameter value
+	 * @param keyUsage one or more parameter values
+	 * @param extendedKeyUsage one or more parameter values
 	 */
-	private CertificateParameters(KeyLength keyLength, String commonName, String[] alternativeNames, String organization,
-								  String organizationUnit, String locality, String state, String country,
-								  Integer duration, String certificateAuthorityCredential,
-								  Boolean certificateAuthority, Boolean selfSign,
-								  KeyUsage[] keyUsage, ExtendedKeyUsage[] extendedKeyUsage) {
+	private CertificateParameters(KeyLength keyLength, String commonName, String[] alternativeNames,
+			String organization, String organizationUnit, String locality, String state, String country,
+			Integer duration, String certificateAuthorityCredential, Boolean certificateAuthority, Boolean selfSign,
+			KeyUsage[] keyUsage, ExtendedKeyUsage[] extendedKeyUsage) {
 		super(keyLength);
 		this.commonName = commonName;
 		this.alternativeNames = alternativeNames;
@@ -86,126 +114,125 @@ public class CertificateParameters extends KeyParameters {
 	}
 
 	/**
-	 * Get the value of the common name parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the common name parameter that will be used when generating the
+	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getCommonName() {
-		return commonName;
+		return this.commonName;
 	}
 
 	/**
-	 * Get the value of the alternative names parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the alternative names parameter that will be used when generating
+	 * the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String[] getAlternativeNames() {
-		return alternativeNames;
+		return this.alternativeNames;
 	}
 
 	/**
-	 * Get the value of the organization parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the organization parameter that will be used when generating the
+	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getOrganization() {
-		return organization;
+		return this.organization;
 	}
 
 	/**
-	 * Get the value of the organization unit parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the organization unit parameter that will be used when generating
+	 * the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getOrganizationUnit() {
-		return organizationUnit;
+		return this.organizationUnit;
 	}
 
 	/**
-	 * Get the value of the locality parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the locality parameter that will be used when generating the
+	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getLocality() {
-		return locality;
+		return this.locality;
 	}
 
 	/**
-	 * Get the value of the state parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the state parameter that will be used when generating the
+	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getState() {
-		return state;
+		return this.state;
 	}
 
 	/**
-	 * Get the value of the country parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the country parameter that will be used when generating the
+	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getCountry() {
-		return country;
+		return this.country;
 	}
 
 	/**
-	 * Get the value of the certificate authority parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the certificate authority parameter that will be used when
+	 * generating the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public String getCa() {
-		return certificateAuthorityCredential;
+		return this.certificateAuthorityCredential;
 	}
 
 	/**
-	 * Get the value of the flag that indicates whether the generated certificate is a certificate authority.
-	 *
+	 * Get the value of the flag that indicates whether the generated certificate is a
+	 * certificate authority.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Boolean getIsCa() {
-		return certificateAuthority;
+		return this.certificateAuthority;
 	}
 
 	/**
-	 * Get the value of the flag that indicates whether the generated certificate is self-signed.
-	 *
+	 * Get the value of the flag that indicates whether the generated certificate is
+	 * self-signed.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Boolean getSelfSign() {
-		return selfSign;
+		return this.selfSign;
 	}
 
 	/**
-	 * Get the value of the duration (in days) parameter that will be used when generating the certificate.
-	 *
+	 * Get the value of the duration (in days) parameter that will be used when generating
+	 * the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Integer getDuration() {
-		return duration;
+		return this.duration;
 	}
 
 	/**
-	 * Get the value of the key usage extensions that will be used when generating the certificate.
-	 *
+	 * Get the value of the key usage extensions that will be used when generating the
+	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public KeyUsage[] getKeyUsage() {
-		return keyUsage;
+		return this.keyUsage;
 	}
 
 	/**
-	 * Get the value of the extended key usage extensions that will be used when generating the certificate.
-	 *
+	 * Get the value of the extended key usage extensions that will be used when
+	 * generating the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public ExtendedKeyUsage[] getExtendedKeyUsage() {
-		return extendedKeyUsage;
+		return this.extendedKeyUsage;
 	}
 
 	/**
-	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link CertificateParameters}.
-	 *
+	 * Create a builder that provides a fluent API for providing the values required to
+	 * construct a {@link CertificateParameters}.
 	 * @return a builder
 	 */
 	public static CertificateParametersBuilder builder() {
@@ -213,27 +240,41 @@ public class CertificateParameters extends KeyParameters {
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link CertificateParametersBuilder}s.
+	 * A builder that provides a fluent API for constructing
+	 * {@link CertificateParametersBuilder}s.
 	 */
 	public static class CertificateParametersBuilder {
+
 		private KeyLength keyLength;
+
 		private String commonName;
+
 		private String[] alternativeNames;
+
 		private String organization;
+
 		private String organizationUnit;
+
 		private String locality;
+
 		private String state;
+
 		private String country;
+
 		private Integer duration;
+
 		private String certificateAuthorityCredential;
+
 		private Boolean certificateAuthority;
+
 		private Boolean selfSign;
+
 		private KeyUsage[] keyUsage;
+
 		private ExtendedKeyUsage[] extendedKeyUsage;
 
 		/**
 		 * Set the length of the key for the generated certificate.
-		 *
 		 * @param keyLength the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -245,7 +286,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the Common Name (CN) field to be used for the generated certificate.
-		 *
 		 * @param commonName the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -257,7 +297,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the Alternative Names (SAN) field to be used for the generated certificate.
-		 *
 		 * @param alternativeNames the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -269,7 +308,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the Organization (O) field to be used for the generated certificate.
-		 *
 		 * @param organization the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -281,7 +319,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the Organization Unit (OU) field to be used for the generated certificate.
-		 *
 		 * @param organizationUnit the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -293,7 +330,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the Locality (L) field to be used for the generated certificate.
-		 *
 		 * @param locality the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -305,7 +341,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the State (S) field to be used for the generated certificate.
-		 *
 		 * @param state the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -317,7 +352,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the Country (C) field to be used for the generated certificate.
-		 *
 		 * @param country the parameter value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -329,7 +363,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the duration in days that the generated certificate should be valid.
-		 *
 		 * @param duration the parameter value
 		 * @return the builder
 		 */
@@ -339,9 +372,10 @@ public class CertificateParameters extends KeyParameters {
 		}
 
 		/**
-		 * Set the name of a certificate authority credential in CredHub to sign the generated certificate with.
-		 *
-		 * @param certificateAuthorityCredential the parameter value; must not be {@literal null}
+		 * Set the name of a certificate authority credential in CredHub to sign the
+		 * generated certificate with.
+		 * @param certificateAuthorityCredential the parameter value; must not be
+		 * {@literal null}
 		 * @return the builder
 		 */
 		public CertificateParametersBuilder certificateAuthorityCredential(String certificateAuthorityCredential) {
@@ -351,12 +385,14 @@ public class CertificateParameters extends KeyParameters {
 		}
 
 		/**
-		 * Set the name of a certificate authority credential in CredHub to sign the generated certificate with.
-		 *
-		 * @param certificateAuthorityCredential the parameter value; must not be {@literal null}
+		 * Set the name of a certificate authority credential in CredHub to sign the
+		 * generated certificate with.
+		 * @param certificateAuthorityCredential the parameter value; must not be
+		 * {@literal null}
 		 * @return the builder
 		 */
-		public CertificateParametersBuilder certificateAuthorityCredential(CredentialName certificateAuthorityCredential) {
+		public CertificateParametersBuilder certificateAuthorityCredential(
+				CredentialName certificateAuthorityCredential) {
 			Assert.notNull(certificateAuthorityCredential, "certificateAuthorityCredential must not be null");
 			this.certificateAuthorityCredential = certificateAuthorityCredential.getName();
 			return this;
@@ -365,7 +401,6 @@ public class CertificateParameters extends KeyParameters {
 		/**
 		 * Set the value of the flag that indicates whether the generated certificate is a
 		 * certificate authority.
-		 *
 		 * @param certificateAuthority the parameter value
 		 * @return the builder
 		 */
@@ -375,9 +410,8 @@ public class CertificateParameters extends KeyParameters {
 		}
 
 		/**
-		 * Set the value of the flag that indicates whether the generated certificate should be
-		 * self-signed.
-		 *
+		 * Set the value of the flag that indicates whether the generated certificate
+		 * should be self-signed.
 		 * @param selfSign the parameter value
 		 * @return the builder
 		 */
@@ -388,7 +422,6 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Set the value of the key usage extensions for the generated certificate.
-		 *
 		 * @param keyUsage one or more parameter values
 		 * @return the builder
 		 */
@@ -398,8 +431,8 @@ public class CertificateParameters extends KeyParameters {
 		}
 
 		/**
-		 * Set the value of the extended key usage extensions for the generated certificate.
-		 *
+		 * Set the value of the extended key usage extensions for the generated
+		 * certificate.
 		 * @param extendedKeyUsage one or more parameter values
 		 * @return the builder
 		 */
@@ -410,18 +443,21 @@ public class CertificateParameters extends KeyParameters {
 
 		/**
 		 * Create a {@link CertificateParameters} from the provided values.
-		 *
 		 * @return the created {@link CertificateParameters}
 		 */
 		public CertificateParameters build() {
-			Assert.isTrue(commonName != null || organization != null || organizationUnit != null ||
-					locality != null || state != null || country != null,
+			Assert.isTrue(
+					this.commonName != null || this.organization != null || this.organizationUnit != null
+							|| this.locality != null || this.state != null || this.country != null,
 					"at least one subject parameter must be specified");
-			Assert.isTrue(certificateAuthorityCredential != null || certificateAuthority != null || selfSign != null,
-					"at least one signing parameter must be specified");
-			return new CertificateParameters(keyLength, commonName, alternativeNames, organization, organizationUnit,
-					locality, state, country, duration, certificateAuthorityCredential, certificateAuthority, selfSign,
-					keyUsage, extendedKeyUsage);
+			Assert.isTrue(this.certificateAuthorityCredential != null || this.certificateAuthority != null
+					|| this.selfSign != null, "at least one signing parameter must be specified");
+			return new CertificateParameters(this.keyLength, this.commonName, this.alternativeNames, this.organization,
+					this.organizationUnit, this.locality, this.state, this.country, this.duration,
+					this.certificateAuthorityCredential, this.certificateAuthority, this.selfSign, this.keyUsage,
+					this.extendedKeyUsage);
 		}
+
 	}
+
 }

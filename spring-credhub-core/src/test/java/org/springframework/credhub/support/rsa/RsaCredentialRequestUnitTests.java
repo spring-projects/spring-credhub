@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
+import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.springframework.credhub.support.JsonPathAssert.assertThat;
-
 public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+
 	@Before
 	public void setUp() {
 		buildRequest(new RsaCredential("public-key", "private-key"));
@@ -34,11 +34,11 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithPublicAndPrivateKey() {
-		DocumentContext json = toJsonPath(requestBuilder);
+		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
-		assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
-		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
+		JsonPathAssert.assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
+		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
 		assertNoPermissions(json);
 	}
@@ -47,12 +47,12 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithPublicKey() {
 		buildRequest(new RsaCredential("public-key", null));
 
-		DocumentContext json = toJsonPath(requestBuilder);
+		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
 
-		assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
-		assertThat(json).hasNoPath("$.value.private_key");
+		JsonPathAssert.assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
+		JsonPathAssert.assertThat(json).hasNoPath("$.value.private_key");
 
 		assertNoPermissions(json);
 	}
@@ -61,11 +61,11 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithPrivateKey() {
 		buildRequest(new RsaCredential(null, "private-key"));
 
-		DocumentContext json = toJsonPath(requestBuilder);
+		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
-		assertThat(json).hasNoPath("$.value.public_key");
-		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
+		JsonPathAssert.assertThat(json).hasNoPath("$.value.public_key");
+		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
 		assertNoPermissions(json);
 	}
@@ -74,15 +74,13 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithNeitherKey() {
 		buildRequest(new RsaCredential(null, null));
 
-		toJsonPath(requestBuilder);
+		toJsonPath(this.requestBuilder);
 	}
 
 	@SuppressWarnings("deprecation")
 	private void buildRequest(RsaCredential value) {
-		requestBuilder = RsaCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true)
-				.mode(WriteMode.OVERWRITE)
-				.value(value);
+		this.requestBuilder = RsaCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
+				.overwrite(true).mode(WriteMode.OVERWRITE).value(value);
 	}
+
 }

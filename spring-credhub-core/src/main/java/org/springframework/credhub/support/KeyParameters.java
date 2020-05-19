@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ package org.springframework.credhub.support;
  * @author Scott Frederick
  */
 public class KeyParameters {
+
 	protected final KeyLength keyLength;
 
 	/**
@@ -33,7 +34,6 @@ public class KeyParameters {
 
 	/**
 	 * Create a {@link KeyParameters} with the specified key length.
-	 *
 	 * @param keyLength the length of the key to generate
 	 */
 	protected KeyParameters(KeyLength keyLength) {
@@ -42,10 +42,10 @@ public class KeyParameters {
 
 	/**
 	 * Get the value of the key length parameter.
-	 *
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
 	public Integer getKeyLength() {
-		return keyLength == null ? null : keyLength.getLength();
+		return (this.keyLength == null) ? null : this.keyLength.getLength();
 	}
+
 }

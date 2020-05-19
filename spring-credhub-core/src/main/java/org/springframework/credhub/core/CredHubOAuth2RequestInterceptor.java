@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 
 package org.springframework.credhub.core;
 
+import java.io.IOException;
+import java.util.Collections;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -28,20 +31,20 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 
-import java.io.IOException;
-import java.util.Collections;
-
 /**
- * A request interceptor that sets OAuth2 bearer authentication headers to all CredHub requests.
+ * A request interceptor that sets OAuth2 bearer authentication headers to all CredHub
+ * requests.
  *
  * @author Scott Frederick
  */
 class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
+
 	private final ClientRegistration clientRegistration;
+
 	private final OAuth2AuthorizedClientManager clientManager;
 
 	CredHubOAuth2RequestInterceptor(ClientRegistration clientRegistration,
-									OAuth2AuthorizedClientManager clientManager) {
+			OAuth2AuthorizedClientManager clientManager) {
 		this.clientRegistration = clientRegistration;
 		this.clientManager = clientManager;
 	}
@@ -52,8 +55,8 @@ class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ClientHttpResponse intercept(HttpRequest request, byte[] body,
-										ClientHttpRequestExecution execution) throws IOException {
+	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+			throws IOException {
 		HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
 
 		HttpHeaders headers = requestWrapper.getHeaders();
@@ -64,13 +67,13 @@ class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
 
 	private OAuth2AuthorizedClient authorizeClient() {
 		OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-				.withClientRegistrationId(clientRegistration.getRegistrationId())
-				.principal(new OAuth2ClientCredentialsGrantAuthenticationToken(clientRegistration))
-				.build();
-		return clientManager.authorize(authorizeRequest);
+				.withClientRegistrationId(this.clientRegistration.getRegistrationId())
+				.principal(new OAuth2ClientCredentialsGrantAuthenticationToken(this.clientRegistration)).build();
+		return this.clientManager.authorize(authorizeRequest);
 	}
 
 	private static class OAuth2ClientCredentialsGrantAuthenticationToken extends AbstractAuthenticationToken {
+
 		private final ClientRegistration clientRegistration;
 
 		OAuth2ClientCredentialsGrantAuthenticationToken(ClientRegistration clientRegistration) {
@@ -87,5 +90,7 @@ class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
 		public Object getPrincipal() {
 			return this.clientRegistration.getClientId();
 		}
+
 	}
+
 }

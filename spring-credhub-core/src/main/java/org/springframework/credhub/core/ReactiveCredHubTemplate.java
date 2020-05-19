@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,10 @@
 
 package org.springframework.credhub.core;
 
+import java.util.function.Function;
+
 import org.reactivestreams.Publisher;
+
 import org.springframework.credhub.core.certificate.ReactiveCredHubCertificateOperations;
 import org.springframework.credhub.core.certificate.ReactiveCredHubCertificateTemplate;
 import org.springframework.credhub.core.credential.ReactiveCredHubCredentialOperations;
@@ -38,21 +41,20 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.function.Function;
-
 /**
  * Implements the main interaction with CredHub.
  *
  * @author Scott Frederick
  */
 public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
+
 	private final WebClient webClient;
+
 	private final boolean usingOAuth2;
 
 	/**
 	 * Create a new {@link ReactiveCredHubTemplate} using the provided {@link WebClient}.
 	 * Intended for internal testing only.
-	 *
 	 * @param webClient the {@link WebClient} to use for interactions with CredHub
 	 */
 	public ReactiveCredHubTemplate(WebClient webClient) {
@@ -65,10 +67,9 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	/**
 	 * Create a new {@link ReactiveCredHubTemplate} using the provided base URI and
 	 * {@link ClientHttpRequestFactory}.
-	 *
 	 * @param credHubProperties connection properties for the CredHub server
-	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when
-	 * creating new connections
+	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when creating new
+	 * connections
 	 */
 	public ReactiveCredHubTemplate(CredHubProperties credHubProperties, ClientHttpConnector clientHttpConnector) {
 		Assert.notNull(credHubProperties, "credHubProperties must not be null");
@@ -81,16 +82,15 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	/**
 	 * Create a new {@link ReactiveCredHubTemplate} using the provided base URI and
 	 * {@link ClientHttpRequestFactory}.
-	 *
 	 * @param credHubProperties connection properties for the CredHub server
-	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when
-	 *                            creating new connections
+	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when creating new
+	 * connections
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientRepository a repository of authorized OAuth2 clients
 	 */
 	public ReactiveCredHubTemplate(CredHubProperties credHubProperties, ClientHttpConnector clientHttpConnector,
-								   ReactiveClientRegistrationRepository clientRegistrationRepository,
-								   ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+			ReactiveClientRegistrationRepository clientRegistrationRepository,
+			ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
 		Assert.notNull(credHubProperties, "credHubProperties must not be null");
 		Assert.notNull(clientHttpConnector, "clientHttpConnector must not be null");
 		Assert.notNull(clientRegistrationRepository, "clientRegistrationRepository must not be null");
@@ -104,14 +104,13 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	/**
 	 * Create a new {@link ReactiveCredHubTemplate} using the provided base URI and
 	 * {@link ClientHttpRequestFactory}.
-	 *
-	 * @param credHubProperties   connection properties for the CredHub server
-	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when
-	 *                            creating new connections
-	 * @param clientManager       an OAuth2 authorization client manager
+	 * @param credHubProperties connection properties for the CredHub server
+	 * @param clientHttpConnector the {@link ClientHttpConnector} to use when creating new
+	 * connections
+	 * @param clientManager an OAuth2 authorization client manager
 	 */
 	public ReactiveCredHubTemplate(CredHubProperties credHubProperties, ClientHttpConnector clientHttpConnector,
-								   ReactiveOAuth2AuthorizedClientManager clientManager) {
+			ReactiveOAuth2AuthorizedClientManager clientManager) {
 		Assert.notNull(credHubProperties, "credHubProperties must not be null");
 		Assert.notNull(clientHttpConnector, "clientHttpConnector must not be null");
 		Assert.notNull(clientManager, "clientManager must not be null");
@@ -122,7 +121,6 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 	/**
 	 * Get the operations for saving, retrieving, and deleting credentials.
-	 *
 	 * @return the credentials operations
 	 */
 	@Override
@@ -131,8 +129,8 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	}
 
 	/**
-	 * Get the operations for adding, retrieving, and deleting permissions from a credential.
-	 *
+	 * Get the operations for adding, retrieving, and deleting permissions from a
+	 * credential.
 	 * @return the permissions operations
 	 */
 	@Override
@@ -141,8 +139,8 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	}
 
 	/**
-	 * Get the operations for adding, retrieving, and deleting permissions from a credential.
-	 *
+	 * Get the operations for adding, retrieving, and deleting permissions from a
+	 * credential.
 	 * @return the permissions operations
 	 */
 	@Override
@@ -152,7 +150,6 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 	/**
 	 * Get the operations for retrieving, regenerating, and updating certificates.
-	 *
 	 * @return the certificates operations
 	 */
 	@Override
@@ -162,7 +159,6 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 	/**
 	 * Get the operations for interpolating service binding credentials.
-	 *
 	 * @return the interpolation operations
 	 */
 	@Override
@@ -172,7 +168,6 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 	/**
 	 * Get the operations for retrieving CredHub server information.
-	 *
 	 * @return the info operations
 	 */
 	@Override
@@ -181,9 +176,8 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	}
 
 	/**
-	 * Allow interaction with the configured {@link WebClient} not provided
-	 * by other methods.
-	 *
+	 * Allow interaction with the configured {@link WebClient} not provided by other
+	 * methods.
 	 * @param callback wrapper for the callback method
 	 * @param <T> the credential implementation type
 	 * @return the return value from the callback method
@@ -193,14 +187,15 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 		Assert.notNull(callback, "callback must not be null");
 
 		try {
-			return callback.apply(webClient);
+			return callback.apply(this.webClient);
 		}
-		catch (HttpStatusCodeException e) {
-			throw new CredHubException(e);
+		catch (HttpStatusCodeException ex) {
+			throw new CredHubException(ex);
 		}
 	}
 
 	public boolean isUsingOAuth2() {
 		return this.usingOAuth2;
 	}
+
 }

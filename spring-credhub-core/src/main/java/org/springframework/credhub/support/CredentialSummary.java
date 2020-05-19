@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,9 @@ import java.util.Objects;
  * @author Scott Frederick
  */
 public class CredentialSummary {
+
 	protected final CredentialName name;
+
 	protected final Date versionCreatedAt;
 
 	/**
@@ -42,7 +44,6 @@ public class CredentialSummary {
 	 * Create a {@link CredentialSummary} from the provided parameters. Intended for
 	 * internal use. Clients will get {@link CredentialSummary} objects populated from
 	 * CredHub responses.
-	 *
 	 * @param name the name of the credential
 	 */
 	public CredentialSummary(CredentialName name) {
@@ -52,7 +53,6 @@ public class CredentialSummary {
 
 	/**
 	 * Get the client-provided name of the credential.
-	 *
 	 * @return the credential name
 	 */
 	public CredentialName getName() {
@@ -60,8 +60,8 @@ public class CredentialSummary {
 	}
 
 	/**
-	 * Get the CredHub-generated {@link Date} when this version of the credential was created.
-	 *
+	 * Get the CredHub-generated {@link Date} when this version of the credential was
+	 * created.
 	 * @return the credential version creation {@link Date}
 	 */
 	public Date getVersionCreatedAt() {
@@ -70,29 +70,30 @@ public class CredentialSummary {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof CredentialSummary))
+		}
+		if (!(o instanceof CredentialSummary)) {
 			return false;
+		}
 
 		CredentialSummary that = (CredentialSummary) o;
 
-		if (name != null ? !name.equals(that.name) : that.name != null)
+		if ((this.name != null) ? !this.name.equals(that.name) : (that.name != null)) {
 			return false;
-		return versionCreatedAt != null ? versionCreatedAt.equals(that.versionCreatedAt)
-				: that.versionCreatedAt == null;
+		}
+		return (this.versionCreatedAt != null) ? this.versionCreatedAt.equals(that.versionCreatedAt)
+				: (that.versionCreatedAt == null);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, versionCreatedAt);
+		return Objects.hash(this.name, this.versionCreatedAt);
 	}
 
 	@Override
 	public String toString() {
-		return "CredentialSummary{"
-				+ "name=" + name
-				+ ", versionCreatedAt='" + versionCreatedAt + '\''
-				+ '}';
+		return "CredentialSummary{" + "name=" + this.name + ", versionCreatedAt='" + this.versionCreatedAt + '\'' + '}';
 	}
+
 }

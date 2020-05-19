@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,8 +23,10 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
+
 	@Test
 	public void deserializationWithCredentials() {
+		// @formatter:off
 		String json = "{\n" +
 				"  \"credentials\": [\n" +
 				"    {\n" +
@@ -41,6 +43,7 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 				"    }\n" +
 				"  ]\n" +
 				"}";
+		// @formatter:on
 
 		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 
@@ -48,12 +51,9 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 
 		List<CredentialSummary> credentials = response.getCredentials();
 
-		assertThat(credentials.get(0).getName().getName())
-				.isEqualTo("/deploy123/example1");
-		assertThat(credentials.get(1).getName().getName())
-				.isEqualTo("/deploy123/example2");
-		assertThat(credentials.get(2).getName().getName())
-				.isEqualTo("/deploy123/example3");
+		assertThat(credentials.get(0).getName().getName()).isEqualTo("/deploy123/example1");
+		assertThat(credentials.get(1).getName().getName()).isEqualTo("/deploy123/example2");
+		assertThat(credentials.get(2).getName().getName()).isEqualTo("/deploy123/example3");
 
 		for (CredentialSummary credential : credentials) {
 			assertThat(credential.getVersionCreatedAt()).isEqualTo(testDate);
@@ -62,14 +62,12 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializationWithEmptyCredentials() {
-		String json = "{\n" +
-				"  \"credentials\": [\n" +
-				"  ]\n" +
-				"}";
+		String json = "{\n" + "  \"credentials\": [\n" + "  ]\n" + "}";
 
 		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 
 		assertThat(response.getCredentials()).isNotNull();
 		assertThat(response.getCredentials()).hasSize(0);
 	}
+
 }

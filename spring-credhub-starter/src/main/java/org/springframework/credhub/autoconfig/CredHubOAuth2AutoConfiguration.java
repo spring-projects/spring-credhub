@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,6 +15,9 @@
  */
 
 package org.springframework.credhub.autoconfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -41,17 +44,15 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.server.UnAuthenticatedServerOAuth2AuthorizedClientRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for Spring CredHub OAuth2 support beans.
+ * {@link EnableAutoConfiguration Auto-configuration} for Spring CredHub OAuth2 support
+ * beans.
  *
  * @author Scott Frederick
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
-@AutoConfigureAfter({OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class})
+@AutoConfigureAfter({ OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class })
 @ConditionalOnClass(name = "org.springframework.security.oauth2.client.registration.ClientRegistration")
 @ConditionalOnProperty("spring.credhub.oauth2.registration-id")
 @Conditional(ClientsConfiguredCondition.class)
@@ -66,7 +67,6 @@ public class CredHubOAuth2AutoConfiguration {
 	/**
 	 * Create a {@code ClientRegistrationRepository} bean for use with an OAuth2-enabled
 	 * {@code CredHubTemplate}.
-	 *
 	 * @return the {@code ClientRegistrationRepository}
 	 */
 	@Bean
@@ -74,15 +74,13 @@ public class CredHubOAuth2AutoConfiguration {
 	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
 	public ClientRegistrationRepository credHubClientRegistrationRepository() {
 		List<ClientRegistration> registrations = new ArrayList<>(
-				OAuth2ClientPropertiesRegistrationAdapter
-						.getClientRegistrations(this.properties).values());
+				OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(this.properties).values());
 		return new InMemoryClientRegistrationRepository(registrations);
 	}
 
 	/**
-	 * Create an {@code OAuth2AuthorizedClientRepository} bean for use with an OAuth2-enabled
-	 * {@code CredHubTemplate}.
-	 *
+	 * Create an {@code OAuth2AuthorizedClientRepository} bean for use with an
+	 * OAuth2-enabled {@code CredHubTemplate}.
 	 * @param clientRegistrationRepository a {@code ClientRegistrationRepository}
 	 * @return the {@code OAuth2AuthorizedClientRepository}
 	 */
@@ -92,14 +90,13 @@ public class CredHubOAuth2AutoConfiguration {
 	public OAuth2AuthorizedClientRepository credHubAuthorizedClientRepository(
 			ClientRegistrationRepository clientRegistrationRepository) {
 		return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(
-			new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository));
+				new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository));
 	}
 
 	/**
-	 * Create a {@code ReactiveClientRegistrationRepository} bean for use with an OAuth2-enabled
-	 * {@code ReactiveCredHubTemplate}, in case
+	 * Create a {@code ReactiveClientRegistrationRepository} bean for use with an
+	 * OAuth2-enabled {@code ReactiveCredHubTemplate}, in case
 	 * {@link ReactiveOAuth2ClientAutoConfiguration} doesn't configure one.
-	 *
 	 * @return the {@code ReactiveClientRegistrationRepository}
 	 */
 	@Bean
@@ -107,16 +104,14 @@ public class CredHubOAuth2AutoConfiguration {
 	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
 	public ReactiveClientRegistrationRepository credHubReactiveClientRegistrationRepository() {
 		List<ClientRegistration> registrations = new ArrayList<>(
-				OAuth2ClientPropertiesRegistrationAdapter
-						.getClientRegistrations(this.properties).values());
+				OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(this.properties).values());
 		return new InMemoryReactiveClientRegistrationRepository(registrations);
 	}
 
 	/**
-	 * Create a {@code ServerOAuth2AuthorizedClientRepository} bean for use with an OAuth2-enabled
-	 * {@code ReactiveCredHubTemplate}, to override the default provided by
+	 * Create a {@code ServerOAuth2AuthorizedClientRepository} bean for use with an
+	 * OAuth2-enabled {@code ReactiveCredHubTemplate}, to override the default provided by
 	 * {@link ReactiveOAuth2ClientAutoConfiguration}.
-	 *
 	 * @return the {@code ServerOAuth2AuthorizedClientRepository}
 	 */
 	@Bean
@@ -125,4 +120,5 @@ public class CredHubOAuth2AutoConfiguration {
 	public ServerOAuth2AuthorizedClientRepository credHubReactiveAuthorizedClientRepository() {
 		return new UnAuthenticatedServerOAuth2AuthorizedClientRepository();
 	}
+
 }

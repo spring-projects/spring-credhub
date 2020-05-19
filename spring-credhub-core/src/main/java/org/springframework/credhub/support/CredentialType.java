@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support;
@@ -28,8 +26,11 @@ import org.springframework.credhub.support.value.ValueCredential;
 
 /**
  * The types of credentials that can be written to CredHub.
+ *
+ * @author Scott Frederick
  */
 public enum CredentialType {
+
 	/**
 	 * Indicates a credential of type {@link PasswordCredential}.
 	 */
@@ -66,6 +67,7 @@ public enum CredentialType {
 	JSON("json", JsonCredential.class);
 
 	private final String valueType;
+
 	private final Class<?> modelClass;
 
 	CredentialType(String valueType, Class<?> modelClass) {
@@ -75,26 +77,26 @@ public enum CredentialType {
 
 	/**
 	 * Get the type value that will be used in requests to CredHub.
-	 *
 	 * @return the type value
 	 */
 	public String getValueType() {
-		return valueType;
+		return this.valueType;
 	}
 
 	/**
 	 * Get the class that models requests of the credential type.
-	 *
 	 * @return the credential model class
 	 */
 	public Class<?> getModelClass() {
-		return modelClass;
+		return this.modelClass;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
-		return valueType;
+		return this.valueType;
 	}
+
 }

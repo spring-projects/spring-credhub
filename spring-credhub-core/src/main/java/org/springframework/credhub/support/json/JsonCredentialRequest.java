@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,30 +16,30 @@
 
 package org.springframework.credhub.support.json;
 
-import org.springframework.credhub.support.CredentialRequest;
-import org.springframework.util.Assert;
-
 import java.util.Map;
 
-import static org.springframework.credhub.support.CredentialType.JSON;
+import org.springframework.credhub.support.CredentialRequest;
+import org.springframework.credhub.support.CredentialType;
+import org.springframework.util.Assert;
 
 /**
- * The details of a request to write a new or update an existing {@link JsonCredential} in CredHub.
+ * The details of a request to write a new or update an existing {@link JsonCredential} in
+ * CredHub.
  *
  * @author Scott Frederick
  */
 public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
+
 	/**
 	 * Initialize a {@link CredentialRequest}.
 	 */
 	JsonCredentialRequest() {
-		super(JSON);
+		super(CredentialType.JSON);
 	}
 
 	/**
-	 * Create a builder that provides a fluent API for providing the values required
-	 * to construct a {@link JsonCredentialRequest}.
-	 *
+	 * Create a builder that provides a fluent API for providing the values required to
+	 * construct a {@link JsonCredentialRequest}.
 	 * @return a builder
 	 */
 	public static JsonCredentialRequestBuilder builder() {
@@ -47,10 +47,11 @@ public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 	}
 
 	/**
-	 * A builder that provides a fluent API for constructing {@link JsonCredentialRequest}s.
+	 * A builder that provides a fluent API for constructing
+	 * {@link JsonCredentialRequest}s.
 	 */
-	public static class JsonCredentialRequestBuilder extends
-			CredHubRequestBuilder<JsonCredential, JsonCredentialRequest, JsonCredentialRequestBuilder> {
+	public static class JsonCredentialRequestBuilder
+			extends CredHubRequestBuilder<JsonCredential, JsonCredentialRequest, JsonCredentialRequestBuilder> {
 
 		@Override
 		protected JsonCredentialRequest createTarget() {
@@ -64,7 +65,6 @@ public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 
 		/**
 		 * Set the value of a JSON credential.
-		 *
 		 * @param value the credential value; must not be {@literal null}
 		 * @return the builder
 		 */
@@ -78,6 +78,7 @@ public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 			value(new JsonCredential(value));
 			return this;
 		}
+
 	}
 
 }

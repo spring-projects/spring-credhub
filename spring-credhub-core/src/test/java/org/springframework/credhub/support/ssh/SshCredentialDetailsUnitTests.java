@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,13 +26,16 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+
+	// @formatter:off
 	private static final String SSH_CREDENTIALS =
 			"  \"type\": \"ssh\"," +
 			"  \"value\": {" +
-			"  \"private_key\": \"private-key\"," +
-			"  \"public_key\": \"public-key\"," +
-			"  \"public_key_fingerprint\": \"fingerprint\"" +
+				"  \"private_key\": \"private-key\"," +
+				"  \"public_key\": \"public-key\"," +
+				"  \"public_key_fingerprint\": \"fingerprint\"" +
 			"  }";
+	// @formatter:on
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() {
@@ -43,11 +46,13 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPublicKey() {
+		// @formatter:off
 		final String credentials =
 				"  \"type\": \"ssh\"," +
-						"  \"value\": {" +
-						"  \"public_key\": \"public-key\"" +
-						"  }";
+				"  \"value\": {" +
+					"  \"public_key\": \"public-key\"" +
+				"  }";
+		// @formatter:on
 		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "public-key", null, null);
@@ -55,11 +60,13 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPrivateKey() {
+		// @formatter:off
 		final String credentials =
 				"  \"type\": \"ssh\"," +
-						"  \"value\": {" +
-						"  \"private_key\": \"private-key\"" +
-						"  }";
+				"  \"value\": {" +
+					"  \"private_key\": \"private-key\"" +
+				"  }";
+		// @formatter:on
 		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "private-key", null);
@@ -76,13 +83,14 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 		assertDetails(data, "public-key", "private-key", "fingerprint");
 	}
 
-	private void assertDetails(CredentialDetails<SshCredential> data,
-							   String publicKey, String privateKey, String publicKeyFingerprint) {
+	private void assertDetails(CredentialDetails<SshCredential> data, String publicKey, String privateKey,
+			String publicKeyFingerprint) {
 		assertCommonDetails(data);
-		
+
 		assertThat(data.getCredentialType()).isEqualTo(CredentialType.SSH);
 		assertThat(data.getValue().getPublicKey()).isEqualTo(publicKey);
 		assertThat(data.getValue().getPrivateKey()).isEqualTo(privateKey);
 		assertThat(data.getValue().getPublicKeyFingerprint()).isEqualTo(publicKeyFingerprint);
 	}
+
 }

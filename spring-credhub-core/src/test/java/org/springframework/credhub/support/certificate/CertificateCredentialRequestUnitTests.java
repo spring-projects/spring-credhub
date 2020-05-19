@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
+import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-import static org.springframework.credhub.support.JsonPathAssert.assertThat;
-
 public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+
 	@Before
 	public void setUp() {
 		buildRequest(new CertificateCredential("cert", "ca", "private-key"));
@@ -34,12 +34,12 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 
 	@Test
 	public void serializeWithAllValues() {
-		DocumentContext json = toJsonPath(requestBuilder);
+		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
-		assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
-		assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
-		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
+		JsonPathAssert.assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
+		JsonPathAssert.assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
+		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
 		assertNoPermissions(json);
 	}
@@ -48,12 +48,11 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithCertOnly() {
 		buildRequest(new CertificateCredential("cert", null, null));
 
-		DocumentContext json = toJsonPath(requestBuilder);
+		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
-		assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
-		assertThat(json).hasNoPath("$.value.ca")
-				.hasNoPath("$.value.private_key");
+		JsonPathAssert.assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
+		JsonPathAssert.assertThat(json).hasNoPath("$.value.ca").hasNoPath("$.value.private_key");
 
 		assertNoPermissions(json);
 	}
@@ -62,12 +61,12 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithNoCert() {
 		buildRequest(new CertificateCredential(null, "ca", "private-key"));
 
-		DocumentContext json = toJsonPath(requestBuilder);
+		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
-		assertThat(json).hasNoPath("$.value.certificate");
-		assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
-		assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
+		JsonPathAssert.assertThat(json).hasNoPath("$.value.certificate");
+		JsonPathAssert.assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
+		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
 		assertNoPermissions(json);
 	}
@@ -76,15 +75,13 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithNoValues() {
 		buildRequest(new CertificateCredential(null, null, null));
 
-		toJsonPath(requestBuilder);
+		toJsonPath(this.requestBuilder);
 	}
 
 	@SuppressWarnings("deprecation")
 	private void buildRequest(CertificateCredential value) {
-		requestBuilder = CertificateCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true)
-				.mode(WriteMode.OVERWRITE)
+		this.requestBuilder = CertificateCredentialRequest.builder()
+				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
 				.value(value);
 	}
 

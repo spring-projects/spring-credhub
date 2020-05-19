@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +12,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support;
-
-import org.springframework.credhub.support.permissions.Permission;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.credhub.support.permissions.Permission;
+
 /**
  * A collection of {@link Permission}s associated with a credential. Clients don't
- * typically instantiate objects of this type, but will receive them in response
- * to write and retrieve requests.
+ * typically instantiate objects of this type, but will receive them in response to write
+ * and retrieve requests.
  *
  * @author Scott Frederick
  */
 public class CredentialPermissions {
+
 	private final CredentialName credentialName;
+
 	private final List<Permission> permissions;
 
 	/**
@@ -45,10 +45,9 @@ public class CredentialPermissions {
 	}
 
 	/**
-	 * Create a {@link CredentialPermissions} from the provided parameters. Intended for internal
-	 * use. Clients will get {@link CredentialPermissions} objects populated from
+	 * Create a {@link CredentialPermissions} from the provided parameters. Intended for
+	 * internal use. Clients will get {@link CredentialPermissions} objects populated from
 	 * CredHub responses.
-	 *
 	 * @param credentialName the name of the credential that the permissions will apply to
 	 * @param permissions a collection of {@link Permission}s
 	 */
@@ -59,7 +58,6 @@ public class CredentialPermissions {
 
 	/**
 	 * Get the name of the credential that the permissions apply to.
-	 *
 	 * @return the credential name
 	 */
 	public String getCredentialName() {
@@ -68,7 +66,6 @@ public class CredentialPermissions {
 
 	/**
 	 * Get the collection of {@link Permission}s.
-	 *
 	 * @return the collection of {@link Permission}s
 	 */
 	public List<Permission> getPermissions() {
@@ -76,27 +73,32 @@ public class CredentialPermissions {
 	}
 
 	@Override
-	public String toString() {
-		return "CredentialPermissions{"
-				+ "credentialName=" + credentialName
-				+ ", permissions=" + permissions
-				+ '}';
-	}
-
-	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof CredentialPermissions)) return false;
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof CredentialPermissions)) {
+			return false;
+		}
 
 		CredentialPermissions that = (CredentialPermissions) o;
 
-		if (credentialName != null ? !credentialName.equals(that.credentialName) : that.credentialName != null)
+		if ((this.credentialName != null) ? !this.credentialName.equals(that.credentialName)
+				: (that.credentialName != null)) {
 			return false;
-		return permissions != null ? permissions.equals(that.permissions) : that.permissions == null;
+		}
+		return (this.permissions != null) ? this.permissions.equals(that.permissions) : (that.permissions == null);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(credentialName, permissions);
+		return Objects.hash(this.credentialName, this.permissions);
 	}
+
+	@Override
+	public String toString() {
+		return "CredentialPermissions{" + "credentialName=" + this.credentialName + ", permissions=" + this.permissions
+				+ '}';
+	}
+
 }

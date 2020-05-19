@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ package org.springframework.credhub.support.info;
  * @author Scott Frederick
  */
 public class VersionInfo {
+
 	private final String version;
 
 	@SuppressWarnings("unused")
@@ -30,10 +31,9 @@ public class VersionInfo {
 	}
 
 	/**
-	 * Create a new {@literal VersionInfo} containing the specified version string. Intended for
-	 * internal use. Clients will get {@literal VersionInfo} objects populated from
-	 * CredHub responses.
-	 *
+	 * Create a new {@literal VersionInfo} containing the specified version string.
+	 * Intended for internal use. Clients will get {@literal VersionInfo} objects
+	 * populated from CredHub responses.
 	 * @param version a version string
 	 */
 	public VersionInfo(String version) {
@@ -42,7 +42,6 @@ public class VersionInfo {
 
 	/**
 	 * Get the value of the version string returned from the CredHub server.
-	 *
 	 * @return the version string
 	 */
 	public String getVersion() {
@@ -51,8 +50,8 @@ public class VersionInfo {
 
 	/**
 	 * Determine if the CredHub server implements the v1 API.
-	 *
-	 * @return {@code true} if the server implements the CredHub v1 API; {@code false} otherwise
+	 * @return {@code true} if the server implements the CredHub v1 API; {@code false}
+	 * otherwise
 	 */
 	public boolean isVersion1() {
 		return this.version.startsWith("1.");
@@ -60,8 +59,8 @@ public class VersionInfo {
 
 	/**
 	 * Determine if the CredHub server implements the v2 API.
-	 *
-	 * @return {@code true} if the server implements the CredHub v2 API; {@code false} otherwise
+	 * @return {@code true} if the server implements the CredHub v2 API; {@code false}
+	 * otherwise
 	 */
 	public boolean isVersion2() {
 		return this.version.startsWith("2.");
@@ -69,8 +68,8 @@ public class VersionInfo {
 
 	/**
 	 * Determine if the CredHub server implements the v2.0 API.
-	 *
-	 * @return {@code true} if the server implements the CredHub v2.0 API; {@code false} otherwise
+	 * @return {@code true} if the server implements the CredHub v2.0 API; {@code false}
+	 * otherwise
 	 */
 	public boolean isVersion2_0() {
 		return this.version.startsWith("2.0");
@@ -78,10 +77,11 @@ public class VersionInfo {
 
 	/**
 	 * Determine if the CredHub server implements the v2.1 API.
-	 *
-	 * @return {@code true} if the server implements the CredHub v2.1 API; {@code false} otherwise
+	 * @return {@code true} if the server implements the CredHub v2.1 API; {@code false}
+	 * otherwise
 	 */
 	public boolean isVersion2_1() {
 		return this.version.startsWith("2.1");
 	}
+
 }

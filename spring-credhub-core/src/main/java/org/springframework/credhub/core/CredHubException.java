@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,9 +25,9 @@ import org.springframework.web.client.HttpStatusCodeException;
  * @author Scott Frederick
  */
 public class CredHubException extends HttpStatusCodeException {
+
 	/**
 	 * Create a new exception with the provided root cause.
-	 *
 	 * @param e an {@link HttpStatusCodeException} caught while attempting to communicate
 	 * with CredHub
 	 */
@@ -37,11 +37,11 @@ public class CredHubException extends HttpStatusCodeException {
 
 	/**
 	 * Create a new exception with the provided error status code.
-	 *
 	 * @param statusCode an {@link HttpStatus} indicating an error while attempting to
 	 * communicate with CredHub
 	 */
 	public CredHubException(HttpStatus statusCode) {
 		super(statusCode);
 	}
+
 }

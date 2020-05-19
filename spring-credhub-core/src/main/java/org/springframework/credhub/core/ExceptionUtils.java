@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,18 +16,22 @@
 
 package org.springframework.credhub.core;
 
+import reactor.core.publisher.Mono;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-public class ExceptionUtils {
+public final class ExceptionUtils {
+
+	private ExceptionUtils() {
+	}
+
 	/**
-	 * Helper method to throw an appropriate exception if a request to CredHub
-	 * returns with an error code.
-	 *
+	 * Helper method to throw an appropriate exception if a request to CredHub returns
+	 * with an error code.
 	 * @param response a {@link ResponseEntity} returned from {@link RestTemplate}
 	 */
 	public static void throwExceptionOnError(ResponseEntity<?> response) {
@@ -37,13 +41,13 @@ public class ExceptionUtils {
 	}
 
 	/**
-	 * Helper method to return an appropriate error if a request to CredHub
-	 * returns with an error code.
-	 *
-	 * @return the generated error
+	 * Helper method to return an appropriate error if a request to CredHub returns with
+	 * an error code.
 	 * @param response a {@link ClientResponse} returned from {@link WebClient}
+	 * @return the generated error
 	 */
 	public static Mono<Throwable> buildError(ClientResponse response) {
 		return Mono.error(new CredHubException(response.statusCode()));
 	}
+
 }

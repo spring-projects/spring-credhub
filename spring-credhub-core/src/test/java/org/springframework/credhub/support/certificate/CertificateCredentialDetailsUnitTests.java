@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +26,8 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+
+	// @formatter:off
 	private static final String CERT_CREDENTIALS =
 			"  \"type\": \"certificate\"," +
 			"  \"value\": {" +
@@ -33,6 +35,7 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 			"  \"ca\": \"authority\"," +
 			"  \"private_key\": \"private-key\"" +
 			"  }";
+	// @formatter:on
 
 	@Test
 	public void deserializeDetailsWithAllValues() {
@@ -43,11 +46,13 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 
 	@Test
 	public void deserializeDetailsCertOnly() {
+		// @formatter:off
 		final String credentials =
 				"  \"type\": \"certificate\"," +
 				"  \"value\": {" +
 				"  \"certificate\": \"cert\"" +
 				"  }";
+		// @formatter:on
 		CredentialDetails<CertificateCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "cert", null, null);
@@ -55,12 +60,14 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 
 	@Test
 	public void deserializeDetailsWithNoCert() {
+		// @formatter:off
 		final String credentials =
 				"  \"type\": \"certificate\"," +
 				"  \"value\": {" +
 				"  \"ca\": \"authority\"," +
 				"  \"private_key\": \"private-key\"" +
 				"  }";
+		// @formatter:on
 		CredentialDetails<CertificateCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "authority", "private-key");
@@ -77,13 +84,14 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 		assertDetails(data, "cert", "authority", "private-key");
 	}
 
-	private void assertDetails(CredentialDetails<CertificateCredential> data,
-							   String certificate, String ca, String privateKey) {
+	private void assertDetails(CredentialDetails<CertificateCredential> data, String certificate, String ca,
+			String privateKey) {
 		assertCommonDetails(data);
-		
+
 		assertThat(data.getCredentialType()).isEqualTo(CredentialType.CERTIFICATE);
 		assertThat(data.getValue().getCertificate()).isEqualTo(certificate);
 		assertThat(data.getValue().getCertificateAuthority()).isEqualTo(ca);
 		assertThat(data.getValue().getPrivateKey()).isEqualTo(privateKey);
 	}
+
 }

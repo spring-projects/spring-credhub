@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A collection of {@link CredentialSummary}s. Clients don't typically instantiate
- * objects of this type, but will receive them in response to write and retrieve
- * requests.
+ * A collection of {@link CredentialSummary}s. Clients don't typically instantiate objects
+ * of this type, but will receive them in response to write and retrieve requests.
  *
  * @author Scott Frederick
  */
 public class CredentialSummaryData {
+
 	private final List<CredentialSummary> credentials;
 
 	/**
@@ -39,10 +39,9 @@ public class CredentialSummaryData {
 	}
 
 	/**
-	 * Create a {@link CredentialSummaryData} from the provided parameters. Intended for internal
-	 * use. Clients will get {@link CredentialSummaryData} objects populated from
+	 * Create a {@link CredentialSummaryData} from the provided parameters. Intended for
+	 * internal use. Clients will get {@link CredentialSummaryData} objects populated from
 	 * CredHub responses.
-	 *
 	 * @param credentials a collection of {@link CredentialSummary}s
 	 */
 	public CredentialSummaryData(CredentialSummary... credentials) {
@@ -51,7 +50,6 @@ public class CredentialSummaryData {
 
 	/**
 	 * Get the collection of {@link CredentialSummary}s.
-	 *
 	 * @return the collection of {@link CredentialSummary}s
 	 */
 	public List<CredentialSummary> getCredentials() {
@@ -60,28 +58,29 @@ public class CredentialSummaryData {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof CredentialSummaryData))
+		}
+		if (!(o instanceof CredentialSummaryData)) {
 			return false;
-		if (!super.equals(o))
+		}
+		if (!super.equals(o)) {
 			return false;
+		}
 
 		CredentialSummaryData that = (CredentialSummaryData) o;
 
-		return credentials != null ? credentials.equals(that.credentials)
-				: that.credentials == null;
+		return (this.credentials != null) ? this.credentials.equals(that.credentials) : (that.credentials == null);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(credentials);
+		return Objects.hashCode(this.credentials);
 	}
 
 	@Override
 	public String toString() {
-		return "CredentialSummaryData{"
-				+ "credentials=" + credentials
-				+ '}';
+		return "CredentialSummaryData{" + "credentials=" + this.credentials + '}';
 	}
+
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,77 +41,68 @@ public class CredHubTemplateFactory {
 
 	/**
 	 * Create a {@link CredHubTemplate} for interaction with a CredHub server.
-	 *
 	 * @param credHubProperties connection properties
-	 * @param clientOptions     connection options
+	 * @param clientOptions connection options
 	 * @return a {@code CredHubTemplate}
 	 */
-	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
-										   ClientOptions clientOptions) {
+	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions) {
 		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions));
 	}
 
 	/**
-	 * Create a {@link CredHubTemplate} for interaction with a CredHub server
-	 * using OAuth2 for authentication.
-	 *
-	 * @param credHubProperties            connection properties
-	 * @param clientOptions                connection options
+	 * Create a {@link CredHubTemplate} for interaction with a CredHub server using OAuth2
+	 * for authentication.
+	 * @param credHubProperties connection properties
+	 * @param clientOptions connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientRepository   a repository of authorized OAuth2 clients
+	 * @param authorizedClientRepository a repository of authorized OAuth2 clients
 	 * @return a {@code CredHubTemplate}
 	 */
-	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties,
-										   ClientOptions clientOptions,
-										   ClientRegistrationRepository clientRegistrationRepository,
-										   OAuth2AuthorizedClientRepository authorizedClientRepository) {
+	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions,
+			ClientRegistrationRepository clientRegistrationRepository,
+			OAuth2AuthorizedClientRepository authorizedClientRepository) {
 		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions),
 				clientRegistrationRepository, authorizedClientRepository);
 	}
 
 	/**
-	 * Create a {@link CredHubTemplate} for interaction with a CredHub server
-	 * using OAuth2 for authentication.
-	 *
-	 * @param credHubProperties            connection properties
-	 * @param clientOptions                connection options
+	 * Create a {@link CredHubTemplate} for interaction with a CredHub server using OAuth2
+	 * for authentication.
+	 * @param credHubProperties connection properties
+	 * @param clientOptions connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param clientManager                an OAuth2 authorization client manager
+	 * @param clientManager an OAuth2 authorization client manager
 	 * @return a {@code CredHubTemplate}
 	 */
 	public CredHubOperations credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions,
-											 ClientRegistrationRepository clientRegistrationRepository,
-											 OAuth2AuthorizedClientManager clientManager) {
+			ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientManager clientManager) {
 		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions),
 				clientRegistrationRepository, clientManager);
 	}
 
 	/**
 	 * Create a {@link ReactiveCredHubTemplate} for interaction with a CredHub server.
-	 *
 	 * @param credHubProperties connection properties
-	 * @param clientOptions     connection options
+	 * @param clientOptions connection options
 	 * @return a {@code ReactiveCredHubTemplate}
 	 */
 	public ReactiveCredHubTemplate reactiveCredHubTemplate(CredHubProperties credHubProperties,
-														   ClientOptions clientOptions) {
+			ClientOptions clientOptions) {
 		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector(clientOptions));
 	}
 
 	/**
 	 * Create a {@link ReactiveCredHubTemplate} for interaction with a CredHub server
 	 * using OAuth2 for authentication.
-	 *
-	 * @param credHubProperties            connection properties
-	 * @param clientOptions                connection options
+	 * @param credHubProperties connection properties
+	 * @param clientOptions connection options
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
-	 * @param authorizedClientRepository   a repository of OAuth2 client authorizations
+	 * @param authorizedClientRepository a repository of OAuth2 client authorizations
 	 * @return a {@code ReactiveCredHubTemplate}
 	 */
 	public ReactiveCredHubOperations reactiveCredHubTemplate(CredHubProperties credHubProperties,
-															 ClientOptions clientOptions,
-															 ReactiveClientRegistrationRepository clientRegistrationRepository,
-															 ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+			ClientOptions clientOptions, ReactiveClientRegistrationRepository clientRegistrationRepository,
+			ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
 		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector(clientOptions),
 				clientRegistrationRepository, authorizedClientRepository);
 	}
@@ -119,21 +110,18 @@ public class CredHubTemplateFactory {
 	/**
 	 * Create a {@link ReactiveCredHubTemplate} for interaction with a CredHub server
 	 * using OAuth2 for authentication.
-	 *
 	 * @param credHubProperties connection properties
-	 * @param clientOptions     connection options
-	 * @param clientManager     an OAuth2 authorization client manager
+	 * @param clientOptions connection options
+	 * @param clientManager an OAuth2 authorization client manager
 	 * @return a {@code ReactiveCredHubTemplate}
 	 */
 	public ReactiveCredHubOperations reactiveCredHubTemplate(CredHubProperties credHubProperties,
-															 ClientOptions clientOptions,
-															 ReactiveOAuth2AuthorizedClientManager clientManager) {
+			ClientOptions clientOptions, ReactiveOAuth2AuthorizedClientManager clientManager) {
 		return new ReactiveCredHubTemplate(credHubProperties, clientHttpConnector(clientOptions), clientManager);
 	}
 
 	/**
 	 * Create a {@link ClientHttpRequestFactory}.
-	 *
 	 * @param clientOptions options for creating the client connection
 	 * @return the {@link ClientHttpRequestFactory} instance.
 	 */
@@ -143,11 +131,11 @@ public class CredHubTemplateFactory {
 
 	/**
 	 * Create a {@link ClientHttpRequestFactory}.
-	 *
 	 * @param clientOptions options for creating the client connection
 	 * @return the {@link ClientHttpRequestFactory} instance.
 	 */
 	private ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
 		return ClientHttpConnectorFactory.create(clientOptions);
 	}
+
 }

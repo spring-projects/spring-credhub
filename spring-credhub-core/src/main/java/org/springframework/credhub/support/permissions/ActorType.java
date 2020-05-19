@@ -1,6 +1,5 @@
 /*
- *
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +12,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 package org.springframework.credhub.support.permissions;
 
 /**
- * The types of entities that can be authorized to perform operations on CredHub credentials.
+ * The types of entities that can be authorized to perform operations on CredHub
+ * credentials.
  *
  * @author Scott Frederick
  */
 public enum ActorType {
+
 	/**
-	 * A Cloud Foundry application entity
+	 * A Cloud Foundry application entity.
 	 */
 	APP("mtls-app"),
 
 	/**
-	 * A UAA user entity, as can be used with a password grant
+	 * A UAA user entity, as can be used with a password grant.
 	 */
 	USER("uaa-user"),
 
 	/**
-	 * A UAA client entity, as can be used with a client credentials grant
+	 * A UAA client entity, as can be used with a client credentials grant.
 	 */
 	OAUTH_CLIENT("uaa-client");
 
@@ -47,17 +47,18 @@ public enum ActorType {
 
 	/**
 	 * Get the entity type.
-	 *
 	 * @return the entity type
 	 */
 	public String getType() {
-		return type;
+		return this.type;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
-		return type;
+		return this.type;
 	}
+
 }

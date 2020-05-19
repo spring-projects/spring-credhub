@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,26 +24,28 @@ import org.springframework.util.Assert;
  * @author Scott Frederick
  */
 public class KeyPairCredential {
+
 	private final String publicKey;
+
 	private final String privateKey;
 
 	/**
-	 * Create an empty {@link KeyPairCredential}. Intended to be used internally for deserialization of responses.
+	 * Create an empty {@link KeyPairCredential}. Intended to be used internally for
+	 * deserialization of responses.
 	 */
 	protected KeyPairCredential() {
-		publicKey = null;
-		privateKey = null;
+		this.publicKey = null;
+		this.privateKey = null;
 	}
 
 	/**
-	 * Create a {@link KeyPairCredential} from the provided parameters. Intended for internal use.
-	 *
+	 * Create a {@link KeyPairCredential} from the provided parameters. Intended for
+	 * internal use.
 	 * @param publicKey the public key
 	 * @param privateKey the private key
 	 */
 	protected KeyPairCredential(String publicKey, String privateKey) {
-		Assert.isTrue(publicKey != null || privateKey != null,
-				"one of publicKey or privateKey must not be null");
+		Assert.isTrue(publicKey != null || privateKey != null, "one of publicKey or privateKey must not be null");
 
 		this.publicKey = publicKey;
 		this.privateKey = privateKey;
@@ -51,19 +53,18 @@ public class KeyPairCredential {
 
 	/**
 	 * Get the value of the public key.
-	 *
 	 * @return the public key
 	 */
 	public String getPublicKey() {
-		return publicKey;
+		return this.publicKey;
 	}
 
 	/**
 	 * Get the value of the private key.
-	 *
 	 * @return the private key
 	 */
 	public String getPrivateKey() {
-		return privateKey;
+		return this.privateKey;
 	}
+
 }

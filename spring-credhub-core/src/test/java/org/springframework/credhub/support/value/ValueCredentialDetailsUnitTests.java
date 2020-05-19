@@ -1,11 +1,11 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,22 +26,23 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValueCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+
+	// @formatter:off
 	private static final String VALUE_CREDENTIALS =
 			"  \"type\": \"value\"," +
 			"  \"value\": \"somevalue\"";
+	// @formatter:on
 
 	@Test
 	public void deserializeDetails() {
-		CredentialDetails<ValueCredential> data =
-				parseDetails(VALUE_CREDENTIALS);
+		CredentialDetails<ValueCredential> data = parseDetails(VALUE_CREDENTIALS);
 
 		assertDetails(data);
 	}
 
 	@Test
 	public void deserializeDetailsData() {
-		CredentialDetailsData<ValueCredential> response =
-				parseDetailsData(VALUE_CREDENTIALS);
+		CredentialDetailsData<ValueCredential> response = parseDetailsData(VALUE_CREDENTIALS);
 
 		assertThat(response.getData()).hasSize(1);
 
@@ -52,8 +53,9 @@ public class ValueCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private void assertDetails(CredentialDetails<ValueCredential> data) {
 		assertCommonDetails(data);
-		
+
 		assertThat(data.getCredentialType()).isEqualTo(CredentialType.VALUE);
 		assertThat(data.getValue().getValue()).isEqualTo("somevalue");
 	}
+
 }

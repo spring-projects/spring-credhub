@@ -19,6 +19,9 @@ Scott Frederick;
 :credhub-api-info: {credhub-api-home}version/master/#_info_endpoint
 :cloudfoundry-home: https://www.cloudfoundry.org/
 :apidocs-home: https://docs.spring.io/spring-credhub/docs/{revnumber}/api/index.html
+:spring-security-version: 5.2.2.RELEASE
+:spring-security-apidocs-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/api/org/springframework/security/oauth2/client/
+:spring-security-ref-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/reference/html5/
 
 (C) 2017-2018 The original authors.
 

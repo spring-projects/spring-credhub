@@ -41,6 +41,7 @@ configurations {
 dependencies {
 	compile project(":spring-credhub-core")
 	compile("io.projectreactor:reactor-core")
+	compile("org.springframework.boot:spring-boot-autoconfigure")
 
 	docs("io.spring.docresources:spring-doc-resources:0.1.2.RELEASE@zip")
 }

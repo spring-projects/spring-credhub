@@ -49,14 +49,26 @@ CredHubInfoOperations info();
 Each method of the `Operations` interfaces maps directly to one endpoint of the CredHub HTTP API.
 The following table shows the mapping between the CredHub API and the appropriate Spring CredHub `Operations` interface.
 
-|=======
-| {credhub-api-credentials}[CredHub Credentials API] | {apidocs-credentials}[CredHubCredentialOperations]
-| {credhub-api-permissions}[CredHub Permissions API] (v1) | {apidocs-permissions}[CredHubPermissionOperations]
-| {credhub-api-permissionsV2}[CredHub Permissions API] (v2) | {apidocs-permissionsV2}[CredHubPermissionV2Operations]
-| {credhub-api-certificates}[CredHub Certificates API] | {apidocs-certificates}[CredHubCertificateOperations]
-| {credhub-api-interpolation}[CredHub Interpolation API] | {apidocs-interpolation}[CredHubInterpolationOperations]
-| {credhub-api-info}[CredHub Information API] | {apidocs-info}[CredHubInfoOperations]
-|=======
+[cols="2"]
+|===
+| {credhub-api-credentials}[CredHub Credentials API]
+| {apidocs-credentials}[CredHubCredentialOperations]
+
+| {credhub-api-permissions}[CredHub Permissions API] (v1)
+| {apidocs-permissions}[CredHubPermissionOperations]
+
+| {credhub-api-permissionsV2}[CredHub Permissions API] (v2)
+| {apidocs-permissionsV2}[CredHubPermissionV2Operations]
+
+| {credhub-api-certificates}[CredHub Certificates API]
+| {apidocs-certificates}[CredHubCertificateOperations]
+
+| {credhub-api-interpolation}[CredHub Interpolation API]
+| {apidocs-interpolation}[CredHubInterpolationOperations]
+
+| {credhub-api-info}[CredHub Information API]
+| {apidocs-info}[CredHubInfoOperations]
+|===
 
 === CredHubOperations Auto-configuration
 

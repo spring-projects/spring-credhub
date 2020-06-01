@@ -49,13 +49,25 @@ ReactiveCredHubInfoOperations info();
 Each method of the `Reactive...Operations` interfaces maps directly to one endpoint of the CredHub HTTP API.
 The following table shows the mapping between the CredHub API and the appropriate Spring CredHub `Reactive...Operations` interface.
 
-|=======
-| {credhub-api-credentials}[CredHub Credentials API] | {apidocs-reactive-credentials}[ReactiveCredHubCredentialOperations]
-| {credhub-api-permissions}[CredHub Permissions API] (v1) | {apidocs-reactive-permissions}[ReactiveCredHubPermissionOperations]
-| {credhub-api-permissionsV2}[CredHub Permissions API] (v2) | {apidocs-reactive-permissionsV2}[ReactiveCredHubPermissionV2Operations]
-| {credhub-api-certificates}[CredHub Certificates API] | {apidocs-reactive-certificates}[ReactiveCredHubCertificateOperations]
-| {credhub-api-interpolation}[CredHub Interpolation API] | {apidocs-reactive-interpolation}[ReactiveCredHubInterpolationOperations]
-| {credhub-api-info}[CredHub Information API] | {apidocs-reactive-info}[CredHubInfoOperations]
+[cols="2"]
+|===
+| {credhub-api-credentials}[CredHub Credentials API]
+| {apidocs-reactive-credentials}[ReactiveCredHubCredentialOperations]
+
+| {credhub-api-permissions}[CredHub Permissions API] (v1)
+| {apidocs-reactive-permissions}[ReactiveCredHubPermissionOperations]
+
+| {credhub-api-permissionsV2}[CredHub Permissions API] (v2)
+| {apidocs-reactive-permissionsV2}[ReactiveCredHubPermissionV2Operations]
+
+| {credhub-api-certificates}[CredHub Certificates API]
+| {apidocs-reactive-certificates}[ReactiveCredHubCertificateOperations]
+
+| {credhub-api-interpolation}[CredHub Interpolation API]
+| {apidocs-reactive-interpolation}[ReactiveCredHubInterpolationOperations]
+
+| {credhub-api-info}[CredHub Information API]
+| {apidocs-reactive-info}[CredHubInfoOperations]
 |=======
 
 === ReactiveCredHubOperations Auto-configuration

@@ -39,6 +39,66 @@ See the {spring-boot-oauth}[Spring Boot documentation] for more information on S
 The OAuth2 client specified in the Spring Security client registration must have CredHub scopes such as `credhub.read` or `credhub.write` to perform most operations.
 See the {credhub-api-oauth}[CredHub documentation] for more information on OAuth2 authentication with UAA.
 
+==== Auto-configuration of Spring Security OAuth2
 
+When `spring.credhub.oauth2` properties are set and Spring Security is on the application classpath, Spring CredHub will auto-configure the Spring Security beans required for OAuth2 authentication.
+An application can provide the required Spring Security OAuth2 beans to override the auto-configuration if necessary.
 
+===== Servlet and Non-reactive Applications
+
+Spring CredHub requires beans of the following types, provided by Spring Security, in order to authenticate using OAuth2.
+
+[%header,cols=2*]
+|===
+| Required Bean Type
+| Auto-configured Type
+
+| {spring-security-apidocs-home}registration/ClientRegistrationRepository.html[`ClientRegistrationRepository`]
+| {spring-security-apidocs-home}registration/InMemoryClientRegistrationRepository.html[`InMemoryClientRegistrationRepository`]
+
+| {spring-security-apidocs-home}web/OAuth2AuthorizedClientRepository.html[`OAuth2AuthorizedClientRepository`]
+| {spring-security-apidocs-home}web/AuthenticatedPrincipalOAuth2AuthorizedClientRepository.html[`AuthenticatedPrincipalOAuth2AuthorizedClientRepository`]
+
+| {spring-security-apidocs-home}OAuth2AuthorizedClientManager.html[`OAuth2AuthorizedClientManager`]
+| {spring-security-apidocs-home}web\DefaultOAuth2AuthorizedClientManager.html[`DefaultOAuth2AuthorizedClientManager`]
+|===
+
+The auto-configured `DefaultOAuth2AuthorizedClientManager` assumes the application is running in a servlet container and has an active `HttpServletRequest`.
+An application might need to provide an alternate implementation of the `OAuth2AuthorizedClientManager` bean such as {spring-security-apidocs-home}AuthorizedClientServiceOAuth2AuthorizedClientManager.html[`AuthorizedClientServiceOAuth2AuthorizedClientManager`] to process requests outside of an `HttpServletRequest`, as shown in the following example:
+
+[source,properties,%autofit]
+----
+include::{examples-dir}CredHubSecurityConfiguration.java[]
+----
+
+Refer to the {spring-security-ref-home}#oauth2login-override-boot-autoconfig[Spring Security documentation] for more information and examples of configuring other beans.
+
+===== Reactive Applications
+
+Spring CredHub requires beans of the following types, provided by Spring Security, in order to authenticate using OAuth2.
+
+[%header,cols=2*]
+|===
+| Required Bean Type
+| Auto-configured Type
+
+| {spring-security-apidocs-home}registration/ReactiveClientRegistrationRepository.html[`ReactiveClientRegistrationRepository`]
+| {spring-security-apidocs-home}registration/InMemoryReactiveClientRegistrationRepository.html[`InMemoryReactiveClientRegistrationRepository`]
+
+| {spring-security-apidocs-home}web/server/ServerOAuth2AuthorizedClientRepository.html[`ServerOAuth2AuthorizedClientRepository`]
+| {spring-security-apidocs-home}web/server/UnAuthenticatedServerOAuth2AuthorizedClientRepository.html[`UnAuthenticatedServerOAuth2AuthorizedClientRepository`]
+
+| {spring-security-apidocs-home}ReactiveOAuth2AuthorizedClientManager.html[`ReactiveOAuth2AuthorizedClientManager`]
+| {spring-security-apidocs-home}web/DefaultReactiveOAuth2AuthorizedClientManager.html[`DefaultReactiveOAuth2AuthorizedClientManager`]
+|===
+
+The auto-configured `DefaultReactiveOAuth2AuthorizedClientManager` requires an active `ServerHttpRequest` context.
+An application might need to provide an alternate implementation of the `ReactiveOAuth2AuthorizedClientManager` bean such as {spring-security-apidocs-home}AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager.html[`AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager`] to process requests outside of an `ServerHttpRequest`, as shown in the following example:
+
+[source,properties,%autofit]
+----
+include::{examples-dir}CredHubReactiveSecurityConfiguration.java[]
+----
+
+Refer to the {spring-security-ref-home}#oauth2login-override-boot-autoconfig[Spring Security documentation] for more information and examples of configuring other beans.
 

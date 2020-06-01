@@ -33,7 +33,7 @@ buildscript {
 ext {
 	springVersion = "5.2.5.RELEASE"
 	springBootVersion = "2.2.6.RELEASE"
-	springSecurityVersion = "5.2.2.RELEASE"
+	springSecurityVersion = "5.2.4.RELEASE"
 	reactorVersion = "Dysprosium-SR6"
 
 	okHttp3Version = "4.4.1"

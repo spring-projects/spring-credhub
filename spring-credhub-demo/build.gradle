@@ -18,7 +18,7 @@ description = 'Spring CredHub Demo'
 
 buildscript {
 	ext {
-		springBootVersion = "2.0.6.RELEASE"
+		springBootVersion = "2.2.6.RELEASE"
 	}
 
 	dependencies {
@@ -45,10 +45,10 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-webflux")
+	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-actuator")
 
-	compile("org.springframework.credhub:spring-credhub-starter:2.0.0.BUILD-SNAPSHOT")
+	compile("org.springframework.credhub:spring-credhub-starter:2.1.1.RELEASE")
 }
 
 repositories {

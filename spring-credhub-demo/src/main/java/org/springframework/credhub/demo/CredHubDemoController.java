@@ -43,10 +43,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CredHubDemoController {
+
 	private static final String APP_GUID_2 = UUID.randomUUID().toString();
 
-	private CredHubCredentialOperations credentialOperations;
+	private final CredHubCredentialOperations credentialOperations;
+
 	private final CredHubPermissionOperations permissionOperations;
+
 	private final CredHubInterpolationOperations interpolationOperations;
 
 	public CredHubDemoController(CredHubOperations credHubOperations) {
@@ -60,11 +63,10 @@ public class CredHubDemoController {
 		Results results = new Results();
 
 		try {
-			SimpleCredentialName credentialName =
-					new SimpleCredentialName("spring-credhub", "demo", "credentials_json");
+			SimpleCredentialName credentialName = new SimpleCredentialName("spring-credhub", "demo",
+					"credentials_json");
 
-			CredentialDetails<JsonCredential> credentialDetails =
-					writeCredentials(credentialName, value, results);
+			CredentialDetails<JsonCredential> credentialDetails = writeCredentials(credentialName, value, results);
 
 			getCredentialsById(credentialDetails.getId(), results);
 
@@ -83,23 +85,20 @@ public class CredHubDemoController {
 			interpolateServiceData(credentialName, results);
 
 			deleteCredentials(credentialName, results);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Exception caught: " + e.getMessage());
 		}
 
 		return results;
 	}
 
-	private CredentialDetails<JsonCredential> writeCredentials(SimpleCredentialName name,
-															   Map<String, Object> value,
-															   Results results) {
+	private CredentialDetails<JsonCredential> writeCredentials(SimpleCredentialName name, Map<String, Object> value,
+			Results results) {
 		try {
-			JsonCredentialRequest request = JsonCredentialRequest.builder()
-					.name(name)
-					.value(value)
-					.build();
+			JsonCredentialRequest request = JsonCredentialRequest.builder().name(name).value(value).build();
 
-			CredentialDetails<JsonCredential> credentialDetails = credentialOperations.write(request);
+			CredentialDetails<JsonCredential> credentialDetails = this.credentialOperations.write(request);
 			saveResults(results, "Successfully wrote credentials: ", credentialDetails);
 
 			return credentialDetails;
@@ -112,61 +111,65 @@ public class CredHubDemoController {
 
 	private void getCredentialsById(String id, Results results) {
 		try {
-			CredentialDetails<JsonCredential> retrievedDetails =
-					credentialOperations.getById(id, JsonCredential.class);
+			CredentialDetails<JsonCredential> retrievedDetails = this.credentialOperations.getById(id,
+					JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by ID: ", retrievedDetails);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error retrieving credentials by ID: ", e.getMessage());
 		}
 	}
 
 	private void getCredentialsByName(CredentialName name, Results results) {
 		try {
-			CredentialDetails<JsonCredential> retrievedDetails =
-					credentialOperations.getByName(name, JsonCredential.class);
+			CredentialDetails<JsonCredential> retrievedDetails = this.credentialOperations.getByName(name,
+					JsonCredential.class);
 			saveResults(results, "Successfully retrieved credentials by name: ", retrievedDetails);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error retrieving credentials by name: ", e.getMessage());
 		}
 	}
 
 	private void findCredentialsByName(CredentialName name, Results results) {
 		try {
-			List<CredentialSummary> retrievedDetails = credentialOperations.findByName(name);
+			List<CredentialSummary> retrievedDetails = this.credentialOperations.findByName(name);
 			saveResults(results, "Successfully found credentials by name: ", retrievedDetails);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error finding credentials by name: ", e.getMessage());
 		}
 	}
 
 	private void findCredentialsByPath(String path, Results results) {
 		try {
-			List<CredentialSummary> retrievedDetails = credentialOperations.findByPath(path);
+			List<CredentialSummary> retrievedDetails = this.credentialOperations.findByPath(path);
 			saveResults(results, "Successfully found credentials by path: ", retrievedDetails);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error finding credentials by path: ", e.getMessage());
 		}
 	}
 
 	private void getCredentialPermissions(CredentialName name, Results results) {
 		try {
-			List<Permission> retrievedDetails = permissionOperations.getPermissions(name);
+			List<Permission> retrievedDetails = this.permissionOperations.getPermissions(name);
 			saveResults(results, "Successfully retrieved credential permissions: ", retrievedDetails);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error retrieving credential permissions: ", e.getMessage());
 		}
 	}
 
 	private void addCredentialPermissions(CredentialName name, Results results) {
 		try {
-			Permission permission = Permission.builder()
-					.app(APP_GUID_2)
-					.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
-					.build();
+			Permission permission = Permission.builder().app(APP_GUID_2)
+					.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
 
-			permissionOperations.addPermissions(name, permission);
+			this.permissionOperations.addPermissions(name, permission);
 			saveResults(results, "Successfully added permissions");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error adding permission: ", e.getMessage());
 		}
 	}
@@ -174,23 +177,26 @@ public class CredHubDemoController {
 	private void interpolateServiceData(CredentialName name, Results results) {
 		try {
 			ServicesData request = buildServicesData(name.getName());
-			ServicesData interpolatedServiceData = interpolationOperations.interpolateServiceData(request);
+			ServicesData interpolatedServiceData = this.interpolationOperations.interpolateServiceData(request);
 			saveResults(results, "Successfully interpolated service data: ", interpolatedServiceData);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error interpolating service data: ", e.getMessage());
 		}
 	}
 
 	private void deleteCredentials(CredentialName name, Results results) {
 		try {
-			credentialOperations.deleteByName(name);
+			this.credentialOperations.deleteByName(name);
 			saveResults(results, "Successfully deleted credentials");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			saveResults(results, "Error deleting credentials by name: ", e.getMessage());
 		}
 	}
 
 	private ServicesData buildServicesData(String credHubReferenceName) throws IOException {
+		// @formatter:off
 		String vcapServices = "{" +
 				"  \"service-offering\": [" +
 				"   {" +
@@ -207,6 +213,7 @@ public class CredHubDemoController {
 				"   }" +
 				"  ]" +
 				"}";
+		// @formatter:on
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(vcapServices, ServicesData.class);
@@ -220,6 +227,8 @@ public class CredHubDemoController {
 		results.add(Collections.singletonMap(message, details));
 	}
 
-	private class Results extends ArrayList<Map<String, Object>> {
+	private static class Results extends ArrayList<Map<String, Object>> {
+
 	}
+
 }

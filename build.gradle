@@ -25,7 +25,6 @@ buildscript {
 	dependencies {
 		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
 		classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
-		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.12'
 		classpath 'io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE'
 		classpath 'io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.22'
@@ -88,25 +87,6 @@ allprojects {
 	}
 
 	apply from: "${rootProject.projectDir}/publish-maven.gradle"
-
-	if (project.hasProperty('platformVersion')) {
-		apply plugin: 'spring-io'
-
-		// necessary to resolve the Spring IO versions (which may include snapshots)
-		repositories {
-			maven { url "https://repo.spring.io/libs-snapshot" }
-		}
-
-		dependencyManagement {
-			springIoTestRuntime {
-				imports {
-					mavenBom("io.spring.platform:platform-bom:${platformVersion}") {
-						bomProperty "mockito.version", "${mockitoVersion}"
-					}
-				}
-			}
-		}
-	}
 }
 
 subprojects {

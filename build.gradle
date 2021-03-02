@@ -69,8 +69,9 @@ allprojects {
 	apply plugin: 'checkstyle'
 
 	checkstyle {
-		toolVersion = 8.29
+		toolVersion = 8.41
 		configDir = new File("${rootProject.projectDir}/src/checkstyle")
+		showViolations = true
 	}
 
 	group = 'org.springframework.credhub'

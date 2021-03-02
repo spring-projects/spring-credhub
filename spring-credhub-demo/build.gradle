@@ -18,12 +18,12 @@ description = 'Spring CredHub Demo'
 
 buildscript {
 	ext {
-		springBootVersion = "2.2.6.RELEASE"
+		springBootVersion = "2.4.3"
 	}
 
 	dependencies {
 		classpath('io.spring.gradle:propdeps-plugin:0.0.10.RELEASE')
-		classpath('io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE')
+		classpath('io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE')
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 

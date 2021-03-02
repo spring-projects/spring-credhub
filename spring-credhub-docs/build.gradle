@@ -21,7 +21,6 @@ plugins {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-		mavenBom "io.projectreactor:reactor-bom:${reactorVersion}"
 	}
 }
 

@@ -24,7 +24,7 @@ buildscript {
 	}
 	dependencies {
 		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
-		classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
+		classpath 'io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE'
 		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.12'
 		classpath 'io.spring.nohttp:nohttp-gradle:0.0.5.RELEASE'
 		classpath 'io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.27'
@@ -32,18 +32,20 @@ buildscript {
 }
 
 ext {
-	springVersion = "5.2.5.RELEASE"
-	springBootVersion = "2.2.6.RELEASE"
-	springSecurityVersion = "5.2.4.RELEASE"
-	reactorVersion = "Dysprosium-SR6"
+	springVersion = "5.3.4"
+	springBootVersion = "2.4.3"
+	springSecurityVersion = "5.4.5"
+	reactorVersion = "2020.0.4"
 
-	okHttp3Version = "4.4.1"
-	httpClientVersion = "4.5.12"
-	nettyVersion = "4.1.48.Final"
+	okHttp3Version = "3.14.9"
+	httpClientVersion = "4.5.13"
+	nettyVersion = "4.1.49.Final"
+	jacksonVersion = "2.11.4"
+	jsonPathVersion = "2.4.0"
 
 	junitVersion = "4.12"
 	mockitoVersion = "3.1.0"
-	assertJVersion = "3.6.1"
+	assertJVersion = "3.18.1"
 
 	javadocLinks = [
 			'https://docs.oracle.com/javase/7/docs/api/',

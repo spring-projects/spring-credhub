@@ -29,7 +29,7 @@ dependencies {
 	compile("org.springframework:spring-beans")
 	compile("org.springframework:spring-context")
 	compile("org.springframework:spring-web")
-	compile("com.fasterxml.jackson.core:jackson-databind:2.9.7")
+	compile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
 
 	optional("org.springframework:spring-webflux")
 	optional("io.projectreactor.netty:reactor-netty")
@@ -50,5 +50,5 @@ dependencies {
 	testImplementation("junit:junit")
 	testImplementation("org.mockito:mockito-core")
 	testImplementation("org.assertj:assertj-core:${assertJVersion}")
-	testImplementation("com.jayway.jsonpath:json-path:2.4.0")
+	testImplementation("com.jayway.jsonpath:json-path:${jsonPathVersion}")
 }

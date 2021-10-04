@@ -18,6 +18,8 @@ description = "Spring CredHub"
 
 buildscript {
 	repositories {
+		gradlePluginPortal()
+		mavenCentral()
 		maven { url 'https://repo.spring.io/plugins-release' }
 	}
 	dependencies {

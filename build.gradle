@@ -87,8 +87,6 @@ allprojects {
 		]
 	}
 
-	apply from: "${rootProject.projectDir}/publish-maven.gradle"
-
 	if (project.hasProperty('platformVersion')) {
 		apply plugin: 'spring-io'
 
@@ -107,6 +105,13 @@ allprojects {
 			}
 		}
 	}
+}
+
+configure(allprojects - [project(':spring-credhub-docs'),
+						 project(':spring-credhub-integration-tests'),
+						 project(':spring-credhub-reactive-integration-tests')]) {
+	apply plugin: 'java-library'
+	apply from: "${rootProject.projectDir}/publish-maven.gradle"
 }
 
 subprojects {

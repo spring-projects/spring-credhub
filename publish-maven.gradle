@@ -24,7 +24,6 @@ publishing {
 	}
 	publications {
 		mavenJava(MavenPublication) {
-//			suppressAllPomMetadataWarnings()
 			from components.java
 			pom {
 				afterEvaluate {
@@ -33,7 +32,7 @@ publishing {
 				}
 				url = "https://spring.io/projects/spring-credhub"
 				organization {
-					name = "Pivotal Software, Inc."
+					name = "Spring IO"
 					url = "https://spring.io"
 				}
 				licenses {
@@ -45,8 +44,8 @@ publishing {
 				}
 				scm {
 					url = "https://github.com/spring-projects/spring-credhub"
-					connection = "scm:git:git://github.com/spring-projects/spring-credhub"
-					developerConnection = "scm:git:git://github.com/spring-projects/spring-credhub"
+					connection = "scm:git:https://github.com/spring-projects/spring-credhub.git"
+					developerConnection = "scm:git:https://github.com/spring-projects/spring-credhub.git"
 				}
 				issueManagement {
 					system = "GitHub"
@@ -59,20 +58,6 @@ publishing {
 						email = "sfrederick@pivotal.io"
 					}
 				}
-			}
-
-			// Published pom will use fully-qualified dependency versions and no BOMs
-			versionMapping {
-				usage('java-api') {
-					fromResolutionOf('runtimeClasspath')
-				}
-				usage('java-runtime') {
-					fromResolutionResult()
-				}
-			}
-			pom.withXml {
-				def dependencyManagementNode = asNode().get("dependencyManagement")
-				asNode().remove(dependencyManagementNode)
 			}
 		}
 	}

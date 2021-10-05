@@ -15,7 +15,7 @@
  */
 
 plugins {
-	id 'org.asciidoctor.convert'
+	id 'org.asciidoctor.jvm.convert' version '3.2.0'
 }
 
 dependencyManagement {
@@ -27,13 +27,6 @@ dependencyManagement {
 
 description = "Spring CredHub Documentation"
 
-apply plugin: 'org.asciidoctor.convert'
-
-repositories {
-	maven { url "https://repo.spring.io/libs-release-local" }
-	mavenCentral()
-}
-
 configurations {
 	docs
 }
@@ -43,7 +36,7 @@ dependencies {
 	compile("io.projectreactor:reactor-core")
 	compile("org.springframework.boot:spring-boot-autoconfigure")
 
-	docs("io.spring.docresources:spring-doc-resources:0.1.2.RELEASE@zip")
+	docs("io.spring.docresources:spring-doc-resources:0.2.5@zip")
 }
 
 task prepareAsciidocBuild(type: Sync) {
@@ -59,6 +52,7 @@ task prepareAsciidocBuild(type: Sync) {
 }
 
 asciidoctor {
+	baseDirFollowsSourceFile()
 	sourceDir = file("$buildDir/asciidoc")
 	sources {
 		include '*.adoc'
@@ -69,7 +63,7 @@ asciidoctor {
 		}
 	}
 	logDocuments = true
-	backends = ["html5"]
+//	backends = ["html5"]
 	options doctype: 'book', eruby: 'erubis'
 	attributes  'icons': 'font',
 			'idprefix': '',
@@ -77,7 +71,7 @@ asciidoctor {
 			docinfo: 'shared',
 			revnumber: project.version,
 			'spring-version': project.version,
-			'branch-or-tag': project.version.endsWith('SNAPSHOT') ? 'master' : "v${project.version}",
+			'branch-or-tag': project.version.endsWith('SNAPSHOT') ? 'main' : "v${project.version}",
 			sectanchors: '',
 			sectnums: '',
 			stylesdir: "css/",

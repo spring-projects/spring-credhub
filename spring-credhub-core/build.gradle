@@ -31,19 +31,21 @@ dependencies {
 	compile("org.springframework:spring-web")
 	compile("com.fasterxml.jackson.core:jackson-databind:2.9.7")
 
-	optional("org.springframework:spring-webflux")
-	optional("io.projectreactor.netty:reactor-netty")
+	reactiveImplementation("org.springframework:spring-webflux")
+	reactiveImplementation("io.projectreactor.netty:reactor-netty")
 
 	compile("org.springframework.security:spring-security-oauth2-client") {
 		exclude module: "spring-security-web"
 	}
-	optional("org.springframework.security:spring-security-config")
+	securityImplementation("org.springframework.security:spring-security-config")
 
-	optional("org.apache.httpcomponents:httpclient:${httpClientVersion}") {
+	httpclientImplementation("org.apache.httpcomponents:httpclient:${httpClientVersion}") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
-	optional("com.squareup.okhttp3:okhttp:${okHttp3Version}")
-	optional("io.netty:netty-all:${nettyVersion}")
+
+	okhttpImplementation("com.squareup.okhttp3:okhttp:${okHttp3Version}")
+
+	nettyImplementation("io.netty:netty-all:${nettyVersion}")
 
 	testImplementation("org.springframework:spring-test")
 	testImplementation("io.projectreactor:reactor-test")

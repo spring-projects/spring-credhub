@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-description = "Spring CredHub"
-
-buildscript {
-	repositories {
-		gradlePluginPortal()
-		mavenCentral()
-		maven { url 'https://repo.spring.io/plugins-release' }
-	}
-	dependencies {
-		classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
-		classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
-		classpath 'io.spring.gradle:spring-io-plugin:0.0.8.RELEASE'
-		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.12'
-		classpath 'io.spring.nohttp:nohttp-gradle:0.0.1.RELEASE'
-		classpath 'io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.22'
-	}
+plugins {
+	id 'checkstyle'
+	id 'io.spring.nohttp' version '0.0.10'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'io.spring.javaformat' version '0.0.29'
 }
+
+description = "Spring CredHub"
 
 ext {
 	springVersion = "5.2.5.RELEASE"
@@ -53,57 +44,46 @@ ext {
 	] as String[]
 }
 
-allprojects {
+configure(allprojects) {
 	apply plugin: 'java'
-	apply plugin: 'maven'
 	apply plugin: 'eclipse'
 
-	apply plugin: 'propdeps'
-	apply plugin: 'propdeps-maven'
-	apply plugin: 'propdeps-idea'
-	apply plugin: 'propdeps-eclipse'
 	apply plugin: "io.spring.dependency-management"
-	apply plugin: 'org.asciidoctor.gradle.asciidoctor'
-
-	apply plugin: 'io.spring.nohttp'
-	apply plugin: 'io.spring.javaformat'
-	apply plugin: 'checkstyle'
-
-	checkstyle {
-		toolVersion = 8.29
-		configDir = new File("${rootProject.projectDir}/src/checkstyle")
-	}
 
 	group = 'org.springframework.credhub'
 
-	asciidoctor {
-		sourceDir = new File("docs/src/main/asciidoc")
-		outputDir = new File("docs/target/generated-docs")
-		options = [
-				'doctype': 'book'
-		]
-		attributes = [
-				'source-highlighter': 'coderay'
-		]
+	repositories {
+		mavenCentral()
+		maven { url 'https://repo.spring.io/release' }
+	}
+	if (version =~ /((-M|-RC)[0-9]+|-SNAPSHOT)$/) {
+		repositories {
+			maven { url 'https://repo.spring.io/milestone' }
+		}
+	}
+	if (version.endsWith('-SNAPSHOT')) {
+		repositories {
+			maven { url 'https://repo.spring.io/snapshot' }
+		}
+	}
+}
+
+configure(allprojects - [project(':spring-credhub-docs')]) {
+	apply plugin: 'checkstyle'
+	apply plugin: 'io.spring.nohttp'
+	apply plugin: 'io.spring.javaformat'
+
+	checkstyle {
+		toolVersion = "8.45.1"
+		configDirectory.set(rootProject.file("src/checkstyle"))
 	}
 
-	if (project.hasProperty('platformVersion')) {
-		apply plugin: 'spring-io'
-
-		// necessary to resolve the Spring IO versions (which may include snapshots)
-		repositories {
-			maven { url "https://repo.spring.io/libs-snapshot" }
-		}
-
-		dependencyManagement {
-			springIoTestRuntime {
-				imports {
-					mavenBom("io.spring.platform:platform-bom:${platformVersion}") {
-						bomProperty "mockito.version", "${mockitoVersion}"
-					}
-				}
-			}
-		}
+	nohttp {
+		allowlistFile = rootProject.file("src/nohttp/allowlist.lines")
+	}
+	
+	dependencies {
+		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.29")
 	}
 }
 
@@ -122,48 +102,55 @@ subprojects {
 		options.encoding = 'UTF-8'
 	}
 
-	task packageSources(type: Jar) {
-		classifier = 'sources'
-		from sourceSets.main.allSource
-	}
-
-	task javadocJar(type: Jar) {
-		classifier = "javadoc"
-		from javadoc
-	}
-
-	artifacts {
-		archives packageSources
-		archives javadocJar
+	java {
+		registerFeature('reactive') {
+			usingSourceSet(sourceSets.main)
+		}
+		registerFeature('security') {
+			usingSourceSet(sourceSets.main)
+		}
+		registerFeature('httpclient') {
+			usingSourceSet(sourceSets.main)
+		}
+		registerFeature('okhttp') {
+			usingSourceSet(sourceSets.main)
+		}
+		registerFeature('netty') {
+			usingSourceSet(sourceSets.main)
+		}
 	}
 
 	javadoc {
 		options.encoding = 'UTF-8'
-		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+		options.memberLevel = JavadocMemberLevel.PROTECTED
 		options.author = true
 		options.header = project.name
 	}
 
 	dependencies {
-		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.22")
-
 		testCompile("junit:junit:$junitVersion")
 		testCompile("org.mockito:mockito-core:$mockitoVersion")
-	}
-
-	repositories {
-		mavenCentral()
 	}
 }
 
 configure(rootProject) {
+	task sourcesJar(type: Jar) {
+		archiveClassifier.set('sources')
+		from sourceSets.main.allSource
+	}
+
+	task javadocJar(type: Jar) {
+		archiveClassifier.set('javadoc')
+		from javadoc.destinationDir
+	}
+
 	task api(type: Javadoc) {
 		group = "Documentation"
 		description = "Generates aggregated Javadoc API documentation."
 		title = "${rootProject.description} ${version} API"
 
 		options.encoding = 'UTF-8'
-		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+		options.memberLevel = JavadocMemberLevel.PROTECTED
 		options.author = true
 		options.header = rootProject.description
 		options.links(project.ext.javadocLinks)
@@ -184,8 +171,8 @@ configure(rootProject) {
 
 	task docsZip(type: Zip, dependsOn: [':spring-credhub-docs:asciidoctor']) {
 		group = 'Distribution'
-		classifier = 'docs'
-		description = "Builds -${classifier} archive containing api and reference " +
+		archiveClassifier.set('docs')
+		description = "Builds -${archiveClassifier} archive containing api and reference " +
 				"for deployment at docs.spring.io/spring-credhub/docs."
 
 		from(api) {
@@ -198,6 +185,16 @@ configure(rootProject) {
 
 	artifacts {
 		archives docsZip
+	}
+	
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				artifact sourcesJar
+				artifact javadocJar
+				artifact docsZip
+			}
+		}
 	}
 
 	task dist(dependsOn: assemble) {

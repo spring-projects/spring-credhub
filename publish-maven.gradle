@@ -24,6 +24,7 @@ publishing {
 	}
 	publications {
 		mavenJava(MavenPublication) {
+			suppressAllPomMetadataWarnings()
 			from components.java
 			pom {
 				afterEvaluate {
@@ -32,7 +33,7 @@ publishing {
 				}
 				url = "https://spring.io/projects/spring-credhub"
 				organization {
-					name = "Spring IO"
+					name = "VMware, Inc."
 					url = "https://spring.io"
 				}
 				licenses {
@@ -58,6 +59,20 @@ publishing {
 						email = "sfrederick@pivotal.io"
 					}
 				}
+			}
+
+			// Published pom will use fully-qualified dependency versions and no BOMs
+			versionMapping {
+				usage('java-api') {
+					fromResolutionOf('runtimeClasspath')
+				}
+				usage('java-runtime') {
+					fromResolutionResult()
+				}
+			}
+			pom.withXml {
+				def dependencyManagementNode = asNode().get("dependencyManagement")
+				asNode().remove(dependencyManagementNode)
 			}
 		}
 	}

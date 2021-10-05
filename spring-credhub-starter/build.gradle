@@ -26,19 +26,20 @@ dependencies {
 	compile project(':spring-credhub-core')
 	compile("org.springframework.boot:spring-boot-autoconfigure")
 
-	optional("org.springframework.boot:spring-boot-starter-webflux")
+	reactiveImplementation("org.springframework.boot:spring-boot-starter-webflux")
 
-	optional("org.springframework.security:spring-security-config")
-	optional("org.springframework.security:spring-security-oauth2-client")
+	securityImplementation("org.springframework.security:spring-security-config")
+	securityImplementation("org.springframework.security:spring-security-oauth2-client")
 
-	optional("org.apache.httpcomponents:httpclient") {
+	httpclientImplementation("org.apache.httpcomponents:httpclient") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
-	optional("com.squareup.okhttp3:okhttp:${okHttp3Version}")
-	optional("io.netty:netty-all:${nettyVersion}")
+
+	okhttpImplementation("com.squareup.okhttp3:okhttp:${okHttp3Version}")
+
+	nettyImplementation("io.netty:netty-all:${nettyVersion}")
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-	annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-web")

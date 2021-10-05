@@ -79,9 +79,9 @@ asciidoctor {
 			'linkcss': true,
 			'nofooter': true,
 			'allow-uri-read': '',
-			'source-highlighter=highlight.js',
-			'highlightjsdir=js/highlight',
-			'highlightjs-theme=atom-one-dark-reasonable'
+			'source-highlighter': 'highlight.js',
+			'highlightjsdir': 'js/highlight',
+			'highlightjs-theme': 'github'
 }
 
 asciidoctor.dependsOn prepareAsciidocBuild

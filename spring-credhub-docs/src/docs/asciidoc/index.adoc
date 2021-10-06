@@ -10,18 +10,15 @@ Scott Frederick;
 
 :examples-dir: ../../src/test/java/com/example/credhub/
 :credhub-home: https://docs.cloudfoundry.org/credhub/
-:credhub-api-home: https://credhub-api.cfapps.io/
-:credhub-api-credentials: {credhub-api-home}version/master/#_credentials_endpoint
-:credhub-api-certificates: {credhub-api-home}version/master/#_certificates_endpoint
-:credhub-api-permissions: {credhub-api-home}version/master/#_permissions_v1_deprecated
-:credhub-api-permissionsV2: {credhub-api-home}version/master/#_permissions_v2_endpoint
-:credhub-api-interpolation: {credhub-api-home}version/master/#_interpolation_endpoint
-:credhub-api-info: {credhub-api-home}version/master/#_info_endpoint
+:credhub-api-home: https://docs.cloudfoundry.org/api/credhub/
+:credhub-api-credentials: {credhub-api-home}version/main/#_credentials_endpoint
+:credhub-api-certificates: {credhub-api-home}version/main/#_certificates_endpoint
+:credhub-api-permissions: {credhub-api-home}version/main/#_permissions_v1_deprecated
+:credhub-api-permissionsV2: {credhub-api-home}version/main/#_permissions_v2_endpoint
+:credhub-api-interpolation: {credhub-api-home}version/main/#_interpolation_endpoint
+:credhub-api-info: {credhub-api-home}version/main/#_info_endpoint
 :cloudfoundry-home: https://www.cloudfoundry.org/
 :apidocs-home: https://docs.spring.io/spring-credhub/docs/{revnumber}/api/index.html
-:spring-security-version: 5.2.2.RELEASE
-:spring-security-apidocs-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/api/org/springframework/security/oauth2/client/
-:spring-security-ref-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/reference/html5/
 
 (C) 2017-2018 The original authors.
 

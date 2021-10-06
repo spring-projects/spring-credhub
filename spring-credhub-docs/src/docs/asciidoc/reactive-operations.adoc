@@ -1,3 +1,4 @@
+:examples-dir: ../../src/test/java/com/example/credhub/
 :apidocs-reactive-credentials: {apidocs-home}?org/springframework/credhub/core/credential/ReactiveCredHubCredentialOperations.html
 :apidocs-reactive-certificates: {apidocs-home}?org/springframework/credhub/core/certificate/ReactiveCredHubCertificateOperations.html
 :apidocs-reactive-permissions: {apidocs-home}?org/springframework/credhub/core/permission/ReactiveCredHubPermissionOperations.html
@@ -67,8 +68,8 @@ The following table shows the mapping between the CredHub API and the appropriat
 | {apidocs-reactive-interpolation}[ReactiveCredHubInterpolationOperations]
 
 | {credhub-api-info}[CredHub Information API]
-| {apidocs-reactive-info}[CredHubInfoOperations]
-|=======
+| {apidocs-reactive-info}[ReactiveCredHubInfoOperations]
+|===
 
 === ReactiveCredHubOperations Auto-configuration
 

@@ -1,3 +1,4 @@
+:examples-dir: ../../src/test/java/com/example/credhub/
 :apidocs-credentials: {apidocs-home}?org/springframework/credhub/core/credential/CredHubCredentialOperations.html
 :apidocs-certificates: {apidocs-home}?org/springframework/credhub/core/certificate/CredHubCertificateOperations.html
 :apidocs-permissions: {apidocs-home}?org/springframework/credhub/core/permission/CredHubPermissionOperations.html

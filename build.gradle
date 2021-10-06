@@ -24,21 +24,20 @@ plugins {
 description = "Spring CredHub"
 
 ext {
-	springVersion = "5.2.5.RELEASE"
-	springBootVersion = "2.2.6.RELEASE"
-	springSecurityVersion = "5.2.4.RELEASE"
-	reactorVersion = "Dysprosium-SR6"
+	springVersion = "5.3.10"
+	springBootVersion = "2.5.5"
+	springSecurityVersion = "5.5.2"
+	reactorVersion = "2020.0.11"
 
-	okHttp3Version = "4.4.1"
-	httpClientVersion = "4.5.12"
-	nettyVersion = "4.1.48.Final"
+	okHttp3Version = "4.9.1"
+	httpClientVersion = "4.5.13"
+	nettyVersion = "4.1.68.Final"
 
 	junitVersion = "4.12"
 	mockitoVersion = "3.1.0"
 	assertJVersion = "3.6.1"
 
 	javadocLinks = [
-			'https://docs.oracle.com/javase/7/docs/api/',
 			"https://docs.oracle.com/javase/8/docs/api/",
 			'https://docs.spring.io/spring/docs/current/javadoc-api/',
 	] as String[]

@@ -29,7 +29,7 @@ dependencies {
 	compile("org.springframework:spring-beans")
 	compile("org.springframework:spring-context")
 	compile("org.springframework:spring-web")
-	compile("com.fasterxml.jackson.core:jackson-databind:2.9.7")
+	compile("com.fasterxml.jackson.core:jackson-databind:2.12.5")
 
 	reactiveImplementation("org.springframework:spring-webflux")
 	reactiveImplementation("io.projectreactor.netty:reactor-netty")

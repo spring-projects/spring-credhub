@@ -1,8 +1,8 @@
 spring:
   credhub:
-    url: ${CREDHUB_SERVER}
+    url: ${CREDHUB_SERVER:https://localhost:9000}
     ca-cert-files:
-      - ${CREDHUB_CA_CERT}
+      - ${CREDHUB_CA_CERT:../credhub-server/server-ca-cert.pem}
     oauth2:
       registration-id: credhub-test
   security:
@@ -11,12 +11,14 @@ spring:
         registration:
           credhub-test:
             provider: uaa
-            client-id: ${CREDHUB_CLIENT}
-            client-secret: ${CREDHUB_SECRET}
+            client-id: ${CREDHUB_CLIENT:credhub_client}
+            client-secret: ${CREDHUB_SECRET:secret}
             authorization-grant-type: client_credentials
         provider:
           uaa:
-            token-uri: ${UAA_SERVER}/oauth/token
+            token-uri: ${UAA_SERVER:http://localhost:8080/uaa}/oauth/token
+
+test-server-version: "2.0.0"
 
 debug: true
 logging.level.org.springframework.web: DEBUG

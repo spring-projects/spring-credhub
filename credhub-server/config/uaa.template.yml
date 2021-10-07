@@ -1,0 +1,26 @@
+#@ load("@ytt:data", "data")
+
+scim:
+  users:
+    - credhub|password|credhub|Credhub|User|credhub.read,credhub.write
+oauth:
+  clients:
+    credhub_cli:
+      override: true
+      authorized-grant-types: password,refresh_token
+      scope: credhub.read,credhub.write
+      authorities: uaa.resource
+      access-token-validity: 86400
+      refresh-token-validity: 172800
+      secret: ""
+    credhub_client:
+      override: true
+      authorized-grant-types: client_credentials
+      secret: secret
+      scope: uaa.none
+      authorities: credhub.read,credhub.write
+      access-token-validity: 86400
+jwt:
+  token:
+    signing-key: #@ data.read('privkey.pem')
+    verification-key: #@ data.read('pubkey.pem')

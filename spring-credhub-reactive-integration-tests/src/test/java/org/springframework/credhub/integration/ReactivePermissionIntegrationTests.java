@@ -121,8 +121,8 @@ public class ReactivePermissionIntegrationTests extends ReactiveCredHubIntegrati
 
 		StepVerifier.create(this.permissions.getPermissions(CREDENTIAL_NAME))
 				.assertNext((response) -> assertThat(response).isEqualTo(appPermission))
-				.assertNext((response) -> assertThat(response).isEqualTo(userPermission))
-				.assertNext((response) -> assertThat(response).isEqualTo(clientPermission)).verifyComplete();
+				.assertNext((response) -> assertThat(response).isEqualTo(clientPermission))
+				.assertNext((response) -> assertThat(response).isEqualTo(userPermission)).verifyComplete();
 
 		deletePermissionsIfExist();
 

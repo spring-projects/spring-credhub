@@ -16,35 +16,49 @@
 
 package org.springframework.credhub.integration;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.info.VersionInfo;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StringUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
 public abstract class ReactiveCredHubIntegrationTests {
 
+	@Value("${test-server-version:}")
+	private String serverVersion;
+
+	private VersionInfo versionInfo;
+
 	@Autowired
 	protected ReactiveCredHubOperations operations;
 
+	@Before
+	public void setupVersionInfo() {
+		if (StringUtils.hasText(this.serverVersion)) {
+			this.versionInfo = new VersionInfo(this.serverVersion);
+		}
+		else {
+			this.versionInfo = this.operations.info().version().single().block();
+		}
+	}
+
 	boolean serverApiIsV1() {
-		return getVersion().isVersion1();
+		return this.versionInfo.isVersion1();
 	}
 
 	boolean serverApiIsV2() {
-		return getVersion().isVersion2();
-	}
-
-	private VersionInfo getVersion() {
-		return this.operations.info().version().single().block();
+		return this.versionInfo.isVersion2();
 	}
 
 	void deleteCredentialIfExists(CredentialName credentialName) {

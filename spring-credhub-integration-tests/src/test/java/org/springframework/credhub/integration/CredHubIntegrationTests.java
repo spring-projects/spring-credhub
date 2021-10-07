@@ -16,30 +16,49 @@
 
 package org.springframework.credhub.integration;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.info.VersionInfo;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StringUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
 public abstract class CredHubIntegrationTests {
 
+	@Value("${test-server-version:}")
+	private String serverVersion;
+
+	private VersionInfo versionInfo;
+
 	@Autowired
 	protected CredHubOperations operations;
 
+	@Before
+	public void setupVersionInfo() {
+		if (StringUtils.hasText(this.serverVersion)) {
+			this.versionInfo = new VersionInfo(this.serverVersion);
+		}
+		else {
+			this.versionInfo = this.operations.info().version();
+		}
+	}
+
 	boolean serverApiIsV1() {
-		return this.operations.info().version().isVersion1();
+		return this.versionInfo.isVersion1();
 	}
 
 	boolean serverApiIsV2() {
-		return this.operations.info().version().isVersion2();
+		return this.versionInfo.isVersion2();
 	}
 
 	void deleteCredentialIfExists(CredentialName credentialName) {

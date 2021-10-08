@@ -46,6 +46,12 @@ jobs:
           build_uri: "${ATC_EXTERNAL_URL}/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}"
           build_number: "${BUILD_PIPELINE_NAME}-${BUILD_JOB_NAME}-${BUILD_NAME}"
           disable_checksum_uploads: true
+          artifact_set:
+            - include:
+                - "/**/*-docs.zip"
+              properties:
+                "zip.type": "docs"
+                "zip.deployed": "false"
     on_success:
       *slack-success-notification
     on_failure:

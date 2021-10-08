@@ -15,3 +15,6 @@ bin
 build
 out
 target
+
+credhub-server/config/*.pem
+credhub-server/uaa.yml

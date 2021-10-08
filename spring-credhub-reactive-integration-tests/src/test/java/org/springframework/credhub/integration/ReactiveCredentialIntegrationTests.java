@@ -96,13 +96,13 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 				}).verifyComplete();
 
 		StepVerifier.create(this.credentials.findByName(new SimpleCredentialName("/test")))
-				.assertNext((response) -> assertThat(response).extracting("name").extracting("name")
-						.containsExactly(CREDENTIAL_NAME.getName()))
+				.assertNext((response) -> assertThat(response).extracting("name").extracting("name").asString()
+						.contains(CREDENTIAL_NAME.getName()))
 				.verifyComplete();
 
 		StepVerifier.create(this.credentials.findByPath("/spring-credhub/integration-test"))
-				.assertNext((response) -> assertThat(response).extracting("name").extracting("name")
-						.containsExactly(CREDENTIAL_NAME.getName()))
+				.assertNext((response) -> assertThat(response).extracting("name").extracting("name").asString()
+						.contains(CREDENTIAL_NAME.getName()))
 				.verifyComplete();
 	}
 

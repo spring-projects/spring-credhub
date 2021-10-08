@@ -17,7 +17,7 @@
 plugins {
 	id 'checkstyle'
 	id 'io.spring.nohttp' version '0.0.10'
-	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'io.spring.javaformat' version '0.0.29'
 }
 
@@ -67,7 +67,7 @@ configure(allprojects) {
 	}
 }
 
-configure(allprojects - [project(':spring-credhub-docs')]) {
+configure(allprojects) {
 	apply plugin: 'checkstyle'
 	apply plugin: 'io.spring.nohttp'
 	apply plugin: 'io.spring.javaformat'
@@ -86,10 +86,35 @@ configure(allprojects - [project(':spring-credhub-docs')]) {
 	}
 }
 
-configure(allprojects - [project(':spring-credhub-docs'),
-						 project(':spring-credhub-integration-tests'),
-						 project(':spring-credhub-reactive-integration-tests')]) {
+configure(libraryProjects) {
 	apply plugin: 'java-library'
+
+	java {
+		withJavadocJar()
+		withSourcesJar()
+	}
+
+	javadoc {
+		options.encoding = 'UTF-8'
+		options.memberLevel = JavadocMemberLevel.PROTECTED
+		options.author = true
+		options.header = project.name
+	}
+
+	sourcesJar {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		archiveClassifier.set "sources"
+		from sourceSets.main.allJava
+	}
+
+	javadocJar {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		archiveClassifier.set "javadoc"
+		from javadoc
+	}
+}
+
+configure(publishedProjects) {
 	apply from: "${rootProject.projectDir}/publish-maven.gradle"
 }
 
@@ -117,13 +142,6 @@ subprojects {
 		registerFeature('netty') {
 			usingSourceSet(sourceSets.main)
 		}
-	}
-
-	javadoc {
-		options.encoding = 'UTF-8'
-		options.memberLevel = JavadocMemberLevel.PROTECTED
-		options.author = true
-		options.header = project.name
 	}
 
 	dependencies {
@@ -200,4 +218,25 @@ configure(rootProject) {
 		group = "Distribution"
 		description = "Builds -dist and -docs distribution archives."
 	}
+}
+
+def getDocumentationProjects() {
+	[project(":spring-credhub-docs")] as Set
+}
+
+def getTestProjects() {
+	[project(":spring-credhub-integration-tests"),
+	 project(":spring-credhub-reactive-integration-tests")] as Set
+}
+
+def getJavaProjects() {
+	subprojects
+}
+
+def getLibraryProjects() {
+	javaProjects - documentationProjects - testProjects
+}
+
+def getPublishedProjects() {
+	libraryProjects + rootProject
 }

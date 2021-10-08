@@ -43,7 +43,7 @@ dependencies {
 
 	testCompile("org.springframework.boot:spring-boot-starter-test")
 	testCompile("io.projectreactor:reactor-test")
-	testCompile("org.assertj:assertj-core:${assertJVersion}")
+	testCompile("org.assertj:assertj-core")
 }
 
 test {

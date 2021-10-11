@@ -18,12 +18,11 @@ description = 'Spring CredHub Demo'
 
 buildscript {
 	ext {
-		springBootVersion = "2.2.6.RELEASE"
+		springBootVersion = "2.5.5"
 	}
 
 	dependencies {
-		classpath('io.spring.gradle:propdeps-plugin:0.0.10.RELEASE')
-		classpath('io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE')
+		classpath('io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE')
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 
@@ -34,25 +33,21 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'eclipse'
 
-apply plugin: 'propdeps'
-apply plugin: 'propdeps-maven'
-apply plugin: 'propdeps-idea'
-apply plugin: 'propdeps-eclipse'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-actuator")
+	compile("org.springframework.boot:spring-boot-starter-security")
 
-	compile("org.springframework.credhub:spring-credhub-starter:2.1.1.RELEASE")
+	compile("org.springframework.credhub:spring-credhub-starter:2.2.0-SNAPSHOT")
 }
 
 repositories {
 	mavenCentral()
-	maven { url "https://repo.spring.io/libs-snapshot-local" }
-	maven { url "https://repo.spring.io/libs-milestone-local" }
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
 }

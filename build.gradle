@@ -33,9 +33,9 @@ ext {
 	httpClientVersion = "4.5.13"
 	nettyVersion = "4.1.68.Final"
 
-	junitVersion = "4.12"
-	mockitoVersion = "3.1.0"
-	assertJVersion = "3.6.1"
+	junitVersion = "5.7.2"
+	mockitoVersion = "3.9.0"
+	assertJVersion = "3.19.0"
 
 	javadocLinks = [
 			"https://docs.oracle.com/javase/8/docs/api/",
@@ -145,8 +145,12 @@ subprojects {
 	}
 
 	dependencies {
-		testCompile("junit:junit:$junitVersion")
-		testCompile("org.mockito:mockito-core:$mockitoVersion")
+		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+		testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+	}
+
+	test {
+		useJUnitPlatform()
 	}
 }
 

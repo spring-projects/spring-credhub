@@ -16,8 +16,8 @@
 
 package org.springframework.credhub.integration;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.core.info.CredHubInfoOperations;
 import org.springframework.credhub.support.info.VersionInfo;
@@ -28,7 +28,7 @@ public class InfoIntegrationTests extends CredHubIntegrationTests {
 
 	private CredHubInfoOperations info;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.info = this.operations.info();
 	}

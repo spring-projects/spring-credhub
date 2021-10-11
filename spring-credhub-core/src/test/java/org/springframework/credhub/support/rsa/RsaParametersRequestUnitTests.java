@@ -17,8 +17,8 @@
 package org.springframework.credhub.support.rsa;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
@@ -29,7 +29,7 @@ import org.springframework.credhub.support.WriteMode;
 @SuppressWarnings("deprecation")
 public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.requestBuilder = RsaParametersRequest.builder();
 	}

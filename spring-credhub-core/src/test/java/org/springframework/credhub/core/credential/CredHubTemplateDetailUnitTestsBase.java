@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.params.provider.Arguments;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubException;
@@ -51,6 +54,19 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	protected ParametersRequest<P> getGenerateRequest() {
 		throw new IllegalStateException("Tests that verify credential generation must override this method");
+	}
+
+	static <T> Stream<? extends Arguments> buildDetailArguments(CredentialType type, T credential) {
+		return Stream.of(
+				Arguments.of(ResponseEntity.ok().body(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential))),
+				Arguments.of(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialDetails<>())));
+	}
+
+	static <T> Stream<? extends Arguments> buildDataArguments(CredentialType type, T credential) {
+		return Stream.of(
+				Arguments.of(ResponseEntity.ok().body(
+						new CredentialDetailsData<>(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential)))),
+				Arguments.of(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialDetailsData<>())));
 	}
 
 	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {

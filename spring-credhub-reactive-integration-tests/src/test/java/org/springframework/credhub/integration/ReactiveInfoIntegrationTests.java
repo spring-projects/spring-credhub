@@ -16,8 +16,8 @@
 
 package org.springframework.credhub.integration;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import org.springframework.credhub.core.info.ReactiveCredHubInfoOperations;
@@ -28,7 +28,7 @@ public class ReactiveInfoIntegrationTests extends ReactiveCredHubIntegrationTest
 
 	private ReactiveCredHubInfoOperations info;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.info = this.operations.info();
 	}

@@ -16,13 +16,13 @@
 
 package org.springframework.credhub.core.credential;
 
-import java.util.List;
+import java.util.stream.Stream;
 
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.FromDataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
@@ -32,7 +32,6 @@ import org.springframework.credhub.support.json.JsonCredential;
 import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
-@RunWith(Theories.class)
 public class CredHubTemplateDetailJsonUnitTests extends CredHubTemplateDetailUnitTestsBase<JsonCredential, Void> {
 
 	private static final JsonCredential CREDENTIAL = new JsonCredential() {
@@ -41,16 +40,6 @@ public class CredHubTemplateDetailJsonUnitTests extends CredHubTemplateDetailUni
 			put("test", true);
 		}
 	};
-
-	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<JsonCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.JSON, CREDENTIAL);
-	}
-
-	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<JsonCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.JSON, CREDENTIAL);
-	}
 
 	@Override
 	public CredentialRequest<JsonCredential> getWriteRequest() {
@@ -62,34 +51,52 @@ public class CredHubTemplateDetailJsonUnitTests extends CredHubTemplateDetailUni
 		return JsonCredential.class;
 	}
 
-	@Theory
-	public void write(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void write(ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
-	@Theory
-	public void getById(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void getById(ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
-	@Theory
-	public void getByName(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByName(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
-	@Theory
-	public void getByNameWithHistory(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
-	@Theory
-	public void getByNameWithVersions(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
+	}
+
+	static class DetailResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return buildDetailArguments(CredentialType.JSON, CREDENTIAL);
+		}
+
+	}
+
+	static class DataResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return buildDataArguments(CredentialType.JSON, CREDENTIAL);
+		}
+
 	}
 
 }

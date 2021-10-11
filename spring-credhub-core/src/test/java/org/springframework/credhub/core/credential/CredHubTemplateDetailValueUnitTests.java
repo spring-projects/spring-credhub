@@ -16,13 +16,13 @@
 
 package org.springframework.credhub.core.credential;
 
-import java.util.List;
+import java.util.stream.Stream;
 
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.FromDataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
@@ -32,20 +32,9 @@ import org.springframework.credhub.support.value.ValueCredential;
 import org.springframework.credhub.support.value.ValueCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
-@RunWith(Theories.class)
 public class CredHubTemplateDetailValueUnitTests extends CredHubTemplateDetailUnitTestsBase<ValueCredential, Void> {
 
 	private static final ValueCredential CREDENTIAL = new ValueCredential("secret");
-
-	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<ValueCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.VALUE, CREDENTIAL);
-	}
-
-	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<ValueCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.VALUE, CREDENTIAL);
-	}
 
 	@Override
 	public CredentialRequest<ValueCredential> getWriteRequest() {
@@ -57,34 +46,52 @@ public class CredHubTemplateDetailValueUnitTests extends CredHubTemplateDetailUn
 		return ValueCredential.class;
 	}
 
-	@Theory
-	public void write(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void write(ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
-	@Theory
-	public void getById(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void getById(ResponseEntity<CredentialDetails<ValueCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
-	@Theory
-	public void getByName(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByName(ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
-	@Theory
-	public void getByNameWithHistory(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
-	@Theory
-	public void getByNameWithVersions(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<ValueCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
+	}
+
+	static class DetailResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return buildDetailArguments(CredentialType.VALUE, CREDENTIAL);
+		}
+
+	}
+
+	static class DataResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return buildDataArguments(CredentialType.VALUE, CREDENTIAL);
+		}
+
 	}
 
 }

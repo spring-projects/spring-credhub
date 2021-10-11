@@ -17,8 +17,8 @@
 package org.springframework.credhub.support.json;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
@@ -27,7 +27,7 @@ import org.springframework.credhub.support.WriteMode;
 
 public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.requestBuilder = JsonCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
 				.value(new JsonCredential() {

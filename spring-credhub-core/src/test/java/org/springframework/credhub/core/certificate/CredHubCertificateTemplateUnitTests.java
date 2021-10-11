@@ -22,11 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubTemplate;
@@ -48,7 +48,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CredHubCertificateTemplateUnitTests {
 
 	private static final SimpleCredentialName NAME = new SimpleCredentialName("example", "certificate");
@@ -58,7 +58,7 @@ public class CredHubCertificateTemplateUnitTests {
 
 	private CredHubCertificateOperations credHubTemplate;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).certificates();
 	}

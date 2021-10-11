@@ -17,17 +17,19 @@
 package org.springframework.credhub.support.ssh;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+
 public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		buildRequest(new SshCredential("public-key", "private-key"));
 	}
@@ -69,11 +71,13 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 		assertNoPermissions(json);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void serializeWithNeitherKey() {
-		buildRequest(new SshCredential(null, null));
+		assertThatIllegalArgumentException().isThrownBy(() -> {
+			buildRequest(new SshCredential(null, null));
 
-		toJsonPath(this.requestBuilder);
+			toJsonPath(this.requestBuilder);
+		});
 	}
 
 	@SuppressWarnings("deprecation")

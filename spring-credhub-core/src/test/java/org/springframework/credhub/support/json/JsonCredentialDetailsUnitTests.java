@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.support.json;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;

@@ -17,12 +17,13 @@
 package org.springframework.credhub.core.credential;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.junit.experimental.theories.DataPoint;
-import org.junit.experimental.theories.FromDataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.support.CredentialSummary;
@@ -34,19 +35,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(Theories.class)
 public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 
-	@DataPoint("responses")
-	public static ResponseEntity<CredentialSummaryData> successfulResponse = ResponseEntity.ok()
-			.body(new CredentialSummaryData(new CredentialSummary(NAME)));
-
-	@DataPoint("responses")
-	public static ResponseEntity<CredentialSummaryData> httpErrorResponse = ResponseEntity
-			.status(HttpStatus.UNAUTHORIZED).body(new CredentialSummaryData());
-
-	@Theory
-	public void findByName(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(ResponseArgumentsProvider.class)
+	public void findByName(ResponseEntity<CredentialSummaryData> expectedResponse) {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.NAME_LIKE_URL_QUERY, CredentialSummaryData.class,
 				NAME.getName())).willReturn(expectedResponse);
 
@@ -66,8 +59,9 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 		}
 	}
 
-	@Theory
-	public void findByPath(@FromDataPoints("responses") ResponseEntity<CredentialSummaryData> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(ResponseArgumentsProvider.class)
+	public void findByPath(ResponseEntity<CredentialSummaryData> expectedResponse) {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.PATH_URL_QUERY, CredentialSummaryData.class,
 				NAME.getName())).willReturn(expectedResponse);
 
@@ -92,6 +86,17 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 		assertThat(response).isNotNull();
 		assertThat(response.size()).isEqualTo(expectedResponse.getBody().getCredentials().size());
 		assertThat(response).contains(expectedResponse.getBody().getCredentials().get(0));
+	}
+
+	static class ResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return Stream.of(
+					Arguments.of(ResponseEntity.ok().body(new CredentialSummaryData(new CredentialSummary(NAME)))),
+					Arguments.of(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialSummaryData())));
+		}
+
 	}
 
 }

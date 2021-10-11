@@ -19,7 +19,7 @@ package org.springframework.credhub.support;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +46,7 @@ public abstract class JsonParsingUnitTestsBase {
 
 	Date testDate;
 
-	@Before
+	@BeforeEach
 	public void setUpJsonParsing() throws Exception {
 		this.testDate = new StdDateFormat().parse(TEST_DATE_STRING);
 	}

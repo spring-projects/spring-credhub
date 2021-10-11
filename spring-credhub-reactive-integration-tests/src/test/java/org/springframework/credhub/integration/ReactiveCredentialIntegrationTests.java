@@ -18,9 +18,9 @@ package org.springframework.credhub.integration;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import org.springframework.credhub.core.credential.ReactiveCredHubCredentialOperations;
@@ -35,7 +35,7 @@ import org.springframework.credhub.support.value.ValueCredential;
 import org.springframework.credhub.support.value.ValueCredentialRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrationTests {
 
@@ -48,7 +48,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 
 	private PasswordParameters.PasswordParametersBuilder passwordParameters;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.credentials = this.operations.credentials();
 
@@ -58,7 +58,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 

@@ -16,8 +16,7 @@
 
 package org.springframework.credhub.integration;
 
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,10 +26,8 @@ import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.info.VersionInfo;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
 public abstract class CredHubIntegrationTests {
@@ -43,7 +40,7 @@ public abstract class CredHubIntegrationTests {
 	@Autowired
 	protected CredHubOperations operations;
 
-	@Before
+	@BeforeEach
 	public void setupVersionInfo() {
 		if (StringUtils.hasText(this.serverVersion)) {
 			this.versionInfo = new VersionInfo(this.serverVersion);

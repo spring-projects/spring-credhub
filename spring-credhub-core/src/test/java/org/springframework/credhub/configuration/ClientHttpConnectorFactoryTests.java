@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.configuration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.reactive.ClientHttpConnector;

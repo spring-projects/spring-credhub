@@ -48,8 +48,9 @@ dependencies {
 		compile("org.apache.httpcomponents:httpclient")
 	}
 
-	testCompile("org.springframework.boot:spring-boot-starter-test")
-	testCompile("org.assertj:assertj-core")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+	testImplementation("org.assertj:assertj-core:${assertJVersion}")
 }
 
 test {

@@ -17,8 +17,8 @@
 package org.springframework.credhub.support.certificate;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
@@ -26,10 +26,12 @@ import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+
 @SuppressWarnings("deprecation")
 public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.requestBuilder = CertificateParametersRequest.builder();
 	}
@@ -132,13 +134,15 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 		assertParametersNotSet(json);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void serializeWithEmptyParameters() {
-		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true)
-				.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).build());
+		assertThatIllegalArgumentException().isThrownBy(() -> {
+			this.requestBuilder = CertificateParametersRequest.builder()
+					.name(new SimpleCredentialName("example", "credential")).overwrite(true)
+					.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).build());
 
-		toJsonPath(this.requestBuilder);
+			toJsonPath(this.requestBuilder);
+		});
 	}
 
 	private void assertParametersNotSet(DocumentContext json) {

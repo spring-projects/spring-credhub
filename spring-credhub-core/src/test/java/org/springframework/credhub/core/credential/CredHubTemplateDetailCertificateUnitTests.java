@@ -16,13 +16,13 @@
 
 package org.springframework.credhub.core.credential;
 
-import java.util.List;
+import java.util.stream.Stream;
 
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.FromDataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
@@ -35,7 +35,6 @@ import org.springframework.credhub.support.certificate.CertificateParameters;
 import org.springframework.credhub.support.certificate.CertificateParametersRequest;
 import org.springframework.http.ResponseEntity;
 
-@RunWith(Theories.class)
 public class CredHubTemplateDetailCertificateUnitTests
 		extends CredHubTemplateDetailUnitTestsBase<CertificateCredential, CertificateParameters> {
 
@@ -44,16 +43,6 @@ public class CredHubTemplateDetailCertificateUnitTests
 
 	private static final CertificateParameters PARAMETERS = CertificateParameters.builder().commonName("common")
 			.certificateAuthorityCredential("credential").build();
-
-	@DataPoints("detail-responses")
-	public static List<ResponseEntity<CredentialDetails<CertificateCredential>>> buildDetailResponses() {
-		return buildDetailResponses(CredentialType.CERTIFICATE, CREDENTIAL);
-	}
-
-	@DataPoints("data-responses")
-	public static List<ResponseEntity<CredentialDetailsData<CertificateCredential>>> buildDataResponses() {
-		return buildDataResponses(CredentialType.CERTIFICATE, CREDENTIAL);
-	}
 
 	@Override
 	public CredentialRequest<CertificateCredential> getWriteRequest() {
@@ -70,46 +59,64 @@ public class CredHubTemplateDetailCertificateUnitTests
 		return CertificateCredential.class;
 	}
 
-	@Theory
-	public void write(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void write(ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
-	@Theory
-	public void generate(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void generate(ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyGenerate(expectedResponse);
 	}
 
-	@Theory
-	public void regenerate(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void regenerate(ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyRegenerate(expectedResponse);
 	}
 
-	@Theory
-	public void getById(
-			@FromDataPoints("detail-responses") ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	public void getById(ResponseEntity<CredentialDetails<CertificateCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
-	@Theory
-	public void getByName(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByName(ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
-	@Theory
-	public void getByNameWithHistory(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
-	@Theory
-	public void getByNameWithVersions(
-			@FromDataPoints("data-responses") ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
+	@ParameterizedTest
+	@ArgumentsSource(DataResponseArgumentsProvider.class)
+	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<CertificateCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
+	}
+
+	static class DetailResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return buildDetailArguments(CredentialType.CERTIFICATE, CREDENTIAL);
+		}
+
+	}
+
+	static class DataResponseArgumentsProvider implements ArgumentsProvider {
+
+		@Override
+		public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+			return buildDataArguments(CredentialType.CERTIFICATE, CREDENTIAL);
+		}
+
 	}
 
 }

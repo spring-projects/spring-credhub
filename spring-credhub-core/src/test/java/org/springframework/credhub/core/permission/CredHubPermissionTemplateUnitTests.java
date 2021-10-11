@@ -18,11 +18,13 @@ package org.springframework.credhub.core.permission;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CredentialPermissions;
@@ -41,7 +43,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.STRICT_STUBS)
 public class CredHubPermissionTemplateUnitTests {
 
 	private static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
@@ -51,7 +54,7 @@ public class CredHubPermissionTemplateUnitTests {
 
 	private CredHubPermissionOperations credHubTemplate;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).permissions();
 	}

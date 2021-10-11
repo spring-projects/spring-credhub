@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.support.info;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 

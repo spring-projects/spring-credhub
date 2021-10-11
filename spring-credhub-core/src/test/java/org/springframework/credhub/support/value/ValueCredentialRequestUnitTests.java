@@ -17,8 +17,8 @@
 package org.springframework.credhub.support.value;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
@@ -26,7 +26,7 @@ import org.springframework.credhub.support.SimpleCredentialName;
 
 public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
-	@Before
+	@BeforeEach
 	@SuppressWarnings("deprecation")
 	public void setUp() {
 		this.requestBuilder = ValueCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))

@@ -18,7 +18,7 @@ package org.springframework.credhub.configuration;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents;

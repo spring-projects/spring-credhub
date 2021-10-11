@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import org.springframework.credhub.core.credential.ReactiveCredHubCredentialOperations;
@@ -45,13 +45,13 @@ public class ReactiveInterpolationIntegrationTests extends ReactiveCredHubIntegr
 
 	private ReactiveCredHubCredentialOperations credentials;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.interpolation = this.operations.interpolation();
 		this.credentials = this.operations.credentials();
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}

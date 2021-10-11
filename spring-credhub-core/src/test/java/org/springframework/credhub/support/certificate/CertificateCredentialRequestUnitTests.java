@@ -17,17 +17,19 @@
 package org.springframework.credhub.support.certificate;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+
 public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		buildRequest(new CertificateCredential("cert", "ca", "private-key"));
 	}
@@ -71,11 +73,13 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 		assertNoPermissions(json);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void serializeWithNoValues() {
-		buildRequest(new CertificateCredential(null, null, null));
+		assertThatIllegalArgumentException().isThrownBy(() -> {
+			buildRequest(new CertificateCredential(null, null, null));
 
-		toJsonPath(this.requestBuilder);
+			toJsonPath(this.requestBuilder);
+		});
 	}
 
 	@SuppressWarnings("deprecation")

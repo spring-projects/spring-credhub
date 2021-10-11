@@ -17,7 +17,7 @@
 package org.springframework.credhub.support;
 
 import com.jayway.jsonpath.DocumentContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.credhub.support.CredHubRequest.CredHubRequestBuilder;
 import org.springframework.credhub.support.permissions.Actor;

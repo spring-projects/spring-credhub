@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.autoconfig;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -35,7 +35,6 @@ public class CredHubOAuth2AutoConfigurationTests {
 	private final Class[] configurations = { CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class };
 
 	private final String[] oAuth2ClientProperties = { "spring.credhub.oauth2.registration-id=test-client",
-
 			"spring.security.oauth2.client.registration.credhub-client.provider=uaa",
 			"spring.security.oauth2.client.registration.credhub-client.client-id=test-client",
 			"spring.security.oauth2.client.registration.credhub-client.client-secret=test-secret",

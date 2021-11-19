@@ -24,10 +24,10 @@ plugins {
 description = "Spring CredHub"
 
 ext {
-	springVersion = "5.3.10"
-	springBootVersion = "2.5.5"
-	springSecurityVersion = "5.5.2"
-	reactorVersion = "2020.0.11"
+	springVersion = "5.3.13"
+	springBootVersion = "2.5.7"
+	springSecurityVersion = "5.5.3"
+	reactorVersion = "2020.0.13"
 
 	okHttp3Version = "4.9.1"
 	httpClientVersion = "4.5.13"

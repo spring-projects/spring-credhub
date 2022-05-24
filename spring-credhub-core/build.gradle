@@ -29,7 +29,7 @@ dependencies {
 	api("org.springframework:spring-beans")
 	api("org.springframework:spring-context")
 	api("org.springframework:spring-web")
-	api("com.fasterxml.jackson.core:jackson-databind:2.12.5")
+	api("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
 	reactiveImplementation("org.springframework:spring-webflux")
 	reactiveImplementation("io.projectreactor.netty:reactor-netty")

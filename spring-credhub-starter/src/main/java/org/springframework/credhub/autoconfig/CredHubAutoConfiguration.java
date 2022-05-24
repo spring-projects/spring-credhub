@@ -16,13 +16,13 @@
 
 package org.springframework.credhub.autoconfig;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.support.ClientOptions;
 
@@ -32,7 +32,7 @@ import org.springframework.credhub.support.ClientOptions;
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties
 public class CredHubAutoConfiguration {
 

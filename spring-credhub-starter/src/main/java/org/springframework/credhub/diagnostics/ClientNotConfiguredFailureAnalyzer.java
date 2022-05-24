@@ -16,9 +16,7 @@
 
 package org.springframework.credhub.diagnostics;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
 import org.springframework.boot.diagnostics.FailureAnalysis;
@@ -30,10 +28,13 @@ import org.springframework.boot.diagnostics.FailureAnalyzer;
  *
  * @author Scott Frederick
  */
-class ClientNotConfiguredFailureAnalyzer extends AbstractFailureAnalyzer<NoSuchBeanDefinitionException>
-		implements BeanFactoryAware {
+class ClientNotConfiguredFailureAnalyzer extends AbstractFailureAnalyzer<NoSuchBeanDefinitionException> {
 
-	private BeanFactory beanFactory;
+	private final BeanFactory beanFactory;
+
+	ClientNotConfiguredFailureAnalyzer(BeanFactory beanFactory) {
+		this.beanFactory = beanFactory;
+	}
 
 	@Override
 	protected FailureAnalysis analyze(Throwable rootFailure, NoSuchBeanDefinitionException cause) {
@@ -61,11 +62,6 @@ class ClientNotConfiguredFailureAnalyzer extends AbstractFailureAnalyzer<NoSuchB
 	private String getAction() {
 		return "Add Spring Security to the application classpath and configure properties for the "
 				+ "OAuth2 client registration under 'spring.security.oauth2.client.registration'.";
-	}
-
-	@Override
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = beanFactory;
 	}
 
 }

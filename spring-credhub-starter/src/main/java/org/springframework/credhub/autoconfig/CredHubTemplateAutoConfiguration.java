@@ -16,12 +16,11 @@
 
 package org.springframework.credhub.autoconfig;
 
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.credhub.core.CredHubProperties;
 import org.springframework.credhub.core.CredHubTemplate;
@@ -31,8 +30,7 @@ import org.springframework.credhub.core.CredHubTemplate;
  *
  * @author Scott Frederick
  */
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureAfter({ CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class,
+@AutoConfiguration(after = { CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class,
 		OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class })
 @ConditionalOnBean(CredHubProperties.class)
 @Import({ CredHubTemplateConfiguration.class, ReactiveCredHubTemplateConfiguration.class })

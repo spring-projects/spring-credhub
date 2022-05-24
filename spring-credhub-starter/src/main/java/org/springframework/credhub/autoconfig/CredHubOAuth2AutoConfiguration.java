@@ -19,7 +19,7 @@ package org.springframework.credhub.autoconfig;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,7 +32,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAu
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
@@ -52,9 +51,8 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
  *
  * @author Scott Frederick
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = { OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class })
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
-@AutoConfigureAfter({ OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class })
 @ConditionalOnClass(name = "org.springframework.security.oauth2.client.registration.ClientRegistration")
 @ConditionalOnProperty("spring.credhub.oauth2.registration-id")
 @Conditional(ClientsConfiguredCondition.class)

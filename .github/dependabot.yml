@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: daily
+    labels:
+      - "dependency-upgrade"
+    ignore:
+      - update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: "2.2.x"
+    schedule:
+      interval: daily
+    labels:
+      - "dependency-upgrade"
+    ignore:
+      - update-types: ["version-update:semver-major", "version-update:semver-minor"]

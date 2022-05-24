@@ -25,7 +25,7 @@ description = "Spring CredHub"
 
 ext {
 	springVersion = "5.3.20"
-	springBootVersion = "2.5.7"
+	springBootVersion = "2.7.0"
 	springSecurityVersion = "5.5.3"
 	reactorVersion = "2020.0.13"
 

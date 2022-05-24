@@ -129,7 +129,7 @@ public class CredHubTemplateAutoConfigurationTests {
 					assertThat(context).hasSingleBean(ReactiveCredHubTemplate.class);
 					assertThat(context).hasSingleBean(ReactiveClientRegistrationRepository.class);
 					assertThat(context).hasSingleBean(ServerOAuth2AuthorizedClientRepository.class);
-					assertThat(context).doesNotHaveBean(ReactiveOAuth2AuthorizedClientManager.class);
+					assertThat(context).hasSingleBean(ReactiveOAuth2AuthorizedClientManager.class);
 					ReactiveCredHubTemplate reactiveCredHubTemplate = context.getBean(ReactiveCredHubTemplate.class);
 					assertThat(reactiveCredHubTemplate.isUsingOAuth2()).isTrue();
 				});

@@ -18,7 +18,7 @@ description = 'Spring CredHub Demo'
 
 buildscript {
 	ext {
-		springBootVersion = "2.5.5"
+		springBootVersion = "2.7.0"
 	}
 
 	dependencies {

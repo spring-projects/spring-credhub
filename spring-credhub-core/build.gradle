@@ -25,16 +25,16 @@ dependencyManagement {
 description = 'Spring CredHub Core'
 
 dependencies {
-	compile("org.springframework:spring-core")
-	compile("org.springframework:spring-beans")
-	compile("org.springframework:spring-context")
-	compile("org.springframework:spring-web")
-	compile("com.fasterxml.jackson.core:jackson-databind:2.12.5")
+	api("org.springframework:spring-core")
+	api("org.springframework:spring-beans")
+	api("org.springframework:spring-context")
+	api("org.springframework:spring-web")
+	api("com.fasterxml.jackson.core:jackson-databind:2.12.5")
 
 	reactiveImplementation("org.springframework:spring-webflux")
 	reactiveImplementation("io.projectreactor.netty:reactor-netty")
 
-	compile("org.springframework.security:spring-security-oauth2-client") {
+	api("org.springframework.security:spring-security-oauth2-client") {
 		exclude module: "spring-security-web"
 	}
 	securityImplementation("org.springframework.security:spring-security-config")

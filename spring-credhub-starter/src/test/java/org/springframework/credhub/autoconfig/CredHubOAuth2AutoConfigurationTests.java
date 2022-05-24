@@ -118,14 +118,14 @@ public class CredHubOAuth2AutoConfigurationTests {
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
 		assertThat(context).hasBean("credHubReactiveClientRegistrationRepository");
-		assertThat(context).hasBean("credHubReactiveAuthorizedClientRepository");
+		assertThat(context).hasBean("credHubReactiveAuthorizedClientManager");
 	}
 
 	private void assertReactiveOAuth2ContextNotConfigured(
 			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
 
 		assertThat(context).doesNotHaveBean("credHubReactiveClientRegistrationRepository");
-		assertThat(context).doesNotHaveBean("credHubReactiveAuthorizedClientRepository");
+		assertThat(context).doesNotHaveBean("credHubReactiveAuthorizedClientManager");
 	}
 
 	private void assertOAuth2ContextNotConfigured(

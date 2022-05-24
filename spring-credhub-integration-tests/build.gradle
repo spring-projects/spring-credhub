@@ -32,24 +32,23 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	compile project(":spring-credhub-starter")
-	compile("org.springframework.boot:spring-boot-starter")
+	testImplementation(project(":spring-credhub-starter"))
+	testImplementation("org.springframework.boot:spring-boot-starter")
 
-	compile("org.springframework.boot:spring-boot-starter-web")
+	testImplementation("org.springframework.boot:spring-boot-starter-web")
 
-	compile("org.springframework.security:spring-security-config")
-	compile("org.springframework.security:spring-security-oauth2-client")
+	testImplementation("org.springframework.security:spring-security-config")
+	testImplementation("org.springframework.security:spring-security-oauth2-client")
 
 	if (project.hasProperty("useOkHttp3")) {
-		compile("com.squareup.okhttp3:okhttp")
+		testImplementation("com.squareup.okhttp3:okhttp")
 	} else if (project.hasProperty("useNetty")) {
-		compile("io.netty:netty-all")
+		testImplementation("io.netty:netty-all")
 	} else {
-		compile("org.apache.httpcomponents:httpclient")
+		testImplementation("org.apache.httpcomponents:httpclient")
 	}
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
 	testImplementation("org.assertj:assertj-core:${assertJVersion}")
 }
 

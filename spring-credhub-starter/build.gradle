@@ -23,8 +23,8 @@ dependencyManagement {
 description = 'Spring CredHub Starter'
 
 dependencies {
-	compile project(':spring-credhub-core')
-	compile("org.springframework.boot:spring-boot-autoconfigure")
+	api(project(':spring-credhub-core'))
+	api("org.springframework.boot:spring-boot-autoconfigure")
 
 	reactiveImplementation("org.springframework.boot:spring-boot-starter-webflux")
 
@@ -43,6 +43,5 @@ dependencies {
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-web")
-	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
 	testImplementation("org.assertj:assertj-core:${assertJVersion}")
 }

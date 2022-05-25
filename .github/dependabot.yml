@@ -5,6 +5,7 @@ updates:
     target-branch: "main"
     schedule:
       interval: daily
+    open-pull-requests-limit: 15
     labels:
       - "dependency-upgrade"
     ignore:
@@ -16,6 +17,7 @@ updates:
     target-branch: "2.2.x"
     schedule:
       interval: daily
+    open-pull-requests-limit: 15
     labels:
       - "dependency-upgrade"
     ignore:

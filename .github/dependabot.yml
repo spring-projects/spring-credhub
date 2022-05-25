@@ -8,7 +8,8 @@ updates:
     labels:
       - "dependency-upgrade"
     ignore:
-      - update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
   - package-ecosystem: gradle
     directory: "/"
@@ -18,4 +19,5 @@ updates:
     labels:
       - "dependency-upgrade"
     ignore:
-      - update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]

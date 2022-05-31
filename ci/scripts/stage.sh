@@ -47,7 +47,6 @@ echo
 ./gradlew clean publish -PpublicationRepository="${repository}"
 echo
 
-git reset --hard HEAD^
 echo "Setting next development version (v$nextVersion)"
 sed -i "s/version=$stageVersion/version=$nextVersion/" gradle.properties
 git add gradle.properties

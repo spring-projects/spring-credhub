@@ -29,7 +29,7 @@ ext {
 	springSecurityVersion = "5.5.8"
 	reactorVersion = "2020.0.19"
 
-	okHttp3Version = "4.9.1"
+	okHttp3Version = "4.9.3"
 	httpClientVersion = "4.5.13"
 	nettyVersion = "4.1.68.Final"
 

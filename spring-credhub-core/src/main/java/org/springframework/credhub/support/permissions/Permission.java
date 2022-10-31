@@ -255,14 +255,14 @@ public final class Permission {
 		public Permission build() {
 			List<Operation> operations;
 			switch ((this.operations == null) ? 0 : this.operations.size()) {
-			case 0:
-				operations = java.util.Collections.emptyList();
-				break;
-			case 1:
-				operations = java.util.Collections.singletonList(this.operations.get(0));
-				break;
-			default:
-				operations = java.util.Collections.unmodifiableList(new ArrayList<>(this.operations));
+				case 0:
+					operations = java.util.Collections.emptyList();
+					break;
+				case 1:
+					operations = java.util.Collections.singletonList(this.operations.get(0));
+					break;
+				default:
+					operations = java.util.Collections.unmodifiableList(new ArrayList<>(this.operations));
 			}
 
 			return new Permission(this.actor, operations);

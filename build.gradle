@@ -27,7 +27,7 @@ ext {
 	springVersion = "5.3.23"
 	springBootVersion = "2.7.5"
 	springSecurityVersion = "5.7.5"
-	reactorVersion = "2020.0.19"
+	reactorVersion = "2020.0.24"
 
 	okHttp3Version = "4.9.3"
 	httpClientVersion = "4.5.13"

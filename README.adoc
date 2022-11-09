@@ -14,7 +14,7 @@ A simple application that demonstrates the use of Spring CredHub is available in
 
 === Basic Compile and Test
 
-To build the source you will need to install JDK 1.8.
+To build the source you will need to install JDK 17.
 
 Spring CredHub uses Gradle for most build-related activities, and you should be able to get off the ground quite quickly by cloning the project you are interested in and typing
 

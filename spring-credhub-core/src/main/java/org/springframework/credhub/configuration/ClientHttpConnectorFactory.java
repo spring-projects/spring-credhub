@@ -19,6 +19,7 @@ package org.springframework.credhub.configuration;
 import java.security.NoSuchAlgorithmException;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManagerFactory;
 
 import io.netty.channel.ChannelOption;
@@ -53,6 +54,7 @@ public final class ClientHttpConnectorFactory {
 
 	/**
 	 * Create a {@link ClientHttpConnector} for the given {@link ClientOptions}.
+	 *
 	 * @param options must not be {@literal null}
 	 * @return a new {@link ClientHttpConnector}.
 	 */
@@ -63,8 +65,16 @@ public final class ClientHttpConnectorFactory {
 			TrustManagerFactory trustManagerFactory = sslCertificateUtils
 					.createTrustManagerFactory(options.getCaCertFiles());
 
-			httpClient = httpClient.secure((sslContextSpec) -> sslContextSpec.sslContext(
-					SslContextBuilder.forClient().sslProvider(SslProvider.JDK).trustManager(trustManagerFactory)));
+			httpClient = httpClient.secure((sslContextSpec) -> {
+				try {
+					sslContextSpec.sslContext(SslContextBuilder.forClient().sslProvider(SslProvider.JDK)
+															   .trustManager(trustManagerFactory).build());
+				}
+				catch (SSLException ex) {
+					logger.error("Error configuring HTTP connections using custom certs", ex);
+					throw new RuntimeException("Error configuring HTTP connections using custom certs", ex);
+				}
+			});
 		}
 		else {
 			httpClient = httpClient.secure((sslContextSpec) -> {
@@ -80,9 +90,8 @@ public final class ClientHttpConnectorFactory {
 		}
 
 		if (options.getConnectionTimeout() != null) {
-			httpClient = httpClient
-					.tcpConfiguration((tcpClient) -> tcpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
-							Math.toIntExact(options.getConnectionTimeout().toMillis())));
+			httpClient = httpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+					Math.toIntExact(options.getConnectionTimeout().toMillis()));
 		}
 
 		return new ReactorClientHttpConnector(httpClient);

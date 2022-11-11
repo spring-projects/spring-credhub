@@ -46,7 +46,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 public class CredHubTemplateConfiguration {
 
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
+	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	@ConditionalOnProperty(prefix = "spring.credhub.oauth2", name = "registration-id", havingValue = "false",
 			matchIfMissing = true)
 	static class CredHubTemplateBaseConfiguration {
@@ -68,7 +68,7 @@ public class CredHubTemplateConfiguration {
 	}
 
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
+	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	@ConditionalOnProperty(prefix = "spring.credhub.oauth2", name = "registration-id")
 	@ConditionalOnMissingBean(OAuth2AuthorizedClientManager.class)
 	static class CredHubTemplateOAuth2Configuration {
@@ -95,7 +95,7 @@ public class CredHubTemplateConfiguration {
 	}
 
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
+	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	@ConditionalOnProperty(prefix = "spring.credhub.oauth2", name = "registration-id")
 	@ConditionalOnBean(OAuth2AuthorizedClientManager.class)
 	static class CredHubTemplateOAuth2ClientConfiguration {

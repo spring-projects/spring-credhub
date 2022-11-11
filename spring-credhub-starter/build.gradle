@@ -31,7 +31,7 @@ dependencies {
 	securityImplementation("org.springframework.security:spring-security-config")
 	securityImplementation("org.springframework.security:spring-security-oauth2-client")
 
-	httpclientImplementation("org.apache.httpcomponents:httpclient") {
+	httpclientImplementation("org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
 

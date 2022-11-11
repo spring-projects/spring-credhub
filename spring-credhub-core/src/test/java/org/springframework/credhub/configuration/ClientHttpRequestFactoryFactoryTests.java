@@ -16,19 +16,17 @@
 
 package org.springframework.credhub.configuration;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents;
 import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection;
-import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.Netty;
 import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp3;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
@@ -61,16 +59,6 @@ public class ClientHttpRequestFactoryFactoryTests {
 		ClientHttpRequestFactory factory = OkHttp3.usingOkHttp3(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(OkHttp3ClientHttpRequestFactory.class);
-
-		((DisposableBean) factory).destroy();
-	}
-
-	@Test
-	@SuppressWarnings("deprecation")
-	public void nettyClientCreated() throws Exception {
-		ClientHttpRequestFactory factory = Netty.usingNetty(new ClientOptions());
-
-		assertThat(factory).isInstanceOf(Netty4ClientHttpRequestFactory.class);
 
 		((DisposableBean) factory).destroy();
 	}

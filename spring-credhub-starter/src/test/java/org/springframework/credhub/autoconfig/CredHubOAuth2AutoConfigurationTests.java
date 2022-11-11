@@ -81,7 +81,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 
 	@Test
 	public void oauth2ContextConfiguredWithReactiveWebAppNoServlet() {
-		new ReactiveWebApplicationContextRunner().withClassLoader(new FilteredClassLoader("javax.servlet"))
+		new ReactiveWebApplicationContextRunner().withClassLoader(new FilteredClassLoader("jakarta.servlet"))
 				.withConfiguration(AutoConfigurations.of(this.configurations))
 				.withPropertyValues(this.oAuth2ClientProperties).run((context) -> {
 					assertServletOAuth2ContextNotConfigured(context);

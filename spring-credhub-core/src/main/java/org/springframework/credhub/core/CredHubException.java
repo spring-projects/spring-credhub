@@ -16,7 +16,7 @@
 
 package org.springframework.credhub.core;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.HttpStatusCodeException;
 
 /**
@@ -37,10 +37,10 @@ public class CredHubException extends HttpStatusCodeException {
 
 	/**
 	 * Create a new exception with the provided error status code.
-	 * @param statusCode an {@link HttpStatus} indicating an error while attempting to
+	 * @param statusCode an {@link HttpStatusCode} indicating an error while attempting to
 	 * communicate with CredHub
 	 */
-	public CredHubException(HttpStatus statusCode) {
+	public CredHubException(HttpStatusCode statusCode) {
 		super(statusCode);
 	}
 

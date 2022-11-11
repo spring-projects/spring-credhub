@@ -24,7 +24,7 @@ import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Permission;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.util.Assert;
 
 /**
@@ -68,7 +68,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post().uri(PERMISSIONS_URL_PATH)
-				.bodyValue(credentialPermission).retrieve().onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+				.bodyValue(credentialPermission).retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 				.bodyToMono(CredentialPermission.class));
 	}
 
@@ -79,7 +79,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
 				.uri(PERMISSIONS_PATH_ACTOR_URL_QUERY, path.getName(), actor.getIdentity()).retrieve()
-				.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
+				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.put().uri(PERMISSIONS_ID_URL_PATH, id)
-				.bodyValue(credentialPermission).retrieve().onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+				.bodyValue(credentialPermission).retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 				.bodyToMono(CredentialPermission.class));
 	}
 
@@ -101,7 +101,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		Assert.notNull(id, "credential ID must not be null");
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.delete().uri(PERMISSIONS_ID_URL_PATH, id)
-				.retrieve().onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+				.retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
 	}
 
 }

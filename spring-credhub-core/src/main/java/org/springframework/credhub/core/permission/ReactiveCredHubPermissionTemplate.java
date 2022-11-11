@@ -25,7 +25,7 @@ import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermissions;
 import org.springframework.credhub.support.permissions.Actor;
 import org.springframework.credhub.support.permissions.Permission;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.util.Assert;
 
 /**
@@ -58,7 +58,7 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
 				.uri(PERMISSIONS_URL_QUERY, name.getName()).retrieve()
-				.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermissions.class)
+				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermissions.class)
 				.flatMapMany((data) -> Flux.fromIterable(data.getPermissions())));
 	}
 
@@ -70,7 +70,7 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 
 		return this.credHubOperations.doWithWebClient(
 				(webClient) -> webClient.post().uri(PERMISSIONS_URL_PATH).bodyValue(credentialPermissions).retrieve()
-						.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+						.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 
 		return this.credHubOperations.doWithWebClient(
 				(webClient) -> webClient.delete().uri(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity())
-						.retrieve().onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+						.retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
 	}
 
 }

@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.info.VersionInfo;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 /**
  * Implements the interaction with CredHub retrieve server information.
@@ -50,7 +50,7 @@ public class ReactiveCredHubInfoTemplate implements ReactiveCredHubInfoOperation
 	@Override
 	public Mono<VersionInfo> version() {
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get().uri(VERSION_URL_PATH).retrieve()
-				.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(VersionInfo.class));
+				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(VersionInfo.class));
 	}
 
 }

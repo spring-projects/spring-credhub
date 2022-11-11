@@ -58,7 +58,7 @@ public class CredHubTemplateAutoConfigurationTests {
 			"org.springframework.security.oauth2.client");
 
 	private static final FilteredClassLoader SERVLET_AND_SECURITY_FILTERED_CLASS_LOADER = new FilteredClassLoader(
-			"javax.servlet.http.HttpServletRequest", "org.springframework.security.oauth2.client");
+			"jakarta.servlet.http.HttpServletRequest", "org.springframework.security.oauth2.client");
 
 	private static final FilteredClassLoader WEB_CLIENT_AND_SECURITY_FILTERED_CLASS_LOADER = new FilteredClassLoader(
 			"org.springframework.web.reactive.function.client", "org.springframework.security.oauth2.client");
@@ -67,7 +67,7 @@ public class CredHubTemplateAutoConfigurationTests {
 			.withConfiguration(
 					AutoConfigurations.of(ReactiveOAuth2ClientAutoConfiguration.class, CredHubAutoConfiguration.class,
 							CredHubOAuth2AutoConfiguration.class, CredHubTemplateAutoConfiguration.class))
-			.withInitializer(new ConditionEvaluationReportLoggingListener(LogLevel.INFO));
+			.withInitializer(ConditionEvaluationReportLoggingListener.forLogLevel(LogLevel.INFO));
 
 	@Test
 	public void credHubTemplatesConfigured() {

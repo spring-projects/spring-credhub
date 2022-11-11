@@ -22,7 +22,7 @@ import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.ServicesData;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.util.Assert;
 
 /**
@@ -52,7 +52,7 @@ public class ReactiveCredHubInterpolationTemplate implements ReactiveCredHubInte
 
 		return this.credHubOperations.doWithWebClient(
 				(webClient) -> webClient.post().uri(INTERPOLATE_URL_PATH).bodyValue(serviceData).retrieve()
-						.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(ServicesData.class));
+						.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(ServicesData.class));
 	}
 
 }

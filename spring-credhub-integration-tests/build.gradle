@@ -45,7 +45,7 @@ dependencies {
 	} else if (project.hasProperty("useNetty")) {
 		testImplementation("io.netty:netty-all")
 	} else {
-		testImplementation("org.apache.httpcomponents:httpclient")
+		testImplementation("org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}")
 	}
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

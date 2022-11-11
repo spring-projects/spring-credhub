@@ -71,7 +71,7 @@ public class CredHubOAuth2AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
+	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	public ClientRegistrationRepository credHubClientRegistrationRepository() {
 		List<ClientRegistration> registrations = new ArrayList<>(
 				OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(this.properties).values());
@@ -86,7 +86,7 @@ public class CredHubOAuth2AutoConfiguration {
 	 */
 	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnClass(name = "javax.servlet.http.HttpServletRequest")
+	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	public OAuth2AuthorizedClientRepository credHubAuthorizedClientRepository(
 			ClientRegistrationRepository clientRegistrationRepository) {
 		return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(

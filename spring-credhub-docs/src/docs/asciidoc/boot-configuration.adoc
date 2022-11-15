@@ -2,7 +2,6 @@
 :credhub-api-mtls: {credhub-api-home}version/main/#_mutual_tls
 :credhub-api-oauth: {credhub-api-home}version/main/#_uaa_oauth2
 :spring-boot-oauth: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security-oauth2
-:spring-security-version: 5.5.2
 :spring-security-apidocs-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/api/org/springframework/security/oauth2/client/
 :spring-security-ref-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/reference/html5/
 

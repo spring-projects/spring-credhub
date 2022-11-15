@@ -71,6 +71,7 @@ asciidoctor {
 			docinfo: 'shared',
 			revnumber: project.version,
 			'spring-version': "${springVersion}",
+			'spring-boot-version': "${springBootVersion}",
 			'spring-security-version': "${springSecurityVersion}",
 			'branch-or-tag': project.version.endsWith('SNAPSHOT') ? 'main' : "v${project.version}",
 			sectanchors: '',

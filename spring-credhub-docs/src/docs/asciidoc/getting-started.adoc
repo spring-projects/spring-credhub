@@ -34,7 +34,7 @@ To enable reactive support in Spring CredHub, add the following {spring-webflux}
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
-            <version>{spring-version}</version>
+            <version>{spring-boot-version}</version>
         </dependency>
     </dependencies>
 ----
@@ -76,7 +76,7 @@ To enable reactive support in Spring CredHub, add the following {spring-webflux}
 [subs="verbatim,attributes"]
 ----
     dependencies {
-        compile("org.springframework.boot:spring-boot-starter-webflux:{spring-version}")
+        compile("org.springframework.boot:spring-boot-starter-webflux:{spring-boot-version}")
     }
 ----
 

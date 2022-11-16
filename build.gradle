@@ -139,9 +139,6 @@ subprojects {
 		registerFeature('okhttp') {
 			usingSourceSet(sourceSets.main)
 		}
-		registerFeature('netty') {
-			usingSourceSet(sourceSets.main)
-		}
 	}
 
 	dependencies {

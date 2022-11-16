@@ -37,8 +37,6 @@ dependencies {
 
 	okhttpImplementation("com.squareup.okhttp3:okhttp:${okHttp3Version}")
 
-	nettyImplementation("io.netty:netty-all:${nettyVersion}")
-
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

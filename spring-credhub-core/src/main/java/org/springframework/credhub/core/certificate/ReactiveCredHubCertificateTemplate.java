@@ -112,9 +112,10 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		Map<String, Object> request = new HashMap<>(1);
 		request.put(SIGNED_BY_REQUEST_FIELD, certificateName.getName());
 
-		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post().uri(BULK_REGENERATE_URL_PATH)
-				.bodyValue(request).retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToFlux(ref)
-				.flatMap((body) -> Flux.fromIterable(body.get(REGENERATED_CREDENTIALS_RESPONSE_FIELD))));
+		return this.credHubOperations
+				.doWithWebClient((webClient) -> webClient.post().uri(BULK_REGENERATE_URL_PATH).bodyValue(request)
+						.retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToFlux(ref)
+						.flatMap((body) -> Flux.fromIterable(body.get(REGENERATED_CREDENTIALS_RESPONSE_FIELD))));
 	}
 
 	public Flux<CertificateCredentialDetails> updateTransitionalVersion(final String id, final String versionId) {

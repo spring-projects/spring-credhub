@@ -42,8 +42,6 @@ dependencies {
 
 	if (project.hasProperty("useOkHttp3")) {
 		testImplementation("com.squareup.okhttp3:okhttp")
-	} else if (project.hasProperty("useNetty")) {
-		testImplementation("io.netty:netty-all")
 	} else {
 		testImplementation("org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}")
 	}

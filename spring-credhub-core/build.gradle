@@ -45,8 +45,6 @@ dependencies {
 
 	okhttpImplementation("com.squareup.okhttp3:okhttp:${okHttp3Version}")
 
-	nettyImplementation("io.netty:netty-all:${nettyVersion}")
-
 	testImplementation("org.springframework:spring-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")

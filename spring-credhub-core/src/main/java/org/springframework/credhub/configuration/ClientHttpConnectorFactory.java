@@ -54,7 +54,6 @@ public final class ClientHttpConnectorFactory {
 
 	/**
 	 * Create a {@link ClientHttpConnector} for the given {@link ClientOptions}.
-	 *
 	 * @param options must not be {@literal null}
 	 * @return a new {@link ClientHttpConnector}.
 	 */
@@ -68,7 +67,7 @@ public final class ClientHttpConnectorFactory {
 			httpClient = httpClient.secure((sslContextSpec) -> {
 				try {
 					sslContextSpec.sslContext(SslContextBuilder.forClient().sslProvider(SslProvider.JDK)
-															   .trustManager(trustManagerFactory).build());
+							.trustManager(trustManagerFactory).build());
 				}
 				catch (SSLException ex) {
 					logger.error("Error configuring HTTP connections using custom certs", ex);

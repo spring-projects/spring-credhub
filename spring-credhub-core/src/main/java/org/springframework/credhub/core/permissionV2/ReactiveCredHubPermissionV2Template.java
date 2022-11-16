@@ -68,8 +68,8 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post().uri(PERMISSIONS_URL_PATH)
-				.bodyValue(credentialPermission).retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
-				.bodyToMono(CredentialPermission.class));
+				.bodyValue(credentialPermission).retrieve()
+				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.put().uri(PERMISSIONS_ID_URL_PATH, id)
-				.bodyValue(credentialPermission).retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
-				.bodyToMono(CredentialPermission.class));
+				.bodyValue(credentialPermission).retrieve()
+				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
 	}
 
 	@Override

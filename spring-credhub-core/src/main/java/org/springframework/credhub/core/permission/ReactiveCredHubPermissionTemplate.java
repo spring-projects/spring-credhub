@@ -78,9 +78,9 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(actor, "actor must not be null");
 
-		return this.credHubOperations.doWithWebClient(
-				(webClient) -> webClient.delete().uri(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity())
-						.retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.delete()
+				.uri(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity()).retrieve()
+				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
 	}
 
 }

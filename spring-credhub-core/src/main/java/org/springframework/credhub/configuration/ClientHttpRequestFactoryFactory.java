@@ -45,7 +45,7 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Factory for {@link ClientHttpRequestFactory} that supports Apache HTTP Components,
- * OkHttp, Netty and the JDK HTTP client (in that order). This factory configures a
+ * OkHttp the JDK HTTP client (in that order). This factory configures a
  * {@link ClientHttpRequestFactory} depending on the available dependencies.
  *
  * @author Mark Paluch
@@ -57,7 +57,8 @@ public final class ClientHttpRequestFactoryFactory {
 
 	private static final SslCertificateUtils sslCertificateUtils = new SslCertificateUtils();
 
-	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent("org.apache.http.client.HttpClient",
+	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent(
+			"org.apache.hc.client5.http.impl.classic.HttpClients",
 			ClientHttpRequestFactoryFactory.class.getClassLoader());
 
 	private static final boolean OKHTTP3_PRESENT = ClassUtils.isPresent("okhttp3.OkHttpClient",
@@ -108,8 +109,7 @@ public final class ClientHttpRequestFactoryFactory {
 			if (usingCustomCerts(options)) {
 				logger.warn("Trust material will not be configured when using "
 						+ "java.net.HttpUrlConnection. Use an alternate HTTP Client "
-						+ "(Apache HttpComponents HttpClient or OkHttp3) when "
-						+ "configuring CA certificates.");
+						+ "(Apache HttpComponents HttpClient or OkHttp3) when configuring CA certificates.");
 			}
 
 			SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -148,28 +148,23 @@ public final class ClientHttpRequestFactoryFactory {
 				SSLContext sslContext = sslCertificateUtils.getSSLContext(options.getCaCertFiles());
 				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
 				PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder
-						.create()
-						.setSSLSocketFactory(sslSocketFactory)
-						.setDefaultSocketConfig(socketConfig)
-						.build();
+						.create().setSSLSocketFactory(sslSocketFactory).setDefaultSocketConfig(socketConfig).build();
 				httpClientBuilder.setConnectionManager(connectionManager);
 			}
 			else {
 				SSLContext sslContext = SSLContext.getDefault();
 				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
 				PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder
-						.create()
-						.useSystemProperties()
-						.setSSLSocketFactory(sslSocketFactory)
-						.setDefaultSocketConfig(socketConfig)
-						.build();
+						.create().useSystemProperties().setSSLSocketFactory(sslSocketFactory)
+						.setDefaultSocketConfig(socketConfig).build();
 				httpClientBuilder.setConnectionManager(connectionManager);
 			}
 
 			RequestConfig.Builder requestConfigBuilder = RequestConfig.custom().setAuthenticationEnabled(true);
 
 			if (options.getConnectionTimeout() != null) {
-				requestConfigBuilder.setConnectTimeout(Timeout.ofMilliseconds(options.getConnectionTimeout().toMillis()));
+				requestConfigBuilder
+						.setConnectTimeout(Timeout.ofMilliseconds(options.getConnectionTimeout().toMillis()));
 			}
 			httpClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
 

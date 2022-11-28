@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-	}
-}
-
 description = 'Spring CredHub Starter'
 
 dependencies {
+	api(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
 	api(project(':spring-credhub-core'))
 	api("org.springframework.boot:spring-boot-autoconfigure")
 
@@ -31,15 +26,16 @@ dependencies {
 	securityImplementation("org.springframework.security:spring-security-config")
 	securityImplementation("org.springframework.security:spring-security-oauth2-client")
 
-	httpclientImplementation("org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}") {
+	httpclientImplementation("org.apache.httpcomponents.client5:httpclient5") {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
 
-	okhttpImplementation("com.squareup.okhttp3:okhttp:${okHttp3Version}")
+	okhttpImplementation("com.squareup.okhttp3:okhttp")
 
+	annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-web")
-	testImplementation("org.assertj:assertj-core:${assertJVersion}")
+	testImplementation("org.assertj:assertj-core")
 }

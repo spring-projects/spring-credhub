@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-plugins {
-	id 'org.asciidoctor.jvm.convert' version '3.3.2'
-}
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-		mavenBom "io.projectreactor:reactor-bom:${reactorVersion}"
-	}
+plugins {
+	id 'org.asciidoctor.jvm.convert'
+	id 'org.springframework.boot' apply false
 }
 
 description = "Spring CredHub Documentation"
@@ -32,7 +28,8 @@ configurations {
 }
 
 dependencies {
-	implementation project(":spring-credhub-core")
+	implementation(platform(SpringBootPlugin.BOM_COORDINATES))
+	implementation(project(":spring-credhub-core"))
 	implementation("io.projectreactor:reactor-core")
 	implementation("org.springframework.boot:spring-boot-autoconfigure")
 

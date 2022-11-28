@@ -14,40 +14,16 @@
  * limitations under the License.
  */
 
+plugins {
+	id 'org.springframework.boot' version '3.0.0'
+	id 'eclipse'
+}
+
 description = 'Spring CredHub Demo'
 
-buildscript {
-	ext {
-		springBootVersion = "3.0.0-RC2"
-	}
-
-	dependencies {
-		classpath('io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE')
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
-
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/plugins-release" }
-	}
-}
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'org.springframework.boot'
-
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-actuator")
-	compile("org.springframework.boot:spring-boot-starter-security")
-
-	compile("org.springframework.credhub:spring-credhub-starter:2.2.0-SNAPSHOT")
-}
-
-repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
+	implementation("org.springframework.credhub:spring-credhub-starter:3.0.0-SNAPSHOT")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 }

@@ -1,12 +1,10 @@
-version: '2'
-
 services:
   uaa:
     image: pcfseceng/uaa
     volumes:
       - ./uaa.yml:/uaa/uaa.yml
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: always
 
   credhub:

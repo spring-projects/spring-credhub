@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-description = 'Spring CredHub Integration Tests'
-
-buildscript {
-	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-	}
-
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/plugins-release" }
-	}
+plugins {
+	id 'org.springframework.boot'
+	id 'eclipse'
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
+description = 'Spring CredHub Integration Tests'
 
 dependencies {
 	testImplementation(project(":spring-credhub-starter"))
@@ -43,11 +33,11 @@ dependencies {
 	if (project.hasProperty("useOkHttp3")) {
 		testImplementation("com.squareup.okhttp3:okhttp")
 	} else {
-		testImplementation("org.apache.httpcomponents.client5:httpclient5:${httpClient5Version}")
+		testImplementation("org.apache.httpcomponents.client5:httpclient5")
 	}
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.assertj:assertj-core:${assertJVersion}")
+	testImplementation("org.assertj:assertj-core")
 }
 
 test {
@@ -61,7 +51,3 @@ bootJar {
 }
 
 configurations.archives.artifacts.clear()
-
-repositories {
-	mavenCentral()
-}

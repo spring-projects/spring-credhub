@@ -41,6 +41,10 @@ public class CredentialRequest<T> extends CredHubRequest<T> {
 		return this.details;
 	}
 
+	/**
+	 * Set the value of the credential.
+	 * @param value the value of the credential
+	 */
 	protected void setValue(T value) {
 		this.details = value;
 	}

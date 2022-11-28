@@ -59,6 +59,7 @@ public class CredHubRequest<T> {
 	 * @return the {@literal boolean} overwrite value
 	 * @deprecated as of CredHub 1.6, use {@link #mode}
 	 */
+	@Deprecated
 	public Boolean isOverwrite() {
 		return this.overwrite;
 	}
@@ -215,6 +216,7 @@ public class CredHubRequest<T> {
 		 * @return the builder
 		 * @deprecated as of CredHub 1.6, use {@link #mode(WriteMode)}
 		 */
+		@Deprecated
 		public B overwrite(boolean overwrite) {
 			this.targetObj.setOverwrite(overwrite);
 			return this.thisObj;
@@ -222,11 +224,9 @@ public class CredHubRequest<T> {
 
 		/**
 		 * Sets a value indicating the action CredHub should take when a credential being
-		 * written or generated already exists.
-		 *
-		 * As of CredHub 2.0, this value must not be set on write requests (write requests
-		 * always overwrite the credential that already exists) but may be set on generate
-		 * requests.
+		 * written or generated already exists. As of CredHub 2.0, this value must not be
+		 * set on write requests (write requests always overwrite the credential that
+		 * already exists) but may be set on generate requests.
 		 * @param mode the {@link WriteMode} to use when a credential exists
 		 * @return the builder
 		 */
@@ -243,6 +243,7 @@ public class CredHubRequest<T> {
 		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to
 		 * assign permissions to a credential after it is created
 		 */
+		@Deprecated
 		public B permission(Permission permission) {
 			this.targetObj.getAdditionalPermissions().add(permission);
 			return this.thisObj;
@@ -257,6 +258,7 @@ public class CredHubRequest<T> {
 		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to
 		 * assign permissions to a credential after it is created
 		 */
+		@Deprecated
 		public B permissions(Collection<? extends Permission> permissions) {
 			this.targetObj.getAdditionalPermissions().addAll(permissions);
 			return this.thisObj;
@@ -271,6 +273,7 @@ public class CredHubRequest<T> {
 		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to
 		 * assign permissions to a credential after it is created
 		 */
+		@Deprecated
 		public B permissions(Permission... permissions) {
 			this.targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));
 			return this.thisObj;

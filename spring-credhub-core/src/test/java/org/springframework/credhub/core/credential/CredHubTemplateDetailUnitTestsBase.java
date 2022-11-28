@@ -126,7 +126,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 	}
 
 	void verifyRegenerate(ResponseEntity<CredentialDetails<T>> expectedResponse) {
-		Map<String, Object> request = new HashMap<String, Object>() {
+		Map<String, Object> request = new HashMap<>() {
 			{
 				put(CredHubCredentialTemplate.NAME_REQUEST_FIELD, NAME.getName());
 			}
@@ -151,11 +151,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	void verifyGetById(ResponseEntity<CredentialDetails<T>> expectedResponse) {
-		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.ID_URL_PATH), eq(HttpMethod.GET),
-				isNull(HttpEntity.class), isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID)))
-						.willReturn(expectedResponse);
+		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.ID_URL_PATH), eq(HttpMethod.GET), isNull(),
+				isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID))).willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -173,11 +171,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	void verifyGetByName(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY_CURRENT), eq(HttpMethod.GET),
-				isNull(HttpEntity.class), isA(ParameterizedTypeReference.class), eq(NAME.getName())))
-						.willReturn(expectedResponse);
+				isNull(), isA(ParameterizedTypeReference.class), eq(NAME.getName()))).willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -195,11 +191,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	void verifyGetByNameWithHistory(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
-		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY), eq(HttpMethod.GET),
-				isNull(HttpEntity.class), isA(ParameterizedTypeReference.class), eq(NAME.getName())))
-						.willReturn(expectedResponse);
+		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY), eq(HttpMethod.GET), isNull(),
+				isA(ParameterizedTypeReference.class), eq(NAME.getName()))).willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -217,10 +211,9 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	void verifyGetByNameWithVersions(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY_VERSIONS), eq(HttpMethod.GET),
-				isNull(HttpEntity.class), isA(ParameterizedTypeReference.class), eq(NAME.getName()), eq(5)))
+				isNull(), isA(ParameterizedTypeReference.class), eq(NAME.getName()), eq(5)))
 						.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {

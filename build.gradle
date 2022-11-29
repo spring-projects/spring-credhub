@@ -24,8 +24,8 @@ description = "Spring CredHub"
 
 ext {
 	springVersion = "6.0.0"
-	springBootVersion = "3.0.0-RC2"
-	springSecurityVersion = "6.0.0-RC2"
+	springBootVersion = "3.0.0"
+	springSecurityVersion = "6.0.0"
 	javadocLinks = [
 			"https://docs.oracle.com/javase/17/docs/api/",
 			'https://docs.spring.io/spring/docs/current/javadoc-api/',

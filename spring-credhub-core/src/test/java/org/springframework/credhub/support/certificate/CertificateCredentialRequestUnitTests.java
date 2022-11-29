@@ -38,7 +38,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithAllValues() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		JsonPathAssert.assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
 		JsonPathAssert.assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
 		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
@@ -52,7 +52,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		JsonPathAssert.assertThat(json).hasPath("$.value.certificate").isEqualTo("cert");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.ca").hasNoPath("$.value.private_key");
 
@@ -65,7 +65,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.certificate");
 		JsonPathAssert.assertThat(json).hasPath("$.value.ca").isEqualTo("ca");
 		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
@@ -82,11 +82,9 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 		});
 	}
 
-	@SuppressWarnings("deprecation")
 	private void buildRequest(CertificateCredential value) {
 		this.requestBuilder = CertificateCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
-				.value(value);
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE).value(value);
 	}
 
 }

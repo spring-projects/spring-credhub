@@ -35,7 +35,6 @@ import org.springframework.credhub.support.value.ValueCredential;
 import org.springframework.credhub.support.value.ValueCredentialRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class CredentialIntegrationTests extends CredHubIntegrationTests {
 
@@ -95,9 +94,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void overwriteCredentialV2() {
-		assumeTrue(serverApiIsV2());
-
+	public void overwriteCredential() {
 		CredentialDetails<ValueCredential> written = this.credentials
 				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
@@ -107,30 +104,6 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 
 		CredentialDetails<ValueCredential> overwritten = this.credentials
 				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value("new-value").build());
-		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-		assertThat(overwritten.getValue().getValue()).isEqualTo("new-value");
-
-		verifyHistory();
-	}
-
-	@Test
-	public void overwriteCredentialV1() {
-		assumeTrue(serverApiIsV1());
-
-		CredentialDetails<ValueCredential> written = this.credentials
-				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
-		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-		assertThat(written.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-		assertThat(written.getCredentialType()).isEqualTo(CredentialType.VALUE);
-		assertThat(written.getId()).isNotNull();
-
-		CredentialDetails<ValueCredential> overwritten = this.credentials.write(ValueCredentialRequest.builder()
-				.name(CREDENTIAL_NAME).value("new-value").mode(WriteMode.NO_OVERWRITE).build());
-		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-		assertThat(overwritten.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-
-		overwritten = this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value("new-value")
-				.mode(WriteMode.OVERWRITE).build());
 		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(overwritten.getValue().getValue()).isEqualTo("new-value");
 

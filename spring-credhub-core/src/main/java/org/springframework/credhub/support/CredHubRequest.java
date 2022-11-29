@@ -16,16 +16,10 @@
 
 package org.springframework.credhub.support;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import org.springframework.credhub.core.permission.CredHubPermissionOperations;
-import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.util.Assert;
 
 /**
@@ -37,35 +31,15 @@ import org.springframework.util.Assert;
 @SuppressWarnings("WeakerAccess")
 public class CredHubRequest<T> {
 
-	protected Boolean overwrite;
-
 	protected WriteMode mode;
 
 	protected CredentialName name;
 
 	protected CredentialType credentialType;
 
-	protected List<Permission> additionalPermissions;
-
 	protected T details;
 
 	public CredHubRequest() {
-		this.additionalPermissions = new ArrayList<>();
-	}
-
-	/**
-	 * Get the value of the {@literal boolean} flag indicating whether the CredHub should
-	 * create a new credential or update an existing credential.
-	 * @return the {@literal boolean} overwrite value
-	 * @deprecated as of CredHub 1.6, use {@link #mode}
-	 */
-	@Deprecated
-	public Boolean isOverwrite() {
-		return this.overwrite;
-	}
-
-	void setOverwrite(boolean overwrite) {
-		this.overwrite = overwrite;
 	}
 
 	/**
@@ -109,14 +83,6 @@ public class CredHubRequest<T> {
 		this.details = details;
 	}
 
-	/**
-	 * Get the set of {@link Permission} to assign to the credential.
-	 * @return the set of {@link Permission}
-	 */
-	public List<Permission> getAdditionalPermissions() {
-		return this.additionalPermissions;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -128,17 +94,10 @@ public class CredHubRequest<T> {
 
 		CredHubRequest that = (CredHubRequest) o;
 
-		if (this.overwrite != that.overwrite) {
-			return false;
-		}
 		if ((this.name != null) ? !this.name.equals(that.name) : (that.name != null)) {
 			return false;
 		}
 		if (this.credentialType != that.credentialType) {
-			return false;
-		}
-		if ((this.additionalPermissions != null) ? !this.additionalPermissions.equals(that.additionalPermissions)
-				: (that.additionalPermissions == null)) {
 			return false;
 		}
 		if ((this.details != null) ? !this.details.equals(that.details) : (that.details != null)) {
@@ -153,14 +112,12 @@ public class CredHubRequest<T> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.overwrite, this.name, this.credentialType, this.additionalPermissions, this.details,
-				this.mode);
+		return Objects.hash(this.name, this.credentialType, this.details, this.mode);
 	}
 
 	@Override
 	public String toString() {
-		return "CredHubRequest{" + "overwrite=" + this.overwrite + ", name=" + this.name + ", credentialType="
-				+ this.credentialType + ", additionalPermissions=" + this.additionalPermissions + ", details="
+		return "CredHubRequest{" + "name=" + this.name + ", credentialType=" + this.credentialType + ", details="
 				+ this.details + '}';
 	}
 
@@ -209,20 +166,6 @@ public class CredHubRequest<T> {
 		}
 
 		/**
-		 * Sets a {@literal boolean} value indicating whether CredHub should create a new
-		 * credential or update and existing credential.
-		 * @param overwrite {@literal false} to create a new credential, or
-		 * {@literal true} to update and existing credential
-		 * @return the builder
-		 * @deprecated as of CredHub 1.6, use {@link #mode(WriteMode)}
-		 */
-		@Deprecated
-		public B overwrite(boolean overwrite) {
-			this.targetObj.setOverwrite(overwrite);
-			return this.thisObj;
-		}
-
-		/**
 		 * Sets a value indicating the action CredHub should take when a credential being
 		 * written or generated already exists. As of CredHub 2.0, this value must not be
 		 * set on write requests (write requests always overwrite the credential that
@@ -232,50 +175,6 @@ public class CredHubRequest<T> {
 		 */
 		public B mode(WriteMode mode) {
 			this.targetObj.setMode(mode);
-			return this.thisObj;
-		}
-
-		/**
-		 * Add an {@link Permission} to the permissions that will be assigned to the
-		 * credential.
-		 * @param permission a {@link Permission} to assign to the credential
-		 * @return the builder
-		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to
-		 * assign permissions to a credential after it is created
-		 */
-		@Deprecated
-		public B permission(Permission permission) {
-			this.targetObj.getAdditionalPermissions().add(permission);
-			return this.thisObj;
-		}
-
-		/**
-		 * Add a collection of {@link Permission}s to the controls that will be assigned
-		 * to the credential.
-		 * @param permissions a collection of {@link Permission}s to assign to the
-		 * credential
-		 * @return the builder
-		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to
-		 * assign permissions to a credential after it is created
-		 */
-		@Deprecated
-		public B permissions(Collection<? extends Permission> permissions) {
-			this.targetObj.getAdditionalPermissions().addAll(permissions);
-			return this.thisObj;
-		}
-
-		/**
-		 * Add a collection of {@link Permission}s to the controls that will be assigned
-		 * to the credential.
-		 * @param permissions a collection of {@link Permission}s to assign to the
-		 * credential
-		 * @return the builder
-		 * @deprecated as of CredHub 2.0, use {@link CredHubPermissionOperations} to
-		 * assign permissions to a credential after it is created
-		 */
-		@Deprecated
-		public B permissions(Permission... permissions) {
-			this.targetObj.getAdditionalPermissions().addAll(Arrays.asList(permissions));
 			return this.thisObj;
 		}
 

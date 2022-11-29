@@ -27,17 +27,15 @@ import org.springframework.credhub.support.SimpleCredentialName;
 public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	@SuppressWarnings("deprecation")
 	public void setUp() {
 		this.requestBuilder = ValueCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).value(new ValueCredential("somevalue"));
+				.value(new ValueCredential("somevalue"));
 	}
 
 	@Test
 	public void serializeWithValue() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		JsonPathAssert.assertThat(json).hasPath("$.overwrite").isEqualTo(true);
 		JsonPathAssert.assertThat(json).hasPath("$.name").isEqualTo("/example/credential");
 		JsonPathAssert.assertThat(json).hasPath("$.type").isEqualTo("value");
 		JsonPathAssert.assertThat(json).hasPath("$.value").isEqualTo("somevalue");
@@ -46,14 +44,12 @@ public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase
 	}
 
 	@Test
-	@SuppressWarnings("deprecation")
 	public void serializeWithStringValue() {
 		this.requestBuilder = ValueCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).value("somevalue");
+				.value("somevalue");
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		JsonPathAssert.assertThat(json).hasPath("$.overwrite").isEqualTo(true);
 		JsonPathAssert.assertThat(json).hasPath("$.name").isEqualTo("/example/credential");
 		JsonPathAssert.assertThat(json).hasPath("$.type").isEqualTo("value");
 		JsonPathAssert.assertThat(json).hasPath("$.value").isEqualTo("somevalue");

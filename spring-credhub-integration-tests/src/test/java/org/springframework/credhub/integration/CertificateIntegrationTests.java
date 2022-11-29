@@ -35,7 +35,6 @@ import org.springframework.credhub.support.certificate.CertificateParametersRequ
 import org.springframework.credhub.support.certificate.CertificateSummary;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
@@ -66,8 +65,6 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void generateCertificate() {
-		assumeTrue(serverApiIsV2());
-
 		CredentialDetails<CertificateCredential> certificate = this.credentials.generate(CertificateParametersRequest
 				.builder().name(TEST_CERT_NAME)
 				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build()).build());
@@ -89,8 +86,6 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void regenerateCertificate() {
-		assumeTrue(serverApiIsV2());
-
 		CredentialDetails<CertificateCredential> certificate = this.credentials.generate(CertificateParametersRequest
 				.builder().name(TEST_CERT_NAME)
 				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build()).build());
@@ -109,8 +104,6 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void rotateCertificate() {
-		assumeTrue(serverApiIsV2());
-
 		CredentialDetails<CertificateCredential> certificate = this.credentials.generate(CertificateParametersRequest
 				.builder().name(TEST_CERT_NAME)
 				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build()).build());

@@ -33,7 +33,6 @@ import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.credhub.support.value.ValueCredentialRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 
@@ -61,8 +60,6 @@ public class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void managePermissions() {
-		assumeTrue(serverApiIsV2());
-
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
 		Permission clientPermission = Permission.builder().client("client1")
@@ -86,8 +83,6 @@ public class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 
 	@Test
 	public void updatePermissions() {
-		assumeTrue(serverApiIsV2());
-
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
 		Permission clientPermission = Permission.builder().client("client1")

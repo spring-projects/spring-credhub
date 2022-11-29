@@ -28,7 +28,6 @@ import org.springframework.credhub.support.WriteMode;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-@SuppressWarnings("deprecation")
 public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
@@ -39,7 +38,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	@Test
 	public void serializeWithParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE)
 				.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).commonName("common")
 						.alternateNames("alt1", "alt2").organization("org").organizationUnit("dev").locality("city")
 						.state("state").country("country").duration(1234).certificateAuthorityCredential("credential")
@@ -54,7 +53,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "certificate");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "certificate");
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_length").isEqualTo(2048);
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.common_name").isEqualTo("common");
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.alternative_names[0]").isEqualTo("alt1");
@@ -100,13 +99,13 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	@Test
 	public void serializeWithMinimalParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.NO_OVERWRITE)
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.NO_OVERWRITE)
 				.parameters(CertificateParameters.builder().commonName("common")
 						.certificateAuthorityCredential("credential").build());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.NO_OVERWRITE, "/example/credential", "certificate");
+		assertCommonRequestFields(json, WriteMode.NO_OVERWRITE, "/example/credential", "certificate");
 		JsonPathAssert.assertThat(json).hasNoPath("$.parameters.key_length");
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.common_name").isEqualTo("common");
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.ca").isEqualTo("credential");
@@ -126,11 +125,11 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	@Test
 	public void serializeWithNoParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.CONVERGE);
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.CONVERGE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.CONVERGE, "/example/credential", "certificate");
+		assertCommonRequestFields(json, WriteMode.CONVERGE, "/example/credential", "certificate");
 		assertParametersNotSet(json);
 	}
 
@@ -138,7 +137,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithEmptyParameters() {
 		assertThatIllegalArgumentException().isThrownBy(() -> {
 			this.requestBuilder = CertificateParametersRequest.builder()
-					.name(new SimpleCredentialName("example", "credential")).overwrite(true)
+					.name(new SimpleCredentialName("example", "credential"))
 					.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).build());
 
 			toJsonPath(this.requestBuilder);

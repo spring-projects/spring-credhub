@@ -26,8 +26,6 @@ import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialDetailsData;
 import org.springframework.credhub.support.CredentialName;
-import org.springframework.credhub.support.CredentialPath;
-import org.springframework.credhub.support.CredentialPathData;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialSummaryData;
@@ -57,8 +55,6 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 	static final String NAME_LIKE_URL_QUERY = BASE_URL_PATH + "?name-like={name}";
 
 	static final String PATH_URL_QUERY = BASE_URL_PATH + "?path={path}";
-
-	static final String SHOW_ALL_URL_QUERY = BASE_URL_PATH + "?paths=true";
 
 	static final String REGENERATE_URL_PATH = "/api/v1/regenerate";
 
@@ -229,19 +225,6 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 			ExceptionUtils.throwExceptionOnError(response);
 
 			return response.getBody().getCredentials();
-		});
-	}
-
-	@Override
-	@Deprecated
-	public List<CredentialPath> getAllPaths() {
-		return this.credHubOperations.doWithRest((restOperations) -> {
-			ResponseEntity<CredentialPathData> response = restOperations.getForEntity(SHOW_ALL_URL_QUERY,
-					CredentialPathData.class);
-
-			ExceptionUtils.throwExceptionOnError(response);
-
-			return response.getBody().getPaths();
 		});
 	}
 

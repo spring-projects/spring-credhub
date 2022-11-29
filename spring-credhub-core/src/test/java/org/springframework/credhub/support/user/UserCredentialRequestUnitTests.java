@@ -26,20 +26,19 @@ import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 import org.springframework.credhub.support.user.UserCredentialRequest.UserCredentialRequestBuilder;
 
-@SuppressWarnings("deprecation")
 public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
 	public void setUp() {
 		this.requestBuilder = UserCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE).value(new UserCredential("myname", "secret"));
+				.mode(WriteMode.OVERWRITE).value(new UserCredential("myname", "secret"));
 	}
 
 	@Test
 	public void serializeWithUsernameAndPassword() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "user");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "user");
 		JsonPathAssert.assertThat(json).hasPath("$.value.username").isEqualTo("myname");
 		JsonPathAssert.assertThat(json).hasPath("$.value.password").isEqualTo("secret");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.password_hash");
@@ -50,12 +49,12 @@ public class UserCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	@Test
 	public void serializeWithPassword() {
 		UserCredentialRequestBuilder builder = UserCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE)
 				.value(new UserCredential("secret"));
 
 		DocumentContext json = toJsonPath(builder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "user");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "user");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.username");
 		JsonPathAssert.assertThat(json).hasPath("$.value.password").isEqualTo("secret");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.password_hash");

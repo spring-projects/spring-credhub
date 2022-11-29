@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
-import org.springframework.credhub.support.CredentialPath;
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.ParametersRequest;
@@ -121,14 +120,6 @@ public interface CredHubCredentialOperations {
 	 * @return a summary of the credential search results
 	 */
 	List<CredentialSummary> findByPath(String path);
-
-	/**
-	 * Retrieve a collection of all paths that contain credentials.
-	 * @return a collection of paths
-	 * @deprecated as of CredHub 2.0 this operation is not supported
-	 */
-	@Deprecated
-	List<CredentialPath> getAllPaths();
 
 	/**
 	 * Delete a credential by its full name.

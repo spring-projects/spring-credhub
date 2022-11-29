@@ -25,7 +25,6 @@ import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-@SuppressWarnings("deprecation")
 public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
@@ -36,13 +35,13 @@ public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithParameters() {
 		this.requestBuilder = PasswordParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE)
 				.parameters(PasswordParameters.builder().length(20).excludeLower(true).excludeUpper(false)
 						.excludeNumber(true).includeSpecial(false).build());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "password");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "password");
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.length").isEqualTo(20);
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.exclude_lower").isEqualTo(true);
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.exclude_upper").isEqualTo(false);
@@ -53,23 +52,23 @@ public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithEmptyParameters() {
 		this.requestBuilder = PasswordParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.CONVERGE)
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.CONVERGE)
 				.parameters(new PasswordParameters());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.CONVERGE, "/example/credential", "password");
+		assertCommonRequestFields(json, WriteMode.CONVERGE, "/example/credential", "password");
 		assertParametersNotSet(json);
 	}
 
 	@Test
 	public void serializeWithNoParameters() {
 		this.requestBuilder = PasswordParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.NO_OVERWRITE);
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.NO_OVERWRITE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.NO_OVERWRITE, "/example/credential", "password");
+		assertCommonRequestFields(json, WriteMode.NO_OVERWRITE, "/example/credential", "password");
 		assertParametersNotSet(json);
 	}
 

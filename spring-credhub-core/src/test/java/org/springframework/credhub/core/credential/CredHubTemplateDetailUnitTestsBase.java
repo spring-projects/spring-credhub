@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.core.credential;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,18 +66,6 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 				Arguments.of(ResponseEntity.ok().body(
 						new CredentialDetailsData<>(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential)))),
 				Arguments.of(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialDetailsData<>())));
-	}
-
-	static <T> List<ResponseEntity<CredentialDetails<T>>> buildDetailResponses(CredentialType type, T credential) {
-		return Arrays.asList(ResponseEntity.ok().body(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential)),
-				ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialDetails<>()));
-	}
-
-	static <T> List<ResponseEntity<CredentialDetailsData<T>>> buildDataResponses(CredentialType type, T credential) {
-		return Arrays.asList(
-				ResponseEntity.ok().body(
-						new CredentialDetailsData<>(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential))),
-				ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialDetailsData<>()));
 	}
 
 	void verifyWrite(ResponseEntity<CredentialDetails<T>> expectedResponse) {

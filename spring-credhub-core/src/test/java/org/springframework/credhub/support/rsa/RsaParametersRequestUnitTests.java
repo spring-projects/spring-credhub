@@ -26,7 +26,6 @@ import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-@SuppressWarnings("deprecation")
 public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
@@ -37,22 +36,22 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	@Test
 	public void serializeWithParameters() {
 		this.requestBuilder = RsaParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE).parameters(new RsaParameters(KeyLength.LENGTH_4096));
+				.mode(WriteMode.OVERWRITE).parameters(new RsaParameters(KeyLength.LENGTH_4096));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_length").isEqualTo(4096);
 	}
 
 	@Test
 	public void serializeWithNoParameters() {
 		this.requestBuilder = RsaParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE);
+				.mode(WriteMode.OVERWRITE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "rsa");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "rsa");
 		JsonPathAssert.assertThat(json).hasNoPath("$.parameters.key_length");
 	}
 

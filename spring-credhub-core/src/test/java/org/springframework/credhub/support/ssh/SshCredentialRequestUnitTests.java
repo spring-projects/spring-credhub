@@ -38,7 +38,7 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	public void serializeWithPublicAndPrivateKey() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "ssh");
 		JsonPathAssert.assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
 		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
@@ -51,7 +51,7 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "ssh");
 		JsonPathAssert.assertThat(json).hasPath("$.value.public_key").isEqualTo("public-key");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.private_key");
 
@@ -64,7 +64,7 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "ssh");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "ssh");
 		JsonPathAssert.assertThat(json).hasNoPath("$.value.public_key");
 		JsonPathAssert.assertThat(json).hasPath("$.value.private_key").isEqualTo("private-key");
 
@@ -80,10 +80,9 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 		});
 	}
 
-	@SuppressWarnings("deprecation")
 	private void buildRequest(SshCredential value) {
 		this.requestBuilder = SshCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE).value(value);
+				.mode(WriteMode.OVERWRITE).value(value);
 	}
 
 }

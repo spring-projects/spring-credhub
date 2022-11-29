@@ -25,13 +25,12 @@ import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-@SuppressWarnings("deprecation")
 public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
 	public void setUp() {
 		this.requestBuilder = PasswordCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE)
 				.value(new PasswordCredential("secret"));
 	}
 
@@ -39,7 +38,7 @@ public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsB
 	public void serializeWithPasswordValue() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "password");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "password");
 		JsonPathAssert.assertThat(json).hasPath("$.value").isEqualTo("secret");
 
 		assertNoPermissions(json);
@@ -48,12 +47,11 @@ public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithStringValue() {
 		this.requestBuilder = PasswordCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
-				.value("secret");
+				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE).value("secret");
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
-		assertCommonRequestFields(json, true, WriteMode.OVERWRITE, "/example/credential", "password");
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "password");
 		JsonPathAssert.assertThat(json).hasPath("$.value").isEqualTo("secret");
 
 		assertNoPermissions(json);

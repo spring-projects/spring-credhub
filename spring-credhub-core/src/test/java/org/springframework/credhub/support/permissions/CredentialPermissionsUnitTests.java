@@ -33,27 +33,27 @@ public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializePermissions() {
-		// @formatter:off
-		String json = "{\"credential_name\": \"/c/example\"," +
-				"\"permissions\": [" +
-				"    {" +
-				"      \"actor\": \"mtls-app:appid1\"," +
-				"      \"operations\": [" +
-				"        \"read\"," +
-				"        \"write\"," +
-				"        \"delete\"," +
-				"        \"read_acl\"," +
-				"        \"write_acl\"" +
-				"      ]" +
-				"    }," +
-				"    {" +
-				"      \"actor\": \"uaa-user:zone1/userid\"," +
-				"      \"operations\": [" +
-				"        \"read\"" +
-				"      ]" +
-				"    }" +
-				"  ]}";
-		// @formatter:on
+		String json = """
+				{
+					"credential_name": "/c/example",
+					"permissions": [
+					{
+						"actor": "mtls-app:appid1",
+						"operations": [
+							"read",
+							"write",
+							"delete",
+							"read_acl",
+							"write_acl"
+						]
+					},
+					{
+						"actor": "uaa-user:zone1/userid",
+						"operations": [ "read" ]
+					}
+					]
+				}
+				""";
 
 		CredentialPermissions permissions = parsePermissions(json);
 
@@ -80,7 +80,11 @@ public class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithNoPermissions() {
-		String json = "{\"permissions\": []}";
+		String json = """
+				{
+					"permissions": []
+				}
+				""";
 
 		CredentialPermissions permissions = parsePermissions(json);
 

@@ -91,24 +91,20 @@ public class ReactiveInterpolationIntegrationTests extends ReactiveCredHubIntegr
 	}
 
 	private ServicesData buildVcapServices(String credHubReferenceName) throws IOException {
-		// @formatter:off
-		String vcapServices = "{" +
-				"  \"service-offering\": [" +
-				"   {" +
-				"    \"credentials\": {" +
-				"      \"credhub-ref\": \"((" + credHubReferenceName + "))\"" +
-				"    }," +
-				"    \"label\": \"service-offering\"," +
-				"    \"name\": \"service-instance\"," +
-				"    \"plan\": \"standard\"," +
-				"    \"tags\": [" +
-				"     \"cloud-service\"" +
-				"    ]," +
-				"    \"volume_mounts\": []" +
-				"   }" +
-				"  ]" +
-				"}";
-		// @formatter:on
+		String vcapServices = """
+				{
+					"service-offering": [{
+						"credentials": {
+							"credhub-ref": "((%s))"
+						},
+						"label": "service-offering",
+						"name": "service-instance",
+						"plan": "standard",
+						"tags": [ "cloud-service" ],
+						"volume_mounts": []
+					}]
+				}
+				""".formatted(credHubReferenceName);
 
 		ObjectMapper mapper = JsonUtils.buildObjectMapper();
 		return mapper.readValue(vcapServices, ServicesData.class);

@@ -27,14 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
-	// @formatter:off
-	private static final String RSA_CREDENTIALS =
-			"  \"type\": \"rsa\"," +
-			"  \"value\": {" +
-			"  \"private_key\": \"private-key\"," +
-			"  \"public_key\": \"public-key\"" +
-			"  }";
-	// @formatter:on
+	private static final String RSA_CREDENTIALS = """
+			"type": "rsa",
+			"value": {
+				"private_key": "private-key",
+				"public_key": "public-key"
+			}
+			""";
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() {
@@ -45,13 +44,12 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPublicKey() {
-		// @formatter:off
-		final String credentials =
-				"  \"type\": \"rsa\"," +
-				"  \"value\": {" +
-					"  \"public_key\": \"public-key\"" +
-				"  }";
-		// @formatter:on
+		final String credentials = """
+				"type": "rsa",
+				"value": {
+					"public_key": "public-key"
+				}
+				""";
 		CredentialDetails<RsaCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "public-key", null);
@@ -59,13 +57,12 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPrivateKey() {
-		// @formatter:off
-		final String credentials =
-				"  \"type\": \"rsa\"," +
-				"  \"value\": {" +
-					"  \"private_key\": \"private-key\"" +
-				"  }";
-		// @formatter:on
+		final String credentials = """
+				"type": "rsa",
+				"value": {
+					"private_key": "private-key"
+				}
+				""";
 		CredentialDetails<RsaCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "private-key");

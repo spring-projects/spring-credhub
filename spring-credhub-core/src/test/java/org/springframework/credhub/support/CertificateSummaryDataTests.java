@@ -26,20 +26,20 @@ public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithCertificates() {
-		// @formatter:off
-		String json = "{\n" +
-				"  \"certificates\": [\n" +
-				"    {\n" +
-				"      \"id\": \"2993f622-cb1e-4e00-a267-4b23c273bf3d\",\n" +
-				"      \"name\": \"/example-certificate-1\"\n" +
-				"    },\n" +
-				"    {\n" +
-				"      \"id\": \"b40d3d3b-2cf5-4a73-babd-9dceefa9b0db\",\n" +
-				"      \"name\": \"/example-certificate-2\"\n" +
-				"    }\n" +
-				"  ]\n" +
-				"}";
-		// @formatter:on
+		String json = """
+				{
+					"certificates": [
+					{
+						"id": "2993f622-cb1e-4e00-a267-4b23c273bf3d",
+						"name": "/example-certificate-1"
+					},
+					{
+						"id": "b40d3d3b-2cf5-4a73-babd-9dceefa9b0db",
+						"name": "/example-certificate-2"
+					}
+					]
+				}
+				""";
 
 		CertificateSummaryData certificates = parseResponse(json, CertificateSummaryData.class);
 
@@ -52,7 +52,11 @@ public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithNoCertificates() {
-		String json = "{\n" + "  \"certificates\": []\n" + "}";
+		String json = """
+				{
+					"certificates": []
+				}
+				""";
 
 		CertificateSummaryData certificates = parseResponse(json, CertificateSummaryData.class);
 

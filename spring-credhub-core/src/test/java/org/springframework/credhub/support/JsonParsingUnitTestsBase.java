@@ -27,22 +27,22 @@ public abstract class JsonParsingUnitTestsBase {
 
 	static final String TEST_DATE_STRING = "2017-01-31T11:22:33Z";
 
-	// @formatter:off
-	private static final String CREDENTIAL_DETAIL_TEMPLATE =  "{" +
-			"  \"version_created_at\": \"" + TEST_DATE_STRING + "\"," +
-			"  \"id\": \"80cbb13f-7562-4e72-92de-f3ccf69eaa59\"," +
-			"  \"name\": \"/service-broker-name/service-instance-name/binding-id/credentials-json\"," +
-			" %s" +
-			"}";
-	// @formatter:on
+	private static final String CREDENTIAL_DETAIL_TEMPLATE = """
+			{
+				"version_created_at": "%s",
+				"id": "80cbb13f-7562-4e72-92de-f3ccf69eaa59",
+				"name": "/service-broker-name/service-instance-name/binding-id/credentials-json",
+				%s
+			}
+			""".formatted(TEST_DATE_STRING, "%s");
 
-	// @formatter:off
-	private static final String CREDENTIAL_DETAILS_DATA_TEMPLATE = "{" +
-			"  \"data\": [" +
-			CREDENTIAL_DETAIL_TEMPLATE +
-			"  ]" +
-			"}";
-	// @formatter:on
+	private static final String CREDENTIAL_DETAILS_DATA_TEMPLATE = """
+			{
+				"data": [
+					%s
+				]
+			}
+			""".formatted(CREDENTIAL_DETAIL_TEMPLATE);
 
 	Date testDate;
 

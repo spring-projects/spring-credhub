@@ -27,15 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
-	// @formatter:off
-	private static final String JSON_CREDENTIALS =
-			"  \"type\": \"json\"," +
-			"  \"value\": {" +
-			"    \"client_id\": \"test-id\"," +
-			"    \"client_secret\": \"test-secret\"," +
-			"    \"uri\": \"https://example.com\"" +
-			"  }";
-	// @formatter:on
+	private static final String JSON_CREDENTIALS = """
+			"type": "json",
+			"value": {
+				"client_id": "test-id",
+				"client_secret": "test-secret",
+				"uri": "https://example.com"
+			}
+			""";
 
 	@Test
 	public void deserializeDetails() {

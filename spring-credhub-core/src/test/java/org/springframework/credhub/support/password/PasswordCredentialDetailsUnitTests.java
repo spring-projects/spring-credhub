@@ -27,7 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
-	private static final String PASSWORD_CREDENTIALS = "  \"type\": \"password\"," + "  \"value\": \"secret\"";
+	private static final String PASSWORD_CREDENTIALS = """
+			"type": "password",
+			"value": "secret"
+			""";
 
 	@Test
 	public void deserializeDetails() {

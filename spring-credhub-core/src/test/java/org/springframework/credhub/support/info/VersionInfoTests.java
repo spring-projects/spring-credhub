@@ -26,7 +26,11 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithV1() {
-		String json = "{\n" + "  \"version\": \"1.9.0\"\n" + "}";
+		String json = """
+				{
+					"version": "1.9.0"
+				}
+				""";
 
 		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
 
@@ -39,7 +43,11 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithV2_0() {
-		String json = "{\n" + "  \"version\": \"2.0.2\"\n" + "}";
+		String json = """
+				{
+					"version": "2.0.2"
+				}
+				""";
 
 		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
 
@@ -52,7 +60,10 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeWithV2_1() {
-		String json = "{\n" + "  \"version\": \"2.1.2\"\n" + "}";
+		String json = """
+				{
+					"version": "2.1.2"
+				}""";
 
 		VersionInfo versionInfo = parseResponse(json, VersionInfo.class);
 

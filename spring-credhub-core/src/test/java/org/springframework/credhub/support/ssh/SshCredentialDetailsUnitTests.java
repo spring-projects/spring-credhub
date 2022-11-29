@@ -27,15 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
-	// @formatter:off
-	private static final String SSH_CREDENTIALS =
-			"  \"type\": \"ssh\"," +
-			"  \"value\": {" +
-				"  \"private_key\": \"private-key\"," +
-				"  \"public_key\": \"public-key\"," +
-				"  \"public_key_fingerprint\": \"fingerprint\"" +
-			"  }";
-	// @formatter:on
+	private static final String SSH_CREDENTIALS = """
+			"type": "ssh",
+			"value": {
+				"private_key": "private-key",
+				"public_key": "public-key",
+				"public_key_fingerprint": "fingerprint"
+			}
+			""";
 
 	@Test
 	public void deserializeDetailsWithPublicAndPrivateKeys() {
@@ -46,13 +45,12 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPublicKey() {
-		// @formatter:off
-		final String credentials =
-				"  \"type\": \"ssh\"," +
-				"  \"value\": {" +
-					"  \"public_key\": \"public-key\"" +
-				"  }";
-		// @formatter:on
+		final String credentials = """
+				"type": "ssh",
+				"value": {
+					"public_key": "public-key"
+				}
+				""";
 		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "public-key", null, null);
@@ -60,13 +58,12 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializeDetailsWithPrivateKey() {
-		// @formatter:off
-		final String credentials =
-				"  \"type\": \"ssh\"," +
-				"  \"value\": {" +
-					"  \"private_key\": \"private-key\"" +
-				"  }";
-		// @formatter:on
+		final String credentials = """
+				"type": "ssh",
+				"value": {
+					"private_key": "private-key"
+				}
+				""";
 		CredentialDetails<SshCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "private-key", null);

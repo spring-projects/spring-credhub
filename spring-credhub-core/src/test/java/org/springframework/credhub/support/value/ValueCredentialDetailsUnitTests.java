@@ -27,11 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValueCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
-	// @formatter:off
-	private static final String VALUE_CREDENTIALS =
-			"  \"type\": \"value\"," +
-			"  \"value\": \"somevalue\"";
-	// @formatter:on
+	private static final String VALUE_CREDENTIALS = """
+			"type": "value",
+			"value": "somevalue"
+			""";
 
 	@Test
 	public void deserializeDetails() {

@@ -26,24 +26,24 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializationWithCredentials() {
-		// @formatter:off
-		String json = "{\n" +
-				"  \"credentials\": [\n" +
-				"    {\n" +
-				"      \"name\": \"/deploy123/example1\",\n" +
-				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
-				"    },\n" +
-				"    {\n" +
-				"      \"name\": \"/deploy123/example2\",\n" +
-				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
-				"    },\n" +
-				"    {\n" +
-				"      \"name\": \"/deploy123/example3\",\n" +
-				"      \"version_created_at\": \"" + TEST_DATE_STRING + "\"\n" +
-				"    }\n" +
-				"  ]\n" +
-				"}";
-		// @formatter:on
+		String json = """
+				{
+					"credentials": [
+					{
+						"name": "/deploy123/example1",
+						"version_created_at": "%s"
+					},
+					{
+						"name": "/deploy123/example2",
+						"version_created_at": "%s"
+					},
+					{
+						"name": "/deploy123/example3",
+						"version_created_at": "%s"
+					}
+					]
+				}
+				""".formatted(TEST_DATE_STRING, TEST_DATE_STRING, TEST_DATE_STRING);
 
 		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 
@@ -56,13 +56,17 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(credentials.get(2).getName().getName()).isEqualTo("/deploy123/example3");
 
 		for (CredentialSummary credential : credentials) {
-			assertThat(credential.getVersionCreatedAt()).isEqualTo(testDate);
+			assertThat(credential.getVersionCreatedAt()).isEqualTo(this.testDate);
 		}
 	}
 
 	@Test
 	public void deserializationWithEmptyCredentials() {
-		String json = "{\n" + "  \"credentials\": [\n" + "  ]\n" + "}";
+		String json = """
+				{
+					"credentials": []
+				}
+				""";
 
 		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 

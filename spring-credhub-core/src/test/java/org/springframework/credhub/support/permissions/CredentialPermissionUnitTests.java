@@ -33,14 +33,14 @@ public class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
 	public void deserializePermission() {
-		// @formatter:off
-		String json = "{" +
-				"\"uuid\": \"uuid\",\n" +
-				"\"path\": \"/example-directory/example-specific-credential\",\n" +
-				"\"actor\": \"uaa-user:106f52e2-5d01-4675-8d7a-c05ff9a2c081\",\n" +
-				"\"operations\": [\"read\",\"write\"]" +
-				"}";
-		// @formatter:on
+		String json = """
+				{
+					"uuid": "uuid",
+					"path": "/example-directory/example-specific-credential",
+					"actor": "uaa-user:106f52e2-5d01-4675-8d7a-c05ff9a2c081",
+					"operations": ["read","write"]
+				}
+				""";
 
 		CredentialPermission credentialPermission = parsePermission(json);
 

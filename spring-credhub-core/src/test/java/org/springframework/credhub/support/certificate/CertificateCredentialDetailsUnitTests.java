@@ -27,15 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
-	// @formatter:off
-	private static final String CERT_CREDENTIALS =
-			"  \"type\": \"certificate\"," +
-			"  \"value\": {" +
-			"  \"certificate\": \"cert\"," +
-			"  \"ca\": \"authority\"," +
-			"  \"private_key\": \"private-key\"" +
-			"  }";
-	// @formatter:on
+	private static final String CERT_CREDENTIALS = """
+			"type": "certificate",
+			"value": {
+				"certificate": "cert",
+				"ca": "authority",
+				"private_key": "private-key"
+			}
+			""";
 
 	@Test
 	public void deserializeDetailsWithAllValues() {
@@ -46,13 +45,12 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 
 	@Test
 	public void deserializeDetailsCertOnly() {
-		// @formatter:off
-		final String credentials =
-				"  \"type\": \"certificate\"," +
-				"  \"value\": {" +
-				"  \"certificate\": \"cert\"" +
-				"  }";
-		// @formatter:on
+		final String credentials = """
+				"type": "certificate",
+				"value": {
+					"certificate": "cert"
+				}
+				""";
 		CredentialDetails<CertificateCredential> data = parseDetails(credentials);
 
 		assertDetails(data, "cert", null, null);
@@ -60,14 +58,13 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 
 	@Test
 	public void deserializeDetailsWithNoCert() {
-		// @formatter:off
-		final String credentials =
-				"  \"type\": \"certificate\"," +
-				"  \"value\": {" +
-				"  \"ca\": \"authority\"," +
-				"  \"private_key\": \"private-key\"" +
-				"  }";
-		// @formatter:on
+		final String credentials = """
+				"type": "certificate",
+				"value": {
+					"ca": "authority",
+					"private_key": "private-key"
+				}
+				""";
 		CredentialDetails<CertificateCredential> data = parseDetails(credentials);
 
 		assertDetails(data, null, "authority", "private-key");

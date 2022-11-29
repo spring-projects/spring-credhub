@@ -35,17 +35,14 @@ ext {
 configure(allprojects) {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
-
-	group = 'org.springframework.credhub'
-}
-
-configure(allprojects) {
 	apply plugin: 'checkstyle'
 	apply plugin: 'io.spring.nohttp'
 	apply plugin: 'io.spring.javaformat'
 
+	group = 'org.springframework.credhub'
+
 	checkstyle {
-		toolVersion = "8.45.1"
+		toolVersion = "9.3"
 		configDirectory.set(rootProject.file("src/checkstyle"))
 	}
 
@@ -93,6 +90,7 @@ configure(publishedProjects) {
 subprojects {
 	tasks.withType(JavaCompile) {
 		options.encoding = 'UTF-8'
+		options.compilerArgs.addAll(["-Werror", "-Xlint:unchecked", "-Xlint:deprecation"])
 	}
 
 	java {

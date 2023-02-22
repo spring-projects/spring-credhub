@@ -82,7 +82,7 @@ configure(allprojects) {
 	}
 	
 	dependencies {
-		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.35")
+		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.38")
 	}
 }
 

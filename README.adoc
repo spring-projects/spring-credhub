@@ -12,14 +12,32 @@ A simple application that demonstrates the use of Spring CredHub is available in
 
 == Building
 
-=== Basic Compile and Test
+=== Basic Compile and Unit Tests
 
 To build the source you will need to install JDK 17.
 
-Spring CredHub uses Gradle for most build-related activities, and you should be able to get off the ground quite quickly by cloning the project you are interested in and typing
+Spring CredHub uses Gradle for most build-related activities, and you should be able to get off the ground quite quickly by cloning the project you are interested in and typing:
 
+[source,bash]
 ----
-$ ./gradlew build
+./gradlew build
+----
+
+=== Integration Tests
+
+Spring CredHub integration tests need a CredHub server.
+
+Refer to link:credhub-server/README.adoc[credhub-server] for information on how to start it up.
+
+Once running they can be executed with:
+
+[source,bash]
+----
+./gradlew :spring-credhub-integration-tests:test -PintegrationTests
+----
+[source,bash]
+----
+./gradlew :spring-credhub-reactive-integration-tests:test -PintegrationTests
 ----
 
 === Working with the code

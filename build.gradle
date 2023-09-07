@@ -149,8 +149,39 @@ subprojects {
 		testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 	}
 
-	test {
-		useJUnitPlatform()
+	tasks.withType(Test).forEach { Test task ->
+		task.with {
+			// enable JUnit 5
+			useJUnitPlatform()
+			scanForTestClasses = true
+			group = "verification"
+
+			testLogging {
+				exceptionFormat = "full"
+				events = ["passed", "skipped", "failed"]
+			}
+
+			// print failed tests after the execution
+			def failedTests = []
+			afterTest { test, result ->
+				if (result.resultType == TestResult.ResultType.FAILURE) {
+					failedTests << test
+				}
+			}
+
+			// create a summary after the execution
+			afterSuite { desc, result ->
+				if (!desc.parent) {
+					println "\nTest result: ${result.resultType}"
+					println "Test summary: ${result.testCount} tests, " +
+							"${result.successfulTestCount} succeeded, " +
+							"${result.failedTestCount} failed, " +
+							"${result.skippedTestCount} skipped"
+
+					failedTests.each { test -> println "FAILED test: ${test.className} > ${test.name}" }
+				}
+			}
+		}
 	}
 }
 

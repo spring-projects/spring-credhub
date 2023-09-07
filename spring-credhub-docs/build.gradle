@@ -28,7 +28,7 @@ dependencyManagement {
 description = "Spring CredHub Documentation"
 
 configurations {
-	docs
+	asciidoctorExtensions
 }
 
 dependencies {
@@ -36,12 +36,11 @@ dependencies {
 	compile("io.projectreactor:reactor-core")
 	compile("org.springframework.boot:spring-boot-autoconfigure")
 
-	docs("io.spring.docresources:spring-doc-resources:0.2.5@zip")
+	asciidoctorExtensions "io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.7"
 }
 
 task prepareAsciidocBuild(type: Sync) {
-	dependsOn configurations.docs
-	// copy doc resources
+	// Copy doc sources
 	from {
 		configurations.docs.collect { zipTree(it) }
 	}
@@ -53,6 +52,10 @@ task prepareAsciidocBuild(type: Sync) {
 
 asciidoctor {
 	baseDirFollowsSourceFile()
+	configurations "asciidoctorExtensions"
+	outputOptions {
+		backends "spring-html"
+	}
 	sourceDir = file("$buildDir/asciidoc")
 	sources {
 		include '*.adoc'
@@ -63,16 +66,14 @@ asciidoctor {
 		}
 	}
 	logDocuments = true
-//	backends = ["html5"]
 	options doctype: 'book', eruby: 'erubis'
-	attributes  'icons': 'font',
+	attributes 'revnumber': project.version,
+			'spring-version': project.version,
+			'branch-or-tag': project.version.endsWith('SNAPSHOT') ? 'main' : "v${project.version}",
+			'icons': 'font',
 			'idprefix': '',
 			'idseparator': '-',
 			docinfo: 'shared',
-			revnumber: project.version,
-			'spring-version': "${springVersion}",
-			'spring-security-version': "${springSecurityVersion}",
-			'branch-or-tag': project.version.endsWith('SNAPSHOT') ? 'main' : "v${project.version}",
 			sectanchors: '',
 			sectnums: '',
 			stylesdir: "css/",
@@ -82,9 +83,8 @@ asciidoctor {
 			'allow-uri-read': '',
 			'source-highlighter': 'highlight.js',
 			'highlightjsdir': 'js/highlight',
-			'highlightjs-theme': 'github'
+			'highlightjs-theme': 'github',
+			'project-version': project.version
 }
-
-asciidoctor.dependsOn prepareAsciidocBuild
 
 configurations.archives.artifacts.clear()

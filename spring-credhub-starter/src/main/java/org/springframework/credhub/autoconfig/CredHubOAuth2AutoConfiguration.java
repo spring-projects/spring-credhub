@@ -26,7 +26,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
 import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -73,8 +73,9 @@ public class CredHubOAuth2AutoConfiguration {
 	@ConditionalOnMissingBean
 	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	public ClientRegistrationRepository credHubClientRegistrationRepository() {
+
 		List<ClientRegistration> registrations = new ArrayList<>(
-				OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(this.properties).values());
+				new OAuth2ClientPropertiesMapper(this.properties).asClientRegistrations().values());
 		return new InMemoryClientRegistrationRepository(registrations);
 	}
 
@@ -104,7 +105,7 @@ public class CredHubOAuth2AutoConfiguration {
 	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
 	public ReactiveClientRegistrationRepository credHubReactiveClientRegistrationRepository() {
 		List<ClientRegistration> registrations = new ArrayList<>(
-				OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(this.properties).values());
+				new OAuth2ClientPropertiesMapper(this.properties).asClientRegistrations().values());
 		return new InMemoryReactiveClientRegistrationRepository(registrations);
 	}
 

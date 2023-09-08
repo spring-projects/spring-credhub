@@ -48,6 +48,7 @@ task prepareAsciidocBuild(type: Sync) {
 }
 
 asciidoctor {
+	dependsOn prepareAsciidocBuild
 	baseDirFollowsSourceFile()
 	configurations "asciidoctorExtensions"
 	outputOptions {

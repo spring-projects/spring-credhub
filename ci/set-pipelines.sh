@@ -22,26 +22,34 @@ readonly FLY_TARGET="spring-credhub"
 readonly GITHUB_REPO="https://github.com/spring-projects/spring-credhub"
 
 set_pipeline() {
-	local pipeline_name pipeline_definition branch ci_image_tag
+	local pipeline_name pipeline_definition branch version
 	pipeline_name="${1:?pipeline name must be provided}"
 	pipeline_definition="${2:?pipeline definition file must be provided}"
 	branch="${3:?branch must be provided}"
-	ci_image_tag="${4:-$branch}"
+	version="${4:?version must be provided}"
+  pipeline_full_name="${pipeline_name}-${version}"
 
-	echo "Setting $pipeline_name pipeline..."
+	echo "Setting $pipeline_full_name pipeline..."
 	fly --target "$FLY_TARGET" set-pipeline \
-		--pipeline "$pipeline_name" \
+		--pipeline "$pipeline_full_name" \
 		--config "$pipeline_definition" \
 		--load-vars-from config-concourse.yml \
 		--var "github-repo=$GITHUB_REPO" \
 		--var "branch=$branch" \
-		--var "ci-image-tag=$ci_image_tag"
+		--var "ci-image-tag=$version"
 }
 
 set_pipelines() {
 	fly -t "$FLY_TARGET" sync
+  set_pipeline spring-credhub pipeline.yml main 3.1.x
+  set_pipeline spring-credhub pipeline.yml 3.0.x 3.0.x
+  set_pipeline spring-credhub pipeline.yml 2.3.x 2.3.x
+  set_pipeline spring-credhub pipeline.yml 2.2.x 2.2.x
 
-	set_pipeline spring-credhub-3.1.x pipeline.yml main spring-credhub-ci
+  set_pipeline spring-credhub-pr pr-pipeline.yml main 3.1.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 3.0.x 3.0.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 2.3.x 2.3.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 2.2.x 2.2.x
 }
 
 set_pipelines

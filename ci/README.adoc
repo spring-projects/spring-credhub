@@ -4,7 +4,7 @@ Set up the Concourse target and login:
 
 [source]
 ----
-$ fly -t spring-credhub login -n spring-credhub -c https://runway-ci.eng.vmware.com 
+$ fly -t spring-credhub login -n spring-credhub -c https://runway-ci-sfo.eng.vmware.com
 ----
 
 Deploy the pipelines

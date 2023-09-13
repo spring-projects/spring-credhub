@@ -2,17 +2,31 @@
 
 set -euo pipefail
 
-readonly SKIP_TESTS="${SKIP_TESTS:-false}"
-
 # shellcheck source=common.sh
 source "$(dirname "$0")/common.sh"
 repository=$(pwd)/distribution-repository
-if [ "$SKIP_TESTS" == "true" ]; then
-	build_task=assemble
-else
-	build_task=build
-fi
 
-pushd git-repo >/dev/null
-./gradlew clean "${build_task}" publish -PpublicationRepository="${repository}"
-popd >/dev/null
+start_docker() {
+  pushd credhub-server >/dev/null
+    service cgroupfs-mount start
+    service docker start
+    docker-compose up --detach
+    trap "stop_docker" EXIT
+  popd >/dev/null
+}
+
+stop_docker() {
+  pushd credhub-server >/dev/null
+    docker-compose stop
+    service cgroupfs-mount stop
+    service docker stop
+  popd >/dev/null
+}
+
+main() {
+  cd git-repo >/dev/null
+  start_docker
+  ./gradlew clean build publish -PpublicationRepository="${repository}" -PintegrationTests --no-parallel
+}
+
+main

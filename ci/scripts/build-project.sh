@@ -26,7 +26,7 @@ stop_docker() {
 main() {
   cd git-repo >/dev/null
   start_docker
-  ./gradlew clean build publish -PpublicationRepository="${repository}" -PintegrationTests --no-parallel
+  ./gradlew build publish -PpublicationRepository="${repository}" -PintegrationTests --no-parallel
 }
 
 main

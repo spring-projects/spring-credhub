@@ -13,7 +13,7 @@ $ docker-compose up
 After both servers have started successfully, UAA will be available at `http://localhost:8080/uaa` and CredHub will be available at `https://localhost:9000`.
 
 
-To generate the test jwt signing keys, ensure the `openssl` and https://carvel.dev/ytt/[`ytt`] tools are installed, the run the setup script:
+To generate the test jwt signing keys, ensure the `openssl` and https://carvel.dev/ytt/[`ytt`] tools are installed, then run the setup script:
 
 [source,bash]
 ----

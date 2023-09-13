@@ -22,12 +22,12 @@ readonly FLY_TARGET="spring-credhub"
 readonly GITHUB_REPO="https://github.com/spring-projects/spring-credhub"
 
 set_pipeline() {
-	local pipeline_name pipeline_definition branch version
+	local pipeline_name pipeline_definition branch release_series pipeline_full_name
 	pipeline_name="${1:?pipeline name must be provided}"
 	pipeline_definition="${2:?pipeline definition file must be provided}"
 	branch="${3:?branch must be provided}"
-	version="${4:?version must be provided}"
-  pipeline_full_name="${pipeline_name}-${version}"
+	release_series="${4:?release_series must be provided}"
+	pipeline_full_name="${pipeline_name}-${release_series}"
 
 	echo "Setting $pipeline_full_name pipeline..."
 	fly --target "$FLY_TARGET" set-pipeline \
@@ -36,7 +36,7 @@ set_pipeline() {
 		--load-vars-from config-concourse.yml \
 		--var "github-repo=$GITHUB_REPO" \
 		--var "branch=$branch" \
-		--var "ci-image-tag=$version"
+		--var "ci-image-tag=$release_series"
 }
 
 set_pipelines() {

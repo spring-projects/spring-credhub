@@ -57,8 +57,11 @@ public class CredHubInterpolationTemplateUnitTests {
 	@Test
 	public void interpolateServiceData() throws IOException {
 		ServiceInstanceCredentialName credentialName = ServiceInstanceCredentialName.builder()
-				.serviceBrokerName("service-broker").serviceOfferingName("service-offering")
-				.serviceBindingId("1111-1111-1111-111").credentialName("credential_json").build();
+			.serviceBrokerName("service-broker")
+			.serviceOfferingName("service-offering")
+			.serviceBindingId("1111-1111-1111-111")
+			.credentialName("credential_json")
+			.build();
 
 		ServicesData vcapServices = buildVcapServices(credentialName.getName());
 
@@ -66,7 +69,7 @@ public class CredHubInterpolationTemplateUnitTests {
 
 		given(this.restTemplate.exchange(CredHubInterpolationTemplate.INTERPOLATE_URL_PATH, HttpMethod.POST,
 				new HttpEntity<>(vcapServices), ServicesData.class))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		ServicesData response = this.credHubTemplate.interpolateServiceData(vcapServices);
 

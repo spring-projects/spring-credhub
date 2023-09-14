@@ -41,8 +41,10 @@ public class CredHubTemplateDetailCertificateUnitTests
 	private static final CertificateCredential CREDENTIAL = new CertificateCredential("certificate", "authority",
 			"private-key");
 
-	private static final CertificateParameters PARAMETERS = CertificateParameters.builder().commonName("common")
-			.certificateAuthorityCredential("credential").build();
+	private static final CertificateParameters PARAMETERS = CertificateParameters.builder()
+		.commonName("common")
+		.certificateAuthorityCredential("credential")
+		.build();
 
 	@Override
 	public CredentialRequest<CertificateCredential> getWriteRequest() {

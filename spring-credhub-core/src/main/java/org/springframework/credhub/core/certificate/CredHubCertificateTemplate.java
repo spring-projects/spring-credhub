@@ -127,7 +127,7 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 			request.put(SIGNED_BY_REQUEST_FIELD, certificateName.getName());
 
 			ResponseEntity<Map<String, List<CredentialName>>> response = restOperations
-					.exchange(BULK_REGENERATE_URL_PATH, HttpMethod.POST, new HttpEntity<>(request), ref);
+				.exchange(BULK_REGENERATE_URL_PATH, HttpMethod.POST, new HttpEntity<>(request), ref);
 
 			ExceptionUtils.throwExceptionOnError(response);
 
@@ -146,7 +146,7 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 			request.put(VERSION_REQUEST_FIELD, versionId);
 
 			ResponseEntity<List<CertificateCredentialDetails>> response = restOperations
-					.exchange(UPDATE_TRANSITIONAL_URL_PATH, HttpMethod.PUT, new HttpEntity<Object>(request), ref, id);
+				.exchange(UPDATE_TRANSITIONAL_URL_PATH, HttpMethod.PUT, new HttpEntity<Object>(request), ref, id);
 
 			ExceptionUtils.throwExceptionOnError(response);
 

@@ -63,7 +63,7 @@ public class CredHubPermissionV2TemplateUnitTests {
 
 		given(this.restTemplate.getForEntity(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH,
 				CredentialPermission.class, permissionId))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		CredentialPermission response = this.credHubTemplate.getPermissions(permissionId);
 
@@ -83,7 +83,7 @@ public class CredHubPermissionV2TemplateUnitTests {
 		String actor = ActorType.OAUTH_CLIENT + ":" + clientId;
 		given(this.restTemplate.getForEntity(CredHubPermissionV2Template.PERMISSIONS_PATH_ACTOR_URL_QUERY,
 				CredentialPermission.class, PATH.getName(), actor))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		CredentialPermission response = this.credHubTemplate.getPermissionsByPathAndActor(PATH, Actor.client(clientId));
 
@@ -96,14 +96,17 @@ public class CredHubPermissionV2TemplateUnitTests {
 
 	@Test
 	public void addPermissions() {
-		Permission permission = Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE)
-				.build();
+		Permission permission = Permission.builder()
+			.app("app-id")
+			.operation(Operation.READ)
+			.operation(Operation.WRITE)
+			.build();
 
 		CredentialPermission expectedResponse = new CredentialPermission(PATH, permission);
 
 		given(this.restTemplate.exchange(CredHubPermissionV2Template.PERMISSIONS_URL_PATH, HttpMethod.POST,
 				new HttpEntity<>(expectedResponse), CredentialPermission.class))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		CredentialPermission response = this.credHubTemplate.addPermissions(PATH, permission);
 
@@ -117,14 +120,17 @@ public class CredHubPermissionV2TemplateUnitTests {
 	public void updatePermissions() {
 		String permissionId = "uuid";
 
-		Permission permission = Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE)
-				.build();
+		Permission permission = Permission.builder()
+			.app("app-id")
+			.operation(Operation.READ)
+			.operation(Operation.WRITE)
+			.build();
 
 		CredentialPermission expectedResponse = new CredentialPermission(PATH, permission);
 
 		given(this.restTemplate.exchange(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH, HttpMethod.PUT,
 				new HttpEntity<>(expectedResponse), CredentialPermission.class, permissionId))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		CredentialPermission response = this.credHubTemplate.updatePermissions(permissionId, PATH, permission);
 

@@ -44,10 +44,10 @@ public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 		CertificateSummaryData certificates = parseResponse(json, CertificateSummaryData.class);
 
 		assertThat(certificates.getCertificates().size()).isEqualTo(2);
-		assertThat(certificates.getCertificates()).extracting("id").contains("2993f622-cb1e-4e00-a267-4b23c273bf3d",
-				"b40d3d3b-2cf5-4a73-babd-9dceefa9b0db");
-		assertThat(certificates.getCertificates()).extracting("name").contains("/example-certificate-1",
-				"/example-certificate-2");
+		assertThat(certificates.getCertificates()).extracting("id")
+			.contains("2993f622-cb1e-4e00-a267-4b23c273bf3d", "b40d3d3b-2cf5-4a73-babd-9dceefa9b0db");
+		assertThat(certificates.getCertificates()).extracting("name")
+			.contains("/example-certificate-1", "/example-certificate-2");
 	}
 
 	@Test

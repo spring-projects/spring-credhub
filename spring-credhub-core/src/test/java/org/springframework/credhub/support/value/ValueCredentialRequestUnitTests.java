@@ -28,8 +28,9 @@ public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase
 
 	@BeforeEach
 	public void setUp() {
-		this.requestBuilder = ValueCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.value(new ValueCredential("somevalue"));
+		this.requestBuilder = ValueCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.value(new ValueCredential("somevalue"));
 	}
 
 	@Test
@@ -45,8 +46,9 @@ public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase
 
 	@Test
 	public void serializeWithStringValue() {
-		this.requestBuilder = ValueCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.value("somevalue");
+		this.requestBuilder = ValueCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.value("somevalue");
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 

@@ -56,8 +56,10 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 	public Mono<CredentialPermission> getPermissions(final String id) {
 		Assert.notNull(id, "credential ID must not be null");
 
-		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get().uri(PERMISSIONS_ID_URL_PATH, id)
-				.retrieve().bodyToMono(CredentialPermission.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
+			.uri(PERMISSIONS_ID_URL_PATH, id)
+			.retrieve()
+			.bodyToMono(CredentialPermission.class));
 	}
 
 	@Override
@@ -67,9 +69,12 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
-		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post().uri(PERMISSIONS_URL_PATH)
-				.bodyValue(credentialPermission).retrieve()
-				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
+			.uri(PERMISSIONS_URL_PATH)
+			.bodyValue(credentialPermission)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(CredentialPermission.class));
 	}
 
 	@Override
@@ -78,8 +83,10 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		Assert.notNull(actor, "credential actor must not be null");
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
-				.uri(PERMISSIONS_PATH_ACTOR_URL_QUERY, path.getName(), actor.getIdentity()).retrieve()
-				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
+			.uri(PERMISSIONS_PATH_ACTOR_URL_QUERY, path.getName(), actor.getIdentity())
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(CredentialPermission.class));
 	}
 
 	@Override
@@ -91,17 +98,23 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 
 		final CredentialPermission credentialPermission = new CredentialPermission(path, permission);
 
-		return this.credHubOperations.doWithWebClient((webClient) -> webClient.put().uri(PERMISSIONS_ID_URL_PATH, id)
-				.bodyValue(credentialPermission).retrieve()
-				.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermission.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.put()
+			.uri(PERMISSIONS_ID_URL_PATH, id)
+			.bodyValue(credentialPermission)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(CredentialPermission.class));
 	}
 
 	@Override
 	public Mono<Void> deletePermission(final String id) {
 		Assert.notNull(id, "credential ID must not be null");
 
-		return this.credHubOperations.doWithWebClient((webClient) -> webClient.delete().uri(PERMISSIONS_ID_URL_PATH, id)
-				.retrieve().onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.delete()
+			.uri(PERMISSIONS_ID_URL_PATH, id)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(Void.class));
 	}
 
 }

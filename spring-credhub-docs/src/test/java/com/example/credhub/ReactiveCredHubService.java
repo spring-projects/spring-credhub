@@ -39,18 +39,24 @@ public class ReactiveCredHubService {
 	}
 
 	public Mono<String> generatePassword() {
-		PasswordParameters parameters = PasswordParameters.builder().length(12).excludeLower(false).excludeUpper(false)
-				.excludeNumber(false).includeSpecial(true).build();
+		PasswordParameters parameters = PasswordParameters.builder()
+			.length(12)
+			.excludeLower(false)
+			.excludeUpper(false)
+			.excludeNumber(false)
+			.includeSpecial(true)
+			.build();
 
 		return this.credHubOperations.credentials()
-				.generate(PasswordParametersRequest.builder().name(this.credentialName).parameters(parameters).build(),
-						PasswordCredential.class)
-				.map((password) -> password.getValue().getPassword());
+			.generate(PasswordParametersRequest.builder().name(this.credentialName).parameters(parameters).build(),
+					PasswordCredential.class)
+			.map((password) -> password.getValue().getPassword());
 	}
 
 	public Mono<String> getPassword() {
-		return this.credHubOperations.credentials().getByName(this.credentialName, PasswordCredential.class)
-				.map((password) -> password.getValue().getPassword());
+		return this.credHubOperations.credentials()
+			.getByName(this.credentialName, PasswordCredential.class)
+			.map((password) -> password.getValue().getPassword());
 	}
 
 }

@@ -68,26 +68,29 @@ public class ReactiveInterpolationIntegrationTests extends ReactiveCredHubIntegr
 		};
 
 		StepVerifier
-				.create(this.credentials
-						.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(json).build()))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue()).isEqualTo(json);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.JSON);
-					assertThat(response.getId()).isNotNull();
-				}).verifyComplete();
+			.create(this.credentials.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(json).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue()).isEqualTo(json);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.JSON);
+				assertThat(response.getId()).isNotNull();
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.interpolation.interpolateServiceData(buildVcapServices(CREDENTIAL_NAME.getName())))
-				.assertNext((servicesData) -> {
-					assertThat(servicesData).containsKey("service-offering");
-					assertThat(servicesData.get("service-offering")).hasSize(1);
-					assertThat(servicesData.get("service-offering").get(0)).containsKey("credentials");
+			.assertNext((servicesData) -> {
+				assertThat(servicesData).containsKey("service-offering");
+				assertThat(servicesData.get("service-offering")).hasSize(1);
+				assertThat(servicesData.get("service-offering").get(0)).containsKey("credentials");
 
-					Map<String, Object> credentials = (Map<String, Object>) servicesData.get("service-offering").get(0)
-							.get("credentials");
-					assertThat(credentials).containsEntry("url", "https://example.com")
-							.containsEntry("username", "user").containsEntry("password", "secret");
-				}).verifyComplete();
+				Map<String, Object> credentials = (Map<String, Object>) servicesData.get("service-offering")
+					.get(0)
+					.get("credentials");
+				assertThat(credentials).containsEntry("url", "https://example.com")
+					.containsEntry("username", "user")
+					.containsEntry("password", "secret");
+			})
+			.verifyComplete();
 	}
 
 	private ServicesData buildVcapServices(String credHubReferenceName) throws IOException {

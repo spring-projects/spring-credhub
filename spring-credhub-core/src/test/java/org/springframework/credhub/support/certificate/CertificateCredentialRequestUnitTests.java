@@ -85,8 +85,10 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	@SuppressWarnings("deprecation")
 	private void buildRequest(CertificateCredential value) {
 		this.requestBuilder = CertificateCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
-				.value(value);
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.value(value);
 	}
 
 }

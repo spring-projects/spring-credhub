@@ -82,8 +82,10 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	private void buildRequest(RsaCredential value) {
-		this.requestBuilder = RsaCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.mode(WriteMode.OVERWRITE).value(value);
+		this.requestBuilder = RsaCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.OVERWRITE)
+			.value(value);
 	}
 
 }

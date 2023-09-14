@@ -51,8 +51,12 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	public void setUp() {
 		this.credentials = this.operations.credentials();
 
-		this.passwordParameters = PasswordParameters.builder().length(12).excludeLower(false).excludeUpper(false)
-				.excludeNumber(false).includeSpecial(true);
+		this.passwordParameters = PasswordParameters.builder()
+			.length(12)
+			.excludeLower(false)
+			.excludeUpper(false)
+			.excludeNumber(false)
+			.includeSpecial(true);
 
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
@@ -68,7 +72,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	public void writeCredential() {
 		CredentialDetails<ValueCredential> written = this.credentials
-				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
+			.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(written.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
 		assertThat(written.getCredentialType()).isEqualTo(CredentialType.VALUE);
@@ -96,14 +100,14 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	public void overwriteCredential() {
 		CredentialDetails<ValueCredential> written = this.credentials
-				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
+			.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(written.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
 		assertThat(written.getCredentialType()).isEqualTo(CredentialType.VALUE);
 		assertThat(written.getId()).isNotNull();
 
 		CredentialDetails<ValueCredential> overwritten = this.credentials
-				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value("new-value").build());
+			.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value("new-value").build());
 		assertThat(overwritten.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(overwritten.getValue().getValue()).isEqualTo("new-value");
 
@@ -130,7 +134,10 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	public void generateCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
-				.name(CREDENTIAL_NAME).username("test-user").parameters(this.passwordParameters.build()).build());
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build());
 		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(generated.getCredentialType()).isEqualTo(CredentialType.USER);
 		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
@@ -152,15 +159,21 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	public void generateNoOverwriteCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
-				.name(CREDENTIAL_NAME).username("test-user").parameters(this.passwordParameters.build()).build());
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build());
 		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(generated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
 		assertThat(generated.getValue().getPasswordHash()).isNotNull();
 
-		CredentialDetails<UserCredential> noOverwrite = this.credentials
-				.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.NO_OVERWRITE)
-						.username("test-user").parameters(this.passwordParameters.build()).build());
+		CredentialDetails<UserCredential> noOverwrite = this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.mode(WriteMode.NO_OVERWRITE)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build());
 		assertThat(noOverwrite.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(noOverwrite.getValue().getPassword()).isEqualTo(generated.getValue().getPassword());
 		assertThat(noOverwrite.getValue().getPasswordHash()).isEqualTo(generated.getValue().getPasswordHash());
@@ -169,15 +182,21 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	public void generateOverwriteCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
-				.name(CREDENTIAL_NAME).username("test-user").parameters(this.passwordParameters.build()).build());
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build());
 		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(generated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
 		assertThat(generated.getValue().getPasswordHash()).isNotNull();
 
-		CredentialDetails<UserCredential> overwrite = this.credentials
-				.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.OVERWRITE)
-						.username("test-user").parameters(this.passwordParameters.build()).build());
+		CredentialDetails<UserCredential> overwrite = this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.mode(WriteMode.OVERWRITE)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build());
 		assertThat(overwrite.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(overwrite.getValue().getPassword()).isNotEqualTo(generated.getValue().getPassword());
 		assertThat(overwrite.getValue().getPasswordHash()).isNotEqualTo(generated.getValue().getPasswordHash());
@@ -186,29 +205,40 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	@Test
 	public void generateConvergeCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
-				.name(CREDENTIAL_NAME).username("test-user").parameters(this.passwordParameters.build()).build());
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build());
 		assertThat(generated.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(generated.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(generated.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
 		assertThat(generated.getValue().getPasswordHash()).isNotNull();
 
 		CredentialDetails<UserCredential> convergeWithoutChanges = this.credentials
-				.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.CONVERGE)
-						.username("test-user").parameters(this.passwordParameters.build()).build());
+			.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.mode(WriteMode.CONVERGE)
+				.username("test-user")
+				.parameters(this.passwordParameters.build())
+				.build());
 		assertThat(convergeWithoutChanges.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(convergeWithoutChanges.getValue().getPassword()).isEqualTo(generated.getValue().getPassword());
 		assertThat(convergeWithoutChanges.getValue().getPasswordHash())
-				.isEqualTo(generated.getValue().getPasswordHash());
+			.isEqualTo(generated.getValue().getPasswordHash());
 
 		this.passwordParameters.includeSpecial(false);
 
 		CredentialDetails<UserCredential> convergeWithChanges = this.credentials
-				.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.CONVERGE)
-						.username("test-user").parameters(this.passwordParameters.build()).build());
+			.generate(UserParametersRequest.builder()
+				.name(CREDENTIAL_NAME)
+				.mode(WriteMode.CONVERGE)
+				.username("test-user")
+				.parameters(this.passwordParameters.build())
+				.build());
 		assertThat(convergeWithChanges.getValue().getUsername()).isEqualTo("test-user");
 		assertThat(convergeWithChanges.getValue().getPassword()).isNotEqualTo(generated.getValue().getPassword());
 		assertThat(convergeWithChanges.getValue().getPasswordHash())
-				.isNotEqualTo(generated.getValue().getPasswordHash());
+			.isNotEqualTo(generated.getValue().getPasswordHash());
 	}
 
 }

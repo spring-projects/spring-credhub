@@ -63,12 +63,16 @@ public class CredHubPermissionTemplateUnitTests {
 	public void getPermissions() {
 		CredentialPermissions expectedResponse = new CredentialPermissions(NAME,
 				Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE).build(),
-				Permission.builder().user("zone1", "user-id").operations(Operation.READ_ACL)
-						.operations(Operation.WRITE_ACL).operation(Operation.DELETE).build());
+				Permission.builder()
+					.user("zone1", "user-id")
+					.operations(Operation.READ_ACL)
+					.operations(Operation.WRITE_ACL)
+					.operation(Operation.DELETE)
+					.build());
 
 		given(this.restTemplate.getForEntity(CredHubPermissionTemplate.PERMISSIONS_URL_QUERY,
 				CredentialPermissions.class, NAME.getName()))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		List<Permission> response = this.credHubTemplate.getPermissions(NAME);
 
@@ -79,11 +83,18 @@ public class CredHubPermissionTemplateUnitTests {
 
 	@Test
 	public void addPermissions() {
-		Permission permission1 = Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE)
-				.build();
+		Permission permission1 = Permission.builder()
+			.app("app-id")
+			.operation(Operation.READ)
+			.operation(Operation.WRITE)
+			.build();
 
-		Permission permission2 = Permission.builder().user("zone1", "user-id").operations(Operation.READ_ACL)
-				.operations(Operation.WRITE_ACL).operation(Operation.DELETE).build();
+		Permission permission2 = Permission.builder()
+			.user("zone1", "user-id")
+			.operations(Operation.READ_ACL)
+			.operations(Operation.WRITE_ACL)
+			.operation(Operation.DELETE)
+			.build();
 
 		this.credHubTemplate.addPermissions(NAME, permission1, permission2);
 

@@ -38,18 +38,23 @@ public class CredHubService {
 	}
 
 	public String generatePassword() {
-		PasswordParameters parameters = PasswordParameters.builder().length(12).excludeLower(false).excludeUpper(false)
-				.excludeNumber(false).includeSpecial(true).build();
+		PasswordParameters parameters = PasswordParameters.builder()
+			.length(12)
+			.excludeLower(false)
+			.excludeUpper(false)
+			.excludeNumber(false)
+			.includeSpecial(true)
+			.build();
 
 		CredentialDetails<PasswordCredential> password = this.credHubOperations.credentials()
-				.generate(PasswordParametersRequest.builder().name(this.credentialName).parameters(parameters).build());
+			.generate(PasswordParametersRequest.builder().name(this.credentialName).parameters(parameters).build());
 
 		return password.getValue().getPassword();
 	}
 
 	public String getPassword() {
 		CredentialDetails<PasswordCredential> password = this.credHubOperations.credentials()
-				.getByName(this.credentialName, PasswordCredential.class);
+			.getByName(this.credentialName, PasswordCredential.class);
 
 		return password.getValue().getPassword();
 	}

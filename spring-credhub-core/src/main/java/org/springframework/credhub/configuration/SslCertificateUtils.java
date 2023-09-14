@@ -47,7 +47,7 @@ class SslCertificateUtils {
 	X509TrustManager getDefaultX509TrustManager() {
 		try {
 			TrustManagerFactory trustManagerFactory = TrustManagerFactory
-					.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+				.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			trustManagerFactory.init((KeyStore) null);
 
 			TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
@@ -86,7 +86,7 @@ class SslCertificateUtils {
 			KeyStore trustStore = loadCertificateStore(caCertFiles);
 
 			TrustManagerFactory trustManagerFactory = TrustManagerFactory
-					.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+				.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			trustManagerFactory.init(trustStore);
 
 			return trustManagerFactory;

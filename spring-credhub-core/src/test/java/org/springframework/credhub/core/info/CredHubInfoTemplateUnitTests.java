@@ -50,7 +50,7 @@ public class CredHubInfoTemplateUnitTests {
 	@Test
 	public void getVersion() {
 		given(this.restTemplate.getForEntity(CredHubInfoTemplate.VERSION_URL_PATH, VersionInfo.class))
-				.willReturn(new ResponseEntity<>(new VersionInfo("2.0.0"), HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(new VersionInfo("2.0.0"), HttpStatus.OK));
 
 		VersionInfo response = this.credHubTemplate.version();
 

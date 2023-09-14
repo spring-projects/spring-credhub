@@ -36,8 +36,11 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithParameters() {
-		this.requestBuilder = RsaParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE).parameters(new RsaParameters(KeyLength.LENGTH_4096));
+		this.requestBuilder = RsaParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.parameters(new RsaParameters(KeyLength.LENGTH_4096));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -47,8 +50,10 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithNoParameters() {
-		this.requestBuilder = RsaParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE);
+		this.requestBuilder = RsaParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 

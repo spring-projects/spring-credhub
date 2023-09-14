@@ -36,10 +36,18 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 
 	@Test
 	public void serializeWithParameters() {
-		this.requestBuilder = UserParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE).username("user")
-				.parameters(PasswordParameters.builder().length(20).excludeLower(true).excludeUpper(false)
-						.excludeNumber(true).includeSpecial(false).build());
+		this.requestBuilder = UserParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.username("user")
+			.parameters(PasswordParameters.builder()
+				.length(20)
+				.excludeLower(true)
+				.excludeUpper(false)
+				.excludeNumber(true)
+				.includeSpecial(false)
+				.build());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -54,8 +62,11 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 
 	@Test
 	public void serializeWithEmptyParameters() {
-		this.requestBuilder = UserParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.NO_OVERWRITE).parameters(new PasswordParameters());
+		this.requestBuilder = UserParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.NO_OVERWRITE)
+			.parameters(new PasswordParameters());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -65,8 +76,10 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 
 	@Test
 	public void serializeWithNoParameters() {
-		this.requestBuilder = UserParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.CONVERGE);
+		this.requestBuilder = UserParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.CONVERGE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 

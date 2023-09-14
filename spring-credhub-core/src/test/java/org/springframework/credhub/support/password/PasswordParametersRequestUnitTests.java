@@ -36,9 +36,16 @@ public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithParameters() {
 		this.requestBuilder = PasswordParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
-				.parameters(PasswordParameters.builder().length(20).excludeLower(true).excludeUpper(false)
-						.excludeNumber(true).includeSpecial(false).build());
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.parameters(PasswordParameters.builder()
+				.length(20)
+				.excludeLower(true)
+				.excludeUpper(false)
+				.excludeNumber(true)
+				.includeSpecial(false)
+				.build());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -53,8 +60,10 @@ public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithEmptyParameters() {
 		this.requestBuilder = PasswordParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.CONVERGE)
-				.parameters(new PasswordParameters());
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.CONVERGE)
+			.parameters(new PasswordParameters());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -65,7 +74,9 @@ public class PasswordParametersRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithNoParameters() {
 		this.requestBuilder = PasswordParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.NO_OVERWRITE);
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.NO_OVERWRITE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 

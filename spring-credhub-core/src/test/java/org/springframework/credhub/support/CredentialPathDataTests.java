@@ -49,8 +49,8 @@ public class CredentialPathDataTests extends JsonParsingUnitTestsBase {
 		CredentialPathData paths = parseResponse(json, CredentialPathData.class);
 
 		assertThat(paths.getPaths().size()).isEqualTo(5);
-		assertThat(paths.getPaths()).extracting("path").contains("/", "/director-name/", "/director-name/deploy1/",
-				"/director-name/deploy2/", "/director2/");
+		assertThat(paths.getPaths()).extracting("path")
+			.contains("/", "/director-name/", "/director-name/deploy1/", "/director-name/deploy2/", "/director2/");
 	}
 
 	@Test

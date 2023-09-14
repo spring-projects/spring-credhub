@@ -93,16 +93,18 @@ final class CredHubWebClientFactory {
 		ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(
 				clientManager);
 
-		return buildWebClient(properties.getUrl(), clientHttpConnector).filter(oauth).defaultRequest(
-				(requestHeadersSpec) -> requestHeadersSpec.attributes(ServerOAuth2AuthorizedClientExchangeFilterFunction
-						.clientRegistrationId(properties.getOauth2().getRegistrationId())))
-				.build();
+		return buildWebClient(properties.getUrl(), clientHttpConnector).filter(oauth)
+			.defaultRequest((requestHeadersSpec) -> requestHeadersSpec
+				.attributes(ServerOAuth2AuthorizedClientExchangeFilterFunction
+					.clientRegistrationId(properties.getOauth2().getRegistrationId())))
+			.build();
 	}
 
 	private static ReactiveOAuth2AuthorizedClientProvider buildClientProvider(ClientHttpConnector clientHttpConnector) {
-		return ReactiveOAuth2AuthorizedClientProviderBuilder.builder().authorizationCode()
-				.clientCredentials((b) -> b.accessTokenResponseClient(buildTokenResponseClient(clientHttpConnector)))
-				.build();
+		return ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+			.authorizationCode()
+			.clientCredentials((b) -> b.accessTokenResponseClient(buildTokenResponseClient(clientHttpConnector)))
+			.build();
 	}
 
 	private static WebClientReactiveClientCredentialsTokenResponseClient buildTokenResponseClient(
@@ -131,10 +133,12 @@ final class CredHubWebClientFactory {
 			dc.jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
 		}).build();
 
-		return WebClient.builder().clientConnector(clientHttpConnector).baseUrl(baseUri)
-				.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.exchangeStrategies(strategies);
+		return WebClient.builder()
+			.clientConnector(clientHttpConnector)
+			.baseUrl(baseUri)
+			.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+			.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			.exchangeStrategies(strategies);
 	}
 
 }

@@ -8,6 +8,7 @@ repository=$(pwd)/distribution-repository
 
 start_docker() {
   pushd credhub-server >/dev/null
+    echo '{"registry-mirrors": ["https://harbor-mirror.spring.vmware.com"]}' > /etc/docker/daemon.json
     service cgroupfs-mount start
     service docker start
     docker-compose up --detach

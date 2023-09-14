@@ -84,7 +84,9 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 
 	private void buildRequest(CertificateCredential value) {
 		this.requestBuilder = CertificateCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE).value(value);
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.OVERWRITE)
+			.value(value);
 	}
 
 }

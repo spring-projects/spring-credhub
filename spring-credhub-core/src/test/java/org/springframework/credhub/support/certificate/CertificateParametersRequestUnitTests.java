@@ -38,18 +38,27 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	@Test
 	public void serializeWithParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.OVERWRITE)
-				.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).commonName("common")
-						.alternateNames("alt1", "alt2").organization("org").organizationUnit("dev").locality("city")
-						.state("state").country("country").duration(1234).certificateAuthorityCredential("credential")
-						.certificateAuthority(true).selfSign(false)
-						.keyUsage(KeyUsage.CRL_SIGN, KeyUsage.DATA_ENCIPHERMENT, KeyUsage.DECIPHER_ONLY,
-								KeyUsage.DIGITAL_SIGNATURE, KeyUsage.ENCIPHER_ONLY, KeyUsage.KEY_AGREEMENT,
-								KeyUsage.KEY_CERT_SIGN, KeyUsage.KEY_ENCIPHERMENT, KeyUsage.NON_REPUDIATION)
-						.extendedKeyUsage(ExtendedKeyUsage.CLIENT_AUTH, ExtendedKeyUsage.CODE_SIGNING,
-								ExtendedKeyUsage.EMAIL_PROTECTION, ExtendedKeyUsage.SERVER_AUTH,
-								ExtendedKeyUsage.TIMESTAMPING)
-						.build());
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.OVERWRITE)
+			.parameters(CertificateParameters.builder()
+				.keyLength(KeyLength.LENGTH_2048)
+				.commonName("common")
+				.alternateNames("alt1", "alt2")
+				.organization("org")
+				.organizationUnit("dev")
+				.locality("city")
+				.state("state")
+				.country("country")
+				.duration(1234)
+				.certificateAuthorityCredential("credential")
+				.certificateAuthority(true)
+				.selfSign(false)
+				.keyUsage(KeyUsage.CRL_SIGN, KeyUsage.DATA_ENCIPHERMENT, KeyUsage.DECIPHER_ONLY,
+						KeyUsage.DIGITAL_SIGNATURE, KeyUsage.ENCIPHER_ONLY, KeyUsage.KEY_AGREEMENT,
+						KeyUsage.KEY_CERT_SIGN, KeyUsage.KEY_ENCIPHERMENT, KeyUsage.NON_REPUDIATION)
+				.extendedKeyUsage(ExtendedKeyUsage.CLIENT_AUTH, ExtendedKeyUsage.CODE_SIGNING,
+						ExtendedKeyUsage.EMAIL_PROTECTION, ExtendedKeyUsage.SERVER_AUTH, ExtendedKeyUsage.TIMESTAMPING)
+				.build());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -68,40 +77,56 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.is_ca").isEqualTo(true);
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.self_sign").isEqualTo(false);
 		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[0]").isEqualTo(KeyUsage.CRL_SIGN.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[1]")
-				.isEqualTo(KeyUsage.DATA_ENCIPHERMENT.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[2]")
-				.isEqualTo(KeyUsage.DECIPHER_ONLY.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[3]")
-				.isEqualTo(KeyUsage.DIGITAL_SIGNATURE.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[4]")
-				.isEqualTo(KeyUsage.ENCIPHER_ONLY.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[5]")
-				.isEqualTo(KeyUsage.KEY_AGREEMENT.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[6]")
-				.isEqualTo(KeyUsage.KEY_CERT_SIGN.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[7]")
-				.isEqualTo(KeyUsage.KEY_ENCIPHERMENT.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.key_usage[8]")
-				.isEqualTo(KeyUsage.NON_REPUDIATION.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.extended_key_usage[0]")
-				.isEqualTo(ExtendedKeyUsage.CLIENT_AUTH.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.extended_key_usage[1]")
-				.isEqualTo(ExtendedKeyUsage.CODE_SIGNING.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.extended_key_usage[2]")
-				.isEqualTo(ExtendedKeyUsage.EMAIL_PROTECTION.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.extended_key_usage[3]")
-				.isEqualTo(ExtendedKeyUsage.SERVER_AUTH.getValue());
-		JsonPathAssert.assertThat(json).hasPath("$.parameters.extended_key_usage[4]")
-				.isEqualTo(ExtendedKeyUsage.TIMESTAMPING.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[1]")
+			.isEqualTo(KeyUsage.DATA_ENCIPHERMENT.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[2]")
+			.isEqualTo(KeyUsage.DECIPHER_ONLY.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[3]")
+			.isEqualTo(KeyUsage.DIGITAL_SIGNATURE.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[4]")
+			.isEqualTo(KeyUsage.ENCIPHER_ONLY.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[5]")
+			.isEqualTo(KeyUsage.KEY_AGREEMENT.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[6]")
+			.isEqualTo(KeyUsage.KEY_CERT_SIGN.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[7]")
+			.isEqualTo(KeyUsage.KEY_ENCIPHERMENT.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.key_usage[8]")
+			.isEqualTo(KeyUsage.NON_REPUDIATION.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.extended_key_usage[0]")
+			.isEqualTo(ExtendedKeyUsage.CLIENT_AUTH.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.extended_key_usage[1]")
+			.isEqualTo(ExtendedKeyUsage.CODE_SIGNING.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.extended_key_usage[2]")
+			.isEqualTo(ExtendedKeyUsage.EMAIL_PROTECTION.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.extended_key_usage[3]")
+			.isEqualTo(ExtendedKeyUsage.SERVER_AUTH.getValue());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.parameters.extended_key_usage[4]")
+			.isEqualTo(ExtendedKeyUsage.TIMESTAMPING.getValue());
 	}
 
 	@Test
 	public void serializeWithMinimalParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.NO_OVERWRITE)
-				.parameters(CertificateParameters.builder().commonName("common")
-						.certificateAuthorityCredential("credential").build());
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.NO_OVERWRITE)
+			.parameters(CertificateParameters.builder()
+				.commonName("common")
+				.certificateAuthorityCredential("credential")
+				.build());
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -125,7 +150,8 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	@Test
 	public void serializeWithNoParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).mode(WriteMode.CONVERGE);
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.CONVERGE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -137,8 +163,8 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	public void serializeWithEmptyParameters() {
 		assertThatIllegalArgumentException().isThrownBy(() -> {
 			this.requestBuilder = CertificateParametersRequest.builder()
-					.name(new SimpleCredentialName("example", "credential"))
-					.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).build());
+				.name(new SimpleCredentialName("example", "credential"))
+				.parameters(CertificateParameters.builder().keyLength(KeyLength.LENGTH_2048).build());
 
 			toJsonPath(this.requestBuilder);
 		});

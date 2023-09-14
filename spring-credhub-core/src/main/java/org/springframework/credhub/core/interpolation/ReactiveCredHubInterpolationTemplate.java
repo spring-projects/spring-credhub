@@ -50,9 +50,12 @@ public class ReactiveCredHubInterpolationTemplate implements ReactiveCredHubInte
 	public Mono<ServicesData> interpolateServiceData(final ServicesData serviceData) {
 		Assert.notNull(serviceData, "serviceData must not be null");
 
-		return this.credHubOperations.doWithWebClient(
-				(webClient) -> webClient.post().uri(INTERPOLATE_URL_PATH).bodyValue(serviceData).retrieve()
-						.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError).bodyToMono(ServicesData.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
+			.uri(INTERPOLATE_URL_PATH)
+			.bodyValue(serviceData)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(ServicesData.class));
 	}
 
 }

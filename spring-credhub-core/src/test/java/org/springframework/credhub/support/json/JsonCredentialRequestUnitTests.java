@@ -29,13 +29,15 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 
 	@BeforeEach
 	public void setUp() {
-		this.requestBuilder = JsonCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.value(new JsonCredential() {
-					{
-						put("data", "value");
-						put("test", true);
-					}
-				}).mode(WriteMode.OVERWRITE);
+		this.requestBuilder = JsonCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.value(new JsonCredential() {
+				{
+					put("data", "value");
+					put("test", true);
+				}
+			})
+			.mode(WriteMode.OVERWRITE);
 	}
 
 	@Test

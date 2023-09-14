@@ -67,8 +67,9 @@ class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
 
 	private OAuth2AuthorizedClient authorizeClient() {
 		OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-				.withClientRegistrationId(this.clientRegistration.getRegistrationId())
-				.principal(new OAuth2ClientCredentialsGrantAuthenticationToken(this.clientRegistration)).build();
+			.withClientRegistrationId(this.clientRegistration.getRegistrationId())
+			.principal(new OAuth2ClientCredentialsGrantAuthenticationToken(this.clientRegistration))
+			.build();
 		return this.clientManager.authorize(authorizeRequest);
 	}
 

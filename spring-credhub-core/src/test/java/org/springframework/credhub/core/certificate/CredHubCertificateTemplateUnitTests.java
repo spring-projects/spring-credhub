@@ -69,7 +69,7 @@ public class CredHubCertificateTemplateUnitTests {
 				new CertificateSummary("id2", "name2"), new CertificateSummary("id3", "name3"));
 
 		given(this.restTemplate.getForEntity(CredHubCertificateTemplate.BASE_URL_PATH, CertificateSummaryData.class))
-				.willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
 
 		List<CertificateSummary> response = this.credHubTemplate.getAll();
 
@@ -84,7 +84,8 @@ public class CredHubCertificateTemplateUnitTests {
 				new CertificateSummary("id1", "name1"));
 
 		given(this.restTemplate.getForEntity(CredHubCertificateTemplate.NAME_URL_QUERY, CertificateSummaryData.class,
-				NAME.getName())).willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
+				NAME.getName()))
+			.willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
 
 		CertificateSummary response = this.credHubTemplate.getByName(NAME);
 
@@ -104,7 +105,7 @@ public class CredHubCertificateTemplateUnitTests {
 
 		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.REGENERATE_URL_PATH), eq(HttpMethod.POST),
 				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id")))
-						.willReturn(new ResponseEntity<>(expectedCertificate, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedCertificate, HttpStatus.OK));
 
 		CertificateCredentialDetails response = this.credHubTemplate.regenerate("id", true);
 
@@ -133,13 +134,13 @@ public class CredHubCertificateTemplateUnitTests {
 
 		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.BULK_REGENERATE_URL_PATH), eq(HttpMethod.POST),
 				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
-						.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
 		List<CredentialName> response = this.credHubTemplate.regenerate(NAME);
 
 		assertThat(response).isNotNull();
 		assertThat(response)
-				.isEqualTo(expectedResponse.get(CredHubCertificateTemplate.REGENERATED_CREDENTIALS_RESPONSE_FIELD));
+			.isEqualTo(expectedResponse.get(CredHubCertificateTemplate.REGENERATED_CREDENTIALS_RESPONSE_FIELD));
 	}
 
 	@Test
@@ -156,14 +157,14 @@ public class CredHubCertificateTemplateUnitTests {
 
 		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.UPDATE_TRANSITIONAL_URL_PATH),
 				eq(HttpMethod.PUT), eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id1")))
-						.willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
 
 		List<CertificateCredentialDetails> response = this.credHubTemplate.updateTransitionalVersion("id1", "id2");
 
 		assertThat(response).hasSize(2);
 		assertThat(response).extracting("id").contains("id1", "id2");
-		assertThat(response).extracting("credentialType").contains(CredentialType.CERTIFICATE,
-				CredentialType.CERTIFICATE);
+		assertThat(response).extracting("credentialType")
+			.contains(CredentialType.CERTIFICATE, CredentialType.CERTIFICATE);
 		assertThat(response).extracting("transitional").contains(false, true);
 		assertThat(response).extracting("value.certificate").contains("cert1", "cert2");
 		assertThat(response).extracting("value.certificateAuthority").contains("authority1", "authority2");

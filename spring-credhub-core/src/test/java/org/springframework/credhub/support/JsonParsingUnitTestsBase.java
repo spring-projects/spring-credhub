@@ -79,7 +79,7 @@ public abstract class JsonParsingUnitTestsBase {
 		assertThat(data.getVersionCreatedAt()).isEqualTo(this.testDate);
 		assertThat(data.getId()).isEqualTo("80cbb13f-7562-4e72-92de-f3ccf69eaa59");
 		assertThat(data.getName().getName())
-				.isEqualTo("/service-broker-name/service-instance-name/binding-id/credentials-json");
+			.isEqualTo("/service-broker-name/service-instance-name/binding-id/credentials-json");
 	}
 
 }

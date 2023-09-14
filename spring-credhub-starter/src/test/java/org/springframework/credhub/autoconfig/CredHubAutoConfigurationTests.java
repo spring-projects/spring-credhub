@@ -38,31 +38,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CredHubAutoConfigurationTests {
 
 	private final ApplicationContextRunner context = new ApplicationContextRunner()
-			.withConfiguration(AutoConfigurations.of(CredHubAutoConfiguration.class));
+		.withConfiguration(AutoConfigurations.of(CredHubAutoConfiguration.class));
 
 	@Test
 	public void autoConfiguredWithDefaultProperties() {
-		this.context.withPropertyValues("spring.credhub.url=https://localhost",
-				"spring.credhub.oauth2.registration-id=test-client", "spring.credhub.connection-timeout=30",
-				"spring.credhub.read-timeout=60", "debug=true").run(this::assertPropertiesConfigured);
+		this.context
+			.withPropertyValues("spring.credhub.url=https://localhost",
+					"spring.credhub.oauth2.registration-id=test-client", "spring.credhub.connection-timeout=30",
+					"spring.credhub.read-timeout=60", "debug=true")
+			.run(this::assertPropertiesConfigured);
 	}
 
 	@Test
 	public void autoConfiguredWithCustomProperties() {
 		this.context.withConfiguration(AutoConfigurations.of(CustomPropertiesConfiguration.class))
-				.withPropertyValues("my.custom.credhub.url=https://localhost",
-						"my.custom.credhub.oauth2.registration-id=test-client",
-						"my.custom.credhub.connection-timeout=30", "my.custom.credhub.read-timeout=60")
-				.run(this::assertPropertiesConfigured);
+			.withPropertyValues("my.custom.credhub.url=https://localhost",
+					"my.custom.credhub.oauth2.registration-id=test-client", "my.custom.credhub.connection-timeout=30",
+					"my.custom.credhub.read-timeout=60")
+			.run(this::assertPropertiesConfigured);
 	}
 
 	@Test
 	public void webClientConnectorNotConfigured() {
 		this.context.withClassLoader(new FilteredClassLoader(WebClient.class))
-				.withPropertyValues("spring.credhub.url=https://localhost",
-						"spring.credhub.oauth2.registration-id=test-client", "spring.credhub.connection-timeout=30",
-						"spring.credhub.read-timeout=60")
-				.run((context) -> assertThat(context).doesNotHaveBean(ClientHttpConnector.class));
+			.withPropertyValues("spring.credhub.url=https://localhost",
+					"spring.credhub.oauth2.registration-id=test-client", "spring.credhub.connection-timeout=30",
+					"spring.credhub.read-timeout=60")
+			.run((context) -> assertThat(context).doesNotHaveBean(ClientHttpConnector.class));
 	}
 
 	private void assertPropertiesConfigured(AssertableApplicationContext context) {

@@ -1,17 +1,56 @@
 FROM harbor-repo.vmware.com/dockerhub-proxy-cache/library/ubuntu:jammy
 
+# Environment variables
+ENV TERM dumb
+ENV LC_ALL C.UTF-8
+
 ARG CONCOURSE_JAVA_SCRIPTS_VERSION=0.0.4
 ARG CONCOURSE_RELEASE_SCRIPTS_VERSION=0.3.4
+ARG YTT_VERSION="0.45.4"
 
-RUN apt-get update && apt-get install --no-install-recommends -y ca-certificates net-tools git curl jq gnupg
+# Install packages required for bootstrapping
+RUN apt-get -qy update \
+    && apt-get -qy --no-install-recommends install \
+	  apt-transport-https \
+	  ca-certificates \
+	  curl \
+	  gnupg-agent \
+	  software-properties-common \
+    && apt-get clean
 
-RUN rm -rf /var/lib/apt/lists/*
+# Accept apt repository keys
+RUN curl -q 'https://download.docker.com/linux/ubuntu/gpg' | apt-key add -
+
+# Add custom apt repositories
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Install packages
+RUN apt-get -qy update \
+    && apt-get -qy --no-install-recommends install \
+      bsdextrautils \
+      containerd.io \
+      cgroupfs-mount \
+      docker-ce \
+      git \
+      jq \
+      make \
+      openssh-client \
+      tcpdump \
+    && apt-get clean
+
+RUN curl -Lo ytt "https://github.com/vmware-tanzu/carvel-ytt/releases/download/v$YTT_VERSION/ytt-linux-amd64" \
+  && chmod u+x ytt && mv ytt /usr/local/bin/
+
+RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" \
+    -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
 
 ENV JAVA_HOME /opt/openjdk
 ENV PATH $JAVA_HOME/bin:$PATH
 RUN mkdir -p /opt/openjdk && \
     cd /opt/openjdk && \
     curl -L https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u292-b10/OpenJDK8U-jdk_x64_linux_hotspot_8u292b10.tar.gz | tar xz --strip-components=1
+
+WORKDIR /unpack
 
 ADD "https://raw.githubusercontent.com/spring-io/concourse-java-scripts/v$CONCOURSE_JAVA_SCRIPTS_VERSION/concourse-java.sh" /opt/
 ADD "https://repo.spring.io/ui/native/snapshot/io/spring/concourse/releasescripts/concourse-release-scripts/$CONCOURSE_RELEASE_SCRIPTS_VERSION/concourse-release-scripts-$CONCOURSE_RELEASE_SCRIPTS_VERSION.jar" /opt/

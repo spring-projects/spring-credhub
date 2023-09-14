@@ -191,7 +191,7 @@ public final class ClientHttpRequestFactoryFactory {
 
 			if (usingCustomCerts(options)) {
 				SSLSocketFactory socketFactory = sslCertificateUtils.getSSLContext(options.getCaCertFiles())
-						.getSocketFactory();
+					.getSocketFactory();
 				X509TrustManager trustManager = sslCertificateUtils.createTrustManager(options.getCaCertFiles());
 
 				builder.sslSocketFactory(socketFactory, trustManager);
@@ -237,10 +237,12 @@ public final class ClientHttpRequestFactoryFactory {
 
 			if (usingCustomCerts(options)) {
 				TrustManagerFactory trustManagerFactory = sslCertificateUtils
-						.createTrustManagerFactory(options.getCaCertFiles());
+					.createTrustManagerFactory(options.getCaCertFiles());
 
-				SslContext sslContext = SslContextBuilder.forClient().sslProvider(SslProvider.JDK)
-						.trustManager(trustManagerFactory).build();
+				SslContext sslContext = SslContextBuilder.forClient()
+					.sslProvider(SslProvider.JDK)
+					.trustManager(trustManagerFactory)
+					.build();
 
 				requestFactory.setSslContext(sslContext);
 			}

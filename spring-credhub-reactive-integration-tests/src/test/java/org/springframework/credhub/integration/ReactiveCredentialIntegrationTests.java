@@ -52,8 +52,12 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	public void setUp() {
 		this.credentials = this.operations.credentials();
 
-		this.passwordParameters = PasswordParameters.builder().length(12).excludeLower(false).excludeUpper(false)
-				.excludeNumber(false).includeSpecial(true);
+		this.passwordParameters = PasswordParameters.builder()
+			.length(12)
+			.excludeLower(false)
+			.excludeUpper(false)
+			.excludeNumber(false)
+			.includeSpecial(true);
 
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
@@ -70,40 +74,47 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 		AtomicReference<CredentialDetails<ValueCredential>> written = new AtomicReference<>();
 
 		StepVerifier
-				.create(this.credentials
-						.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-					assertThat(response.getId()).isNotNull();
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				assertThat(response.getId()).isNotNull();
 
-					written.set(response);
-				}).verifyComplete();
+				written.set(response);
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.credentials.getById(written.get().getId(), ValueCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-				}).verifyComplete();
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.credentials.getByName(CREDENTIAL_NAME, ValueCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-				}).verifyComplete();
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.credentials.findByName(new SimpleCredentialName("/test")))
-				.assertNext((response) -> assertThat(response).extracting("name").extracting("name").asString()
-						.contains(CREDENTIAL_NAME.getName()))
-				.verifyComplete();
+			.assertNext((response) -> assertThat(response).extracting("name")
+				.extracting("name")
+				.asString()
+				.contains(CREDENTIAL_NAME.getName()))
+			.verifyComplete();
 
 		StepVerifier.create(this.credentials.findByPath("/spring-credhub/integration-test"))
-				.assertNext((response) -> assertThat(response).extracting("name").extracting("name").asString()
-						.contains(CREDENTIAL_NAME.getName()))
-				.verifyComplete();
+			.assertNext((response) -> assertThat(response).extracting("name")
+				.extracting("name")
+				.asString()
+				.contains(CREDENTIAL_NAME.getName()))
+			.verifyComplete();
 	}
 
 	@Test
@@ -111,22 +122,24 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 		assumeTrue(serverApiIsV2());
 
 		StepVerifier
-				.create(this.credentials
-						.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-					assertThat(response.getId()).isNotNull();
-				}).verifyComplete();
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				assertThat(response.getId()).isNotNull();
+			})
+			.verifyComplete();
 
 		StepVerifier
-				.create(this.credentials
-						.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value("new-value").build()))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo("new-value");
-				}).verifyComplete();
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value("new-value").build()))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo("new-value");
+			})
+			.verifyComplete();
 
 		verifyHistory();
 	}
@@ -136,184 +149,201 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 		assumeTrue(serverApiIsV1());
 
 		StepVerifier
-				.create(this.credentials
-						.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-					assertThat(response.getId()).isNotNull();
-				}).verifyComplete();
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+				assertThat(response.getId()).isNotNull();
+			})
+			.verifyComplete();
 
-		StepVerifier.create(this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME)
-				.value("new-value").mode(WriteMode.NO_OVERWRITE).build())).assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-				}).verifyComplete();
+		StepVerifier.create(this.credentials.write(ValueCredentialRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.value("new-value")
+			.mode(WriteMode.NO_OVERWRITE)
+			.build())).assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+			}).verifyComplete();
 
-		StepVerifier.create(this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME)
-				.value("new-value").mode(WriteMode.OVERWRITE).build())).assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo("new-value");
-				}).verifyComplete();
+		StepVerifier.create(this.credentials.write(ValueCredentialRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.value("new-value")
+			.mode(WriteMode.OVERWRITE)
+			.build())).assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo("new-value");
+			}).verifyComplete();
 
 		verifyHistory();
 	}
 
 	private void verifyHistory() {
 		StepVerifier.create(this.credentials.getByNameWithHistory(CREDENTIAL_NAME, ValueCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo("new-value");
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-				}).assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-				}).verifyComplete();
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo("new-value");
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+			})
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.credentials.getByNameWithHistory(CREDENTIAL_NAME, 2, ValueCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo("new-value");
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-				}).assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
-				}).verifyComplete();
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo("new-value");
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+			})
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getValue()).isEqualTo(CREDENTIAL_VALUE);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.VALUE);
+			})
+			.verifyComplete();
 	}
 
 	@Test
 	public void generateCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
-		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME)
-				.username("test-user").parameters(this.passwordParameters.build()).build(), UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getCredentialType()).isEqualTo(CredentialType.USER);
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
-					assertThat(response.getValue().getPasswordHash()).isNotNull();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.USER);
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+				assertThat(response.getValue().getPasswordHash()).isNotNull();
 
-					generated.set(response);
-				}).verifyComplete();
+				generated.set(response);
+			}).verifyComplete();
 
 		StepVerifier.create(this.credentials.getById(generated.get().getId(), UserCredential.class))
-				.assertNext((response) -> assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName()))
-				.verifyComplete();
+			.assertNext((response) -> assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName()))
+			.verifyComplete();
 
 		StepVerifier.create(this.credentials.regenerate(CREDENTIAL_NAME, UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
-					assertThat(response.getValue().getPassword())
-							.isNotEqualTo(generated.get().getValue().getPassword());
-					assertThat(response.getValue().getPasswordHash())
-							.isNotEqualTo(generated.get().getValue().getPasswordHash());
-				}).verifyComplete();
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+				assertThat(response.getValue().getPassword()).isNotEqualTo(generated.get().getValue().getPassword());
+				assertThat(response.getValue().getPasswordHash())
+					.isNotEqualTo(generated.get().getValue().getPasswordHash());
+			})
+			.verifyComplete();
 	}
 
 	@Test
 	public void generateNoOverwriteCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
-		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME)
-				.username("test-user").parameters(this.passwordParameters.build()).build(), UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
-					assertThat(response.getValue().getPasswordHash()).isNotNull();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+				assertThat(response.getValue().getPasswordHash()).isNotNull();
 
-					generated.set(response);
-				}).verifyComplete();
+				generated.set(response);
+			}).verifyComplete();
 
-		StepVerifier
-				.create(this.credentials.generate(
-						UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.NO_OVERWRITE)
-								.username("test-user").parameters(this.passwordParameters.build()).build(),
-						UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).isEqualTo(generated.get().getValue().getPassword());
-					assertThat(response.getValue().getPasswordHash())
-							.isEqualTo(generated.get().getValue().getPasswordHash());
-				}).verifyComplete();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.mode(WriteMode.NO_OVERWRITE)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).isEqualTo(generated.get().getValue().getPassword());
+				assertThat(response.getValue().getPasswordHash())
+					.isEqualTo(generated.get().getValue().getPasswordHash());
+			}).verifyComplete();
 	}
 
 	@Test
 	public void generateOverwriteCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
-		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME)
-				.username("test-user").parameters(this.passwordParameters.build()).build(), UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
-					assertThat(response.getValue().getPasswordHash()).isNotNull();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+				assertThat(response.getValue().getPasswordHash()).isNotNull();
 
-					generated.set(response);
-				}).verifyComplete();
+				generated.set(response);
+			}).verifyComplete();
 
-		StepVerifier
-				.create(this.credentials.generate(
-						UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.OVERWRITE)
-								.username("test-user").parameters(this.passwordParameters.build()).build(),
-						UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword())
-							.isNotEqualTo(generated.get().getValue().getPassword());
-					assertThat(response.getValue().getPasswordHash())
-							.isNotEqualTo(generated.get().getValue().getPasswordHash());
-				}).verifyComplete();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.mode(WriteMode.OVERWRITE)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).isNotEqualTo(generated.get().getValue().getPassword());
+				assertThat(response.getValue().getPasswordHash())
+					.isNotEqualTo(generated.get().getValue().getPasswordHash());
+			}).verifyComplete();
 	}
 
 	@Test
 	public void generateConvergeCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
-		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder().name(CREDENTIAL_NAME)
-				.username("test-user").parameters(this.passwordParameters.build()).build(), UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
-					assertThat(response.getValue().getPasswordHash()).isNotNull();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).matches("^[a-zA-Z0-9\\p{Punct}]{12}$");
+				assertThat(response.getValue().getPasswordHash()).isNotNull();
 
-					generated.set(response);
-				}).verifyComplete();
+				generated.set(response);
+			}).verifyComplete();
 
-		StepVerifier
-				.create(this.credentials.generate(
-						UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.CONVERGE)
-								.username("test-user").parameters(this.passwordParameters.build()).build(),
-						UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword()).isEqualTo(generated.get().getValue().getPassword());
-					assertThat(response.getValue().getPasswordHash())
-							.isEqualTo(generated.get().getValue().getPasswordHash());
-				}).verifyComplete();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.mode(WriteMode.CONVERGE)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).isEqualTo(generated.get().getValue().getPassword());
+				assertThat(response.getValue().getPasswordHash())
+					.isEqualTo(generated.get().getValue().getPasswordHash());
+			}).verifyComplete();
 
 		this.passwordParameters.includeSpecial(false);
 
-		StepVerifier
-				.create(this.credentials.generate(
-						UserParametersRequest.builder().name(CREDENTIAL_NAME).mode(WriteMode.CONVERGE)
-								.username("test-user").parameters(this.passwordParameters.build()).build(),
-						UserCredential.class))
-				.assertNext((response) -> {
-					assertThat(response.getValue().getUsername()).isEqualTo("test-user");
-					assertThat(response.getValue().getPassword())
-							.isNotEqualTo(generated.get().getValue().getPassword());
-					assertThat(response.getValue().getPasswordHash())
-							.isNotEqualTo(generated.get().getValue().getPasswordHash());
-				}).verifyComplete();
+		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
+			.name(CREDENTIAL_NAME)
+			.mode(WriteMode.CONVERGE)
+			.username("test-user")
+			.parameters(this.passwordParameters.build())
+			.build(), UserCredential.class)).assertNext((response) -> {
+				assertThat(response.getValue().getUsername()).isEqualTo("test-user");
+				assertThat(response.getValue().getPassword()).isNotEqualTo(generated.get().getValue().getPassword());
+				assertThat(response.getValue().getPasswordHash())
+					.isNotEqualTo(generated.get().getValue().getPasswordHash());
+			}).verifyComplete();
 	}
 
 }

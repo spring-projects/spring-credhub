@@ -83,8 +83,11 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@SuppressWarnings("deprecation")
 	private void buildRequest(RsaCredential value) {
-		this.requestBuilder = RsaCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.overwrite(true).mode(WriteMode.OVERWRITE).value(value);
+		this.requestBuilder = RsaCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.value(value);
 	}
 
 }

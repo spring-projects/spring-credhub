@@ -68,25 +68,29 @@ public class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegra
 		AtomicReference<String> permissionId = new AtomicReference<>();
 
 		StepVerifier
-				.create(this.credentials
-						.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
-				.assertNext((response) -> {
-					assertThat(response.getName()).isEqualTo(CREDENTIAL_NAME);
-					assertThat(response.getId()).isNotNull();
-				}).verifyComplete();
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName()).isEqualTo(CREDENTIAL_NAME);
+				assertThat(response.getId()).isNotNull();
+			})
+			.verifyComplete();
 
-		Permission clientPermission = Permission.builder().client("client1")
-				.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
 
 		StepVerifier.create(this.permissions.addPermissions(CREDENTIAL_NAME, clientPermission))
-				.assertNext((response) -> {
-					assertThat(response.getId()).isNotNull();
-					assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ, Operation.WRITE,
-							Operation.DELETE);
+			.assertNext((response) -> {
+				assertThat(response.getId()).isNotNull();
+				assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ, Operation.WRITE,
+						Operation.DELETE);
 
-					permissionId.set(response.getId());
-				}).verifyComplete();
+				permissionId.set(response.getId());
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.permissions.getPermissions(permissionId.get())).assertNext((response) -> {
 			assertThat(response.getId()).isEqualTo(permissionId.get());
@@ -105,36 +109,42 @@ public class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegra
 		AtomicReference<String> permissionId = new AtomicReference<>();
 
 		StepVerifier
-				.create(this.credentials
-						.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
-				.assertNext((response) -> {
-					assertThat(response.getName()).isEqualTo(CREDENTIAL_NAME);
-					assertThat(response.getId()).isNotNull();
-				}).verifyComplete();
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName()).isEqualTo(CREDENTIAL_NAME);
+				assertThat(response.getId()).isNotNull();
+			})
+			.verifyComplete();
 
-		Permission clientPermission = Permission.builder().client("client1")
-				.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
 
 		StepVerifier.create(this.permissions.addPermissions(CREDENTIAL_NAME, clientPermission))
-				.assertNext((response) -> {
-					assertThat(response.getId()).isNotNull();
-					assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ, Operation.WRITE,
-							Operation.DELETE);
+			.assertNext((response) -> {
+				assertThat(response.getId()).isNotNull();
+				assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ, Operation.WRITE,
+						Operation.DELETE);
 
-					permissionId.set(response.getId());
-				}).verifyComplete();
+				permissionId.set(response.getId());
+			})
+			.verifyComplete();
 
-		Permission newPermission = Permission.builder().client("client1")
-				.operations(Operation.READ_ACL, Operation.WRITE_ACL).build();
+		Permission newPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ_ACL, Operation.WRITE_ACL)
+			.build();
 
 		StepVerifier.create(this.permissions.updatePermissions(permissionId.get(), CREDENTIAL_NAME, newPermission))
-				.assertNext((response) -> {
-					assertThat(response.getId()).isEqualTo(permissionId.get());
-					assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
-					assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ_ACL,
-							Operation.WRITE_ACL);
-				}).verifyComplete();
+			.assertNext((response) -> {
+				assertThat(response.getId()).isEqualTo(permissionId.get());
+				assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ_ACL, Operation.WRITE_ACL);
+			})
+			.verifyComplete();
 
 		StepVerifier.create(this.permissions.getPermissions(permissionId.get())).assertNext((response) -> {
 			assertThat(response.getId()).isEqualTo(permissionId.get());

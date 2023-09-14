@@ -49,8 +49,11 @@ public class ReactiveCredHubInfoTemplate implements ReactiveCredHubInfoOperation
 	 */
 	@Override
 	public Mono<VersionInfo> version() {
-		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get().uri(VERSION_URL_PATH).retrieve()
-				.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(VersionInfo.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
+			.uri(VERSION_URL_PATH)
+			.retrieve()
+			.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+			.bodyToMono(VersionInfo.class));
 	}
 
 }

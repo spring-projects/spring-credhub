@@ -31,8 +31,10 @@ public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsB
 	@BeforeEach
 	public void setUp() {
 		this.requestBuilder = PasswordCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
-				.value(new PasswordCredential("secret"));
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.value(new PasswordCredential("secret"));
 	}
 
 	@Test
@@ -48,8 +50,10 @@ public class PasswordCredentialRequestUnitTests extends CredHubRequestUnitTestsB
 	@Test
 	public void serializeWithStringValue() {
 		this.requestBuilder = PasswordCredentialRequest.builder()
-				.name(new SimpleCredentialName("example", "credential")).overwrite(true).mode(WriteMode.OVERWRITE)
-				.value("secret");
+			.name(new SimpleCredentialName("example", "credential"))
+			.overwrite(true)
+			.mode(WriteMode.OVERWRITE)
+			.value("secret");
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 

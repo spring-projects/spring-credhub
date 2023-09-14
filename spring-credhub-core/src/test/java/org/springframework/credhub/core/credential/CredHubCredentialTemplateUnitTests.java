@@ -38,9 +38,8 @@ public class CredHubCredentialTemplateUnitTests extends CredHubCredentialTemplat
 	@SuppressWarnings("deprecation")
 	public void getAllPaths() {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.SHOW_ALL_URL_QUERY, CredentialPathData.class))
-				.willReturn(new ResponseEntity<>(
-						new CredentialPathData(new CredentialPath("/path1"), new CredentialPath("/path2")),
-						HttpStatus.OK));
+			.willReturn(new ResponseEntity<>(
+					new CredentialPathData(new CredentialPath("/path1"), new CredentialPath("/path2")), HttpStatus.OK));
 
 		List<CredentialPath> paths = this.credHubTemplate.getAllPaths();
 

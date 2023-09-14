@@ -57,9 +57,11 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 		Assert.notNull(name, "credential name must not be null");
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
-				.uri(PERMISSIONS_URL_QUERY, name.getName()).retrieve()
-				.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(CredentialPermissions.class)
-				.flatMapMany((data) -> Flux.fromIterable(data.getPermissions())));
+			.uri(PERMISSIONS_URL_QUERY, name.getName())
+			.retrieve()
+			.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+			.bodyToMono(CredentialPermissions.class)
+			.flatMapMany((data) -> Flux.fromIterable(data.getPermissions())));
 	}
 
 	@Override
@@ -68,9 +70,12 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 
 		final CredentialPermissions credentialPermissions = new CredentialPermissions(name, permissions);
 
-		return this.credHubOperations.doWithWebClient(
-				(webClient) -> webClient.post().uri(PERMISSIONS_URL_PATH).bodyValue(credentialPermissions).retrieve()
-						.onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
+			.uri(PERMISSIONS_URL_PATH)
+			.bodyValue(credentialPermissions)
+			.retrieve()
+			.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+			.bodyToMono(Void.class));
 	}
 
 	@Override
@@ -78,9 +83,11 @@ public class ReactiveCredHubPermissionTemplate implements ReactiveCredHubPermiss
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(actor, "actor must not be null");
 
-		return this.credHubOperations.doWithWebClient(
-				(webClient) -> webClient.delete().uri(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity())
-						.retrieve().onStatus(HttpStatus::isError, ExceptionUtils::buildError).bodyToMono(Void.class));
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.delete()
+			.uri(PERMISSIONS_ACTOR_URL_QUERY, name.getName(), actor.getIdentity())
+			.retrieve()
+			.onStatus(HttpStatus::isError, ExceptionUtils::buildError)
+			.bodyToMono(Void.class));
 	}
 
 }

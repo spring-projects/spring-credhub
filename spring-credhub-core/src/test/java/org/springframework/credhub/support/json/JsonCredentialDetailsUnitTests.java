@@ -58,8 +58,9 @@ public class JsonCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(data.getCredentialType()).isEqualTo(CredentialType.JSON);
 
 		JsonCredential valueMap = data.getValue();
-		assertThat(valueMap).containsEntry("client_id", "test-id").containsEntry("client_secret", "test-secret")
-				.containsEntry("uri", "https://example.com");
+		assertThat(valueMap).containsEntry("client_id", "test-id")
+			.containsEntry("client_secret", "test-secret")
+			.containsEntry("uri", "https://example.com");
 	}
 
 }

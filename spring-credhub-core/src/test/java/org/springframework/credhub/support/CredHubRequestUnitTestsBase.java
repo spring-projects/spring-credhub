@@ -35,8 +35,9 @@ public abstract class CredHubRequestUnitTestsBase {
 
 		DocumentContext json = JsonTestUtils.toJsonPath(this.requestBuilder.build());
 
-		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[0].actor")
-				.isEqualTo(Actor.app("app-id").getIdentity());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.additional_permissions[0].actor")
+			.isEqualTo(Actor.app("app-id").getIdentity());
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[0].operations[0]").isEqualTo("read");
 	}
 
@@ -44,27 +45,33 @@ public abstract class CredHubRequestUnitTestsBase {
 	@SuppressWarnings({ "deprecation" })
 	public void serializationWithThreePermissions() {
 		this.requestBuilder
-				.permission(
-						Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE).build())
-				.permission(Permission.builder().user("zone1", "user-id")
-						.operations(Operation.READ_ACL, Operation.WRITE_ACL).build())
-				.permission(Permission.builder().client("client-id")
-						.operations(Operation.READ, Operation.WRITE, Operation.READ_ACL, Operation.WRITE_ACL).build());
+			.permission(Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE).build())
+			.permission(Permission.builder()
+				.user("zone1", "user-id")
+				.operations(Operation.READ_ACL, Operation.WRITE_ACL)
+				.build())
+			.permission(Permission.builder()
+				.client("client-id")
+				.operations(Operation.READ, Operation.WRITE, Operation.READ_ACL, Operation.WRITE_ACL)
+				.build());
 
 		DocumentContext json = JsonTestUtils.toJsonPath(this.requestBuilder.build());
 
-		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[0].actor")
-				.isEqualTo(Actor.app("app-id").getIdentity());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.additional_permissions[0].actor")
+			.isEqualTo(Actor.app("app-id").getIdentity());
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[0].operations[0]").isEqualTo("read");
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[0].operations[1]").isEqualTo("write");
 
-		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[1].actor")
-				.isEqualTo(Actor.user("zone1", "user-id").getIdentity());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.additional_permissions[1].actor")
+			.isEqualTo(Actor.user("zone1", "user-id").getIdentity());
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[1].operations[0]").isEqualTo("read_acl");
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[1].operations[1]").isEqualTo("write_acl");
 
-		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[2].actor")
-				.isEqualTo(Actor.client("client-id").getIdentity());
+		JsonPathAssert.assertThat(json)
+			.hasPath("$.additional_permissions[2].actor")
+			.isEqualTo(Actor.client("client-id").getIdentity());
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[2].operations[0]").isEqualTo("read");
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[2].operations[1]").isEqualTo("write");
 		JsonPathAssert.assertThat(json).hasPath("$.additional_permissions[2].operations[2]").isEqualTo("read_acl");

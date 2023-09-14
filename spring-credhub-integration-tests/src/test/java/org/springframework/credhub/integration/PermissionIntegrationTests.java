@@ -64,10 +64,14 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
 		Permission appPermission = Permission.builder().app("app1").operation(Operation.READ).build();
-		Permission userPermission = Permission.builder().user("user1")
-				.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
-		Permission clientPermission = Permission.builder().client("client1")
-				.operations(Operation.READ_ACL, Operation.WRITE_ACL).build();
+		Permission userPermission = Permission.builder()
+			.user("user1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ_ACL, Operation.WRITE_ACL)
+			.build();
 
 		this.permissions.addPermissions(CREDENTIAL_NAME, appPermission, userPermission, clientPermission);
 
@@ -92,10 +96,14 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
 		Permission appPermission = Permission.builder().app("app1").operation(Operation.READ).build();
-		Permission userPermission = Permission.builder().user("user1")
-				.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
-		Permission clientPermission = Permission.builder().client("client1")
-				.operations(Operation.READ_ACL, Operation.WRITE_ACL).build();
+		Permission userPermission = Permission.builder()
+			.user("user1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ_ACL, Operation.WRITE_ACL)
+			.build();
 
 		this.permissions.addPermissions(CREDENTIAL_NAME, appPermission, userPermission, clientPermission);
 

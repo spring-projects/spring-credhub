@@ -131,9 +131,9 @@ final class CredHubRestTemplateFactory {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 		restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(baseUri));
 		restTemplate.getInterceptors().add(new CredHubRequestInterceptor());
-		restTemplate.setMessageConverters(
-				Arrays.asList(new ByteArrayHttpMessageConverter(), new StringHttpMessageConverter(),
-						new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper())));
+		restTemplate
+			.setMessageConverters(Arrays.asList(new ByteArrayHttpMessageConverter(), new StringHttpMessageConverter(),
+					new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper())));
 	}
 
 	/**
@@ -168,9 +168,9 @@ final class CredHubRestTemplateFactory {
 			ClientHttpRequestFactory clientHttpRequestFactory) {
 
 		OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
-				.authorizationCode().clientCredentials(
-						(b) -> b.accessTokenResponseClient(buildTokenResponseClient(clientHttpRequestFactory)))
-				.build();
+			.authorizationCode()
+			.clientCredentials((b) -> b.accessTokenResponseClient(buildTokenResponseClient(clientHttpRequestFactory)))
+			.build();
 
 		DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
 				clientRegistrationRepository, authorizedClientRepository);

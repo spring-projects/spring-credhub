@@ -58,8 +58,10 @@ public final class JsonTestUtils {
 	}
 
 	public static DocumentContext toJsonPath(Object object) {
-		Configuration configuration = Configuration.builder().jsonProvider(new JacksonJsonProvider())
-				.mappingProvider(new JacksonMappingProvider()).build();
+		Configuration configuration = Configuration.builder()
+			.jsonProvider(new JacksonJsonProvider())
+			.mappingProvider(new JacksonMappingProvider())
+			.build();
 
 		return JsonPath.parse(toJson(object), configuration);
 	}

@@ -42,7 +42,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 			"spring.security.oauth2.client.provider.uaa.token-uri=https://example.com/uaa/oauth/token" };
 
 	private final ApplicationContextRunner context = new ApplicationContextRunner().withPropertyValues("debug=true")
-			.withConfiguration(AutoConfigurations.of(this.configurations));
+		.withConfiguration(AutoConfigurations.of(this.configurations));
 
 	@Test
 	public void oauth2ContextConfigured() {
@@ -55,38 +55,42 @@ public class CredHubOAuth2AutoConfigurationTests {
 	@Test
 	public void oauth2ContextConfiguredWithoutWebClient() {
 		this.context.withClassLoader(new FilteredClassLoader(WebClient.class))
-				.withPropertyValues(this.oAuth2ClientProperties).run((context) -> {
-					assertServletOAuth2ContextConfigured(context);
-					assertReactiveOAuth2ContextNotConfigured(context);
-				});
+			.withPropertyValues(this.oAuth2ClientProperties)
+			.run((context) -> {
+				assertServletOAuth2ContextConfigured(context);
+				assertReactiveOAuth2ContextNotConfigured(context);
+			});
 	}
 
 	@Test
 	public void oauth2ContextConfiguredWithWebApp() {
 		new WebApplicationContextRunner().withConfiguration(AutoConfigurations.of(this.configurations))
-				.withPropertyValues(this.oAuth2ClientProperties).run((context) -> {
-					assertServletOAuth2ContextConfigured(context);
-					assertReactiveOAuth2ContextConfigured(context);
-				});
+			.withPropertyValues(this.oAuth2ClientProperties)
+			.run((context) -> {
+				assertServletOAuth2ContextConfigured(context);
+				assertReactiveOAuth2ContextConfigured(context);
+			});
 	}
 
 	@Test
 	public void oauth2ContextConfiguredWithReactiveWebApp() {
 		new ReactiveWebApplicationContextRunner().withConfiguration(AutoConfigurations.of(this.configurations))
-				.withPropertyValues(this.oAuth2ClientProperties).run((context) -> {
-					assertServletOAuth2ContextConfigured(context);
-					assertReactiveOAuth2ContextConfigured(context);
-				});
+			.withPropertyValues(this.oAuth2ClientProperties)
+			.run((context) -> {
+				assertServletOAuth2ContextConfigured(context);
+				assertReactiveOAuth2ContextConfigured(context);
+			});
 	}
 
 	@Test
 	public void oauth2ContextConfiguredWithReactiveWebAppNoServlet() {
 		new ReactiveWebApplicationContextRunner().withClassLoader(new FilteredClassLoader("javax.servlet"))
-				.withConfiguration(AutoConfigurations.of(this.configurations))
-				.withPropertyValues(this.oAuth2ClientProperties).run((context) -> {
-					assertServletOAuth2ContextNotConfigured(context);
-					assertReactiveOAuth2ContextConfigured(context);
-				});
+			.withConfiguration(AutoConfigurations.of(this.configurations))
+			.withPropertyValues(this.oAuth2ClientProperties)
+			.run((context) -> {
+				assertServletOAuth2ContextNotConfigured(context);
+				assertReactiveOAuth2ContextConfigured(context);
+			});
 	}
 
 	@Test
@@ -97,7 +101,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 	@Test
 	public void oauth2ContextNotConfiguredWithoutSpringSecurity() {
 		this.context.withClassLoader(new FilteredClassLoader(ClientRegistration.class))
-				.run(this::assertOAuth2ContextNotConfigured);
+			.run(this::assertOAuth2ContextNotConfigured);
 	}
 
 	private void assertServletOAuth2ContextConfigured(

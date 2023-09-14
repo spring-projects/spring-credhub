@@ -61,7 +61,7 @@ public final class ClientHttpConnectorFactory {
 
 		if (usingCustomCerts(options)) {
 			TrustManagerFactory trustManagerFactory = sslCertificateUtils
-					.createTrustManagerFactory(options.getCaCertFiles());
+				.createTrustManagerFactory(options.getCaCertFiles());
 
 			httpClient = httpClient.secure((sslContextSpec) -> sslContextSpec.sslContext(
 					SslContextBuilder.forClient().sslProvider(SslProvider.JDK).trustManager(trustManagerFactory)));
@@ -81,8 +81,8 @@ public final class ClientHttpConnectorFactory {
 
 		if (options.getConnectionTimeout() != null) {
 			httpClient = httpClient
-					.tcpConfiguration((tcpClient) -> tcpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
-							Math.toIntExact(options.getConnectionTimeout().toMillis())));
+				.tcpConfiguration((tcpClient) -> tcpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+						Math.toIntExact(options.getConnectionTimeout().toMillis())));
 		}
 
 		return new ReactorClientHttpConnector(httpClient);

@@ -35,8 +35,10 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithParameters() {
-		this.requestBuilder = SshParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.mode(WriteMode.OVERWRITE).parameters(new SshParameters(KeyLength.LENGTH_2048, "ssh comment"));
+		this.requestBuilder = SshParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.OVERWRITE)
+			.parameters(new SshParameters(KeyLength.LENGTH_2048, "ssh comment"));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -47,8 +49,10 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithLengthParameter() {
-		this.requestBuilder = SshParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.mode(WriteMode.NO_OVERWRITE).parameters(new SshParameters(KeyLength.LENGTH_2048));
+		this.requestBuilder = SshParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.NO_OVERWRITE)
+			.parameters(new SshParameters(KeyLength.LENGTH_2048));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -59,8 +63,10 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithCommentParameter() {
-		this.requestBuilder = SshParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.mode(WriteMode.CONVERGE).parameters(new SshParameters("ssh comment"));
+		this.requestBuilder = SshParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.CONVERGE)
+			.parameters(new SshParameters("ssh comment"));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
@@ -71,8 +77,9 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@Test
 	public void serializeWithNoParameters() {
-		this.requestBuilder = SshParametersRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.mode(WriteMode.OVERWRITE);
+		this.requestBuilder = SshParametersRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.OVERWRITE);
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
 

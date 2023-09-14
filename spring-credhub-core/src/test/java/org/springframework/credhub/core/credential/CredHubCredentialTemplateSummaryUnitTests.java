@@ -41,7 +41,8 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 	@ArgumentsSource(ResponseArgumentsProvider.class)
 	public void findByName(ResponseEntity<CredentialSummaryData> expectedResponse) {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.NAME_LIKE_URL_QUERY, CredentialSummaryData.class,
-				NAME.getName())).willReturn(expectedResponse);
+				NAME.getName()))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -63,7 +64,8 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 	@ArgumentsSource(ResponseArgumentsProvider.class)
 	public void findByPath(ResponseEntity<CredentialSummaryData> expectedResponse) {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.PATH_URL_QUERY, CredentialSummaryData.class,
-				NAME.getName())).willReturn(expectedResponse);
+				NAME.getName()))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {

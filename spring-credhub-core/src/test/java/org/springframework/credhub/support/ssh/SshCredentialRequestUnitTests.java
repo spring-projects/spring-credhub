@@ -81,8 +81,10 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	private void buildRequest(SshCredential value) {
-		this.requestBuilder = SshCredentialRequest.builder().name(new SimpleCredentialName("example", "credential"))
-				.mode(WriteMode.OVERWRITE).value(value);
+		this.requestBuilder = SshCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.mode(WriteMode.OVERWRITE)
+			.value(value);
 	}
 
 }

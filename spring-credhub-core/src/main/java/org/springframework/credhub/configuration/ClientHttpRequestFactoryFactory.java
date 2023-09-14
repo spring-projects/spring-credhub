@@ -148,15 +148,21 @@ public final class ClientHttpRequestFactoryFactory {
 				SSLContext sslContext = sslCertificateUtils.getSSLContext(options.getCaCertFiles());
 				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
 				PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder
-						.create().setSSLSocketFactory(sslSocketFactory).setDefaultSocketConfig(socketConfig).build();
+					.create()
+					.setSSLSocketFactory(sslSocketFactory)
+					.setDefaultSocketConfig(socketConfig)
+					.build();
 				httpClientBuilder.setConnectionManager(connectionManager);
 			}
 			else {
 				SSLContext sslContext = SSLContext.getDefault();
 				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
 				PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder
-						.create().useSystemProperties().setSSLSocketFactory(sslSocketFactory)
-						.setDefaultSocketConfig(socketConfig).build();
+					.create()
+					.useSystemProperties()
+					.setSSLSocketFactory(sslSocketFactory)
+					.setDefaultSocketConfig(socketConfig)
+					.build();
 				httpClientBuilder.setConnectionManager(connectionManager);
 			}
 
@@ -164,7 +170,7 @@ public final class ClientHttpRequestFactoryFactory {
 
 			if (options.getConnectionTimeout() != null) {
 				requestConfigBuilder
-						.setConnectTimeout(Timeout.ofMilliseconds(options.getConnectionTimeout().toMillis()));
+					.setConnectTimeout(Timeout.ofMilliseconds(options.getConnectionTimeout().toMillis()));
 			}
 			httpClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
 
@@ -187,7 +193,7 @@ public final class ClientHttpRequestFactoryFactory {
 
 			if (usingCustomCerts(options)) {
 				SSLSocketFactory socketFactory = sslCertificateUtils.getSSLContext(options.getCaCertFiles())
-						.getSocketFactory();
+					.getSocketFactory();
 				X509TrustManager trustManager = sslCertificateUtils.createTrustManager(options.getCaCertFiles());
 
 				builder.sslSocketFactory(socketFactory, trustManager);

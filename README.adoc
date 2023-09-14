@@ -1,4 +1,4 @@
-image:https://spring.io/badges/spring-credhub/snapshot.svg[link=https://projects.spring.io/spring-credhub#quick-start] image:https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A["Revved up by Gradle Enterprise", link="https://ge.spring.io/scans?&search.rootProjectNames=spring-credhub"]
+image:https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A["Revved up by Gradle Enterprise", link="https://ge.spring.io/scans?&search.rootProjectNames=spring-credhub"]
 
 == Spring CredHub
 

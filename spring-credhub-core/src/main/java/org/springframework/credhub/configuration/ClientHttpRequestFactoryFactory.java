@@ -26,9 +26,11 @@ import javax.net.ssl.X509TrustManager;
 import okhttp3.OkHttpClient.Builder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
@@ -163,8 +165,11 @@ public final class ClientHttpRequestFactoryFactory {
 			RequestConfig.Builder requestConfigBuilder = RequestConfig.custom().setAuthenticationEnabled(true);
 
 			if (options.getConnectionTimeout() != null) {
-				requestConfigBuilder
-						.setConnectTimeout(Timeout.ofMilliseconds(options.getConnectionTimeout().toMillis()));
+				BasicHttpClientConnectionManager basicHttpClientConnectionManager = new BasicHttpClientConnectionManager();
+				Timeout connectTimeout = Timeout.ofMilliseconds(options.getConnectionTimeout().toMillis());
+				ConnectionConfig.Builder connectionConfig = ConnectionConfig.custom().setConnectTimeout(connectTimeout);
+				basicHttpClientConnectionManager.setConnectionConfig(connectionConfig.build());
+				httpClientBuilder.setConnectionManager(basicHttpClientConnectionManager);
 			}
 			httpClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
 

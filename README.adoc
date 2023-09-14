@@ -33,11 +33,7 @@ Once running they can be executed with:
 
 [source,bash]
 ----
-./gradlew :spring-credhub-integration-tests:test -PintegrationTests
-----
-[source,bash]
-----
-./gradlew :spring-credhub-reactive-integration-tests:test -PintegrationTests
+./gradlew build -PintegrationTests --no-parallel
 ----
 
 === Working with the code

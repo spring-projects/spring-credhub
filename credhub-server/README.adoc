@@ -3,14 +3,6 @@
 This directory contains artifacts that can be used to start UAA and CredHub servers that can be used to run tests against.
 It is derived https://github.com/orange-cloudfoundry/credhub-docker and https://github.com/ampersand8/credhub-docker.
 
-Before running the servers for the first time, UAA needs to be configured with jwt signing keys.
-To generate the configuration, ensure the `openssl` and https://carvel.dev/ytt/[`ytt`] tools are installed, the run the setup script:
-
-[source,bash]
-----
-$ ./setup-uaa.sh
-----
-
 From the root of this directory, start the servers using Docker Compose:
 
 [source,bash]
@@ -19,3 +11,11 @@ $ docker-compose up
 ----
 
 After both servers have started successfully, UAA will be available at `http://localhost:8080/uaa` and CredHub will be available at `https://localhost:9000`.
+
+
+To generate the test jwt signing keys, ensure the `openssl` and https://carvel.dev/ytt/[`ytt`] tools are installed, then run the setup script:
+
+[source,bash]
+----
+$ ./setup-uaa.sh
+----

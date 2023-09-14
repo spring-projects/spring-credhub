@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
 import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -231,7 +231,7 @@ public class CredHubTemplateAutoConfigurationTests {
 		@Bean
 		AuthorizedClientServiceOAuth2AuthorizedClientManager clientManager(OAuth2ClientProperties properties) {
 			List<ClientRegistration> registrations = new ArrayList<>(
-					OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(properties).values());
+					new OAuth2ClientPropertiesMapper(properties).asClientRegistrations().values());
 			ClientRegistrationRepository clientRegistrationRepository = new InMemoryClientRegistrationRepository(
 					registrations);
 			OAuth2AuthorizedClientService authorizedClientService = new InMemoryOAuth2AuthorizedClientService(
@@ -244,7 +244,7 @@ public class CredHubTemplateAutoConfigurationTests {
 		AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager reactiveClientManager(
 				OAuth2ClientProperties properties) {
 			List<ClientRegistration> registrations = new ArrayList<>(
-					OAuth2ClientPropertiesRegistrationAdapter.getClientRegistrations(properties).values());
+					new OAuth2ClientPropertiesMapper(properties).asClientRegistrations().values());
 			ReactiveClientRegistrationRepository clientRegistrationRepository = new InMemoryReactiveClientRegistrationRepository(
 					registrations);
 			ReactiveOAuth2AuthorizedClientService authorizedClientService = new InMemoryReactiveOAuth2AuthorizedClientService(

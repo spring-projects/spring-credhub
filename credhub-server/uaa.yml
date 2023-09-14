@@ -1,0 +1,60 @@
+scim:
+  users:
+    - credhub|password|credhub|Credhub|User|credhub.read,credhub.write
+oauth:
+  clients:
+    credhub_cli:
+      override: true
+      authorized-grant-types: password,refresh_token
+      scope: credhub.read,credhub.write
+      authorities: uaa.resource
+      access-token-validity: 86400
+      refresh-token-validity: 172800
+      secret: ""
+    credhub_client:
+      override: true
+      authorized-grant-types: client_credentials
+      secret: secret
+      scope: uaa.none
+      authorities: credhub.read,credhub.write
+      access-token-validity: 86400
+jwt:
+  token:
+    signing-key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEpAIBAAKCAQEAzmFA/hQZ8iIl2eaCW0XH1eZ2YuPNMhcaavyvGJwHUbXTUUhr
+      P7cYdNVgycqfRR+64qJ0ulsWpRdbdtQHCvTzzdX/KSTTepW2nxZNFKq+Re3M+L0L
+      GeL1maNJ3xLyJ6dvB9YmImI4k+suCOfNBEV03ZJmTxUw3CVjqCdKRpLunA48BeDq
+      +gQAMpBvL9jdMAXqEmsFhLYE/KWjdBzdjfgt7c29zHz4RX4/N9YS8Q8KWjWgo+Yg
+      HaNZpYs+6AZXrOEp25ZpTMhpseP6NgbNhgwKzsI5l9cV5cNvHQjODBPPsVoPgkiC
+      0LRBMChs5h85e6KLrnjpj4njkzmjL5L7xngMRQIDAQABAoIBABMW79oQpe29tt6W
+      8cvbgoaIkL7I73wIowruYIvYMt0eAnPsTO9R0lNMQW2o7l6IdtLrz/xE3K1cobs2
+      FYiv67VIbBe0LlOScZf5ihu1R3BUdLc1VUeJtMoHTpfxurBsTlrdNh3MFAuqn1F3
+      j4Ero4mzNv9tqF1UoAk3ySkKAkQw6le2bE4CKvN+XMLMQvYrdTKIHbNP5UYqmwQ1
+      fVrdUALiXTJl5tRnWYOs+J2jdysRoti2lrHk94im9wCvHU/AqwMjnEDd1HePaWzD
+      SNb0T8Flk9wdb9jlhmsJBHKkG5E7yKJ/M7KgPCfbvJb3Br5W6kPSeuAS0ABE6VFZ
+      RcLKYKkCgYEA6zxlClAVz/vYiyhrIOXt53qEmKqH02Yfg+NeoujG8YffBeq5szsp
+      1iiMnRNKXMeIRpR48dqvSV5HfhK1i052tVdQAa28CObScROts+0QH8aXHq0roINO
+      y+leqiq94yeSCTEBpEUTWKdYpdKhMw2PDlV0EwrhRP2j5BXbKUR+musCgYEA4JjN
+      YZ3qxPaOqclkM50vbrQN8WUimQywePmJi0pI2RBxSnknePiAP7cW8NCsZ10YXe5B
+      4J8y14l17/oirtr+/S6bD1b//ZPrvX4K0mMiUVNzb05HSjYOTNwEtCc+24FHOlVW
+      fH50njSGRyxXBELDJGEuHBcgYaR+9aaoZ1MXyY8CgYAJA0xfw8fCK0UVt9u66/Rc
+      jR4td0My/1OvyvNiTIbq1CjgYijxTBADS5RvpECSI3b+NUwZACb9KaaVlwPrrXrw
+      4cKH/e8ZbDad7IIYRbn7bbF2lG36fW10dKGS5YZXALogrgcBE0B1ghvsZpCUky1r
+      AC0tWZpd+VXhNFEsWJp9NwKBgQDAvwHLG44mGH5YgagHj4bsV4N7vdKSTEyKlYSP
+      0GFyP2Uqh4zziTfu9j6uzjaWwlMuEVHh5l3okWRwXVc0fmbEeyHBaWVphm+SgL/i
+      zAbgimCPjjsqGfftyAgVX3TXRjwNeL0vPAry1prCK/BFjNIRv4ClxMcaZOQ8BxmR
+      CsNoSwKBgQC1KIdBUzuLkSxLAm3pEscS3F5yqpclM+eYE/ed4tT6ySqs46X2G0kQ
+      6VoXd5fT4YgcHszhT7PuW6j8ywNGUN2Zz3Zl8xgxkIkdEZPrL1Hq5K7uBUDeUwhn
+      96S9sIJEd58utQSu/FqFq14K7dFTQjMtC08T0shzTGhFnWcX85jTcA==
+      -----END RSA PRIVATE KEY-----
+    verification-key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzmFA/hQZ8iIl2eaCW0XH
+      1eZ2YuPNMhcaavyvGJwHUbXTUUhrP7cYdNVgycqfRR+64qJ0ulsWpRdbdtQHCvTz
+      zdX/KSTTepW2nxZNFKq+Re3M+L0LGeL1maNJ3xLyJ6dvB9YmImI4k+suCOfNBEV0
+      3ZJmTxUw3CVjqCdKRpLunA48BeDq+gQAMpBvL9jdMAXqEmsFhLYE/KWjdBzdjfgt
+      7c29zHz4RX4/N9YS8Q8KWjWgo+YgHaNZpYs+6AZXrOEp25ZpTMhpseP6NgbNhgwK
+      zsI5l9cV5cNvHQjODBPPsVoPgkiC0LRBMChs5h85e6KLrnjpj4njkzmjL5L7xngM
+      RQIDAQAB
+      -----END PUBLIC KEY-----

@@ -69,22 +69,24 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 		};
 
 		CredentialDetails<JsonCredential> written = this.credentials
-				.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(json).build());
+			.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(json).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
 		assertThat(written.getValue()).isEqualTo(json);
 		assertThat(written.getCredentialType()).isEqualTo(CredentialType.JSON);
 		assertThat(written.getId()).isNotNull();
 
 		ServicesData servicesData = this.interpolation
-				.interpolateServiceData(buildVcapServices(CREDENTIAL_NAME.getName()));
+			.interpolateServiceData(buildVcapServices(CREDENTIAL_NAME.getName()));
 		assertThat(servicesData).containsKey("service-offering");
 		assertThat(servicesData.get("service-offering")).hasSize(1);
 		assertThat(servicesData.get("service-offering").get(0)).containsKey("credentials");
 
-		Map<String, Object> credentials = (Map<String, Object>) servicesData.get("service-offering").get(0)
-				.get("credentials");
-		assertThat(credentials).containsEntry("url", "https://example.com").containsEntry("username", "user")
-				.containsEntry("password", "secret");
+		Map<String, Object> credentials = (Map<String, Object>) servicesData.get("service-offering")
+			.get(0)
+			.get("credentials");
+		assertThat(credentials).containsEntry("url", "https://example.com")
+			.containsEntry("username", "user")
+			.containsEntry("password", "secret");
 	}
 
 	private ServicesData buildVcapServices(String credHubReferenceName) throws IOException {

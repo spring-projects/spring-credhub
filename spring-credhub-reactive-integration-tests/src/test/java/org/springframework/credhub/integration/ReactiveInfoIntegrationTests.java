@@ -35,8 +35,9 @@ public class ReactiveInfoIntegrationTests extends ReactiveCredHubIntegrationTest
 
 	@Test
 	public void getInfo() {
-		StepVerifier.create(this.info.version()).assertNext((response) -> assertThat(response.getVersion()).isNotNull())
-				.verifyComplete();
+		StepVerifier.create(this.info.version())
+			.assertNext((response) -> assertThat(response.getVersion()).isNotNull())
+			.verifyComplete();
 	}
 
 }

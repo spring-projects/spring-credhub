@@ -62,8 +62,10 @@ public class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 	public void managePermissions() {
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
-		Permission clientPermission = Permission.builder().client("client1")
-				.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
 
 		CredentialPermission added = this.permissions.addPermissions(CREDENTIAL_NAME, clientPermission);
 		assertThat(added.getId()).isNotNull();
@@ -85,8 +87,10 @@ public class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 	public void updatePermissions() {
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
-		Permission clientPermission = Permission.builder().client("client1")
-				.operations(Operation.READ, Operation.WRITE, Operation.DELETE).build();
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
 
 		CredentialPermission added = this.permissions.addPermissions(CREDENTIAL_NAME, clientPermission);
 		assertThat(added.getId()).isNotNull();
@@ -95,8 +99,10 @@ public class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 
 		String permissionId = added.getId();
 
-		Permission newPermission = Permission.builder().client("client1")
-				.operations(Operation.READ_ACL, Operation.WRITE_ACL).build();
+		Permission newPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ_ACL, Operation.WRITE_ACL)
+			.build();
 
 		CredentialPermission updated = this.permissions.updatePermissions(permissionId, CREDENTIAL_NAME, newPermission);
 		assertThat(updated.getId()).isEqualTo(permissionId);

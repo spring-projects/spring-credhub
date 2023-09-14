@@ -63,8 +63,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	static <T> Stream<? extends Arguments> buildDataArguments(CredentialType type, T credential) {
 		return Stream.of(
-				Arguments.of(ResponseEntity.ok().body(
-						new CredentialDetailsData<>(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential)))),
+				Arguments.of(ResponseEntity.ok()
+					.body(new CredentialDetailsData<>(new CredentialDetails<>(CREDENTIAL_ID, NAME, type, credential)))),
 				Arguments.of(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CredentialDetailsData<>())));
 	}
 
@@ -72,7 +72,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		CredentialRequest<T> request = getWriteRequest();
 
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.BASE_URL_PATH), eq(HttpMethod.PUT),
-				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class))).willReturn(expectedResponse);
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -94,7 +95,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		ParametersRequest<P> request = getGenerateRequest();
 
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.BASE_URL_PATH), eq(HttpMethod.POST),
-				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class))).willReturn(expectedResponse);
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -120,7 +122,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 		};
 
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.REGENERATE_URL_PATH), eq(HttpMethod.POST),
-				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class))).willReturn(expectedResponse);
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -140,7 +143,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	void verifyGetById(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.ID_URL_PATH), eq(HttpMethod.GET), isNull(),
-				isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID))).willReturn(expectedResponse);
+				isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID)))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -160,7 +164,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	void verifyGetByName(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY_CURRENT), eq(HttpMethod.GET),
-				isNull(), isA(ParameterizedTypeReference.class), eq(NAME.getName()))).willReturn(expectedResponse);
+				isNull(), isA(ParameterizedTypeReference.class), eq(NAME.getName())))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -180,7 +185,8 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 
 	void verifyGetByNameWithHistory(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY), eq(HttpMethod.GET), isNull(),
-				isA(ParameterizedTypeReference.class), eq(NAME.getName()))).willReturn(expectedResponse);
+				isA(ParameterizedTypeReference.class), eq(NAME.getName())))
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {
@@ -201,7 +207,7 @@ public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCr
 	void verifyGetByNameWithVersions(ResponseEntity<CredentialDetailsData<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.NAME_URL_QUERY_VERSIONS), eq(HttpMethod.GET),
 				isNull(), isA(ParameterizedTypeReference.class), eq(NAME.getName()), eq(5)))
-						.willReturn(expectedResponse);
+			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
 			try {

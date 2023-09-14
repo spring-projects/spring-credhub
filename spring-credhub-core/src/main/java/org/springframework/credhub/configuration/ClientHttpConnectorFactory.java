@@ -62,12 +62,14 @@ public final class ClientHttpConnectorFactory {
 
 		if (usingCustomCerts(options)) {
 			TrustManagerFactory trustManagerFactory = sslCertificateUtils
-					.createTrustManagerFactory(options.getCaCertFiles());
+				.createTrustManagerFactory(options.getCaCertFiles());
 
 			httpClient = httpClient.secure((sslContextSpec) -> {
 				try {
-					sslContextSpec.sslContext(SslContextBuilder.forClient().sslProvider(SslProvider.JDK)
-							.trustManager(trustManagerFactory).build());
+					sslContextSpec.sslContext(SslContextBuilder.forClient()
+						.sslProvider(SslProvider.JDK)
+						.trustManager(trustManagerFactory)
+						.build());
 				}
 				catch (SSLException ex) {
 					logger.error("Error configuring HTTP connections using custom certs", ex);

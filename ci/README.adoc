@@ -1,16 +1,3 @@
 == CI Pipeline
 
-Set up the Concourse target and login:
-
-[source]
-----
-$ fly -t spring-credhub login -n spring-credhub -c https://runway-ci.eng.vmware.com 
-----
-
-Deploy the pipelines
-
-[source]
-----
-$ ./set-pipelines.sh
-----
-
+All pipelines are set from the `main` branch.

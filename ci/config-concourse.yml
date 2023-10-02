@@ -1,4 +1,0 @@
-artifactory-server: https://repo.spring.io
-build-name: spring-credhub
-spring-credhub-slack-success-channel: "#sc-app-broker"
-spring-credhub-slack-failure-channel: "#sc-app-broker"

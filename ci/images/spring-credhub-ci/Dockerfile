@@ -48,4 +48,3 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-c
 WORKDIR /unpack
 
 ADD "https://raw.githubusercontent.com/spring-io/concourse-java-scripts/v$CONCOURSE_JAVA_SCRIPTS_VERSION/concourse-java.sh" /opt/
-ADD "https://repo.spring.io/ui/native/snapshot/io/spring/concourse/releasescripts/concourse-release-scripts/$CONCOURSE_RELEASE_SCRIPTS_VERSION/concourse-release-scripts-$CONCOURSE_RELEASE_SCRIPTS_VERSION.jar" /opt/

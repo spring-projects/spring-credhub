@@ -19,3 +19,6 @@ run:
 params:
   ARTIFACTORY_USERNAME: ((artifactory-username))
   ARTIFACTORY_PASSWORD: ((artifactory-password))
+  GRADLE_ENTERPRISE_CACHE_USERNAME: ((gradle-enterprise-cache-user))
+  GRADLE_ENTERPRISE_CACHE_PASSWORD: ((gradle-enterprise-cache-password))
+  GRADLE_ENTERPRISE_ACCESS_KEY: ((gradle-enterprise-secret-access-key))

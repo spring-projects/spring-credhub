@@ -32,9 +32,9 @@ configurations {
 }
 
 dependencies {
-	compile project(":spring-credhub-core")
-	compile("io.projectreactor:reactor-core")
-	compile("org.springframework.boot:spring-boot-autoconfigure")
+	implementation project(":spring-credhub-core")
+	implementation("io.projectreactor:reactor-core")
+	implementation("org.springframework.boot:spring-boot-autoconfigure")
 
 	asciidoctorExtensions "io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.7"
 }

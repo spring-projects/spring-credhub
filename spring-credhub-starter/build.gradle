@@ -30,8 +30,6 @@ dependencies {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
 
-	okhttpImplementation("com.squareup.okhttp3:okhttp")
-
 	annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 

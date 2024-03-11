@@ -5,7 +5,6 @@ Spring CredHub `CredHubOperations` supports multiple HTTP client libraries to co
 
 * Java’s builtin `HttpURLConnection` (default)
 * https://hc.apache.org/[Apache HttpComponents]
-* https://square.github.io/okhttp/[OkHttp 3]
 
 Choosing a specific client library requires the appropriate dependency to be available on the application classpath.
 The application classpath will be inspected for each client library in the order listed above.
@@ -26,14 +25,6 @@ To use Apache HttpComponents to communicate with CredHub, add the following depe
 
 WARNING: Apache HttpClient's https://hc.apache.org/httpcomponents-client-4.5.x/logging.html[wire logging] can be enabled through logging configuration. Make sure to not accidentally enable wire logging as logs may expose traffic (including tokens and secrets) between your application and CredHub in plain text.
 
-=== OkHttp 3
+=== OkHttp
 
-To use OkHttp 3 to communicate with CredHub, add the following dependency to the application:
-
-[source,xml,%autofit]
-----
-<dependency>
-  <groupId>com.squareup.okhttp3</groupId>
-  <artifactId>okhttp</artifactId>
-</dependency>
-----
+WARNING: OkHttp 3 support was removed in version 3.2.x

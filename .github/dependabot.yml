@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: gradle
     directory: "/"
-    target-branch: "main"
+    target-branch: "3.2.x"
     schedule:
       interval: daily
     open-pull-requests-limit: 15
@@ -12,7 +12,7 @@ updates:
       prefix: "3.2.x"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: gradle
     directory: "/"

@@ -23,11 +23,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpComponents;
 import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.HttpURLConnection;
-import org.springframework.credhub.configuration.ClientHttpRequestFactoryFactory.OkHttp3;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,15 +48,6 @@ public class ClientHttpRequestFactoryFactoryTests {
 		HttpClient httpClient = ((HttpComponentsClientHttpRequestFactory) factory).getHttpClient();
 
 		assertThat(httpClient).isInstanceOf(CloseableHttpClient.class);
-
-		((DisposableBean) factory).destroy();
-	}
-
-	@Test
-	public void okHttp3ClientCreated() throws Exception {
-		ClientHttpRequestFactory factory = OkHttp3.usingOkHttp3(new ClientOptions());
-
-		assertThat(factory).isInstanceOf(OkHttp3ClientHttpRequestFactory.class);
 
 		((DisposableBean) factory).destroy();
 	}

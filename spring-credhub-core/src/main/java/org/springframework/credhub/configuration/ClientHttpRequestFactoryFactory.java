@@ -17,13 +17,9 @@
 package org.springframework.credhub.configuration;
 
 import java.security.GeneralSecurityException;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.X509TrustManager;
 
-import okhttp3.OkHttpClient.Builder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hc.client5.http.config.ConnectionConfig;
@@ -40,15 +36,14 @@ import org.apache.hc.core5.util.Timeout;
 import org.springframework.credhub.support.ClientOptions;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
- * Factory for {@link ClientHttpRequestFactory} that supports Apache HTTP Components,
- * OkHttp the JDK HTTP client (in that order). This factory configures a
- * {@link ClientHttpRequestFactory} depending on the available dependencies.
+ * Factory for {@link ClientHttpRequestFactory} that supports Apache HTTP Components. This
+ * factory configures a {@link ClientHttpRequestFactory} depending on the available
+ * dependencies.
  *
  * @author Mark Paluch
  * @author Scott Frederick
@@ -61,9 +56,6 @@ public final class ClientHttpRequestFactoryFactory {
 
 	private static final boolean HTTP_COMPONENTS_PRESENT = ClassUtils.isPresent(
 			"org.apache.hc.client5.http.impl.classic.HttpClients",
-			ClientHttpRequestFactoryFactory.class.getClassLoader());
-
-	private static final boolean OKHTTP3_PRESENT = ClassUtils.isPresent("okhttp3.OkHttpClient",
 			ClientHttpRequestFactoryFactory.class.getClassLoader());
 
 	private ClientHttpRequestFactoryFactory() {
@@ -83,11 +75,6 @@ public final class ClientHttpRequestFactoryFactory {
 			if (HTTP_COMPONENTS_PRESENT) {
 				logger.info("Using Apache HttpComponents HttpClient for HTTP connections");
 				return HttpComponents.usingHttpComponents(options);
-			}
-
-			if (OKHTTP3_PRESENT) {
-				logger.info("Using OkHttp3 for HTTP connections");
-				return OkHttp3.usingOkHttp3(options);
 			}
 		}
 		catch (GeneralSecurityException ex) {
@@ -111,7 +98,7 @@ public final class ClientHttpRequestFactoryFactory {
 			if (usingCustomCerts(options)) {
 				logger.warn("Trust material will not be configured when using "
 						+ "java.net.HttpUrlConnection. Use an alternate HTTP Client "
-						+ "(Apache HttpComponents HttpClient or OkHttp3) when configuring CA certificates.");
+						+ "(Apache HttpComponents HttpClient) when configuring CA certificates.");
 			}
 
 			SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -180,44 +167,6 @@ public final class ClientHttpRequestFactoryFactory {
 			httpClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
 
 			return new HttpComponentsClientHttpRequestFactory(httpClientBuilder.build());
-		}
-
-	}
-
-	/**
-	 * {@link ClientHttpRequestFactory} using {@link OkHttp3}.
-	 *
-	 * @author Mark Paluch
-	 * @author Scott Frederick
-	 */
-	static class OkHttp3 {
-
-		static ClientHttpRequestFactory usingOkHttp3(ClientOptions options) throws GeneralSecurityException {
-
-			Builder builder = new Builder();
-
-			if (usingCustomCerts(options)) {
-				SSLSocketFactory socketFactory = sslCertificateUtils.getSSLContext(options.getCaCertFiles())
-					.getSocketFactory();
-				X509TrustManager trustManager = sslCertificateUtils.createTrustManager(options.getCaCertFiles());
-
-				builder.sslSocketFactory(socketFactory, trustManager);
-			}
-			else {
-				SSLSocketFactory socketFactory = SSLContext.getDefault().getSocketFactory();
-				X509TrustManager trustManager = sslCertificateUtils.getDefaultX509TrustManager();
-
-				builder.sslSocketFactory(socketFactory, trustManager);
-			}
-
-			if (options.getConnectionTimeout() != null) {
-				builder.connectTimeout(options.getConnectionTimeoutMillis(), TimeUnit.MILLISECONDS);
-			}
-			if (options.getReadTimeout() != null) {
-				builder.readTimeout(options.getReadTimeoutMillis(), TimeUnit.MILLISECONDS);
-			}
-
-			return new OkHttp3ClientHttpRequestFactory(builder.build());
 		}
 
 	}

@@ -18,40 +18,46 @@
 
 set -euo pipefail
 
-readonly FLY_TARGET="spring-credhub"
+readonly FLY_TARGET="${FLY_TARGET:-"spring-credhub"}"
 readonly GITHUB_REPO="https://github.com/spring-projects/spring-credhub"
 
 set_pipeline() {
-	local pipeline_name pipeline_definition branch release_series pipeline_full_name
+	local pipeline_name pipeline_definition branch
 	pipeline_name="${1:?pipeline name must be provided}"
 	pipeline_definition="${2:?pipeline definition file must be provided}"
 	branch="${3:?branch must be provided}"
-	release_series="${4:?release_series must be provided}"
-	pipeline_full_name="${pipeline_name}-${release_series}"
 
-	echo "Setting $pipeline_full_name pipeline..."
+	echo "Setting $pipeline_name $branch pipeline..."
 	fly --target "$FLY_TARGET" set-pipeline \
-		--pipeline "$pipeline_full_name" \
+		--pipeline "$pipeline_name" \
 		--config "$pipeline_definition" \
 		--load-vars-from config-concourse.yml \
+		--instance-var "branch=$branch" \
 		--var "github-repo=$GITHUB_REPO" \
-		--var "branch=$branch" \
-		--var "ci-image-tag=$release_series"
+		--var "ci-image-tag=$branch"
 }
 
 set_pipelines() {
 	fly -t "$FLY_TARGET" sync
-  set_pipeline spring-credhub pipeline.yml 3.2.x 3.2.x
-  set_pipeline spring-credhub pipeline.yml 3.1.x 3.1.x
-  set_pipeline spring-credhub pipeline.yml 3.0.x 3.0.x
-  set_pipeline spring-credhub pipeline.yml 2.3.x 2.3.x
-  set_pipeline spring-credhub pipeline.yml 2.2.x 2.2.x
+  set_pipeline spring-credhub pipeline.yml 3.2.x
+  set_pipeline spring-credhub pipeline.yml 3.1.x
+  set_pipeline spring-credhub pipeline.yml 3.0.x
+  set_pipeline spring-credhub pipeline.yml 2.3.x
+  set_pipeline spring-credhub pipeline.yml 2.2.x
 
-  set_pipeline spring-credhub-pr pr-pipeline.yml 3.2.x 3.2.x
-  set_pipeline spring-credhub-pr pr-pipeline.yml 3.1.x 3.1.x
-  set_pipeline spring-credhub-pr pr-pipeline.yml 3.0.x 3.0.x
-  set_pipeline spring-credhub-pr pr-pipeline.yml 2.3.x 2.3.x
-  set_pipeline spring-credhub-pr pr-pipeline.yml 2.2.x 2.2.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 3.2.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 3.1.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 3.0.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 2.3.x
+  set_pipeline spring-credhub-pr pr-pipeline.yml 2.2.x
 }
 
-set_pipelines
+main() {
+  pushd "$(dirname "$0")/../ci" >/dev/null
+
+  set_pipelines
+
+  popd >/dev/null
+}
+
+main

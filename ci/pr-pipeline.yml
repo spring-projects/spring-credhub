@@ -26,7 +26,6 @@ jobs:
       - task: build-project
         timeout: 1h30m
         privileged: true
-        tags: [ btrfs ]
         file: pull-request/ci/tasks/build-project.yml
         input_mapping:
           git-repo: pull-request

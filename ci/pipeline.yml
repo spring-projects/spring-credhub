@@ -34,7 +34,6 @@ jobs:
         trigger: true
       - task: build-project
         privileged: true
-        tags: [ btrfs ]
         timeout: 1h30m
         file: git-repo/ci/tasks/build-project.yml
         vars:

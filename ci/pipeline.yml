@@ -20,11 +20,27 @@ jobs:
     plan:
       - get: ci-images-git-repo
         trigger: true
-      - put: spring-credhub-ci-image
+      - task: generate-docker-credentials
+        file: ci-images-git-repo/ci/tasks/generate-docker-credentials.yml
+        input_mapping:
+          git-repo: ci-images-git-repo
+        vars:
+          registry: ((spring-credhub-dev-docker-registry))
+          registry-username: ((broadcom-jfrog-artifactory-robot-account.username))
+          registry-password: ((broadcom-jfrog-artifactory-robot-account.password))
+      - task: build-image
+        privileged: true
+        file: ci-images-git-repo/ci/tasks/build-oci-image.yml
+        input_mapping:
+          git-repo: ci-images-git-repo
         params:
-          build: ci-images-git-repo/ci/images/spring-credhub-ci
-        get_params:
-          skip_download: "true"
+          CONTEXT: git-repo/ci/images/spring-credhub-ci
+      - put: spring-credhub-ci-image
+        inputs: detect
+        params:
+          image: image/image.tar
+        no_get: true
+    on_failure: *slack-failure-notification
 
   - name: build
     serial: true
@@ -166,13 +182,17 @@ resource_types:
   - name: artifactory-resource
     type: registry-image
     source:
-      repository: ((dockerhub-mirror-registry))/springio/artifactory-resource
+      repository: ((spring-credhub-virtual-docker-registry))/springio/artifactory-resource
+      username: ((broadcom-jfrog-artifactory-robot-account.username))
+      password: ((broadcom-jfrog-artifactory-robot-account.password))
       tag: 0.0.14
 
   - name: slack-notification
     type: registry-image
     source:
-      repository: ((dockerhub-mirror-registry))/cfcommunity/slack-notification-resource
+      repository: ((spring-credhub-virtual-docker-registry))/cfcommunity/slack-notification-resource
+      username: ((broadcom-jfrog-artifactory-robot-account.username))
+      password: ((broadcom-jfrog-artifactory-robot-account.password))
       tag: latest
 
 resources:
@@ -191,14 +211,18 @@ resources:
     source:
       uri: ((github-repo))
       branch: ((branch))
-      paths: ["ci/images/*"]
+      paths:
+        - ci/images/*
+        - ci/scripts/generate-docker-credentials.sh
+        - ci/tasks/build-oci-image.yml
+        - ci/tasks/generate-docker-credentials.yml
 
   - name: spring-credhub-ci-image
-    type: docker-image
+    type: registry-image
     source:
-      repository: ((corporate-harbor-registry))/((dockerhub-organization))/spring-credhub-ci
-      username: ((corporate-harbor-robot-account.username))
-      password: ((corporate-harbor-robot-account.password))
+      repository: ((spring-credhub-dev-docker-registry))/ci/spring-credhub-ci
+      username: ((broadcom-jfrog-artifactory-robot-account.username))
+      password: ((broadcom-jfrog-artifactory-robot-account.password))
       tag: ((ci-image-tag))
 
   - name: artifactory-repo

@@ -3,9 +3,9 @@ platform: linux
 image_resource:
   type: registry-image
   source:
-    repository: ((corporate-harbor-registry))/((dockerhub-organization))/spring-credhub-ci
-    username: ((corporate-harbor-robot-account.username))
-    password: ((corporate-harbor-robot-account.password))
+    repository: ((spring-credhub-dev-docker-registry))/ci/spring-credhub-ci
+    username: ((broadcom-jfrog-artifactory-robot-account.username))
+    password: ((broadcom-jfrog-artifactory-robot-account.password))
     tag: ((ci-image-tag))
 inputs:
   - name: git-repo
@@ -19,6 +19,9 @@ run:
 params:
   ARTIFACTORY_USERNAME: ((artifactory-username))
   ARTIFACTORY_PASSWORD: ((artifactory-password))
+  DOCKERHUB_MIRROR_REGISTRY: ((spring-credhub-virtual-docker-registry))
+  DOCKERHUB_MIRROR_REGISTRY_USERNAME: ((broadcom-jfrog-artifactory-robot-account.username))
+  DOCKERHUB_MIRROR_REGISTRY_PASSWORD: ((broadcom-jfrog-artifactory-robot-account.password))
   GRADLE_ENTERPRISE_CACHE_USERNAME: ((gradle-enterprise-cache-user))
   GRADLE_ENTERPRISE_CACHE_PASSWORD: ((gradle-enterprise-cache-password))
   GRADLE_ENTERPRISE_ACCESS_KEY: ((gradle-enterprise-secret-access-key))

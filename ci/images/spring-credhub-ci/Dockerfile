@@ -1,4 +1,4 @@
-FROM harbor-repo.vmware.com/dockerhub-proxy-cache/library/ubuntu:jammy
+FROM spring-credhub-docker-virtual.usw1.packages.broadcom.com/ubuntu:jammy
 
 # Environment variables
 ENV TERM dumb

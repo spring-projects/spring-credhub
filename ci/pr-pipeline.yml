@@ -41,13 +41,17 @@ resource_types:
   - name: pull-request
     type: registry-image
     source:
-      repository: ((dockerhub-mirror-registry))/teliaoss/github-pr-resource
+      repository: ((spring-credhub-virtual-docker-registry))/teliaoss/github-pr-resource
+      username: ((broadcom-jfrog-artifactory-robot-account.username))
+      password: ((broadcom-jfrog-artifactory-robot-account.password))
       tag: latest
 
   - name: slack-notification
     type: registry-image
     source:
-      repository: ((dockerhub-mirror-registry))/cfcommunity/slack-notification-resource
+      repository: ((spring-credhub-virtual-docker-registry))/cfcommunity/slack-notification-resource
+      username: ((broadcom-jfrog-artifactory-robot-account.username))
+      password: ((broadcom-jfrog-artifactory-robot-account.password))
       tag: latest
 
 resources:

@@ -45,7 +45,13 @@ RUN curl -Lo ytt "https://github.com/vmware-tanzu/carvel-ytt/releases/download/v
 RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" \
     -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
 
+# https://github.com/docker/cli/issues/4807#issuecomment-1903950217
+RUN \
+    echo "ulimits: $(ulimit -Sn):$(ulimit -Hn)"; \
+    sed -i 's/ulimit -Hn/# ulimit -Hn/g' /etc/init.d/docker; \
+    service docker start; \
+    rm -rf /var/cache/apt;
+
 WORKDIR /unpack
 
 ADD "https://raw.githubusercontent.com/spring-io/concourse-java-scripts/v$CONCOURSE_JAVA_SCRIPTS_VERSION/concourse-java.sh" /opt/
-ADD "https://repo.spring.io/ui/native/snapshot/io/spring/concourse/releasescripts/concourse-release-scripts/$CONCOURSE_RELEASE_SCRIPTS_VERSION/concourse-release-scripts-$CONCOURSE_RELEASE_SCRIPTS_VERSION.jar" /opt/

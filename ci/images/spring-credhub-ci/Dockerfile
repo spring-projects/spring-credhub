@@ -1,4 +1,4 @@
-FROM harbor-repo.vmware.com/dockerhub-proxy-cache/library/ubuntu:jammy
+FROM spring-credhub-docker-virtual.usw1.packages.broadcom.com/ubuntu:jammy
 
 # Environment variables
 ENV TERM dumb
@@ -44,6 +44,13 @@ RUN curl -Lo ytt "https://github.com/vmware-tanzu/carvel-ytt/releases/download/v
 
 RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" \
     -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+
+# https://github.com/docker/cli/issues/4807#issuecomment-1903950217
+RUN \
+    echo "ulimits: $(ulimit -Sn):$(ulimit -Hn)"; \
+    sed -i 's/ulimit -Hn/# ulimit -Hn/g' /etc/init.d/docker; \
+    service docker start; \
+    rm -rf /var/cache/apt;
 
 WORKDIR /unpack
 

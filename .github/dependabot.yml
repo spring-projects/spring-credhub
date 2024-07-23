@@ -41,3 +41,45 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: "3.0.x"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 15
+    labels:
+      - "dependency-upgrade"
+    commit-message:
+      prefix: "3.0.x"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: "2.3.x"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 15
+    labels:
+      - "dependency-upgrade"
+    commit-message:
+      prefix: "2.3.x"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: "2.2.x"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 15
+    labels:
+      - "dependency-upgrade"
+    commit-message:
+      prefix: "2.2.x"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]

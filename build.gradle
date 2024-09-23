@@ -51,7 +51,7 @@ configure(allprojects) {
 	}
 	
 	dependencies {
-		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.42")
+		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.43")
 	}
 }
 

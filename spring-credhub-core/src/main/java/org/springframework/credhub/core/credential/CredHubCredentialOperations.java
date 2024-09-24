@@ -127,6 +127,7 @@ public interface CredHubCredentialOperations {
 	 * @return a collection of paths
 	 * @deprecated as of CredHub 2.0 this operation is not supported
 	 */
+	@Deprecated
 	List<CredentialPath> getAllPaths();
 
 	/**

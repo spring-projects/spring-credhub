@@ -243,3 +243,8 @@ def getLibraryProjects() {
 def getPublishedProjects() {
 	libraryProjects + rootProject
 }
+
+wrapper {
+	gradleVersion = "8.13"
+	distributionType = Wrapper.DistributionType.ALL
+}

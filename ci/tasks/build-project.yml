@@ -22,6 +22,3 @@ params:
   DOCKERHUB_MIRROR_REGISTRY: ((spring-credhub-virtual-docker-registry))
   DOCKERHUB_MIRROR_REGISTRY_USERNAME: ((broadcom-jfrog-artifactory-robot-account.username))
   DOCKERHUB_MIRROR_REGISTRY_PASSWORD: ((broadcom-jfrog-artifactory-robot-account.password))
-  GRADLE_ENTERPRISE_CACHE_USERNAME: ((gradle-enterprise-cache-user))
-  GRADLE_ENTERPRISE_CACHE_PASSWORD: ((gradle-enterprise-cache-password))
-  GRADLE_ENTERPRISE_ACCESS_KEY: ((gradle-enterprise-secret-access-key))

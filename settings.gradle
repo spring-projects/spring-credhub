@@ -30,11 +30,6 @@ pluginManagement {
 	}
 }
 
-plugins {
-	id 'com.gradle.develocity' version '3.19.2'
-	id 'io.spring.ge.conventions' version '0.0.17'
-}
-
 dependencyResolutionManagement {
 	repositories {
 		mavenCentral()

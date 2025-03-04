@@ -95,9 +95,9 @@ public final class ClientHttpConnectorFactory {
 					Math.toIntExact(options.getConnectionTimeout().toMillis()));
 		}
 
-        if (options.getReadTimeout() != null) {
-            httpClient = httpClient.responseTimeout(options.getReadTimeout());
-        }
+		if (options.getReadTimeout() != null) {
+			httpClient = httpClient.responseTimeout(options.getReadTimeout());
+		}
 
 		return new ReactorClientHttpConnector(httpClient);
 	}

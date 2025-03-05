@@ -1,20 +1,4 @@
 ---
-aliases:
-  - &slack-success-notification
-    put: alert
-    params:
-      icon_emoji: ":concourse:"
-      username: concourse
-      channel: ((spring-credhub-slack-success-channel))
-      text: "$BUILD_PIPELINE_NAME pipeline has succeeded with build <${ATC_EXTERNAL_URL}/builds/$BUILD_ID|$BUILD_NAME>!"
-  - &slack-failure-notification
-    put: alert
-    params:
-      icon_emoji: ":animal-1252:"
-      username: concourse
-      channel: ((spring-credhub-slack-failure-channel))
-      text: <!here> Build <${ATC_EXTERNAL_URL}/builds/$BUILD_ID|$BUILD_NAME> of job $BUILD_JOB_NAME in the $BUILD_PIPELINE_NAME pipeline has failed!
-
 jobs:
   - name: build-ci-images
     plan:
@@ -40,7 +24,6 @@ jobs:
         params:
           image: image/image.tar
         no_get: true
-    on_failure: *slack-failure-notification
 
   - name: build
     serial: true
@@ -69,10 +52,6 @@ jobs:
               properties:
                 "zip.type": "docs"
                 "zip.deployed": "false"
-    on_success:
-      *slack-success-notification
-    on_failure:
-      *slack-failure-notification
 
   - name: stage-milestone
     serial: true
@@ -187,14 +166,6 @@ resource_types:
       password: ((broadcom-jfrog-artifactory-robot-account.password))
       tag: 0.0.14
 
-  - name: slack-notification
-    type: registry-image
-    source:
-      repository: ((spring-credhub-virtual-docker-registry))/cfcommunity/slack-notification-resource
-      username: ((broadcom-jfrog-artifactory-robot-account.username))
-      password: ((broadcom-jfrog-artifactory-robot-account.password))
-      tag: latest
-
 resources:
   - name: git-repo
     type: git
@@ -232,11 +203,6 @@ resources:
       username: ((artifactory-username))
       password: ((artifactory-password))
       build_name: ((build-name))
-
-  - name: alert
-    type: slack-notification
-    source:
-      url: ((scs-slack-webhook))
 
 groups:
   - name: "builds"

@@ -23,8 +23,8 @@ pluginManagement {
 	}
 	repositories {
 		gradlePluginPortal()
-		maven { url "https://repo.spring.io/plugins-release" }
-		if (version.endsWith('-SNAPSHOT')) {
+		mavenCentral()
+		if (version =~ /((-M|-RC)[0-9]+|-SNAPSHOT)$/) {
 			maven { url "https://repo.spring.io/plugins-snapshot" }
 		}
 	}

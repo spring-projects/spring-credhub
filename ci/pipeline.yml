@@ -220,3 +220,14 @@ groups:
   - name: "ci-images"
     jobs:
       - build-ci-images
+  - name: "all"
+    jobs:
+      - build
+      - stage-milestone
+      - promote-milestone
+      - stage-rc
+      - promote-rc
+      - stage-release
+      - promote-release
+      - sync-to-maven-central
+      - build-ci-images

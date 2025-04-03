@@ -5,9 +5,9 @@ name: Java 21
 
 on:
   push:
-    branches: [ 3.3.*, 3.2.* ]
+    branches: [ 3.4.*, 3.3.*, 3.2.* ]
   pull_request:
-    branches: [ 3.3.*, 3.2.* ]
+    branches: [ 3.4.*, 3.3.*, 3.2.* ]
 
 jobs:
   build:

@@ -36,15 +36,16 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
-import org.springframework.security.oauth2.client.endpoint.DefaultClientCredentialsTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2ClientCredentialsGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.RestClientClientCredentialsTokenResponseClient;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -181,17 +182,17 @@ final class CredHubRestTemplateFactory {
 
 	private static OAuth2AccessTokenResponseClient<OAuth2ClientCredentialsGrantRequest> buildTokenResponseClient(
 			ClientHttpRequestFactory clientHttpRequestFactory) {
-		DefaultClientCredentialsTokenResponseClient tokenResponseClient = new DefaultClientCredentialsTokenResponseClient();
-		tokenResponseClient.setRestOperations(createTokenServerRestTemplate(clientHttpRequestFactory));
+		RestClientClientCredentialsTokenResponseClient tokenResponseClient = new RestClientClientCredentialsTokenResponseClient();
+		tokenResponseClient.setRestClient(createTokenServerRestClient(clientHttpRequestFactory));
 		return tokenResponseClient;
 	}
 
-	private static RestTemplate createTokenServerRestTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
+	private static RestClient createTokenServerRestClient(ClientHttpRequestFactory clientHttpRequestFactory) {
 		RestTemplate restOperations = new RestTemplate(
 				Arrays.asList(new FormHttpMessageConverter(), new OAuth2AccessTokenResponseHttpMessageConverter()));
 		restOperations.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
 		restOperations.setRequestFactory(clientHttpRequestFactory);
-		return restOperations;
+		return RestClient.create(restOperations).mutate().build();
 	}
 
 	/**

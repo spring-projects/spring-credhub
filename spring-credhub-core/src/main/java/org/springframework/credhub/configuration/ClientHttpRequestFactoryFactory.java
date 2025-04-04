@@ -29,7 +29,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
 import org.apache.hc.core5.http.io.SocketConfig;
 import org.apache.hc.core5.util.Timeout;
 
@@ -135,21 +135,21 @@ public final class ClientHttpRequestFactoryFactory {
 
 			if (usingCustomCerts(options)) {
 				SSLContext sslContext = sslCertificateUtils.getSSLContext(options.getCaCertFiles());
-				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
+				DefaultClientTlsStrategy tlsStrategy = new DefaultClientTlsStrategy(sslContext);
 				PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder
 					.create()
-					.setSSLSocketFactory(sslSocketFactory)
+					.setTlsSocketStrategy(tlsStrategy)
 					.setDefaultSocketConfig(socketConfig)
 					.build();
 				httpClientBuilder.setConnectionManager(connectionManager);
 			}
 			else {
 				SSLContext sslContext = SSLContext.getDefault();
-				SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
+				DefaultClientTlsStrategy tlsStrategy = new DefaultClientTlsStrategy(sslContext);
 				PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder
 					.create()
 					.useSystemProperties()
-					.setSSLSocketFactory(sslSocketFactory)
+					.setTlsSocketStrategy(tlsStrategy)
 					.setDefaultSocketConfig(socketConfig)
 					.build();
 				httpClientBuilder.setConnectionManager(connectionManager);

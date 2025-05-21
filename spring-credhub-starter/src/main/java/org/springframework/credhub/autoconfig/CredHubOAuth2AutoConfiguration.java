@@ -24,14 +24,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
+import org.springframework.boot.autoconfigure.security.oauth2.client.ConditionalOnOAuth2ClientRegistrationProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
 import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
@@ -44,6 +44,8 @@ import org.springframework.security.oauth2.client.registration.InMemoryReactiveC
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.AuthenticatedPrincipalOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.client.web.server.AuthenticatedPrincipalServerOAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Spring CredHub OAuth2 support
@@ -55,7 +57,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 @EnableConfigurationProperties(OAuth2ClientProperties.class)
 @ConditionalOnClass(name = "org.springframework.security.oauth2.client.registration.ClientRegistration")
 @ConditionalOnProperty("spring.credhub.oauth2.registration-id")
-@Conditional(ClientsConfiguredCondition.class)
+@ConditionalOnOAuth2ClientRegistrationProperties
 public class CredHubOAuth2AutoConfiguration {
 
 	private final OAuth2ClientProperties properties;
@@ -140,6 +142,21 @@ public class CredHubOAuth2AutoConfiguration {
 	public ReactiveOAuth2AuthorizedClientService credHubReactiveAuthorizedClientService(
 			ReactiveClientRegistrationRepository clientRegistrationRepository) {
 		return new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrationRepository);
+	}
+
+	/**
+	 * Create a {@code ServerOAuth2AuthorizedClientRepository} bean for use with an
+	 * OAuth2-enabled {@code ReactiveCredHubTemplate}, in case
+	 * {@link ReactiveOAuth2ClientWebSecurityAutoConfiguration} doesn't configure one.
+	 * @param authorizedClientService a {@code ReactiveOAuth2AuthorizedClientService}
+	 * @return the {@code ServerOAuth2AuthorizedClientRepository}
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
+	ServerOAuth2AuthorizedClientRepository authorizedClientRepository(
+			ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+		return new AuthenticatedPrincipalServerOAuth2AuthorizedClientRepository(authorizedClientService);
 	}
 
 }

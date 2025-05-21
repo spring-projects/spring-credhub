@@ -23,7 +23,7 @@ plugins {
 description = "Spring CredHub"
 
 ext {
-	springBootVersion = "3.4.6"
+	springBootVersion = "3.5.3"
 	javadocLinks = [
 			"https://docs.oracle.com/en/java/javase/17/docs/api/",
 			"https://docs.spring.io/spring-framework/docs/current/javadoc-api/"
@@ -47,7 +47,7 @@ configure(allprojects) {
 	nohttp {
 		allowlistFile = rootProject.file("src/nohttp/allowlist.lines")
 	}
-	
+
 	dependencies {
 		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.46")
 	}
@@ -206,7 +206,7 @@ configure(rootProject) {
 	artifacts {
 		archives docsZip
 	}
-	
+
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {

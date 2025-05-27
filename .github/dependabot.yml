@@ -15,10 +15,16 @@ updates:
     labels:
       - "dependency-upgrade"
     commit-message:
-      prefix: "3.4.x"
+      prefix: "(3.4.x)"
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.springframework.boot"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "org.springframework.boot:spring-boot-dependencies"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
 
   - package-ecosystem: gradle
     directory: "/"
@@ -29,10 +35,16 @@ updates:
     labels:
       - "dependency-upgrade"
     commit-message:
-      prefix: "3.3.x"
+      prefix: "(3.3.x)"
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.springframework.boot"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "org.springframework.boot:spring-boot-dependencies"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
 
   - package-ecosystem: gradle
     directory: "/"
@@ -43,7 +55,13 @@ updates:
     labels:
       - "dependency-upgrade"
     commit-message:
-      prefix: "3.2.x"
+      prefix: "(3.2.x)"
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.springframework.boot"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "org.springframework.boot:spring-boot-dependencies"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"

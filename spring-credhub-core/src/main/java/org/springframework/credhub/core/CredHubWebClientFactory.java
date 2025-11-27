@@ -16,15 +16,15 @@
 
 package org.springframework.credhub.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.credhub.support.utils.JsonUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.codec.CodecConfigurer;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
@@ -126,11 +126,11 @@ final class CredHubWebClientFactory {
 
 	private static WebClient.Builder buildWebClient(String baseUri, ClientHttpConnector clientHttpConnector) {
 		ExchangeStrategies strategies = ExchangeStrategies.builder().codecs((configurer) -> {
-			ObjectMapper mapper = JsonUtils.buildObjectMapper();
+			JsonMapper mapper = JsonUtils.buildJsonMapper();
 
 			CodecConfigurer.DefaultCodecs dc = configurer.defaultCodecs();
-			dc.jackson2JsonDecoder(new Jackson2JsonDecoder(mapper));
-			dc.jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
+			dc.jacksonJsonDecoder(new JacksonJsonDecoder(mapper));
+			dc.jacksonJsonEncoder(new JacksonJsonEncoder(mapper));
 		}).build();
 
 		return WebClient.builder()

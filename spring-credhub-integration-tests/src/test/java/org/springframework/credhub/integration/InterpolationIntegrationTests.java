@@ -20,10 +20,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
 import org.springframework.credhub.core.interpolation.CredHubInterpolationOperations;
@@ -105,7 +105,7 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 				}
 				""".formatted(credHubReferenceName);
 
-		ObjectMapper mapper = JsonUtils.buildObjectMapper();
+		JsonMapper mapper = JsonUtils.buildJsonMapper();
 		return mapper.readValue(vcapServices, ServicesData.class);
 	}
 

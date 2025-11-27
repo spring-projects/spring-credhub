@@ -16,15 +16,14 @@
 
 package org.springframework.credhub.support;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.exc.JacksonIOException;
+import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.credhub.support.utils.JsonUtils;
 
@@ -37,10 +36,10 @@ public final class JsonTestUtils {
 
 	public static String toJson(Object object) {
 		try {
-			ObjectMapper mapper = JsonUtils.buildObjectMapper();
+			JsonMapper mapper = JsonUtils.buildJsonMapper();
 			return mapper.writeValueAsString(object);
 		}
-		catch (JsonProcessingException ex) {
+		catch (JacksonException ex) {
 			fail("Error creating JSON string from object: " + ex);
 			throw new IllegalStateException(ex);
 		}
@@ -48,10 +47,10 @@ public final class JsonTestUtils {
 
 	public static <T> T fromJson(String json, Class<T> type) {
 		try {
-			ObjectMapper mapper = JsonUtils.buildObjectMapper();
+			JsonMapper mapper = JsonUtils.buildJsonMapper();
 			return mapper.readValue(json, type);
 		}
-		catch (IOException ex) {
+		catch (JacksonIOException ex) {
 			fail("Error parsing JSON string to object: " + ex);
 			throw new IllegalStateException(ex);
 		}

@@ -18,7 +18,6 @@ package org.springframework.credhub.core.interpolation;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.ServiceInstanceCredentialName;
@@ -92,7 +92,7 @@ public class CredHubInterpolationTemplateUnitTests {
 				}
 				""".formatted(credHubReferenceName);
 
-		ObjectMapper mapper = JsonUtils.buildObjectMapper();
+		JsonMapper mapper = JsonUtils.buildJsonMapper();
 		return mapper.readValue(vcapServices, ServicesData.class);
 	}
 

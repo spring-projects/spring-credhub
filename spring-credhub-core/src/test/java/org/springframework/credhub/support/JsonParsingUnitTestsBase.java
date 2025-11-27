@@ -18,8 +18,8 @@ package org.springframework.credhub.support;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.databind.util.StdDateFormat;
 import org.junit.jupiter.api.BeforeEach;
+import tools.jackson.databind.util.StdDateFormat;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

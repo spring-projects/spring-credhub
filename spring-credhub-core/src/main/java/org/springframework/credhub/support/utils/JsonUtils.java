@@ -16,16 +16,16 @@
 
 package org.springframework.credhub.support.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.jsontype.NamedType;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.cfg.EnumFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.jsontype.NamedType;
+import tools.jackson.databind.util.StdDateFormat;
 
 import org.springframework.credhub.support.CredentialType;
 
@@ -40,40 +40,32 @@ public final class JsonUtils {
 	}
 
 	/**
-	 * Create and configure the {@link ObjectMapper} used for serializing and
-	 * deserializing JSON requests and responses.
-	 * @return a configured {@link ObjectMapper}
+	 * Create and configure the {@link JsonMapper} used for serializing and deserializing
+	 * JSON requests and responses.
+	 * @return a configured {@link JsonMapper}
 	 */
-	public static ObjectMapper buildObjectMapper() {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setDateFormat(new StdDateFormat());
-		objectMapper.setPropertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy());
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
-		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-
-		configureCredentialDetailTypeMapping(objectMapper);
-
-		return objectMapper;
+	public static JsonMapper buildJsonMapper() {
+		return JsonMapper.builder()
+			.defaultDateFormat(new StdDateFormat())
+			.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+			.changeDefaultPropertyInclusion((incl) -> incl.withValueInclusion(JsonInclude.Include.NON_EMPTY))
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.configure(EnumFeature.READ_ENUMS_USING_TO_STRING, true)
+			.configure(EnumFeature.WRITE_ENUMS_USING_TO_STRING, true)
+			.configure(MapperFeature.ALLOW_FINAL_FIELDS_AS_MUTATORS, true)
+			.registerSubtypes(credentialDetailTypeMappings())
+			.build();
 	}
 
 	/**
-	 * Configure type mapping for the {@literal value} field in the
-	 * {@literal CredentialDetails} object.
-	 * @param objectMapper the {@link ObjectMapper} to configure
+	 * Return type mappings for the {@literal value} field in the
+	 * {@literal CredentialDetails} objects.
+	 * @return array of {@link NamedType} for {@literal CredentialDetails}.
 	 */
-	private static void configureCredentialDetailTypeMapping(ObjectMapper objectMapper) {
-		List<NamedType> subtypes = new ArrayList<>();
-		for (CredentialType type : CredentialType.values()) {
-			subtypes.add(new NamedType(type.getModelClass(), type.getValueType()));
-		}
-
-		registerSubtypes(objectMapper, subtypes);
-	}
-
-	private static void registerSubtypes(ObjectMapper objectMapper, List<NamedType> subtypes) {
-		objectMapper.registerSubtypes(subtypes.toArray(new NamedType[] {}));
+	private static NamedType[] credentialDetailTypeMappings() {
+		return Arrays.stream(CredentialType.values())
+			.map((type) -> new NamedType(type.getModelClass(), type.getValueType()))
+			.toArray(NamedType[]::new);
 	}
 
 }

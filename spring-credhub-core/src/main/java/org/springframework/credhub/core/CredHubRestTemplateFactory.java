@@ -32,7 +32,7 @@ import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
@@ -132,9 +132,8 @@ final class CredHubRestTemplateFactory {
 		restTemplate.setRequestFactory(clientHttpRequestFactory);
 		restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(baseUri));
 		restTemplate.getInterceptors().add(new CredHubRequestInterceptor());
-		restTemplate
-			.setMessageConverters(Arrays.asList(new ByteArrayHttpMessageConverter(), new StringHttpMessageConverter(),
-					new MappingJackson2HttpMessageConverter(JsonUtils.buildObjectMapper())));
+		restTemplate.setMessageConverters(Arrays.asList(new ByteArrayHttpMessageConverter(),
+				new StringHttpMessageConverter(), new JacksonJsonHttpMessageConverter(JsonUtils.buildJsonMapper())));
 	}
 
 	/**

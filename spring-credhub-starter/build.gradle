@@ -23,8 +23,7 @@ dependencies {
 
 	reactiveImplementation("org.springframework.boot:spring-boot-starter-webflux")
 
-	securityImplementation("org.springframework.security:spring-security-config")
-	securityImplementation("org.springframework.security:spring-security-oauth2-client")
+	securityImplementation("org.springframework.boot:spring-boot-security-oauth2-client")
 
 	httpclientImplementation("org.apache.httpcomponents.client5:httpclient5") {
 		exclude(group: 'commons-logging', module: 'commons-logging')

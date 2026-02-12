@@ -23,17 +23,11 @@ description = 'Spring CredHub Reactive Integration Tests'
 
 dependencies {
 	testImplementation(project(":spring-credhub-starter"))
-	testImplementation("org.springframework.boot:spring-boot-starter")
-
 	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testImplementation("io.projectreactor.netty:reactor-netty")
-
-	testImplementation("org.springframework.security:spring-security-config")
-	testImplementation("org.springframework.security:spring-security-oauth2-client")
-
+	testImplementation("org.springframework.boot:spring-boot-security-oauth2-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
-	testImplementation("org.assertj:assertj-core")
 }
 
 test {

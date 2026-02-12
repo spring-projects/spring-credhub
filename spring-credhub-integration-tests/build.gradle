@@ -23,17 +23,10 @@ description = 'Spring CredHub Integration Tests'
 
 dependencies {
 	testImplementation(project(":spring-credhub-starter"))
-	testImplementation("org.springframework.boot:spring-boot-starter")
-
-	testImplementation("org.springframework.boot:spring-boot-starter-web")
-
-	testImplementation("org.springframework.security:spring-security-config")
-	testImplementation("org.springframework.security:spring-security-oauth2-client")
-
-	testImplementation("org.apache.httpcomponents.client5:httpclient5")
-
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc")
+	testImplementation("org.springframework.boot:spring-boot-security-oauth2-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.assertj:assertj-core")
+	testImplementation("org.apache.httpcomponents.client5:httpclient5")
 }
 
 test {

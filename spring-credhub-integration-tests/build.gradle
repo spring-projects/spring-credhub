@@ -38,5 +38,3 @@ test {
 bootJar {
 	enabled = false
 }
-
-configurations.archives.artifacts.clear()

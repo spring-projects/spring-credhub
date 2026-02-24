@@ -40,11 +40,15 @@ javadoc {
 	enabled = false
 }
 
-task prepareAsciidocBuild(type: Sync) {
+test {
+	enabled = false
+}
+
+tasks.register('prepareAsciidocBuild', Sync) {
 	// Copy doc sources
 	from "src/docs/asciidoc"
 	// to a temporary build directory
-	into "$buildDir/asciidoc"
+	into layout.buildDirectory.dir("asciidoc")
 }
 
 asciidoctor {
@@ -54,7 +58,7 @@ asciidoctor {
 	outputOptions {
 		backends "spring-html"
 	}
-	sourceDir = file("$buildDir/asciidoc")
+	sourceDir = layout.buildDirectory.dir("asciidoc").get().asFile
 	sources {
 		include '*.adoc'
 	}
@@ -84,5 +88,3 @@ asciidoctor {
 			'highlightjs-theme': 'github',
 			'project-version': project.version
 }
-
-configurations.archives.artifacts.clear()

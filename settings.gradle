@@ -25,7 +25,7 @@ pluginManagement {
 		gradlePluginPortal()
 		mavenCentral()
 		if (version =~ /((-M|-RC)[0-9]+|-SNAPSHOT)$/) {
-			maven { url "https://repo.spring.io/plugins-snapshot" }
+			maven { url = "https://repo.spring.io/plugins-snapshot" }
 		}
 	}
 }
@@ -33,16 +33,16 @@ pluginManagement {
 dependencyResolutionManagement {
 	repositories {
 		mavenCentral()
-		maven { url 'https://repo.spring.io/release' }
+		maven { url = 'https://repo.spring.io/release' }
 	}
 	if (version =~ /((-M|-RC)[0-9]+|-SNAPSHOT)$/) {
 		repositories {
-			maven { url 'https://repo.spring.io/milestone' }
+			maven { url = 'https://repo.spring.io/milestone' }
 		}
 	}
 	if (version.endsWith('-SNAPSHOT')) {
 		repositories {
-			maven { url 'https://repo.spring.io/snapshot' }
+			maven { url = 'https://repo.spring.io/snapshot' }
 		}
 	}
 }

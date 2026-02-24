@@ -17,4 +17,7 @@
 /**
  * Core API abstractions for credential operations.
  */
+@NullMarked
 package org.springframework.credhub.core.credential;
+
+import org.jspecify.annotations.NullMarked;

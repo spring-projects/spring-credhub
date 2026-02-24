@@ -17,4 +17,7 @@
 /**
  * Java representations of CredHub JSON credentials.
  */
+@NullMarked
 package org.springframework.credhub.support.json;
+
+import org.jspecify.annotations.NullMarked;

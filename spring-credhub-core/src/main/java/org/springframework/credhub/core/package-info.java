@@ -17,4 +17,7 @@
 /**
  * Core API abstractions for Spring CredHub.
  */
+@NullMarked
 package org.springframework.credhub.core;
+
+import org.jspecify.annotations.NullMarked;

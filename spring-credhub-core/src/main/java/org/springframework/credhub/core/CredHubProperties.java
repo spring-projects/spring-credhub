@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.core;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Properties containing information about a CredHub server.
  *
@@ -24,9 +26,9 @@ package org.springframework.credhub.core;
  */
 public class CredHubProperties {
 
-	private String url;
+	private @Nullable String url;
 
-	private OAuth2 oauth2;
+	private @Nullable OAuth2 oauth2;
 
 	/**
 	 * Create a new instance without initializing properties.
@@ -39,7 +41,7 @@ public class CredHubProperties {
 	 * be prepended to all requests to CredHub.
 	 * @return the base URI
 	 */
-	public String getUrl() {
+	public @Nullable String getUrl() {
 		return this.url;
 	}
 
@@ -56,7 +58,7 @@ public class CredHubProperties {
 	 * Get the OAuth2 properties.
 	 * @return the OAuth2 properties.
 	 */
-	public OAuth2 getOauth2() {
+	public @Nullable OAuth2 getOauth2() {
 		return this.oauth2;
 	}
 
@@ -73,7 +75,7 @@ public class CredHubProperties {
 	 */
 	public static class OAuth2 {
 
-		private String registrationId;
+		private @Nullable String registrationId;
 
 		/**
 		 * Create a new instance without initializing properties.
@@ -85,7 +87,7 @@ public class CredHubProperties {
 		 * Get the OAuth2 client registration ID used to authenticate with CredHub.
 		 * @return the OAuth2 registration ID
 		 */
-		public String getRegistrationId() {
+		public @Nullable String getRegistrationId() {
 			return this.registrationId;
 		}
 

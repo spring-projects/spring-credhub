@@ -17,4 +17,7 @@
 /**
  * Spring configuration support for Spring CredHub.
  */
+@NullMarked
 package org.springframework.credhub.configuration;
+
+import org.jspecify.annotations.NullMarked;

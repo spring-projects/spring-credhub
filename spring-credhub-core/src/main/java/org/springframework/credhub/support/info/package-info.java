@@ -17,4 +17,7 @@
 /**
  * Java representations of CredHub server information.
  */
+@NullMarked
 package org.springframework.credhub.support.info;
+
+import org.jspecify.annotations.NullMarked;

@@ -17,4 +17,7 @@
 /**
  * Core API abstractions for permission operations.
  */
+@NullMarked
 package org.springframework.credhub.core.permission;
+
+import org.jspecify.annotations.NullMarked;

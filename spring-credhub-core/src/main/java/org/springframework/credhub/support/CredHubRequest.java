@@ -19,6 +19,7 @@ package org.springframework.credhub.support;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.Assert;
 
@@ -32,16 +33,16 @@ import org.springframework.util.Assert;
 public class CredHubRequest<T> {
 
 	/** The write mode indicator. */
-	protected WriteMode mode;
+	protected @Nullable WriteMode mode;
 
 	/** The credential name. */
-	protected CredentialName name;
+	protected @Nullable CredentialName name;
 
 	/** The credential type. */
-	protected CredentialType credentialType;
+	protected @Nullable CredentialType credentialType;
 
 	/** The credential details. */
-	protected T details;
+	protected @Nullable T details;
 
 	/**
 	 * Create a {@link CredHubRequest}.
@@ -53,7 +54,7 @@ public class CredHubRequest<T> {
 	 * Get the value of the write mode indicator.
 	 * @return the write mode
 	 */
-	public WriteMode getMode() {
+	public @Nullable WriteMode getMode() {
 		return this.mode;
 	}
 
@@ -66,7 +67,7 @@ public class CredHubRequest<T> {
 	 * @return the name of the credential
 	 */
 	@JsonInclude
-	public String getName() {
+	public @Nullable String getName() {
 		return (this.name == null) ? null : this.name.getName();
 	}
 

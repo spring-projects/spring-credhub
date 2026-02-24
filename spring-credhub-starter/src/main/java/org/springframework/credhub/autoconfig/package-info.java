@@ -17,4 +17,7 @@
 /**
  * Spring auto configuration support for Spring CredHub.
  */
+@NullMarked
 package org.springframework.credhub.autoconfig;
+
+import org.jspecify.annotations.NullMarked;

@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The details of a credential that has been written to CredHub.
@@ -33,13 +34,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 public class CredentialDetails<T> extends CredentialSummary {
 
-	private final String id;
+	private final @Nullable String id;
 
 	@JsonProperty("type")
-	private final CredentialType credentialType;
+	private final @Nullable CredentialType credentialType;
 
 	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
-	private final T value;
+	private final @Nullable T value;
 
 	/**
 	 * Create a {@link CredentialDetails}.
@@ -70,7 +71,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 	 * Get the the CredHub-generated unique ID of the credential.
 	 * @return the credential ID
 	 */
-	public String getId() {
+	public @Nullable String getId() {
 		return this.id;
 	}
 
@@ -78,7 +79,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 	 * Get the client-provided {@link CredentialType} of the credential.
 	 * @return the credential type
 	 */
-	public CredentialType getCredentialType() {
+	public @Nullable CredentialType getCredentialType() {
 		return this.credentialType;
 	}
 
@@ -86,7 +87,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 	 * Get the client-provided value for the credential.
 	 * @return the credential value
 	 */
-	public T getValue() {
+	public @Nullable T getValue() {
 		return this.value;
 	}
 

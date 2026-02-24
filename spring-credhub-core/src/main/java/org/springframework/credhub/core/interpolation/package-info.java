@@ -17,4 +17,7 @@
 /**
  * Core API abstractions for interpolation operations.
  */
+@NullMarked
 package org.springframework.credhub.core.interpolation;
+
+import org.jspecify.annotations.NullMarked;

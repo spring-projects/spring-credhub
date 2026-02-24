@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.credhub.support.permissions.Permission;
 
 /**
@@ -31,9 +33,9 @@ import org.springframework.credhub.support.permissions.Permission;
  */
 public class CredentialPermissions {
 
-	private final CredentialName credentialName;
+	private final @Nullable CredentialName credentialName;
 
-	private final List<Permission> permissions;
+	private final @Nullable List<Permission> permissions;
 
 	/**
 	 * Create a {@link CredentialPermissions}.
@@ -68,7 +70,7 @@ public class CredentialPermissions {
 	 * Get the collection of {@link Permission}s.
 	 * @return the collection of {@link Permission}s
 	 */
-	public List<Permission> getPermissions() {
+	public @Nullable List<Permission> getPermissions() {
 		return this.permissions;
 	}
 

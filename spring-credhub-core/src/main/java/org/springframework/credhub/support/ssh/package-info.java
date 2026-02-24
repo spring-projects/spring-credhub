@@ -17,4 +17,7 @@
 /**
  * Java representations of CredHub SSH credentials.
  */
+@NullMarked
 package org.springframework.credhub.support.ssh;
+
+import org.jspecify.annotations.NullMarked;

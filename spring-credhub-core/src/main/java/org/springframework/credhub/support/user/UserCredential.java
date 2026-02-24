@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.user;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.Assert;
 
 /**
@@ -26,11 +28,11 @@ import org.springframework.util.Assert;
  */
 public class UserCredential {
 
-	private final String username;
+	private final @Nullable String username;
 
-	private final String password;
+	private final @Nullable String password;
 
-	private final String passwordHash;
+	private final @Nullable String passwordHash;
 
 	/**
 	 * Create an empty {@link UserCredential}. Intended to be used internally for
@@ -70,7 +72,7 @@ public class UserCredential {
 	 * Get the user name.
 	 * @return the user name
 	 */
-	public String getUsername() {
+	public @Nullable String getUsername() {
 		return this.username;
 	}
 
@@ -78,7 +80,7 @@ public class UserCredential {
 	 * Get the user password.
 	 * @return the user password
 	 */
-	public String getPassword() {
+	public @Nullable String getPassword() {
 		return this.password;
 	}
 
@@ -86,7 +88,7 @@ public class UserCredential {
 	 * Get the SHA-512 hash of the user password.
 	 * @return the hash of the user password
 	 */
-	public String getPasswordHash() {
+	public @Nullable String getPasswordHash() {
 		return this.passwordHash;
 	}
 

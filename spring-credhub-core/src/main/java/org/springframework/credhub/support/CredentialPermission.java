@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.credhub.support.permissions.Permission;
 
@@ -32,12 +33,12 @@ import org.springframework.credhub.support.permissions.Permission;
 public class CredentialPermission {
 
 	@JsonProperty("uuid")
-	private final String uuid;
+	private final @Nullable String uuid;
 
-	private final CredentialName path;
+	private final @Nullable CredentialName path;
 
 	@JsonUnwrapped
-	private final Permission permission;
+	private final @Nullable Permission permission;
 
 	/**
 	 * Create a {@link CredentialPermission}.
@@ -66,7 +67,7 @@ public class CredentialPermission {
 	 * Get the CredHub-assigned ID of the permission.
 	 * @return the permission ID
 	 */
-	public String getId() {
+	public @Nullable String getId() {
 		return this.uuid;
 	}
 
@@ -82,7 +83,7 @@ public class CredentialPermission {
 	 * Get the collection of {@link Permission}s.
 	 * @return the collection of {@link Permission}s
 	 */
-	public Permission getPermission() {
+	public @Nullable Permission getPermission() {
 		return this.permission;
 	}
 

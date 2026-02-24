@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Base class for parameter types that contain specifications for key generation.
  *
@@ -24,7 +26,7 @@ package org.springframework.credhub.support;
 public class KeyParameters {
 
 	/** The key length parameter. */
-	protected final KeyLength keyLength;
+	protected final @Nullable KeyLength keyLength;
 
 	/**
 	 * Create an empty {@link KeyParameters}.
@@ -45,7 +47,7 @@ public class KeyParameters {
 	 * Get the value of the key length parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Integer getKeyLength() {
+	public @Nullable Integer getKeyLength() {
 		return (this.keyLength == null) ? null : this.keyLength.getLength();
 	}
 

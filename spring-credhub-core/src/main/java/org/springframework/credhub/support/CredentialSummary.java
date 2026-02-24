@@ -19,6 +19,8 @@ package org.springframework.credhub.support;
 import java.util.Date;
 import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * A summary of a credential that has been written to CredHub. Clients don't typically
  * instantiate objects of this type, but will receive them in response to write and
@@ -29,10 +31,10 @@ import java.util.Objects;
 public class CredentialSummary {
 
 	/** The name of the credential. */
-	protected final CredentialName name;
+	protected final @Nullable CredentialName name;
 
 	/** The date the credential version was created. */
-	protected final Date versionCreatedAt;
+	protected final @Nullable Date versionCreatedAt;
 
 	/**
 	 * Create a {@link CredentialSummary}. Intended for internal use.
@@ -57,7 +59,7 @@ public class CredentialSummary {
 	 * Get the client-provided name of the credential.
 	 * @return the credential name
 	 */
-	public CredentialName getName() {
+	public @Nullable CredentialName getName() {
 		return this.name;
 	}
 
@@ -66,7 +68,7 @@ public class CredentialSummary {
 	 * created.
 	 * @return the credential version creation {@link Date}
 	 */
-	public Date getVersionCreatedAt() {
+	public @Nullable Date getVersionCreatedAt() {
 		return this.versionCreatedAt;
 	}
 

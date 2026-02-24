@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.user;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.ParametersRequest;
 import org.springframework.credhub.support.password.PasswordParameters;
@@ -28,7 +30,7 @@ import org.springframework.util.Assert;
  */
 public class UserParametersRequest extends ParametersRequest<PasswordParameters> {
 
-	private UserValue value;
+	private @Nullable UserValue value;
 
 	/**
 	 * Create a {@link UserParametersRequest}.
@@ -49,7 +51,7 @@ public class UserParametersRequest extends ParametersRequest<PasswordParameters>
 	 * Get the value of the username parameter.
 	 * @return the value of the parameter
 	 */
-	public UserValue getValue() {
+	public @Nullable UserValue getValue() {
 		return this.value;
 	}
 

@@ -17,4 +17,7 @@
 /**
  * Spring abstractions for interacting with Cloud Foundry CredHub.
  */
+@NullMarked
 package org.springframework.credhub;
+
+import org.jspecify.annotations.NullMarked;

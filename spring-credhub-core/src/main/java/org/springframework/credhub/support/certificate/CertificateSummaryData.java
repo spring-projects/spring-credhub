@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * A collection of {@link CertificateSummary}s. Clients don't typically instantiate
  * objects of this type, but will receive them in response to requests.
@@ -28,7 +30,7 @@ import java.util.Objects;
  */
 public class CertificateSummaryData {
 
-	private List<CertificateSummary> certificates;
+	private @Nullable List<CertificateSummary> certificates;
 
 	/**
 	 * Create a {@link CertificateSummaryData}.
@@ -51,7 +53,7 @@ public class CertificateSummaryData {
 	 * Get the collection of {@link CertificateSummary}s.
 	 * @return the collection of {@link CertificateSummary}s
 	 */
-	public List<CertificateSummary> getCertificates() {
+	public @Nullable List<CertificateSummary> getCertificates() {
 		return this.certificates;
 	}
 

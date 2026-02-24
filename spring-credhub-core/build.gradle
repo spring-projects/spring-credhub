@@ -43,7 +43,7 @@ dependencies {
 	}
 
 	testImplementation("org.springframework:spring-test")
-	testImplementation("org.springframework.boot:spring-boot-jackson2")
+	testImplementation("com.fasterxml.jackson.core:jackson-databind")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testImplementation("org.junit.jupiter:junit-jupiter-params")

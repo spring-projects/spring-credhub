@@ -28,8 +28,10 @@ import java.util.Objects;
  */
 public class CredentialSummary {
 
+	/** The name of the credential. */
 	protected final CredentialName name;
 
+	/** The date the credential version was created. */
 	protected final Date versionCreatedAt;
 
 	/**

@@ -40,6 +40,10 @@ public class ParametersRequest<T> extends CredHubRequest<T> {
 		return this.details;
 	}
 
+	/**
+	 * Set the parameters of the credential.
+	 * @param parameters the credential parameters
+	 */
 	protected void setParameters(T parameters) {
 		this.details = parameters;
 	}

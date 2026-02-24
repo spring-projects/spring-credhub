@@ -194,6 +194,10 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 		}
 	}
 
+	/**
+	 * Determine whether this template is configured to use OAuth2 for authentication.
+	 * @return {@literal true} if OAuth2 is being used
+	 */
 	public boolean isUsingOAuth2() {
 		return this.usingOAuth2;
 	}

@@ -23,6 +23,7 @@ package org.springframework.credhub.support;
  */
 public class KeyParameters {
 
+	/** The key length parameter. */
 	protected final KeyLength keyLength;
 
 	/**

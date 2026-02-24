@@ -24,6 +24,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
+/**
+ * Utility methods for handling exceptions from CredHub requests.
+ *
+ * @author Scott Frederick
+ */
 public final class ExceptionUtils {
 
 	private ExceptionUtils() {

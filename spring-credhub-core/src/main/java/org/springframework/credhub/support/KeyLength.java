@@ -18,6 +18,11 @@ package org.springframework.credhub.support;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+/**
+ * Enumeration of key lengths supported by CredHub for key generation.
+ *
+ * @author Scott Frederick
+ */
 public enum KeyLength {
 
 	/**
@@ -41,6 +46,10 @@ public enum KeyLength {
 		this.length = length;
 	}
 
+	/**
+	 * Get the key length value.
+	 * @return the key length in bits
+	 */
 	public int getLength() {
 		return this.length;
 	}

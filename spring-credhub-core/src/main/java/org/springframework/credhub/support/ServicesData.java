@@ -65,6 +65,9 @@ import java.util.Map;
  */
 public class ServicesData extends HashMap<String, List<Map<String, Object>>> {
 
+	/**
+	 * Create an empty {@link ServicesData}.
+	 */
 	public ServicesData() {
 	}
 

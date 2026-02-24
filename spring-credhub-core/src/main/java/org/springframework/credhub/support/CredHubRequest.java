@@ -31,14 +31,21 @@ import org.springframework.util.Assert;
 @SuppressWarnings("WeakerAccess")
 public class CredHubRequest<T> {
 
+	/** The write mode indicator. */
 	protected WriteMode mode;
 
+	/** The credential name. */
 	protected CredentialName name;
 
+	/** The credential type. */
 	protected CredentialType credentialType;
 
+	/** The credential details. */
 	protected T details;
 
+	/**
+	 * Create a {@link CredHubRequest}.
+	 */
 	public CredHubRequest() {
 	}
 
@@ -132,6 +139,7 @@ public class CredHubRequest<T> {
 
 		private final B thisObj;
 
+		/** The target object being built. */
 		protected final R targetObj;
 
 		/**

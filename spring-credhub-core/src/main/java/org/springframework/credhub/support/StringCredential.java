@@ -27,6 +27,7 @@ import org.springframework.util.Assert;
  */
 public class StringCredential {
 
+	/** The credential value. */
 	protected final String value;
 
 	/**

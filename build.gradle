@@ -23,7 +23,6 @@ plugins {
 description = "Spring CredHub"
 
 ext {
-	springBootVersion = "4.0.0"
 	javadocLinks = [
 			"https://docs.oracle.com/en/java/javase/17/docs/api/",
 			"https://docs.spring.io/spring-framework/docs/current/javadoc-api/"
@@ -104,8 +103,7 @@ subprojects {
 		reactiveImplementation
 		securityImplementation
 		httpclientImplementation
-		
-		// Make these configurations available at compile, runtime, and test
+
 		compileClasspath.extendsFrom(reactiveImplementation)
 		compileClasspath.extendsFrom(securityImplementation)
 		compileClasspath.extendsFrom(httpclientImplementation)

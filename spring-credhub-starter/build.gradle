@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+	id 'org.springframework.boot' apply false
+}
+
 description = 'Spring CredHub Starter'
 
 dependencies {
-	api(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
+	implementation platform(SpringBootPlugin.BOM_COORDINATES)
+	annotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
 	api(project(':spring-credhub-core'))
 	api("org.springframework.boot:spring-boot-autoconfigure")
 
@@ -29,7 +36,6 @@ dependencies {
 		exclude(group: 'commons-logging', module: 'commons-logging')
 	}
 
-	annotationProcessor(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

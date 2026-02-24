@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+	id 'org.springframework.boot' apply false
+}
+
 description = 'Spring CredHub Core'
 
 dependencies {
-	api(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
+	implementation platform(SpringBootPlugin.BOM_COORDINATES)
 	api("org.springframework:spring-core")
 	api("org.springframework:spring-beans")
 	api("org.springframework:spring-context")

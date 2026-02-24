@@ -33,7 +33,7 @@ publishing {
 				}
 				url = "https://spring.io/projects/spring-credhub"
 				organization {
-					name = "VMware, Inc."
+					name = "Spring IO"
 					url = "https://spring.io"
 				}
 				licenses {
@@ -54,9 +54,9 @@ publishing {
 				}
 				developers {
 					developer {
-						id = "sfrederick"
-						name = "Scott Frederick"
-						email = "sfrederick@pivotal.io"
+						id = "royclarkson"
+						name = "Roy Clarkson"
+						email = "roy.clarkson@broadcom.com"
 					}
 				}
 				withXml {

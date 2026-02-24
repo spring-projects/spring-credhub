@@ -19,6 +19,8 @@ package org.springframework.credhub.core;
 import java.io.IOException;
 import java.util.Collections;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -84,7 +86,7 @@ class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
 		}
 
 		@Override
-		public Object getCredentials() {
+		public @Nullable Object getCredentials() {
 			return null;
 		}
 

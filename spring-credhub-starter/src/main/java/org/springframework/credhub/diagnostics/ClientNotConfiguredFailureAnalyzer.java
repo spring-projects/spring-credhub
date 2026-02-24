@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.diagnostics;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
@@ -37,7 +39,7 @@ class ClientNotConfiguredFailureAnalyzer extends AbstractFailureAnalyzer<NoSuchB
 	}
 
 	@Override
-	protected FailureAnalysis analyze(Throwable rootFailure, NoSuchBeanDefinitionException cause) {
+	protected @Nullable FailureAnalysis analyze(Throwable rootFailure, NoSuchBeanDefinitionException cause) {
 		if (hasCredHubProperties() && isMissingSpringSecurityOAuth2Bean(cause.getBeanType())) {
 			return new FailureAnalysis(getDescription(), getAction(), cause);
 		}

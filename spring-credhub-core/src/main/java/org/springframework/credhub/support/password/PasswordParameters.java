@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.password;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Parameters for generating a new password credential. All parameters are optional; if
  * not specified, CredHub-provided defaults will be used.
@@ -24,15 +26,15 @@ package org.springframework.credhub.support.password;
  */
 public class PasswordParameters {
 
-	private final Integer length;
+	private final @Nullable Integer length;
 
-	private final Boolean excludeUpper;
+	private final @Nullable Boolean excludeUpper;
 
-	private final Boolean excludeLower;
+	private final @Nullable Boolean excludeLower;
 
-	private final Boolean excludeNumber;
+	private final @Nullable Boolean excludeNumber;
 
-	private final Boolean includeSpecial;
+	private final @Nullable Boolean includeSpecial;
 
 	/**
 	 * Create a {@link PasswordParameters} using defaults for all parameter values.
@@ -70,7 +72,7 @@ public class PasswordParameters {
 	 * Get the value of the length parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Integer getLength() {
+	public @Nullable Integer getLength() {
 		return this.length;
 	}
 
@@ -78,7 +80,7 @@ public class PasswordParameters {
 	 * Get the value of the exclude upper case characters parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Boolean getExcludeUpper() {
+	public @Nullable Boolean getExcludeUpper() {
 		return this.excludeUpper;
 	}
 
@@ -86,7 +88,7 @@ public class PasswordParameters {
 	 * Get the value of the exclude lower case characters parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Boolean getExcludeLower() {
+	public @Nullable Boolean getExcludeLower() {
 		return this.excludeLower;
 	}
 
@@ -94,7 +96,7 @@ public class PasswordParameters {
 	 * Get the value of the exclude numeric characters parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Boolean getExcludeNumber() {
+	public @Nullable Boolean getExcludeNumber() {
 		return this.excludeNumber;
 	}
 
@@ -102,7 +104,7 @@ public class PasswordParameters {
 	 * Get the value of the include non-alphanumeric characters parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Boolean getIncludeSpecial() {
+	public @Nullable Boolean getIncludeSpecial() {
 		return this.includeSpecial;
 	}
 
@@ -121,15 +123,15 @@ public class PasswordParameters {
 	 */
 	public static class PasswordParametersBuilder {
 
-		private Integer length = null;
+		private @Nullable Integer length = null;
 
-		private Boolean excludeUpper = null;
+		private @Nullable Boolean excludeUpper = null;
 
-		private Boolean excludeLower = null;
+		private @Nullable Boolean excludeLower = null;
 
-		private Boolean excludeNumber = null;
+		private @Nullable Boolean excludeNumber = null;
 
-		private Boolean includeSpecial = null;
+		private @Nullable Boolean includeSpecial = null;
 
 		/**
 		 * Set the value of the password length parameter.

@@ -17,6 +17,7 @@
 package org.springframework.credhub.support;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Enumeration of key lengths supported by CredHub for key generation.
@@ -60,7 +61,7 @@ public enum KeyLength {
 	 * @return the enum value
 	 */
 	@JsonCreator
-	public static KeyLength getTypeByString(int length) {
+	public static @Nullable KeyLength getTypeByString(int length) {
 		for (KeyLength value : KeyLength.values()) {
 			if (value.getLength() == length) {
 				return value;

@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.credhub.support.CredentialRequest;
 import org.springframework.util.Assert;
@@ -39,10 +40,10 @@ import org.springframework.util.Assert;
  */
 public final class Permission {
 
-	private final Actor actor;
+	private final @Nullable Actor actor;
 
 	@JsonProperty
-	private final List<Operation> operations;
+	private final @Nullable List<Operation> operations;
 
 	/**
 	 * Create a {@literal CredentialPermission}.
@@ -69,7 +70,7 @@ public final class Permission {
 	 * Get the ID of the entity that will be allowed to access the credential.
 	 * @return the ID
 	 */
-	public Actor getActor() {
+	public @Nullable Actor getActor() {
 		return this.actor;
 	}
 
@@ -78,7 +79,7 @@ public final class Permission {
 	 * credential.
 	 * @return the operations
 	 */
-	public List<Operation> getOperations() {
+	public @Nullable List<Operation> getOperations() {
 		return this.operations;
 	}
 
@@ -141,9 +142,9 @@ public final class Permission {
 	 */
 	public static class CredentialPermissionBuilder {
 
-		private Actor actor;
+		private @Nullable Actor actor;
 
-		private ArrayList<Operation> operations;
+		private @Nullable ArrayList<Operation> operations;
 
 		CredentialPermissionBuilder() {
 		}

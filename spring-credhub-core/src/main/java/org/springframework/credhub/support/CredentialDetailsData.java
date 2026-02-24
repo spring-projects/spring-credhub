@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * A collection of {@link CredentialDetails}. Clients don't typically instantiate objects
  * of this type, but will receive them in response to write and retrieve requests.
@@ -29,7 +31,7 @@ import java.util.Objects;
  */
 public class CredentialDetailsData<T> {
 
-	private final List<CredentialDetails<T>> data;
+	private final @Nullable List<CredentialDetails<T>> data;
 
 	/**
 	 * Create a {@link CredentialDetailsData}.
@@ -54,7 +56,7 @@ public class CredentialDetailsData<T> {
 	 * Get the collection of {@link CredentialDetails}.
 	 * @return the collection of {@link CredentialDetails}
 	 */
-	public List<CredentialDetails<T>> getData() {
+	public @Nullable List<CredentialDetails<T>> getData() {
 		return this.data;
 	}
 

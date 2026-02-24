@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.ssh;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.KeyParameters;
 import org.springframework.util.Assert;
@@ -28,7 +30,7 @@ import org.springframework.util.Assert;
  */
 public class SshParameters extends KeyParameters {
 
-	private final String sshComment;
+	private final @Nullable String sshComment;
 
 	/**
 	 * Create a {@link SshParameters} using defaults for all parameter values.
@@ -74,7 +76,7 @@ public class SshParameters extends KeyParameters {
 	 * Get the value of the ssh comment parameter.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getSshComment() {
+	public @Nullable String getSshComment() {
 		return this.sshComment;
 	}
 

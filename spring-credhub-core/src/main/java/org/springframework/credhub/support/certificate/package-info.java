@@ -17,4 +17,7 @@
 /**
  * Java representations of CredHub certificate credentials.
  */
+@NullMarked
 package org.springframework.credhub.support.certificate;
+
+import org.jspecify.annotations.NullMarked;

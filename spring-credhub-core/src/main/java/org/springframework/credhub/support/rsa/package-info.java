@@ -17,4 +17,7 @@
 /**
  * Java representations of CredHub RSA credentials.
  */
+@NullMarked
 package org.springframework.credhub.support.rsa;
+
+import org.jspecify.annotations.NullMarked;

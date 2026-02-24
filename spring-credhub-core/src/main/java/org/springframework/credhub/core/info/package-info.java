@@ -17,4 +17,7 @@
 /**
  * Core API abstractions for informational operations.
  */
+@NullMarked
 package org.springframework.credhub.core.info;
+
+import org.jspecify.annotations.NullMarked;

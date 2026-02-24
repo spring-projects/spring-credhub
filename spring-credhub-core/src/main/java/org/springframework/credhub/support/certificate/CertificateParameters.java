@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.certificate;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.KeyParameters;
@@ -28,31 +30,31 @@ import org.springframework.util.Assert;
  */
 public final class CertificateParameters extends KeyParameters {
 
-	private final String commonName;
+	private final @Nullable String commonName;
 
-	private final String[] alternativeNames;
+	private final String @Nullable [] alternativeNames;
 
-	private final String organization;
+	private final @Nullable String organization;
 
-	private final String organizationUnit;
+	private final @Nullable String organizationUnit;
 
-	private final String locality;
+	private final @Nullable String locality;
 
-	private final String state;
+	private final @Nullable String state;
 
-	private final String country;
+	private final @Nullable String country;
 
-	private final String certificateAuthorityCredential;
+	private final @Nullable String certificateAuthorityCredential;
 
-	private final Boolean certificateAuthority;
+	private final @Nullable Boolean certificateAuthority;
 
-	private final Boolean selfSign;
+	private final @Nullable Boolean selfSign;
 
-	private final Integer duration;
+	private final @Nullable Integer duration;
 
-	private final KeyUsage[] keyUsage;
+	private final KeyUsage @Nullable [] keyUsage;
 
-	private final ExtendedKeyUsage[] extendedKeyUsage;
+	private final ExtendedKeyUsage @Nullable [] extendedKeyUsage;
 
 	/**
 	 * Create a {@link CertificateParameters} using defaults for all parameter values.
@@ -118,7 +120,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getCommonName() {
+	public @Nullable String getCommonName() {
 		return this.commonName;
 	}
 
@@ -127,7 +129,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String[] getAlternativeNames() {
+	public String @Nullable [] getAlternativeNames() {
 		return this.alternativeNames;
 	}
 
@@ -136,7 +138,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getOrganization() {
+	public @Nullable String getOrganization() {
 		return this.organization;
 	}
 
@@ -145,7 +147,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getOrganizationUnit() {
+	public @Nullable String getOrganizationUnit() {
 		return this.organizationUnit;
 	}
 
@@ -154,7 +156,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getLocality() {
+	public @Nullable String getLocality() {
 		return this.locality;
 	}
 
@@ -163,7 +165,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getState() {
+	public @Nullable String getState() {
 		return this.state;
 	}
 
@@ -172,7 +174,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getCountry() {
+	public @Nullable String getCountry() {
 		return this.country;
 	}
 
@@ -181,7 +183,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * generating the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public String getCa() {
+	public @Nullable String getCa() {
 		return this.certificateAuthorityCredential;
 	}
 
@@ -190,7 +192,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate authority.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Boolean getIsCa() {
+	public @Nullable Boolean getIsCa() {
 		return this.certificateAuthority;
 	}
 
@@ -199,7 +201,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * self-signed.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Boolean getSelfSign() {
+	public @Nullable Boolean getSelfSign() {
 		return this.selfSign;
 	}
 
@@ -208,7 +210,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public Integer getDuration() {
+	public @Nullable Integer getDuration() {
 		return this.duration;
 	}
 
@@ -217,7 +219,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public KeyUsage[] getKeyUsage() {
+	public KeyUsage @Nullable [] getKeyUsage() {
 		return this.keyUsage;
 	}
 
@@ -226,7 +228,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * generating the certificate.
 	 * @return the value of the parameter; will be {@literal null} if not explicitly set
 	 */
-	public ExtendedKeyUsage[] getExtendedKeyUsage() {
+	public ExtendedKeyUsage @Nullable [] getExtendedKeyUsage() {
 		return this.extendedKeyUsage;
 	}
 
@@ -245,33 +247,33 @@ public final class CertificateParameters extends KeyParameters {
 	 */
 	public static class CertificateParametersBuilder {
 
-		private KeyLength keyLength;
+		private @Nullable KeyLength keyLength;
 
-		private String commonName;
+		private @Nullable String commonName;
 
-		private String[] alternativeNames;
+		private String @Nullable [] alternativeNames;
 
-		private String organization;
+		private @Nullable String organization;
 
-		private String organizationUnit;
+		private @Nullable String organizationUnit;
 
-		private String locality;
+		private @Nullable String locality;
 
-		private String state;
+		private @Nullable String state;
 
-		private String country;
+		private @Nullable String country;
 
-		private Integer duration;
+		private @Nullable Integer duration;
 
-		private String certificateAuthorityCredential;
+		private @Nullable String certificateAuthorityCredential;
 
-		private Boolean certificateAuthority;
+		private @Nullable Boolean certificateAuthority;
 
-		private Boolean selfSign;
+		private @Nullable Boolean selfSign;
 
-		private KeyUsage[] keyUsage;
+		private KeyUsage @Nullable [] keyUsage;
 
-		private ExtendedKeyUsage[] extendedKeyUsage;
+		private ExtendedKeyUsage @Nullable [] extendedKeyUsage;
 
 		/**
 		 * Set the length of the key for the generated certificate.

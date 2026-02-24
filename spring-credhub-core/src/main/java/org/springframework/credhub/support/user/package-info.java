@@ -17,4 +17,7 @@
 /**
  * Java representations of CredHub user credentials.
  */
+@NullMarked
 package org.springframework.credhub.support.user;
+
+import org.jspecify.annotations.NullMarked;

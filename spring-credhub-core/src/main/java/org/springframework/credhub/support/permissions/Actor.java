@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.Assert;
 
@@ -130,7 +131,7 @@ public final class Actor {
 	}
 
 	@JsonCreator
-	private static Actor createActor(String value) {
+	private static @Nullable Actor createActor(String value) {
 		for (ActorType type : ActorType.values()) {
 			if (value.startsWith(type.getType())) {
 				return new Actor(type, value.substring(type.getType().length() + 1));

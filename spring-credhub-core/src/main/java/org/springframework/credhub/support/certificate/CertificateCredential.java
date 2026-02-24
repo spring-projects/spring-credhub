@@ -17,6 +17,7 @@
 package org.springframework.credhub.support.certificate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.Assert;
 
@@ -28,12 +29,12 @@ import org.springframework.util.Assert;
  */
 public class CertificateCredential {
 
-	private final String certificate;
+	private final @Nullable String certificate;
 
 	@JsonProperty("ca")
-	private final String certificateAuthority;
+	private final @Nullable String certificateAuthority;
 
-	private final String privateKey;
+	private final @Nullable String privateKey;
 
 	/**
 	 * Create an empty {@link CertificateCredential}. Intended to be used internally for
@@ -55,7 +56,8 @@ public class CertificateCredential {
 	 * @param privateKey the private key; may be {@literal null} if one of the other
 	 * parameters is not {@literal null}
 	 */
-	public CertificateCredential(String certificate, String certificateAuthority, String privateKey) {
+	public CertificateCredential(@Nullable String certificate, @Nullable String certificateAuthority,
+			@Nullable String privateKey) {
 		Assert.isTrue(certificate != null || certificateAuthority != null || privateKey != null,
 				"at least one of certificate, certificateAuthority, or privateKey must not be null");
 		this.certificate = certificate;
@@ -67,7 +69,7 @@ public class CertificateCredential {
 	 * Get the certificate value.
 	 * @return the certificate
 	 */
-	public String getCertificate() {
+	public @Nullable String getCertificate() {
 		return this.certificate;
 	}
 
@@ -75,7 +77,7 @@ public class CertificateCredential {
 	 * Get the certificate authority value.
 	 * @return the certificate authority
 	 */
-	public String getCertificateAuthority() {
+	public @Nullable String getCertificateAuthority() {
 		return this.certificateAuthority;
 	}
 
@@ -83,7 +85,7 @@ public class CertificateCredential {
 	 * Get the private key value.
 	 * @return the private key
 	 */
-	public String getPrivateKey() {
+	public @Nullable String getPrivateKey() {
 		return this.privateKey;
 	}
 

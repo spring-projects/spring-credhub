@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.ssh;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.credhub.support.KeyPairCredential;
 
 /**
@@ -26,7 +28,7 @@ import org.springframework.credhub.support.KeyPairCredential;
  */
 public class SshCredential extends KeyPairCredential {
 
-	private final String publicKeyFingerprint;
+	private final @Nullable String publicKeyFingerprint;
 
 	/**
 	 * Create an empty {@link SshCredential}. Intended to be used internally for
@@ -56,7 +58,7 @@ public class SshCredential extends KeyPairCredential {
 	 * CredHub when retrieving one.
 	 * @return the public key fingerprint value
 	 */
-	public String getPublicKeyFingerprint() {
+	public @Nullable String getPublicKeyFingerprint() {
 		return this.publicKeyFingerprint;
 	}
 

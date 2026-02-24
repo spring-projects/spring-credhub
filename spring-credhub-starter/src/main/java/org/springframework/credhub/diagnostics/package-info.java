@@ -17,4 +17,7 @@
 /**
  * {@code FailureAnalyzers} for Spring CredHub.
  */
+@NullMarked
 package org.springframework.credhub.diagnostics;
+
+import org.jspecify.annotations.NullMarked;

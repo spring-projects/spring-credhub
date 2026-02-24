@@ -18,6 +18,8 @@ package org.springframework.credhub.support.certificate;
 
 import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * A summary of a certificate that has been stored to CredHub. Clients don't typically
  * instantiate objects of this type, but will receive them in response to write and
@@ -27,9 +29,9 @@ import java.util.Objects;
  */
 public class CertificateSummary {
 
-	private final String id;
+	private final @Nullable String id;
 
-	private final String name;
+	private final @Nullable String name;
 
 	@SuppressWarnings("unused")
 	private CertificateSummary() {
@@ -53,7 +55,7 @@ public class CertificateSummary {
 	 * Get the CredHub-generated ID of the certificate credential.
 	 * @return the credential ID
 	 */
-	public String getId() {
+	public @Nullable String getId() {
 		return this.id;
 	}
 
@@ -61,7 +63,7 @@ public class CertificateSummary {
 	 * Get the client-provided name of the certificate credential.
 	 * @return the credential name
 	 */
-	public String getName() {
+	public @Nullable String getName() {
 		return this.name;
 	}
 

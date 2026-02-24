@@ -17,4 +17,7 @@
 /**
  * Internal CredHub utility classes.
  */
+@NullMarked
 package org.springframework.credhub.support.utils;
+
+import org.jspecify.annotations.NullMarked;

@@ -24,6 +24,7 @@ description = 'Spring CredHub Core'
 
 dependencies {
 	implementation platform(SpringBootPlugin.BOM_COORDINATES)
+	api("org.jspecify:jspecify")
 	api("org.springframework:spring-core")
 	api("org.springframework:spring-beans")
 	api("org.springframework:spring-context")

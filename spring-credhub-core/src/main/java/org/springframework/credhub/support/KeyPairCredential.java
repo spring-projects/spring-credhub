@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.Assert;
 
 /**
@@ -25,9 +27,9 @@ import org.springframework.util.Assert;
  */
 public class KeyPairCredential {
 
-	private final String publicKey;
+	private final @Nullable String publicKey;
 
-	private final String privateKey;
+	private final @Nullable String privateKey;
 
 	/**
 	 * Create an empty {@link KeyPairCredential}. Intended to be used internally for
@@ -44,7 +46,7 @@ public class KeyPairCredential {
 	 * @param publicKey the public key
 	 * @param privateKey the private key
 	 */
-	protected KeyPairCredential(String publicKey, String privateKey) {
+	protected KeyPairCredential(@Nullable String publicKey, @Nullable String privateKey) {
 		Assert.isTrue(publicKey != null || privateKey != null, "one of publicKey or privateKey must not be null");
 
 		this.publicKey = publicKey;
@@ -55,7 +57,7 @@ public class KeyPairCredential {
 	 * Get the value of the public key.
 	 * @return the public key
 	 */
-	public String getPublicKey() {
+	public @Nullable String getPublicKey() {
 		return this.publicKey;
 	}
 
@@ -63,7 +65,7 @@ public class KeyPairCredential {
 	 * Get the value of the private key.
 	 * @return the private key
 	 */
-	public String getPrivateKey() {
+	public @Nullable String getPrivateKey() {
 		return this.privateKey;
 	}
 

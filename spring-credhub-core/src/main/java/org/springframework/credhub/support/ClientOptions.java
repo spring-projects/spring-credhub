@@ -19,6 +19,8 @@ package org.springframework.credhub.support;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Client options for CredHub connectivity.
  *
@@ -27,11 +29,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientOptions {
 
-	private Duration connectionTimeout;
+	private @Nullable Duration connectionTimeout;
 
-	private Duration readTimeout;
+	private @Nullable Duration readTimeout;
 
-	private String[] caCertFiles;
+	private String @Nullable [] caCertFiles;
 
 	/**
 	 * Create new {@link ClientOptions} with default values.
@@ -60,7 +62,7 @@ public class ClientOptions {
 	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
 	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
-	public Duration getConnectionTimeout() {
+	public @Nullable Duration getConnectionTimeout() {
 		return this.connectionTimeout;
 	}
 
@@ -68,7 +70,7 @@ public class ClientOptions {
 	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
 	 * @return the connection timeout; can be {@literal null if not explicitly set}
 	 */
-	public Integer getConnectionTimeoutMillis() {
+	public @Nullable Integer getConnectionTimeoutMillis() {
 		return (this.connectionTimeout == null) ? null : Math.toIntExact(this.connectionTimeout.toMillis());
 	}
 
@@ -76,7 +78,7 @@ public class ClientOptions {
 	 * Set the connection timeout.
 	 * @param connectionTimeout the connection timeout
 	 */
-	public void setConnectionTimeout(Duration connectionTimeout) {
+	public void setConnectionTimeout(@Nullable Duration connectionTimeout) {
 		this.connectionTimeout = connectionTimeout;
 	}
 
@@ -84,7 +86,7 @@ public class ClientOptions {
 	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
 	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
-	public Duration getReadTimeout() {
+	public @Nullable Duration getReadTimeout() {
 		return this.readTimeout;
 	}
 
@@ -92,7 +94,7 @@ public class ClientOptions {
 	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
 	 * @return the read timeout; can be {@literal null if not explicitly set}
 	 */
-	public Integer getReadTimeoutMillis() {
+	public @Nullable Integer getReadTimeoutMillis() {
 		return (this.readTimeout == null) ? null : Math.toIntExact(this.readTimeout.toMillis());
 	}
 
@@ -100,7 +102,7 @@ public class ClientOptions {
 	 * Set the read timeout.
 	 * @param readTimeout the read timeout
 	 */
-	public void setReadTimeout(Duration readTimeout) {
+	public void setReadTimeout(@Nullable Duration readTimeout) {
 		this.readTimeout = readTimeout;
 	}
 
@@ -108,7 +110,7 @@ public class ClientOptions {
 	 * Get the CA certificate files to use when connecting.
 	 * @return the CA certificate file paths; can be {@literal null}
 	 */
-	public String[] getCaCertFiles() {
+	public String @Nullable [] getCaCertFiles() {
 		return this.caCertFiles;
 	}
 
@@ -116,7 +118,7 @@ public class ClientOptions {
 	 * Set the CA certificate files to use when connecting.
 	 * @param caCertFiles the CA certificate file paths
 	 */
-	public void setCaCertFiles(String[] caCertFiles) {
+	public void setCaCertFiles(String @Nullable [] caCertFiles) {
 		this.caCertFiles = caCertFiles;
 	}
 

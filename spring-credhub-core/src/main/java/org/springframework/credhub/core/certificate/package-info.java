@@ -17,4 +17,7 @@
 /**
  * Core API abstractions for certificate operations.
  */
+@NullMarked
 package org.springframework.credhub.core.certificate;
+
+import org.jspecify.annotations.NullMarked;

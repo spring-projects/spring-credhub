@@ -99,7 +99,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 			return false;
 		}
 
-		CredentialDetails that = (CredentialDetails) o;
+		CredentialDetails<?> that = (CredentialDetails<?>) o;
 
 		if ((this.id != null) ? !this.id.equals(that.id) : (that.id != null)) {
 			return false;

@@ -73,6 +73,7 @@ class CredHubOAuth2RequestInterceptor implements ClientHttpRequestInterceptor {
 		return this.clientManager.authorize(authorizeRequest);
 	}
 
+	@SuppressWarnings("serial")
 	private static class OAuth2ClientCredentialsGrantAuthenticationToken extends AbstractAuthenticationToken {
 
 		private final ClientRegistration clientRegistration;

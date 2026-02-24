@@ -99,7 +99,7 @@ public class CredHubRequest<T> {
 			return false;
 		}
 
-		CredHubRequest that = (CredHubRequest) o;
+		CredHubRequest<?> that = (CredHubRequest<?>) o;
 
 		if ((this.name != null) ? !this.name.equals(that.name) : (that.name != null)) {
 			return false;

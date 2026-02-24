@@ -22,9 +22,9 @@ import org.springframework.credhub.support.CredHubRequest.CredHubRequestBuilder;
 
 public abstract class CredHubRequestUnitTestsBase {
 
-	protected CredHubRequestBuilder requestBuilder;
+	protected CredHubRequestBuilder<?, ?, ?> requestBuilder;
 
-	protected DocumentContext toJsonPath(CredHubRequestBuilder requestBuilder) {
+	protected DocumentContext toJsonPath(CredHubRequestBuilder<?, ?, ?> requestBuilder) {
 		return JsonTestUtils.toJsonPath(requestBuilder.build());
 	}
 

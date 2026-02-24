@@ -63,6 +63,7 @@ import java.util.Map;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("serial")
 public class ServicesData extends HashMap<String, List<Map<String, Object>>> {
 
 	/**

@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CredHubOAuth2AutoConfigurationTests {
 
-	private final Class[] configurations = { CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class };
+	private final Class<?>[] configurations = { CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class };
 
 	private final String[] oAuth2ClientProperties = { "spring.credhub.oauth2.registration-id=test-client",
 			"spring.security.oauth2.client.registration.credhub-client.provider=uaa",

@@ -45,6 +45,7 @@ public class CredentialDetailsData<T> {
 	 * @param data a collection of {@link CredentialDetails}
 	 */
 	@SafeVarargs
+	@SuppressWarnings("varargs")
 	public CredentialDetailsData(CredentialDetails<T>... data) {
 		this.data = Arrays.asList(data);
 	}
@@ -69,7 +70,7 @@ public class CredentialDetailsData<T> {
 			return false;
 		}
 
-		CredentialDetailsData that = (CredentialDetailsData) o;
+		CredentialDetailsData<?> that = (CredentialDetailsData<?>) o;
 
 		return (this.data != null) ? this.data.equals(that.data) : (that.data == null);
 	}

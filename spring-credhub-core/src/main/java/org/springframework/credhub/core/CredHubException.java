@@ -24,6 +24,7 @@ import org.springframework.web.client.HttpStatusCodeException;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("serial")
 public class CredHubException extends HttpStatusCodeException {
 
 	/**

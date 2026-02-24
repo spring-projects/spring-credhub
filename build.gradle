@@ -87,7 +87,28 @@ configure(publishedProjects) {
 subprojects {
 	tasks.withType(JavaCompile).configureEach {
 		options.encoding = 'UTF-8'
-		options.compilerArgs.addAll(["-Werror", "-Xlint:unchecked", "-Xlint:deprecation"])
+		def compilerArgs = [
+				"-Xlint:serial",
+				"-Xlint:varargs",
+				"-Xlint:cast",
+				"-Xlint:classfile",
+				"-Xlint:dep-ann",
+				"-Xlint:divzero",
+				"-Xlint:empty",
+				"-Xlint:finally",
+				"-Xlint:overrides",
+				"-Xlint:path",
+				"-Xlint:-processing",
+				"-Xlint:static",
+				"-Xlint:try",
+				"-Xlint:fallthrough",
+				"-Xlint:rawtypes",
+				"-Xlint:deprecation",
+				"-Xlint:unchecked",
+				"-Xlint:options",
+				"-Werror"
+		]
+		options.compilerArgs.addAll(compilerArgs)
 	}
 
 	java {

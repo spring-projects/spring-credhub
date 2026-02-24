@@ -86,7 +86,7 @@ configure(publishedProjects) {
 }
 
 subprojects {
-	tasks.withType(JavaCompile) {
+	tasks.withType(JavaCompile).configureEach {
 		options.encoding = 'UTF-8'
 		options.compilerArgs.addAll(["-Werror", "-Xlint:unchecked", "-Xlint:deprecation"])
 	}
@@ -95,15 +95,29 @@ subprojects {
 		toolchain {
 			languageVersion = JavaLanguageVersion.of(17)
 		}
-		registerFeature('reactive') {
-			usingSourceSet(sourceSets.main)
-		}
-		registerFeature('security') {
-			usingSourceSet(sourceSets.main)
-		}
-		registerFeature('httpclient') {
-			usingSourceSet(sourceSets.main)
-		}
+	}
+	
+	// Configure optional feature configurations
+	// These provide optional dependencies that are included at compile time
+	// This replaces the deprecated registerFeature with main source set approach
+	configurations {
+		reactiveImplementation
+		securityImplementation
+		httpclientImplementation
+		
+		// Make these configurations available at compile, runtime, and test
+		compileClasspath.extendsFrom(reactiveImplementation)
+		compileClasspath.extendsFrom(securityImplementation)
+		compileClasspath.extendsFrom(httpclientImplementation)
+		runtimeClasspath.extendsFrom(reactiveImplementation)
+		runtimeClasspath.extendsFrom(securityImplementation)
+		runtimeClasspath.extendsFrom(httpclientImplementation)
+		testCompileClasspath.extendsFrom(reactiveImplementation)
+		testCompileClasspath.extendsFrom(securityImplementation)
+		testCompileClasspath.extendsFrom(httpclientImplementation)
+		testRuntimeClasspath.extendsFrom(reactiveImplementation)
+		testRuntimeClasspath.extendsFrom(securityImplementation)
+		testRuntimeClasspath.extendsFrom(httpclientImplementation)
 	}
 
 	dependencies {
@@ -111,34 +125,31 @@ subprojects {
 		testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 	}
 
-	tasks.withType(Test).forEach { Test task ->
-		task.with {
-			// enable JUnit 5
-			useJUnitPlatform()
-			scanForTestClasses = true
-			group = "verification"
+	tasks.withType(Test).configureEach {
+		// enable JUnit 5
+		useJUnitPlatform()
+		scanForTestClasses = true
+		group = "verification"
 
-			// add jvm arg to resolve BlockHound issues, see https://github.com/reactor/BlockHound/issues/33
-			jvmArgs += [
-					"-XX:+AllowRedefinitionToAddDeleteMethods"
-			]
+		// add jvm arg to resolve BlockHound issues, see https://github.com/reactor/BlockHound/issues/33
+		jvmArgs += [
+				"-XX:+AllowRedefinitionToAddDeleteMethods"
+		]
 
-			testLogging {
-				exceptionFormat = "full"
-				events = ["passed", "skipped", "failed"]
-			}
+		testLogging {
+			exceptionFormat = "full"
+			events = ["passed", "skipped", "failed"]
+		}
 
-			// print failed tests after the execution
-			def failedTests = []
-			afterTest { test, result ->
+		def failedTests = []
+		addTestListener(new TestListener() {
+			void afterTest(TestDescriptor testDescriptor, TestResult result) {
 				if (result.resultType == TestResult.ResultType.FAILURE) {
-					failedTests << test
+					failedTests << testDescriptor
 				}
 			}
-
-			// create a summary after the execution
-			afterSuite { desc, result ->
-				if (!desc.parent) {
+			void afterSuite(TestDescriptor suite, TestResult result) {
+				if (!suite.parent) {
 					println "\nTest result: ${result.resultType}"
 					println "Test summary: ${result.testCount} tests, " +
 							"${result.successfulTestCount} succeeded, " +
@@ -148,26 +159,28 @@ subprojects {
 					failedTests.each { test -> println "FAILED test: ${test.className} > ${test.name}" }
 				}
 			}
-		}
+		})
 	}
 
 }
 
 configure(rootProject) {
-	task sourcesJar(type: Jar) {
+	tasks.register('sourcesJar', Jar) {
 		archiveClassifier.set('sources')
 		from sourceSets.main.allSource
 	}
 
-	task javadocJar(type: Jar) {
+	tasks.register('javadocJar', Jar) {
 		archiveClassifier.set('javadoc')
-		from javadoc.destinationDir
+		from tasks.named('javadoc')
 	}
 
-	task api(type: Javadoc) {
+	tasks.register('api', Javadoc) {
 		group = "Documentation"
 		description = "Generates aggregated Javadoc API documentation."
 		title = "${rootProject.description} ${version} API"
+
+		dependsOn(libraryProjects.collect { it.tasks.named('classes') })
 
 		options.encoding = 'UTF-8'
 		options.memberLevel = JavadocMemberLevel.PROTECTED
@@ -175,27 +188,27 @@ configure(rootProject) {
 		options.header = rootProject.description
 		options.links(project.ext.javadocLinks)
 
-		source subprojects.collect { project ->
+		source libraryProjects.collect { project ->
 			project.sourceSets.main.allJava
 		}
 
-		classpath = files(subprojects.collect { project ->
+		classpath = files({ libraryProjects.collect { project ->
 			project.sourceSets.main.compileClasspath
-		})
-
-		exclude '**/spring-credhub-integration-tests/**', '**/spring-credhub-reactive-integration-tests/**'
+		}})
 
 		maxMemory = "1024m"
-		destinationDir = new File(buildDir, "api")
+		destinationDir = layout.buildDirectory.dir("api").get().asFile
 	}
 
-	task docsZip(type: Zip, dependsOn: [':spring-credhub-docs:asciidoctor']) {
+	tasks.register('docsZip', Zip) {
+		dependsOn('api')
+		dependsOn(':spring-credhub-docs:asciidoctor')
 		group = 'Distribution'
 		archiveClassifier.set('docs')
 		description = "Builds -${archiveClassifier} archive containing api and reference " +
 				"for deployment at docs.spring.io/spring-credhub/docs."
 
-		from(api) {
+		from(tasks.named('api')) {
 			into 'api'
 		}
 		from(project.tasks.findByPath(':spring-credhub-docs:asciidoctor')) {
@@ -203,21 +216,22 @@ configure(rootProject) {
 		}
 	}
 
-	artifacts {
-		archives docsZip
+	tasks.named('assemble').configure {
+		dependsOn('docsZip')
 	}
 
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
-				artifact sourcesJar
-				artifact javadocJar
-				artifact docsZip
+				artifact tasks.named('sourcesJar')
+				artifact tasks.named('javadocJar')
+				artifact tasks.named('docsZip')
 			}
 		}
 	}
 
-	task dist(dependsOn: assemble) {
+	tasks.register('dist') {
+		dependsOn(tasks.named('assemble'))
 		group = "Distribution"
 		description = "Builds -dist and -docs distribution archives."
 	}
@@ -245,6 +259,6 @@ def getPublishedProjects() {
 }
 
 wrapper {
-	gradleVersion = "8.14.3"
+	gradleVersion = "9.4.1"
 	distributionType = Wrapper.DistributionType.ALL
 }

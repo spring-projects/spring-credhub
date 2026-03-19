@@ -16,7 +16,9 @@
 
 package org.springframework.credhub.integration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +30,8 @@ import org.springframework.credhub.support.CredentialSummary;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
+import org.springframework.credhub.support.json.JsonCredential;
+import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.credhub.support.password.PasswordParameters;
 import org.springframework.credhub.support.user.UserCredential;
 import org.springframework.credhub.support.user.UserParametersRequest;
@@ -95,6 +99,31 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 		List<CredentialSummary> foundByPath = this.credentials.findByPath("/spring-credhub/integration-test");
 		assertThat(foundByPath).hasSize(1);
 		assertThat(foundByPath).extracting("name").extracting("name").containsExactly(CREDENTIAL_NAME.getName());
+	}
+
+	@Test
+	public void writeJsonCredential() {
+		Map<String, Object> requestValue = new HashMap<>() {
+			{
+				put("username", "user");
+				put("password", "secret");
+				put("null-value", null);
+				put("empty-value", "");
+			}
+		};
+
+		Map<String, Object> responseValue = new HashMap<>() {
+			{
+				put("username", "user");
+				put("password", "secret");
+			}
+		};
+		CredentialDetails<JsonCredential> written = this.credentials
+			.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(requestValue).build());
+		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertThat(written.getValue()).isEqualTo(responseValue);
+		assertThat(written.getCredentialType()).isEqualTo(CredentialType.JSON);
+		assertThat(written.getId()).isNotNull();
 	}
 
 	@Test

@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.integration;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +30,7 @@ import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialType;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
+import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.credhub.support.password.PasswordParameters;
 import org.springframework.credhub.support.user.UserCredential;
 import org.springframework.credhub.support.user.UserParametersRequest;
@@ -114,6 +117,36 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 				.extracting("name")
 				.asString()
 				.contains(CREDENTIAL_NAME.getName()))
+			.verifyComplete();
+	}
+
+	@Test
+	public void writeJsonCredential() {
+		Map<String, Object> requestValue = new HashMap<>() {
+			{
+				put("username", "user");
+				put("password", "secret");
+				put("null-value", null);
+				put("empty-value", "");
+			}
+		};
+
+		Map<String, Object> responseValue = new HashMap<>() {
+			{
+				put("username", "user");
+				put("password", "secret");
+			}
+		};
+
+		StepVerifier
+			.create(this.credentials
+				.write(JsonCredentialRequest.builder().name(CREDENTIAL_NAME).value(requestValue).build()))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertThat(response.getValue()).isEqualTo(responseValue);
+				assertThat(response.getCredentialType()).isEqualTo(CredentialType.JSON);
+				assertThat(response.getId()).isNotNull();
+			})
 			.verifyComplete();
 	}
 

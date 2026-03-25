@@ -73,7 +73,7 @@ class PermissionIntegrationTests extends CredHubIntegrationTests {
 		this.permissions.addPermissions(CREDENTIAL_NAME, appPermission, userPermission, clientPermission);
 
 		List<Permission> retrievedPermissions = this.permissions.getPermissions(CREDENTIAL_NAME);
-		assertThat(retrievedPermissions.size()).isEqualTo(3);
+		assertThat(retrievedPermissions).hasSize(3);
 
 		assertThat(retrievedPermissions).contains(appPermission, userPermission, clientPermission);
 
@@ -82,7 +82,7 @@ class PermissionIntegrationTests extends CredHubIntegrationTests {
 		this.permissions.deletePermission(CREDENTIAL_NAME, Actor.client("client1"));
 
 		List<Permission> afterDelete = this.permissions.getPermissions(CREDENTIAL_NAME);
-		assertThat(afterDelete.size()).isEqualTo(0);
+		assertThat(afterDelete).isEmpty();
 	}
 
 }

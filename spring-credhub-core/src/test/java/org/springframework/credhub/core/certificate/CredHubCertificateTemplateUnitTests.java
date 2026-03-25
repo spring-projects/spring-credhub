@@ -74,7 +74,7 @@ class CredHubCertificateTemplateUnitTests {
 		List<CertificateSummary> response = this.credHubTemplate.getAll();
 
 		assertThat(response).isNotNull();
-		assertThat(response.size()).isEqualTo(expectedCertificates.getCertificates().size());
+		assertThat(response).hasSameSizeAs(expectedCertificates.getCertificates());
 		assertThat(response).isEqualTo(expectedCertificates.getCertificates());
 	}
 

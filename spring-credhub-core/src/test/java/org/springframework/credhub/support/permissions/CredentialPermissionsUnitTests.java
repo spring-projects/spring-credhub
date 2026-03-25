@@ -58,14 +58,14 @@ class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 		CredentialPermissions permissions = parsePermissions(json);
 
 		assertThat(permissions.getCredentialName()).isEqualTo("/c/example");
-		assertThat(permissions.getPermissions().size()).isEqualTo(2);
+		assertThat(permissions.getPermissions()).hasSize(2);
 
 		Permission permission = permissions.getPermissions().get(0);
 		assertThat(permission.getActor().getAuthType()).isEqualTo(ActorType.APP);
 		assertThat(permission.getActor().getPrimaryIdentifier()).isEqualTo("appid1");
 
 		List<Operation> operations = permission.getOperations();
-		assertThat(operations.size()).isEqualTo(5);
+		assertThat(operations).hasSize(5);
 		assertThat(operations).contains(Operation.READ, Operation.WRITE, Operation.DELETE, Operation.READ_ACL,
 				Operation.WRITE_ACL);
 
@@ -74,7 +74,7 @@ class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(permission.getActor().getPrimaryIdentifier()).isEqualTo("zone1/userid");
 
 		operations = permission.getOperations();
-		assertThat(operations.size()).isEqualTo(1);
+		assertThat(operations).hasSize(1);
 		assertThat(operations).contains(Operation.READ);
 	}
 
@@ -88,7 +88,7 @@ class CredentialPermissionsUnitTests extends JsonParsingUnitTestsBase {
 
 		CredentialPermissions permissions = parsePermissions(json);
 
-		assertThat(permissions.getPermissions().size()).isEqualTo(0);
+		assertThat(permissions.getPermissions()).isEmpty();
 	}
 
 	@Test

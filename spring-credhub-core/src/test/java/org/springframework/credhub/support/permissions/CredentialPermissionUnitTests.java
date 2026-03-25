@@ -54,7 +54,7 @@ class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(actor.getPrimaryIdentifier()).isEqualTo("106f52e2-5d01-4675-8d7a-c05ff9a2c081");
 
 		List<Operation> operations = permission.getOperations();
-		assertThat(operations.size()).isEqualTo(2);
+		assertThat(operations).hasSize(2);
 		assertThat(operations).contains(Operation.READ, Operation.WRITE);
 	}
 

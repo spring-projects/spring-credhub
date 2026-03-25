@@ -47,7 +47,7 @@ class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 
 		CredentialSummaryData response = parseResponse(json, CredentialSummaryData.class);
 
-		assertThat(response.getCredentials().size()).isEqualTo(3);
+		assertThat(response.getCredentials()).hasSize(3);
 
 		List<CredentialSummary> credentials = response.getCredentials();
 

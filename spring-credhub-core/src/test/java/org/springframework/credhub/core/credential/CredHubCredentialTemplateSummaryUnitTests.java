@@ -33,7 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 
 class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
@@ -46,13 +46,8 @@ class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplat
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.findByName(NAME);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class).isThrownBy(() -> this.credHubTemplate.findByName(NAME))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			List<CredentialSummary> response = this.credHubTemplate.findByName(NAME);
@@ -69,13 +64,9 @@ class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplat
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.findByPath(NAME.getName());
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.findByPath(NAME.getName()))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			List<CredentialSummary> response = this.credHubTemplate.findByPath(NAME.getName());
@@ -87,7 +78,7 @@ class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplat
 	private void assertResponseContainsExpectedCredentials(ResponseEntity<CredentialSummaryData> expectedResponse,
 			List<CredentialSummary> response) {
 		assertThat(response).isNotNull();
-		assertThat(response.size()).isEqualTo(expectedResponse.getBody().getCredentials().size());
+		assertThat(response).hasSameSizeAs(expectedResponse.getBody().getCredentials());
 		assertThat(response).contains(expectedResponse.getBody().getCredentials().get(0));
 	}
 

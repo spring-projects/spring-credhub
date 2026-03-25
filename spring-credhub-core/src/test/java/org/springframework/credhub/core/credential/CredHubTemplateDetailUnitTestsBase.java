@@ -36,7 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -76,13 +76,8 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.write(request);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class).isThrownBy(() -> this.credHubTemplate.write(request))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			CredentialDetails<T> response = this.credHubTemplate.write(request);
@@ -99,13 +94,8 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.generate(request);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class).isThrownBy(() -> this.credHubTemplate.generate(request))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			CredentialDetails<T> response = this.credHubTemplate.generate(request);
@@ -126,13 +116,9 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.regenerate(NAME, getType());
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.regenerate(NAME, getType()))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			CredentialDetails<T> response = this.credHubTemplate.regenerate(NAME, getType());
@@ -147,13 +133,9 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.getById(CREDENTIAL_ID, String.class);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.getById(CREDENTIAL_ID, String.class))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			CredentialDetails<T> response = this.credHubTemplate.getById(CREDENTIAL_ID, getType());
@@ -168,13 +150,9 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.getByName(NAME, String.class);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.getByName(NAME, String.class))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			CredentialDetails<T> response = this.credHubTemplate.getByName(NAME, getType());
@@ -189,13 +167,9 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.getByNameWithHistory(NAME, String.class);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.getByNameWithHistory(NAME, String.class))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			List<CredentialDetails<T>> response = this.credHubTemplate.getByNameWithHistory(NAME, getType());
@@ -210,13 +184,9 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 			.willReturn(expectedResponse);
 
 		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
-			try {
-				this.credHubTemplate.getByNameWithHistory(NAME, 5, String.class);
-				fail("Exception should have been thrown");
-			}
-			catch (CredHubException ex) {
-				assertThat(ex.getMessage()).contains(expectedResponse.getStatusCode().toString());
-			}
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.getByNameWithHistory(NAME, 5, String.class))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
 		}
 		else {
 			List<CredentialDetails<T>> response = this.credHubTemplate.getByNameWithHistory(NAME, 5, getType());

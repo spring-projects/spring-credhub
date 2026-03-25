@@ -72,6 +72,10 @@ public class ClientOptions {
 		return (this.connectionTimeout == null) ? null : Math.toIntExact(this.connectionTimeout.toMillis());
 	}
 
+	/**
+	 * Set the connection timeout.
+	 * @param connectionTimeout the connection timeout
+	 */
 	public void setConnectionTimeout(Duration connectionTimeout) {
 		this.connectionTimeout = connectionTimeout;
 	}
@@ -92,14 +96,26 @@ public class ClientOptions {
 		return (this.readTimeout == null) ? null : Math.toIntExact(this.readTimeout.toMillis());
 	}
 
+	/**
+	 * Set the read timeout.
+	 * @param readTimeout the read timeout
+	 */
 	public void setReadTimeout(Duration readTimeout) {
 		this.readTimeout = readTimeout;
 	}
 
+	/**
+	 * Get the CA certificate files to use when connecting.
+	 * @return the CA certificate files; can be {@literal null} if not explicitly set
+	 */
 	public String[] getCaCertFiles() {
 		return this.caCertFiles;
 	}
 
+	/**
+	 * Set the CA certificate files to use when connecting.
+	 * @param caCertFiles one or more CA certificate files
+	 */
 	public void setCaCertFiles(String[] caCertFiles) {
 		this.caCertFiles = caCertFiles;
 	}

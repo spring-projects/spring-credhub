@@ -18,6 +18,11 @@ package org.springframework.credhub.support;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+/**
+ * Allowable key lengths for credential generation.
+ *
+ * @author Scott Frederick
+ */
 public enum KeyLength {
 
 	/**
@@ -41,6 +46,10 @@ public enum KeyLength {
 		this.length = length;
 	}
 
+	/**
+	 * Get the key length in bits.
+	 * @return the key length
+	 */
 	public int getLength() {
 		return this.length;
 	}

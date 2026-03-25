@@ -23,6 +23,9 @@ package org.springframework.credhub.support;
  */
 public class KeyParameters {
 
+	/**
+	 * The length of the key to generate.
+	 */
 	protected final KeyLength keyLength;
 
 	/**

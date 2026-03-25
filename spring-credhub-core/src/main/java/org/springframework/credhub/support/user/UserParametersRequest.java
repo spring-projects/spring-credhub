@@ -115,6 +115,10 @@ public class UserParametersRequest extends ParametersRequest<PasswordParameters>
 			this.username = username;
 		}
 
+		/**
+		 * Get the username value.
+		 * @return the username
+		 */
 		public String getUsername() {
 			return this.username;
 		}

@@ -28,8 +28,14 @@ import java.util.Objects;
  */
 public class CredentialSummary {
 
+	/**
+	 * The client-provided name of the credential.
+	 */
 	protected final CredentialName name;
 
+	/**
+	 * The CredHub-generated {@link Date} when this version of the credential was created.
+	 */
 	protected final Date versionCreatedAt;
 
 	/**

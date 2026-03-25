@@ -74,6 +74,11 @@ public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 			return this;
 		}
 
+		/**
+		 * Set the value of a JSON credential from a {@link Map}.
+		 * @param value the credential value; must not be {@literal null}
+		 * @return the builder
+		 */
 		public JsonCredentialRequestBuilder value(Map<String, Object> value) {
 			value(new JsonCredential(value));
 			return this;

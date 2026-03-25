@@ -35,7 +35,7 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-public class CredHubInfoTemplateUnitTests {
+class CredHubInfoTemplateUnitTests {
 
 	@Mock
 	private RestTemplate restTemplate;
@@ -43,12 +43,12 @@ public class CredHubInfoTemplateUnitTests {
 	private CredHubInfoOperations credHubTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).info();
 	}
 
 	@Test
-	public void getVersion() {
+	void getVersion() {
 		given(this.restTemplate.getForEntity(CredHubInfoTemplate.VERSION_URL_PATH, VersionInfo.class))
 			.willReturn(new ResponseEntity<>(new VersionInfo("2.0.0"), HttpStatus.OK));
 

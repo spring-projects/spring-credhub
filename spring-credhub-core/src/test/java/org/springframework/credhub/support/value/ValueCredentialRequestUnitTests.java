@@ -24,17 +24,17 @@ import org.springframework.credhub.support.CredHubRequestUnitTestsBase;
 import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 
-public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.requestBuilder = ValueCredentialRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.value(new ValueCredential("somevalue"));
 	}
 
 	@Test
-	public void serializeWithValue() {
+	void serializeWithValue() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		JsonPathAssert.assertThat(json).hasPath("$.name").isEqualTo("/example/credential");
@@ -45,7 +45,7 @@ public class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase
 	}
 
 	@Test
-	public void serializeWithStringValue() {
+	void serializeWithStringValue() {
 		this.requestBuilder = ValueCredentialRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.value("somevalue");

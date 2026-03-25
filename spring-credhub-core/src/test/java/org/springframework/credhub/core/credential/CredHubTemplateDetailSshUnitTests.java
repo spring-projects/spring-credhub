@@ -37,8 +37,7 @@ import org.springframework.credhub.support.ssh.SshParameters;
 import org.springframework.credhub.support.ssh.SshParametersRequest;
 import org.springframework.http.ResponseEntity;
 
-public class CredHubTemplateDetailSshUnitTests
-		extends CredHubTemplateDetailUnitTestsBase<SshCredential, SshParameters> {
+class CredHubTemplateDetailSshUnitTests extends CredHubTemplateDetailUnitTestsBase<SshCredential, SshParameters> {
 
 	private static final SshCredential CREDENTIAL = new SshCredential("public-key", "private-key");
 
@@ -61,43 +60,43 @@ public class CredHubTemplateDetailSshUnitTests
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void write(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+	void write(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void generate(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+	void generate(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
 		verifyGenerate(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void regenerate(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+	void regenerate(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
 		verifyRegenerate(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void getById(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
+	void getById(ResponseEntity<CredentialDetails<SshCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByName(ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+	void getByName(ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+	void getByNameWithHistory(ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
+	void getByNameWithVersions(ResponseEntity<CredentialDetailsData<SshCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 

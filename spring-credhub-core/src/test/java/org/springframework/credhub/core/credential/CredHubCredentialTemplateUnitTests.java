@@ -23,10 +23,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CredHubCredentialTemplateUnitTests extends CredHubCredentialTemplateUnitTestsBase {
+class CredHubCredentialTemplateUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 
 	@Test
-	public void deleteByName() {
+	void deleteByName() {
 		this.credHubTemplate.deleteByName(NAME);
 
 		verify(this.restTemplate).delete(CredHubCredentialTemplate.NAME_URL_QUERY, NAME.getName());

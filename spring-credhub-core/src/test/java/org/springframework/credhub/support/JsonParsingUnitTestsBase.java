@@ -47,7 +47,7 @@ public abstract class JsonParsingUnitTestsBase {
 	Date testDate;
 
 	@BeforeEach
-	public void setUpJsonParsing() throws Exception {
+	void setUpJsonParsing() throws Exception {
 		this.testDate = new StdDateFormat().parse(TEST_DATE_STRING);
 	}
 

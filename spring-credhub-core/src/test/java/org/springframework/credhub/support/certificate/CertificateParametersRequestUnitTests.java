@@ -28,15 +28,15 @@ import org.springframework.credhub.support.WriteMode;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+class CertificateParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.requestBuilder = CertificateParametersRequest.builder();
 	}
 
 	@Test
-	public void serializeWithParameters() {
+	void serializeWithParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.OVERWRITE)
@@ -119,7 +119,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithMinimalParameters() {
+	void serializeWithMinimalParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.NO_OVERWRITE)
@@ -148,7 +148,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithNoParameters() {
+	void serializeWithNoParameters() {
 		this.requestBuilder = CertificateParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.CONVERGE);
@@ -160,7 +160,7 @@ public class CertificateParametersRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithEmptyParameters() {
+	void serializeWithEmptyParameters() {
 		assertThatIllegalArgumentException().isThrownBy(() -> {
 			this.requestBuilder = CertificateParametersRequest.builder()
 				.name(new SimpleCredentialName("example", "credential"))

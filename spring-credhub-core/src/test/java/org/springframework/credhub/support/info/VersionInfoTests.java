@@ -22,10 +22,10 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VersionInfoTests extends JsonParsingUnitTestsBase {
+class VersionInfoTests extends JsonParsingUnitTestsBase {
 
 	@Test
-	public void deserializeWithV1() {
+	void deserializeWithV1() {
 		String json = """
 				{
 					"version": "1.9.0"
@@ -42,7 +42,7 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeWithV2_0() {
+	void deserializeWithV2_0() {
 		String json = """
 				{
 					"version": "2.0.2"
@@ -59,7 +59,7 @@ public class VersionInfoTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeWithV2_1() {
+	void deserializeWithV2_1() {
 		String json = """
 				{
 					"version": "2.1.2"

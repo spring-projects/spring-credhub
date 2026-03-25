@@ -40,7 +40,7 @@ import org.springframework.credhub.support.value.ValueCredentialRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CredentialIntegrationTests extends CredHubIntegrationTests {
+class CredentialIntegrationTests extends CredHubIntegrationTests {
 
 	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-credential");
@@ -52,7 +52,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	private PasswordParameters.PasswordParametersBuilder passwordParameters;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 
 		this.passwordParameters = PasswordParameters.builder()
@@ -66,7 +66,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 
 		List<CredentialSummary> afterDelete = this.credentials.findByName(CREDENTIAL_NAME);
@@ -74,7 +74,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void writeCredential() {
+	void writeCredential() {
 		CredentialDetails<ValueCredential> written = this.credentials
 			.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
@@ -102,7 +102,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void writeJsonCredential() {
+	void writeJsonCredential() {
 		Map<String, Object> requestValue = new HashMap<>() {
 			{
 				put("username", "user");
@@ -127,7 +127,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void overwriteCredential() {
+	void overwriteCredential() {
 		CredentialDetails<ValueCredential> written = this.credentials
 			.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 		assertThat(written.getName().getName()).isEqualTo(CREDENTIAL_NAME.getName());
@@ -161,7 +161,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void generateCredential() {
+	void generateCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
 			.name(CREDENTIAL_NAME)
 			.username("test-user")
@@ -186,7 +186,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void generateNoOverwriteCredential() {
+	void generateNoOverwriteCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
 			.name(CREDENTIAL_NAME)
 			.username("test-user")
@@ -209,7 +209,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void generateOverwriteCredential() {
+	void generateOverwriteCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
 			.name(CREDENTIAL_NAME)
 			.username("test-user")
@@ -232,7 +232,7 @@ public class CredentialIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void generateConvergeCredential() {
+	void generateConvergeCredential() {
 		CredentialDetails<UserCredential> generated = this.credentials.generate(UserParametersRequest.builder()
 			.name(CREDENTIAL_NAME)
 			.username("test-user")

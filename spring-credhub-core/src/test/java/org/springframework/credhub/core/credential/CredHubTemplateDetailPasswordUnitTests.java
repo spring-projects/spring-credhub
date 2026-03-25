@@ -36,7 +36,7 @@ import org.springframework.credhub.support.password.PasswordParameters;
 import org.springframework.credhub.support.password.PasswordParametersRequest;
 import org.springframework.http.ResponseEntity;
 
-public class CredHubTemplateDetailPasswordUnitTests
+class CredHubTemplateDetailPasswordUnitTests
 		extends CredHubTemplateDetailUnitTestsBase<PasswordCredential, PasswordParameters> {
 
 	private static final PasswordCredential CREDENTIAL = new PasswordCredential("secret");
@@ -60,43 +60,43 @@ public class CredHubTemplateDetailPasswordUnitTests
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void write(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+	void write(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void generate(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+	void generate(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyGenerate(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void regenerate(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+	void regenerate(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyRegenerate(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void getById(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+	void getById(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByName(ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
+	void getByName(ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
+	void getByNameWithHistory(ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
+	void getByNameWithVersions(ResponseEntity<CredentialDetailsData<PasswordCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 

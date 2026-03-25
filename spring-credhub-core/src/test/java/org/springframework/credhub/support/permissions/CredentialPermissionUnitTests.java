@@ -29,10 +29,10 @@ import org.springframework.credhub.support.SimpleCredentialName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
+class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
-	public void deserializePermission() {
+	void deserializePermission() {
 		String json = """
 				{
 					"uuid": "uuid",
@@ -59,7 +59,7 @@ public class CredentialPermissionUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void serializePermission() {
+	void serializePermission() {
 		CredentialPermission permission = new CredentialPermission(
 				new SimpleCredentialName("example", "credential", "*"),
 				Permission.builder().app("appid1").operations(Operation.READ, Operation.WRITE).build());

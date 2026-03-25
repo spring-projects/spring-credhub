@@ -30,7 +30,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CredHubOAuth2AutoConfigurationTests {
+class CredHubOAuth2AutoConfigurationTests {
 
 	private final Class<?>[] configurations = { CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class };
 
@@ -45,7 +45,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 		.withConfiguration(AutoConfigurations.of(this.configurations));
 
 	@Test
-	public void oauth2ContextConfigured() {
+	void oauth2ContextConfigured() {
 		this.context.withPropertyValues(this.oAuth2ClientProperties).run((context) -> {
 			assertServletOAuth2ContextConfigured(context);
 			assertReactiveOAuth2ContextConfigured(context);
@@ -53,7 +53,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 	}
 
 	@Test
-	public void oauth2ContextConfiguredWithoutWebClient() {
+	void oauth2ContextConfiguredWithoutWebClient() {
 		this.context.withClassLoader(new FilteredClassLoader(WebClient.class))
 			.withPropertyValues(this.oAuth2ClientProperties)
 			.run((context) -> {
@@ -63,7 +63,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 	}
 
 	@Test
-	public void oauth2ContextConfiguredWithWebApp() {
+	void oauth2ContextConfiguredWithWebApp() {
 		new WebApplicationContextRunner().withConfiguration(AutoConfigurations.of(this.configurations))
 			.withPropertyValues(this.oAuth2ClientProperties)
 			.run((context) -> {
@@ -73,7 +73,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 	}
 
 	@Test
-	public void oauth2ContextConfiguredWithReactiveWebApp() {
+	void oauth2ContextConfiguredWithReactiveWebApp() {
 		new ReactiveWebApplicationContextRunner().withConfiguration(AutoConfigurations.of(this.configurations))
 			.withPropertyValues(this.oAuth2ClientProperties)
 			.run((context) -> {
@@ -83,7 +83,7 @@ public class CredHubOAuth2AutoConfigurationTests {
 	}
 
 	@Test
-	public void oauth2ContextConfiguredWithReactiveWebAppNoServlet() {
+	void oauth2ContextConfiguredWithReactiveWebAppNoServlet() {
 		new ReactiveWebApplicationContextRunner().withClassLoader(new FilteredClassLoader("jakarta.servlet"))
 			.withConfiguration(AutoConfigurations.of(this.configurations))
 			.withPropertyValues(this.oAuth2ClientProperties)
@@ -94,12 +94,12 @@ public class CredHubOAuth2AutoConfigurationTests {
 	}
 
 	@Test
-	public void oauth2ContextNotConfiguredWithoutProperties() {
+	void oauth2ContextNotConfiguredWithoutProperties() {
 		this.context.run(this::assertOAuth2ContextNotConfigured);
 	}
 
 	@Test
-	public void oauth2ContextNotConfiguredWithoutSpringSecurity() {
+	void oauth2ContextNotConfiguredWithoutSpringSecurity() {
 		this.context.withClassLoader(new FilteredClassLoader(ClientRegistration.class))
 			.run(this::assertOAuth2ContextNotConfigured);
 	}

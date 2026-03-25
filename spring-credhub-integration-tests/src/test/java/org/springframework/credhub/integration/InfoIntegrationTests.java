@@ -24,17 +24,17 @@ import org.springframework.credhub.support.info.VersionInfo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InfoIntegrationTests extends CredHubIntegrationTests {
+class InfoIntegrationTests extends CredHubIntegrationTests {
 
 	private CredHubInfoOperations info;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.info = this.operations.info();
 	}
 
 	@Test
-	public void getInfo() {
+	void getInfo() {
 		VersionInfo version = this.info.version();
 
 		assertThat(version.getVersion()).isNotNull();

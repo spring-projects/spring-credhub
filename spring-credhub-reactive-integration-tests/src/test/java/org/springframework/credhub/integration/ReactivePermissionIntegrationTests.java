@@ -34,7 +34,7 @@ import org.springframework.credhub.support.value.ValueCredentialRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class ReactivePermissionIntegrationTests extends ReactiveCredHubIntegrationTests {
+class ReactivePermissionIntegrationTests extends ReactiveCredHubIntegrationTests {
 
 	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-permissions-credential");
@@ -46,7 +46,7 @@ public class ReactivePermissionIntegrationTests extends ReactiveCredHubIntegrati
 	private ReactiveCredHubPermissionOperations permissions;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 		this.permissions = this.operations.permissions();
 
@@ -55,13 +55,13 @@ public class ReactivePermissionIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 		deletePermissionsIfExist();
 	}
 
 	@Test
-	public void managePermissionsServerV1() {
+	void managePermissionsServerV1() {
 		assumeTrue(serverApiIsV1());
 
 		StepVerifier
@@ -103,7 +103,7 @@ public class ReactivePermissionIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void managePermissionsServerV2() {
+	void managePermissionsServerV2() {
 		assumeTrue(serverApiIsV2());
 
 		StepVerifier

@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
-public abstract class CredHubIntegrationTests {
+abstract class CredHubIntegrationTests {
 
 	@Autowired
 	protected CredHubOperations operations;

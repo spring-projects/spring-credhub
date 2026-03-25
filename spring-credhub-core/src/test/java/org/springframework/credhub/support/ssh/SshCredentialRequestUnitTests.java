@@ -27,15 +27,15 @@ import org.springframework.credhub.support.WriteMode;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		buildRequest(new SshCredential("public-key", "private-key"));
 	}
 
 	@Test
-	public void serializeWithPublicAndPrivateKey() {
+	void serializeWithPublicAndPrivateKey() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "ssh");
@@ -46,7 +46,7 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithPublicKey() {
+	void serializeWithPublicKey() {
 		buildRequest(new SshCredential("public-key", null));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
@@ -59,7 +59,7 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithPrivateKey() {
+	void serializeWithPrivateKey() {
 		buildRequest(new SshCredential(null, "private-key"));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
@@ -72,7 +72,7 @@ public class SshCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithNeitherKey() {
+	void serializeWithNeitherKey() {
 		assertThatIllegalArgumentException().isThrownBy(() -> {
 			buildRequest(new SshCredential(null, null));
 

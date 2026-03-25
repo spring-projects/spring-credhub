@@ -30,17 +30,17 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClientHttpRequestFactoryFactoryTests {
+class ClientHttpRequestFactoryFactoryTests {
 
 	@Test
-	public void jdkDefaultClientCreated() {
+	void jdkDefaultClientCreated() {
 		ClientHttpRequestFactory factory = HttpURLConnection.usingJdk(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(SimpleClientHttpRequestFactory.class);
 	}
 
 	@Test
-	public void httpComponentsClientCreated() throws Exception {
+	void httpComponentsClientCreated() throws Exception {
 		ClientHttpRequestFactory factory = HttpComponents.usingHttpComponents(new ClientOptions());
 
 		assertThat(factory).isInstanceOf(HttpComponentsClientHttpRequestFactory.class);

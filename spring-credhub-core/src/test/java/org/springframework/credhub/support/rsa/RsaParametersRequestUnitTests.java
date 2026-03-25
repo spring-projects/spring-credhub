@@ -26,15 +26,15 @@ import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.requestBuilder = RsaParametersRequest.builder();
 	}
 
 	@Test
-	public void serializeWithParameters() {
+	void serializeWithParameters() {
 		this.requestBuilder = RsaParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.OVERWRITE)
@@ -47,7 +47,7 @@ public class RsaParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithNoParameters() {
+	void serializeWithNoParameters() {
 		this.requestBuilder = RsaParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.OVERWRITE);

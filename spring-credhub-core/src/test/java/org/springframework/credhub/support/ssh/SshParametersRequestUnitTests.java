@@ -26,15 +26,15 @@ import org.springframework.credhub.support.KeyLength;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.requestBuilder = SshParametersRequest.builder();
 	}
 
 	@Test
-	public void serializeWithParameters() {
+	void serializeWithParameters() {
 		this.requestBuilder = SshParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.OVERWRITE)
@@ -48,7 +48,7 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithLengthParameter() {
+	void serializeWithLengthParameter() {
 		this.requestBuilder = SshParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.NO_OVERWRITE)
@@ -62,7 +62,7 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithCommentParameter() {
+	void serializeWithCommentParameter() {
 		this.requestBuilder = SshParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.CONVERGE)
@@ -76,7 +76,7 @@ public class SshParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithNoParameters() {
+	void serializeWithNoParameters() {
 		this.requestBuilder = SshParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.OVERWRITE);

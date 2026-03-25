@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-public abstract class CredHubCredentialTemplateUnitTestsBase {
+abstract class CredHubCredentialTemplateUnitTestsBase {
 
 	protected static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
 
@@ -39,7 +39,7 @@ public abstract class CredHubCredentialTemplateUnitTestsBase {
 	protected CredHubCredentialOperations credHubTemplate;
 
 	@BeforeEach
-	public void setUpCredHubTemplateUnitTests() {
+	void setUpCredHubTemplateUnitTests() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).credentials();
 	}
 

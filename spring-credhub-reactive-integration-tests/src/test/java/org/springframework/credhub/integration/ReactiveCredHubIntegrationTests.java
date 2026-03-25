@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 
 @SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
-public abstract class ReactiveCredHubIntegrationTests {
+abstract class ReactiveCredHubIntegrationTests {
 
 	@Value("${test-server-version:}")
 	private String serverVersion;
@@ -41,7 +41,7 @@ public abstract class ReactiveCredHubIntegrationTests {
 	protected ReactiveCredHubOperations operations;
 
 	@BeforeEach
-	public void setupVersionInfo() {
+	void setupVersionInfo() {
 		if (StringUtils.hasText(this.serverVersion)) {
 			this.versionInfo = new VersionInfo(this.serverVersion);
 		}

@@ -26,15 +26,15 @@ import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 import org.springframework.credhub.support.password.PasswordParameters;
 
-public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
+class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.requestBuilder = UserParametersRequest.builder();
 	}
 
 	@Test
-	public void serializeWithParameters() {
+	void serializeWithParameters() {
 		this.requestBuilder = UserParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.OVERWRITE)
@@ -59,7 +59,7 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithEmptyParameters() {
+	void serializeWithEmptyParameters() {
 		this.requestBuilder = UserParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.NO_OVERWRITE)
@@ -72,7 +72,7 @@ public class UserParametersRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithNoParameters() {
+	void serializeWithNoParameters() {
 		this.requestBuilder = UserParametersRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.mode(WriteMode.CONVERGE);

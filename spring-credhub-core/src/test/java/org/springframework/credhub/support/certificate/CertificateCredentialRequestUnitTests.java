@@ -27,15 +27,15 @@ import org.springframework.credhub.support.WriteMode;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		buildRequest(new CertificateCredential("cert", "ca", "private-key"));
 	}
 
 	@Test
-	public void serializeWithAllValues() {
+	void serializeWithAllValues() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "certificate");
@@ -47,7 +47,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithCertOnly() {
+	void serializeWithCertOnly() {
 		buildRequest(new CertificateCredential("cert", null, null));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
@@ -60,7 +60,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithNoCert() {
+	void serializeWithNoCert() {
 		buildRequest(new CertificateCredential(null, "ca", "private-key"));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
@@ -74,7 +74,7 @@ public class CertificateCredentialRequestUnitTests extends CredHubRequestUnitTes
 	}
 
 	@Test
-	public void serializeWithNoValues() {
+	void serializeWithNoValues() {
 		assertThatIllegalArgumentException().isThrownBy(() -> {
 			buildRequest(new CertificateCredential(null, null, null));
 

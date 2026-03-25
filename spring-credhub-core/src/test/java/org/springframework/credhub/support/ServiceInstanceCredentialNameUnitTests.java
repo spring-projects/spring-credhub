@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServiceInstanceCredentialNameUnitTests {
+class ServiceInstanceCredentialNameUnitTests {
 
 	@Test
-	public void simpleNameIsConstructed() {
+	void simpleNameIsConstructed() {
 		CredentialName credentialName = new ServiceInstanceCredentialName("broker-name", "service-name", "binding-id",
 				"credential-name");
 

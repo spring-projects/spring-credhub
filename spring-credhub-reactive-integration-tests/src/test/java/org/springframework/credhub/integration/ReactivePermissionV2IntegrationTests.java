@@ -37,7 +37,7 @@ import org.springframework.credhub.support.value.ValueCredentialRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegrationTests {
+class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegrationTests {
 
 	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-permissionsV2-credential");
@@ -49,7 +49,7 @@ public class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegra
 	private ReactiveCredHubPermissionV2Operations permissions;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 		this.permissions = this.operations.permissionsV2();
 
@@ -57,12 +57,12 @@ public class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegra
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@Test
-	public void managePermissions() {
+	void managePermissions() {
 		assumeTrue(serverApiIsV2());
 
 		AtomicReference<String> permissionId = new AtomicReference<>();
@@ -103,7 +103,7 @@ public class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegra
 	}
 
 	@Test
-	public void updatePermissions() {
+	void updatePermissions() {
 		assumeTrue(serverApiIsV2());
 
 		AtomicReference<String> permissionId = new AtomicReference<>();

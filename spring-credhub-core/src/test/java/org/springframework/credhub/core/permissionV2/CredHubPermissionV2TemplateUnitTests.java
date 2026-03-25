@@ -40,7 +40,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CredHubPermissionV2TemplateUnitTests {
+class CredHubPermissionV2TemplateUnitTests {
 
 	private static final SimpleCredentialName PATH = new SimpleCredentialName("example", "credential", "*");
 
@@ -50,12 +50,12 @@ public class CredHubPermissionV2TemplateUnitTests {
 	private CredHubPermissionV2Operations credHubTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).permissionsV2();
 	}
 
 	@Test
-	public void getPermissions() {
+	void getPermissions() {
 		String permissionId = "uuid";
 
 		CredentialPermission expectedResponse = new CredentialPermission(PATH,
@@ -74,7 +74,7 @@ public class CredHubPermissionV2TemplateUnitTests {
 	}
 
 	@Test
-	public void getPermissionsByPathAndActor() {
+	void getPermissionsByPathAndActor() {
 		String clientId = "client-id";
 
 		CredentialPermission expectedResponse = new CredentialPermission(PATH,
@@ -95,7 +95,7 @@ public class CredHubPermissionV2TemplateUnitTests {
 	}
 
 	@Test
-	public void addPermissions() {
+	void addPermissions() {
 		Permission permission = Permission.builder()
 			.app("app-id")
 			.operation(Operation.READ)
@@ -117,7 +117,7 @@ public class CredHubPermissionV2TemplateUnitTests {
 	}
 
 	@Test
-	public void updatePermissions() {
+	void updatePermissions() {
 		String permissionId = "uuid";
 
 		Permission permission = Permission.builder()
@@ -141,7 +141,7 @@ public class CredHubPermissionV2TemplateUnitTests {
 	}
 
 	@Test
-	public void deletePermission() {
+	void deletePermission() {
 		this.credHubTemplate.deletePermission("uuid");
 
 		verify(this.restTemplate).delete(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH, "uuid");

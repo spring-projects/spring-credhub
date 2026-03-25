@@ -25,7 +25,7 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private static final String CERT_CREDENTIALS = """
 			"type": "certificate",
@@ -37,14 +37,14 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 			""";
 
 	@Test
-	public void deserializeDetailsWithAllValues() {
+	void deserializeDetailsWithAllValues() {
 		CredentialDetails<CertificateCredential> data = parseDetails(CERT_CREDENTIALS);
 
 		assertDetails(data, "cert", "authority", "private-key");
 	}
 
 	@Test
-	public void deserializeDetailsCertOnly() {
+	void deserializeDetailsCertOnly() {
 		final String credentials = """
 				"type": "certificate",
 				"value": {
@@ -57,7 +57,7 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 	}
 
 	@Test
-	public void deserializeDetailsWithNoCert() {
+	void deserializeDetailsWithNoCert() {
 		final String credentials = """
 				"type": "certificate",
 				"value": {
@@ -71,7 +71,7 @@ public class CertificateCredentialDetailsUnitTests extends JsonParsingUnitTestsB
 	}
 
 	@Test
-	public void deserializeDetailsData() {
+	void deserializeDetailsData() {
 		CredentialDetailsData<CertificateCredential> response = parseDetailsData(CERT_CREDENTIALS);
 
 		assertThat(response.getData()).hasSize(1);

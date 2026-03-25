@@ -33,7 +33,7 @@ import org.springframework.credhub.support.json.JsonCredential;
 import org.springframework.credhub.support.json.JsonCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
-public class CredHubTemplateDetailJsonUnitTests extends CredHubTemplateDetailUnitTestsBase<JsonCredential, Void> {
+class CredHubTemplateDetailJsonUnitTests extends CredHubTemplateDetailUnitTestsBase<JsonCredential, Void> {
 
 	private static final JsonCredential CREDENTIAL = new JsonCredential() {
 		{
@@ -54,31 +54,31 @@ public class CredHubTemplateDetailJsonUnitTests extends CredHubTemplateDetailUni
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void write(ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+	void write(ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void getById(ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
+	void getById(ResponseEntity<CredentialDetails<JsonCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByName(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+	void getByName(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+	void getByNameWithHistory(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
+	void getByNameWithVersions(ResponseEntity<CredentialDetailsData<JsonCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 

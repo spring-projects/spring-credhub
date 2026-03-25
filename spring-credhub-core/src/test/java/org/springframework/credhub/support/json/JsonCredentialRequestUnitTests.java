@@ -25,10 +25,10 @@ import org.springframework.credhub.support.JsonPathAssert;
 import org.springframework.credhub.support.SimpleCredentialName;
 import org.springframework.credhub.support.WriteMode;
 
-public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.requestBuilder = JsonCredentialRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.value(new JsonCredential() {
@@ -41,7 +41,7 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithJsonValue() {
+	void serializeWithJsonValue() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "json");
@@ -52,7 +52,7 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 	}
 
 	@Test
-	public void serializeWithNullAndEmptyValuesExcluded() {
+	void serializeWithNullAndEmptyValuesExcluded() {
 		this.requestBuilder = JsonCredentialRequest.builder()
 			.name(new SimpleCredentialName("example", "credential"))
 			.value(new JsonCredential() {

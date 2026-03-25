@@ -52,7 +52,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CredHubTemplateAutoConfigurationTests {
+class CredHubTemplateAutoConfigurationTests {
 
 	private static final FilteredClassLoader SPRING_SECURITY_FILTERED_CLASS_LOADER = new FilteredClassLoader(
 			"org.springframework.security.oauth2.client");
@@ -70,7 +70,7 @@ public class CredHubTemplateAutoConfigurationTests {
 		.withInitializer(ConditionEvaluationReportLoggingListener.forLogLevel(LogLevel.INFO));
 
 	@Test
-	public void credHubTemplatesConfigured() {
+	void credHubTemplatesConfigured() {
 		this.context.withPropertyValues("spring.credhub.url=https://localhost")
 			.withClassLoader(SPRING_SECURITY_FILTERED_CLASS_LOADER)
 			.run((context) -> {
@@ -85,7 +85,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplatesConfiguredWithSpringSecurityWithoutClientId() {
+	void credHubTemplatesConfiguredWithSpringSecurityWithoutClientId() {
 		this.context.withPropertyValues("spring.credhub.url=https://localhost").run((context) -> {
 			assertThat(context).hasSingleBean(CredHubTemplate.class);
 			CredHubTemplate credHubTemplate = context.getBean(CredHubTemplate.class);
@@ -98,7 +98,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void reactiveCredHubTemplateNotConfiguredWithoutWebClient() {
+	void reactiveCredHubTemplateNotConfiguredWithoutWebClient() {
 		this.context.withPropertyValues("spring.credhub.url=https://localhost")
 			.withClassLoader(new FilteredClassLoader(WebClient.class))
 			.run((context) -> {
@@ -111,7 +111,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplatesConfiguredWithOAuth2() {
+	void credHubTemplatesConfiguredWithOAuth2() {
 		this.context.withPropertyValues("spring.credhub.url=https://localhost",
 				"spring.credhub.oauth2.registration-id=credhub-client",
 
@@ -138,7 +138,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplatesConfiguredWithOAuth2AndCustomClientManager() {
+	void credHubTemplatesConfiguredWithOAuth2AndCustomClientManager() {
 		this.context.withPropertyValues("spring.credhub.url=https://localhost",
 				"spring.credhub.oauth2.registration-id=credhub-client",
 
@@ -166,7 +166,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplatesNotConfiguredWithInvalidClientRegistration() {
+	void credHubTemplatesNotConfiguredWithInvalidClientRegistration() {
 		this.context.withPropertyValues("spring.credhub.url=https://localhost",
 				"spring.credhub.oauth2.registration-id=invalid-client",
 
@@ -180,7 +180,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplateNotConfiguredWithMissingClientRegistration() {
+	void credHubTemplateNotConfiguredWithMissingClientRegistration() {
 		this.context.withClassLoader(WEB_CLIENT_AND_SECURITY_FILTERED_CLASS_LOADER)
 			.withPropertyValues("spring.credhub.url=https://localhost",
 					"spring.credhub.oauth2.registration-id=credhub-client")
@@ -189,7 +189,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void reactiveCredHubTemplateNotConfiguredWithMissingClientRegistration() {
+	void reactiveCredHubTemplateNotConfiguredWithMissingClientRegistration() {
 		this.context.withClassLoader(SERVLET_AND_SECURITY_FILTERED_CLASS_LOADER)
 			.withPropertyValues("spring.credhub.url=https://localhost",
 					"spring.credhub.oauth2.registration-id=credhub-client")
@@ -198,7 +198,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void credHubTemplateNotConfiguredWithOAuth2ButMissingSpringSecurity() {
+	void credHubTemplateNotConfiguredWithOAuth2ButMissingSpringSecurity() {
 		this.context.withClassLoader(WEB_CLIENT_AND_SECURITY_FILTERED_CLASS_LOADER)
 			.withPropertyValues("spring.credhub.url=https://localhost",
 					"spring.credhub.oauth2.registration-id=credhub-client",
@@ -212,7 +212,7 @@ public class CredHubTemplateAutoConfigurationTests {
 	}
 
 	@Test
-	public void reactiveCredHubTemplateNotConfiguredWithOAuth2ButMissingSpringSecurity() {
+	void reactiveCredHubTemplateNotConfiguredWithOAuth2ButMissingSpringSecurity() {
 		this.context.withClassLoader(SERVLET_AND_SECURITY_FILTERED_CLASS_LOADER)
 			.withPropertyValues("spring.credhub.url=https://localhost",
 					"spring.credhub.oauth2.registration-id=credhub-client",

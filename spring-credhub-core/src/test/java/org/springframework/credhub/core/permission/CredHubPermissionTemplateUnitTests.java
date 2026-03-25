@@ -45,7 +45,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-public class CredHubPermissionTemplateUnitTests {
+class CredHubPermissionTemplateUnitTests {
 
 	private static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");
 
@@ -55,12 +55,12 @@ public class CredHubPermissionTemplateUnitTests {
 	private CredHubPermissionOperations credHubTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).permissions();
 	}
 
 	@Test
-	public void getPermissions() {
+	void getPermissions() {
 		CredentialPermissions expectedResponse = new CredentialPermissions(NAME,
 				Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE).build(),
 				Permission.builder()
@@ -82,7 +82,7 @@ public class CredHubPermissionTemplateUnitTests {
 	}
 
 	@Test
-	public void addPermissions() {
+	void addPermissions() {
 		Permission permission1 = Permission.builder()
 			.app("app-id")
 			.operation(Operation.READ)
@@ -104,7 +104,7 @@ public class CredHubPermissionTemplateUnitTests {
 	}
 
 	@Test
-	public void deletePermission() {
+	void deletePermission() {
 		this.credHubTemplate.deletePermission(NAME, Actor.app("appid1"));
 
 		verify(this.restTemplate).delete(CredHubPermissionTemplate.PERMISSIONS_ACTOR_URL_QUERY, NAME.getName(),

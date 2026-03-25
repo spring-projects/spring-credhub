@@ -36,7 +36,7 @@ import org.springframework.credhub.support.certificate.CertificateSummary;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CertificateIntegrationTests extends CredHubIntegrationTests {
+class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 	private static final SimpleCredentialName TEST_CERT_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-certificate");
@@ -49,7 +49,7 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 	private CredHubCertificateOperations certificates;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 		this.certificates = this.operations.certificates();
 
@@ -58,13 +58,13 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(TEST_CERT_NAME);
 		deleteCredentialIfExists(ROOT_CERT_NAME);
 	}
 
 	@Test
-	public void generateCertificate() {
+	void generateCertificate() {
 		CredentialDetails<CertificateCredential> certificate = this.credentials
 			.generate(CertificateParametersRequest.builder()
 				.name(TEST_CERT_NAME)
@@ -87,7 +87,7 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void regenerateCertificate() {
+	void regenerateCertificate() {
 		CredentialDetails<CertificateCredential> certificate = this.credentials
 			.generate(CertificateParametersRequest.builder()
 				.name(TEST_CERT_NAME)
@@ -107,7 +107,7 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void rotateCertificate() {
+	void rotateCertificate() {
 		CredentialDetails<CertificateCredential> certificate = this.credentials
 			.generate(CertificateParametersRequest.builder()
 				.name(TEST_CERT_NAME)
@@ -151,7 +151,7 @@ public class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	public void bulkRegenerateCertificates() {
+	void bulkRegenerateCertificates() {
 		CredentialDetails<CertificateCredential> rootCertificate = this.credentials
 			.generate(CertificateParametersRequest.builder()
 				.name(ROOT_CERT_NAME)

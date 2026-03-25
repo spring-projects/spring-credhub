@@ -24,17 +24,17 @@ import org.springframework.credhub.core.info.ReactiveCredHubInfoOperations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReactiveInfoIntegrationTests extends ReactiveCredHubIntegrationTests {
+class ReactiveInfoIntegrationTests extends ReactiveCredHubIntegrationTests {
 
 	private ReactiveCredHubInfoOperations info;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.info = this.operations.info();
 	}
 
 	@Test
-	public void getInfo() {
+	void getInfo() {
 		StepVerifier.create(this.info.version())
 			.assertNext((response) -> assertThat(response.getVersion()).isNotNull())
 			.verifyComplete();

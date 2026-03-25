@@ -25,7 +25,7 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private static final String SSH_CREDENTIALS = """
 			"type": "ssh",
@@ -37,14 +37,14 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			""";
 
 	@Test
-	public void deserializeDetailsWithPublicAndPrivateKeys() {
+	void deserializeDetailsWithPublicAndPrivateKeys() {
 		CredentialDetails<SshCredential> data = parseDetails(SSH_CREDENTIALS);
 
 		assertDetails(data, "public-key", "private-key", "fingerprint");
 	}
 
 	@Test
-	public void deserializeDetailsWithPublicKey() {
+	void deserializeDetailsWithPublicKey() {
 		final String credentials = """
 				"type": "ssh",
 				"value": {
@@ -57,7 +57,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsWithPrivateKey() {
+	void deserializeDetailsWithPrivateKey() {
 		final String credentials = """
 				"type": "ssh",
 				"value": {
@@ -70,7 +70,7 @@ public class SshCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsData() {
+	void deserializeDetailsData() {
 		CredentialDetailsData<SshCredential> response = parseDetailsData(SSH_CREDENTIALS);
 
 		assertThat(response.getData()).hasSize(1);

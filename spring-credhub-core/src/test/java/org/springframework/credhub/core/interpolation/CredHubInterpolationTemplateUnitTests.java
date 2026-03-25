@@ -42,7 +42,7 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-public class CredHubInterpolationTemplateUnitTests {
+class CredHubInterpolationTemplateUnitTests {
 
 	@Mock
 	private RestTemplate restTemplate;
@@ -50,12 +50,12 @@ public class CredHubInterpolationTemplateUnitTests {
 	private CredHubInterpolationOperations credHubTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).interpolation();
 	}
 
 	@Test
-	public void interpolateServiceData() throws IOException {
+	void interpolateServiceData() throws IOException {
 		ServiceInstanceCredentialName credentialName = ServiceInstanceCredentialName.builder()
 			.serviceBrokerName("service-broker")
 			.serviceOfferingName("service-offering")

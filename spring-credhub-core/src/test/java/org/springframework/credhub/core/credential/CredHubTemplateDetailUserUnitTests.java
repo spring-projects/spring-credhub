@@ -33,7 +33,7 @@ import org.springframework.credhub.support.user.UserCredential;
 import org.springframework.credhub.support.user.UserCredentialRequest;
 import org.springframework.http.ResponseEntity;
 
-public class CredHubTemplateDetailUserUnitTests extends CredHubTemplateDetailUnitTestsBase<UserCredential, Void> {
+class CredHubTemplateDetailUserUnitTests extends CredHubTemplateDetailUnitTestsBase<UserCredential, Void> {
 
 	private static final UserCredential CREDENTIAL = new UserCredential("myname", "secret");
 
@@ -49,31 +49,31 @@ public class CredHubTemplateDetailUserUnitTests extends CredHubTemplateDetailUni
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void write(ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
+	void write(ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
 		verifyWrite(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
-	public void getById(ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
+	void getById(ResponseEntity<CredentialDetails<UserCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByName(ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
+	void getByName(ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByName(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithHistory(ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
+	void getByNameWithHistory(ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByNameWithHistory(expectedResponse);
 	}
 
 	@ParameterizedTest
 	@ArgumentsSource(DataResponseArgumentsProvider.class)
-	public void getByNameWithVersions(ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
+	void getByNameWithVersions(ResponseEntity<CredentialDetailsData<UserCredential>> expectedResponse) {
 		verifyGetByNameWithVersions(expectedResponse);
 	}
 

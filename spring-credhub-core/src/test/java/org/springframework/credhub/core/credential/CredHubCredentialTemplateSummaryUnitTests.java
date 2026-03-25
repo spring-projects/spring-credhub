@@ -36,11 +36,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.BDDMockito.given;
 
-public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
+class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredentialTemplateUnitTestsBase {
 
 	@ParameterizedTest
 	@ArgumentsSource(ResponseArgumentsProvider.class)
-	public void findByName(ResponseEntity<CredentialSummaryData> expectedResponse) {
+	void findByName(ResponseEntity<CredentialSummaryData> expectedResponse) {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.NAME_LIKE_URL_QUERY, CredentialSummaryData.class,
 				NAME.getName()))
 			.willReturn(expectedResponse);
@@ -63,7 +63,7 @@ public class CredHubCredentialTemplateSummaryUnitTests extends CredHubCredential
 
 	@ParameterizedTest
 	@ArgumentsSource(ResponseArgumentsProvider.class)
-	public void findByPath(ResponseEntity<CredentialSummaryData> expectedResponse) {
+	void findByPath(ResponseEntity<CredentialSummaryData> expectedResponse) {
 		given(this.restTemplate.getForEntity(CredHubCredentialTemplate.PATH_URL_QUERY, CredentialSummaryData.class,
 				NAME.getName()))
 			.willReturn(expectedResponse);

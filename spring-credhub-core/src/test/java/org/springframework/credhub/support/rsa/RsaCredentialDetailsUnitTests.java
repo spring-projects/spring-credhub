@@ -25,7 +25,7 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private static final String RSA_CREDENTIALS = """
 			"type": "rsa",
@@ -36,14 +36,14 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			""";
 
 	@Test
-	public void deserializeDetailsWithPublicAndPrivateKeys() {
+	void deserializeDetailsWithPublicAndPrivateKeys() {
 		CredentialDetails<RsaCredential> data = parseDetails(RSA_CREDENTIALS);
 
 		assertDetails(data, "public-key", "private-key");
 	}
 
 	@Test
-	public void deserializeDetailsWithPublicKey() {
+	void deserializeDetailsWithPublicKey() {
 		final String credentials = """
 				"type": "rsa",
 				"value": {
@@ -56,7 +56,7 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsWithPrivateKey() {
+	void deserializeDetailsWithPrivateKey() {
 		final String credentials = """
 				"type": "rsa",
 				"value": {
@@ -69,7 +69,7 @@ public class RsaCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeDetailsData() {
+	void deserializeDetailsData() {
 		CredentialDetailsData<RsaCredential> response = parseDetailsData(RSA_CREDENTIALS);
 
 		assertThat(response.getData()).hasSize(1);

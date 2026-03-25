@@ -37,7 +37,7 @@ import org.springframework.credhub.support.utils.JsonUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InterpolationIntegrationTests extends CredHubIntegrationTests {
+class InterpolationIntegrationTests extends CredHubIntegrationTests {
 
 	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "interpolation-credential");
@@ -47,19 +47,19 @@ public class InterpolationIntegrationTests extends CredHubIntegrationTests {
 	private CredHubCredentialOperations credentials;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.interpolation = this.operations.interpolation();
 		this.credentials = this.operations.credentials();
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void interpolate() throws IOException {
+	void interpolate() throws IOException {
 		Map<String, Object> json = new HashMap<String, Object>() {
 			{
 				put("url", "https://example.com");

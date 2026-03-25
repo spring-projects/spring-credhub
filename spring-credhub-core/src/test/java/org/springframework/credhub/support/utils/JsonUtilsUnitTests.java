@@ -23,16 +23,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonUtilsUnitTests {
+class JsonUtilsUnitTests {
 
 	@Test
-	public void defaultMapperOmitsEmptyScalarsAndEmptyMapValues() {
+	void defaultMapperOmitsEmptyScalarsAndEmptyMapValues() {
 		String json = JsonUtils.buildJsonMapper().writeValueAsString(new AllEmptySample());
 		assertThat(json).isEqualTo("{}");
 	}
 
 	@Test
-	public void defaultMapperStillWritesNonEmptyContent() {
+	void defaultMapperStillWritesNonEmptyContent() {
 		String json = JsonUtils.buildJsonMapper().writeValueAsString(new NonEmptySample());
 		assertThat(json).isEqualTo("""
 				{"map_with_data":{"k":"v"}}""");

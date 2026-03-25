@@ -40,7 +40,7 @@ import org.springframework.credhub.support.value.ValueCredentialRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrationTests {
+class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrationTests {
 
 	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-credential");
@@ -52,7 +52,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	private PasswordParameters.PasswordParametersBuilder passwordParameters;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 
 		this.passwordParameters = PasswordParameters.builder()
@@ -66,14 +66,14 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 
 		StepVerifier.create(this.credentials.findByName(CREDENTIAL_NAME)).expectComplete().verify();
 	}
 
 	@Test
-	public void writeCredential() {
+	void writeCredential() {
 		AtomicReference<CredentialDetails<ValueCredential>> written = new AtomicReference<>();
 
 		StepVerifier
@@ -121,7 +121,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void writeJsonCredential() {
+	void writeJsonCredential() {
 		Map<String, Object> requestValue = new HashMap<>() {
 			{
 				put("username", "user");
@@ -151,7 +151,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void overwriteCredentialV2() {
+	void overwriteCredentialV2() {
 		assumeTrue(serverApiIsV2());
 
 		StepVerifier
@@ -178,7 +178,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void overwriteCredentialV1() {
+	void overwriteCredentialV1() {
 		assumeTrue(serverApiIsV1());
 
 		StepVerifier
@@ -242,7 +242,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void generateCredential() {
+	void generateCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
 		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
@@ -276,7 +276,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void generateNoOverwriteCredential() {
+	void generateNoOverwriteCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
 		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
@@ -306,7 +306,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void generateOverwriteCredential() {
+	void generateOverwriteCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
 		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()
@@ -336,7 +336,7 @@ public class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrati
 	}
 
 	@Test
-	public void generateConvergeCredential() {
+	void generateConvergeCredential() {
 		AtomicReference<CredentialDetails<UserCredential>> generated = new AtomicReference<>();
 
 		StepVerifier.create(this.credentials.generate(UserParametersRequest.builder()

@@ -27,15 +27,15 @@ import org.springframework.credhub.support.WriteMode;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
+class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		buildRequest(new RsaCredential("public-key", "private-key"));
 	}
 
 	@Test
-	public void serializeWithPublicAndPrivateKey() {
+	void serializeWithPublicAndPrivateKey() {
 		DocumentContext json = toJsonPath(this.requestBuilder);
 
 		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "rsa");
@@ -46,7 +46,7 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithPublicKey() {
+	void serializeWithPublicKey() {
 		buildRequest(new RsaCredential("public-key", null));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
@@ -60,7 +60,7 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithPrivateKey() {
+	void serializeWithPrivateKey() {
 		buildRequest(new RsaCredential(null, "private-key"));
 
 		DocumentContext json = toJsonPath(this.requestBuilder);
@@ -73,7 +73,7 @@ public class RsaCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 	}
 
 	@Test
-	public void serializeWithNeitherKey() {
+	void serializeWithNeitherKey() {
 		assertThatIllegalArgumentException().isThrownBy(() -> {
 			buildRequest(new RsaCredential(null, null));
 

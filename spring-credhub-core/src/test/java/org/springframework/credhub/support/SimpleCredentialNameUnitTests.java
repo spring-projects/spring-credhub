@@ -20,45 +20,45 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleCredentialNameUnitTests {
+class SimpleCredentialNameUnitTests {
 
 	@Test
-	public void singleElementNameIsConstructed() {
+	void singleElementNameIsConstructed() {
 		CredentialName credentialName = new SimpleCredentialName("credential-name");
 
 		assertThat(credentialName.getName()).isEqualTo("credential-name");
 	}
 
 	@Test
-	public void singleElementNameWithLeadingSlashIsParsed() {
+	void singleElementNameWithLeadingSlashIsParsed() {
 		CredentialName credentialName = new CredentialName("/credential-name");
 
 		assertThat(credentialName.getName()).isEqualTo("credential-name");
 	}
 
 	@Test
-	public void singleElementNameWithoutLeadingSlashIsParsed() {
+	void singleElementNameWithoutLeadingSlashIsParsed() {
 		CredentialName credentialName = new CredentialName("credential-name");
 
 		assertThat(credentialName.getName()).isEqualTo("credential-name");
 	}
 
 	@Test
-	public void simpleNameIsConstructed() {
+	void simpleNameIsConstructed() {
 		CredentialName credentialName = new SimpleCredentialName("myorg", "example", "credential-name");
 
 		assertThat(credentialName.getName()).isEqualTo("/myorg/example/credential-name");
 	}
 
 	@Test
-	public void simpleNameIsParsed() {
+	void simpleNameIsParsed() {
 		CredentialName credentialName = new CredentialName("/myorg/example/credential-name");
 
 		assertThat(credentialName.getName()).isEqualTo("/myorg/example/credential-name");
 	}
 
 	@Test
-	public void simpleNameWithoutLeadingSlashIsParsed() {
+	void simpleNameWithoutLeadingSlashIsParsed() {
 		CredentialName credentialName = new CredentialName("myorg/example/credential-name");
 
 		assertThat(credentialName.getName()).isEqualTo("/myorg/example/credential-name");

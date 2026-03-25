@@ -23,10 +23,10 @@ import org.springframework.http.client.reactive.ClientHttpConnector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClientHttpConnectorFactoryTests {
+class ClientHttpConnectorFactoryTests {
 
 	@Test
-	public void nettyClientIsCreated() {
+	void nettyClientIsCreated() {
 		ClientHttpConnector clientHttpConnector = ClientHttpConnectorFactory.create(new ClientOptions());
 
 		assertThat(clientHttpConnector).isNotNull();

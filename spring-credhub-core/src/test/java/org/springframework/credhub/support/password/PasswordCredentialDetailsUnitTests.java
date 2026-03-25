@@ -25,7 +25,7 @@ import org.springframework.credhub.support.JsonParsingUnitTestsBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
+class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 
 	private static final String PASSWORD_CREDENTIALS = """
 			"type": "password",
@@ -33,14 +33,14 @@ public class PasswordCredentialDetailsUnitTests extends JsonParsingUnitTestsBase
 			""";
 
 	@Test
-	public void deserializeDetails() {
+	void deserializeDetails() {
 		CredentialDetails<PasswordCredential> data = parseDetails(PASSWORD_CREDENTIALS);
 
 		assertDetails(data);
 	}
 
 	@Test
-	public void deserializeDetailsData() {
+	void deserializeDetailsData() {
 		CredentialDetailsData<PasswordCredential> response = parseDetailsData(PASSWORD_CREDENTIALS);
 
 		assertThat(response.getData()).hasSize(1);

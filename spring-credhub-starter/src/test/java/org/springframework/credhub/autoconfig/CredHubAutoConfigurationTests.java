@@ -35,13 +35,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CredHubAutoConfigurationTests {
+class CredHubAutoConfigurationTests {
 
 	private final ApplicationContextRunner context = new ApplicationContextRunner()
 		.withConfiguration(AutoConfigurations.of(CredHubAutoConfiguration.class));
 
 	@Test
-	public void autoConfiguredWithDefaultProperties() {
+	void autoConfiguredWithDefaultProperties() {
 		this.context
 			.withPropertyValues("spring.credhub.url=https://localhost",
 					"spring.credhub.oauth2.registration-id=test-client", "spring.credhub.connection-timeout=30",
@@ -50,7 +50,7 @@ public class CredHubAutoConfigurationTests {
 	}
 
 	@Test
-	public void autoConfiguredWithCustomProperties() {
+	void autoConfiguredWithCustomProperties() {
 		this.context.withConfiguration(AutoConfigurations.of(CustomPropertiesConfiguration.class))
 			.withPropertyValues("my.custom.credhub.url=https://localhost",
 					"my.custom.credhub.oauth2.registration-id=test-client", "my.custom.credhub.connection-timeout=30",
@@ -59,7 +59,7 @@ public class CredHubAutoConfigurationTests {
 	}
 
 	@Test
-	public void webClientConnectorNotConfigured() {
+	void webClientConnectorNotConfigured() {
 		this.context.withClassLoader(new FilteredClassLoader(WebClient.class))
 			.withPropertyValues("spring.credhub.url=https://localhost",
 					"spring.credhub.oauth2.registration-id=test-client", "spring.credhub.connection-timeout=30",

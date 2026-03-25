@@ -49,7 +49,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class CredHubCertificateTemplateUnitTests {
+class CredHubCertificateTemplateUnitTests {
 
 	private static final SimpleCredentialName NAME = new SimpleCredentialName("example", "certificate");
 
@@ -59,12 +59,12 @@ public class CredHubCertificateTemplateUnitTests {
 	private CredHubCertificateOperations credHubTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credHubTemplate = new CredHubTemplate(this.restTemplate).certificates();
 	}
 
 	@Test
-	public void getAll() {
+	void getAll() {
 		CertificateSummaryData expectedCertificates = new CertificateSummaryData(new CertificateSummary("id1", "name1"),
 				new CertificateSummary("id2", "name2"), new CertificateSummary("id3", "name3"));
 
@@ -79,7 +79,7 @@ public class CredHubCertificateTemplateUnitTests {
 	}
 
 	@Test
-	public void getByName() {
+	void getByName() {
 		CertificateSummaryData expectedCertificates = new CertificateSummaryData(
 				new CertificateSummary("id1", "name1"));
 
@@ -96,7 +96,7 @@ public class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void regenerate() {
+	void regenerate() {
 		CertificateCredentialDetails expectedCertificate = new CertificateCredentialDetails("id", NAME,
 				CredentialType.CERTIFICATE, true, new CertificateCredential("cert", "authority", "key"));
 
@@ -120,7 +120,7 @@ public class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void bulkRegenerate() {
+	void bulkRegenerate() {
 		Map<String, List<CredentialName>> expectedResponse = Collections.singletonMap(
 				CredHubCertificateTemplate.REGENERATED_CREDENTIALS_RESPONSE_FIELD,
 				Arrays.asList(new SimpleCredentialName("example-certificate1"),
@@ -145,7 +145,7 @@ public class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void updateTransitionalVersion() {
+	void updateTransitionalVersion() {
 		List<CertificateCredentialDetails> expectedCertificates = Arrays.asList(
 				new CertificateCredentialDetails("id1", NAME, CredentialType.CERTIFICATE, false,
 						new CertificateCredential("cert1", "authority1", "key1")),

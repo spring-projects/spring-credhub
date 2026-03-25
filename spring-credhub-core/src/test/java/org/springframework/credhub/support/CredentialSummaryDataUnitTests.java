@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
+class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 
 	@Test
-	public void deserializationWithCredentials() {
+	void deserializationWithCredentials() {
 		String json = """
 				{
 					"credentials": [
@@ -61,7 +61,7 @@ public class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializationWithEmptyCredentials() {
+	void deserializationWithEmptyCredentials() {
 		String json = """
 				{
 					"credentials": []

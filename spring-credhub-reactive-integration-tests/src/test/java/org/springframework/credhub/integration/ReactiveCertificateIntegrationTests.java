@@ -34,7 +34,7 @@ import org.springframework.credhub.support.certificate.CertificateParametersRequ
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTests {
+class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTests {
 
 	private static final SimpleCredentialName TEST_CERT_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-certificate");
@@ -47,7 +47,7 @@ public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrat
 	private ReactiveCredHubCertificateOperations certificates;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 		this.certificates = this.operations.certificates();
 
@@ -56,13 +56,13 @@ public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrat
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(TEST_CERT_NAME);
 		deleteCredentialIfExists(ROOT_CERT_NAME);
 	}
 
 	@Test
-	public void generateCertificate() {
+	void generateCertificate() {
 		assumeTrue(serverApiIsV2());
 
 		StepVerifier.create(this.credentials.generate(CertificateParametersRequest.builder()
@@ -89,7 +89,7 @@ public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrat
 	}
 
 	@Test
-	public void regenerateCertificate() {
+	void regenerateCertificate() {
 		assumeTrue(serverApiIsV2());
 
 		AtomicReference<CertificateCredential> certificate = new AtomicReference<>();
@@ -122,7 +122,7 @@ public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrat
 	}
 
 	@Test
-	public void rotateCertificate() {
+	void rotateCertificate() {
 		assumeTrue(serverApiIsV2());
 
 		AtomicReference<CertificateCredential> certificate = new AtomicReference<>();
@@ -187,7 +187,7 @@ public class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrat
 	}
 
 	@Test
-	public void bulkRegenerateCertificates() {
+	void bulkRegenerateCertificates() {
 		AtomicReference<CertificateCredential> rootCertificate = new AtomicReference<>();
 		AtomicReference<String> signedCertificateId = new AtomicReference<>();
 

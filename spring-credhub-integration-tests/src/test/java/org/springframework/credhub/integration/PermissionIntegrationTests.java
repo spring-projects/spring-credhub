@@ -32,7 +32,7 @@ import org.springframework.credhub.support.value.ValueCredentialRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PermissionIntegrationTests extends CredHubIntegrationTests {
+class PermissionIntegrationTests extends CredHubIntegrationTests {
 
 	private static final SimpleCredentialName CREDENTIAL_NAME = new SimpleCredentialName("spring-credhub",
 			"integration-test", "test-permissions-credential");
@@ -44,7 +44,7 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 	private CredHubPermissionOperations permissions;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.credentials = this.operations.credentials();
 		this.permissions = this.operations.permissions();
 
@@ -52,12 +52,12 @@ public class PermissionIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		deleteCredentialIfExists(CREDENTIAL_NAME);
 	}
 
 	@Test
-	public void managePermissions() {
+	void managePermissions() {
 		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
 
 		Permission appPermission = Permission.builder().app("app1").operation(Operation.READ).build();

@@ -22,10 +22,10 @@ import org.springframework.credhub.support.certificate.CertificateSummaryData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
+class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 
 	@Test
-	public void deserializeWithCertificates() {
+	void deserializeWithCertificates() {
 		String json = """
 				{
 					"certificates": [
@@ -51,7 +51,7 @@ public class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 	}
 
 	@Test
-	public void deserializeWithNoCertificates() {
+	void deserializeWithNoCertificates() {
 		String json = """
 				{
 					"certificates": []

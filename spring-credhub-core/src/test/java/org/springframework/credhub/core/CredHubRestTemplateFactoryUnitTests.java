@@ -27,13 +27,13 @@ import org.springframework.web.client.RestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class CredHubRestTemplateFactoryUnitTests {
+class CredHubRestTemplateFactoryUnitTests {
 
 	@Mock
 	private ClientHttpRequestFactory clientHttpRequestFactory;
 
 	@Test
-	public void restTemplateIsCreated() {
+	void restTemplateIsCreated() {
 		CredHubProperties properties = new CredHubProperties();
 		properties.setUrl("https://credhub.cf.example.com:8844");
 		RestTemplate restTemplate = CredHubRestTemplateFactory.createRestTemplate(properties,

@@ -43,7 +43,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 
 @SuppressWarnings("unchecked")
-public abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentialTemplateUnitTestsBase {
+abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentialTemplateUnitTestsBase {
 
 	private static final String CREDENTIAL_ID = "1111-1111-1111-1111";
 

@@ -51,4 +51,27 @@ public class JsonCredentialRequestUnitTests extends CredHubRequestUnitTestsBase 
 		assertNoPermissions(json);
 	}
 
+	@Test
+	public void serializeWithNullAndEmptyValuesExcluded() {
+		this.requestBuilder = JsonCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.value(new JsonCredential() {
+				{
+					put("data", "value");
+					put("null-value", null);
+					put("empty-value", "");
+				}
+			})
+			.mode(WriteMode.OVERWRITE);
+
+		DocumentContext json = toJsonPath(this.requestBuilder);
+
+		assertCommonRequestFields(json, WriteMode.OVERWRITE, "/example/credential", "json");
+		JsonPathAssert.assertThat(json).hasPath("$.value.data").isEqualTo("value");
+		JsonPathAssert.assertThat(json).hasNoPath("$.value.null-value");
+		JsonPathAssert.assertThat(json).hasNoPath("$.value.empty-value");
+
+		assertNoPermissions(json);
+	}
+
 }

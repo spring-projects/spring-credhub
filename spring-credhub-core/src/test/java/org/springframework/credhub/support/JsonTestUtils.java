@@ -22,7 +22,6 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import tools.jackson.core.JacksonException;
-import tools.jackson.core.exc.JacksonIOException;
 import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.credhub.support.utils.JsonUtils;
@@ -50,7 +49,7 @@ public final class JsonTestUtils {
 			JsonMapper mapper = JsonUtils.buildJsonMapper();
 			return mapper.readValue(json, type);
 		}
-		catch (JacksonIOException ex) {
+		catch (JacksonException ex) {
 			fail("Error parsing JSON string to object: " + ex);
 			throw new IllegalStateException(ex);
 		}

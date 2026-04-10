@@ -52,7 +52,9 @@ public final class ExceptionUtils {
 	 * @return the generated error
 	 */
 	public static Mono<Throwable> buildError(ClientResponse response) {
-		return Mono.error(new CredHubException(response.statusCode()));
+		return response.bodyToMono(byte[].class)
+			.defaultIfEmpty(new byte[0])
+			.map((body) -> new CredHubException(response.statusCode(), response.headers().asHttpHeaders(), body));
 	}
 
 }

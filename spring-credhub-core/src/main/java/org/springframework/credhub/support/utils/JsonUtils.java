@@ -48,7 +48,7 @@ public final class JsonUtils {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new StdDateFormat());
 		objectMapper.setPropertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy());
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+		objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
 		objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);

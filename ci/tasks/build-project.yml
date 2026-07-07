@@ -17,6 +17,8 @@ caches:
 run:
   path: git-repo/ci/scripts/build-project.sh
 params:
+  ARTIFACTORY_SERVER: ((artifactory-server))
+  ARTIFACTORY_SERVER_PATH: libs-release
   ARTIFACTORY_USERNAME: ((artifactory-username))
   ARTIFACTORY_PASSWORD: ((artifactory-password))
   DOCKERHUB_MIRROR_REGISTRY: ((spring-credhub-virtual-docker-registry))

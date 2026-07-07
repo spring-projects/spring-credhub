@@ -5,9 +5,9 @@ name: Java 25
 
 on:
   push:
-    branches: [ 4.0.*, 3.5.* ]
+    branches: [ 4.0.* ]
   pull_request:
-    branches: [ 4.0.*, 3.5.* ]
+    branches: [ 4.0.* ]
 
 jobs:
   build:

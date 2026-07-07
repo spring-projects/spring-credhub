@@ -17,7 +17,7 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-	id 'org.asciidoctor.jvm.convert' version '4.0.5'
+	id 'org.asciidoctor.jvm.convert'
 	id 'org.springframework.boot' apply false
 }
 

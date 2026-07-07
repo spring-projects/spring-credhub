@@ -44,7 +44,6 @@ dependencies {
 	}
 
 	testImplementation("org.springframework:spring-test")
-	testImplementation("com.fasterxml.jackson.core:jackson-databind")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testImplementation("org.junit.jupiter:junit-jupiter-params")
@@ -52,4 +51,7 @@ dependencies {
 	testImplementation("org.mockito:mockito-junit-jupiter")
 	testImplementation("org.assertj:assertj-core")
 	testImplementation("com.jayway.jsonpath:json-path")
+	// json-path's JacksonJsonProvider/JacksonMappingProvider (used in JsonTestUtils.toJsonPath())
+	// are hardcoded to the legacy com.fasterxml.jackson API and have no Jackson 3 equivalent
+	testImplementation("com.fasterxml.jackson.core:jackson-databind")
 }

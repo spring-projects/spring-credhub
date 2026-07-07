@@ -15,13 +15,13 @@
  */
 
 plugins {
-	id 'org.springframework.boot' version '3.0.0'
+	id 'org.springframework.boot' version '4.0.7'
 }
 
 description = 'Spring CredHub Demo'
 
 dependencies {
-	implementation("org.springframework.credhub:spring-credhub-starter:3.0.0-SNAPSHOT")
+	implementation("org.springframework.credhub:spring-credhub-starter:4.0.1")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")

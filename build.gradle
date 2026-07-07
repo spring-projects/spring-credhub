@@ -31,7 +31,6 @@ ext {
 
 configure(allprojects) {
 	apply plugin: 'java'
-	apply plugin: 'eclipse'
 	apply plugin: 'checkstyle'
 	apply plugin: 'io.spring.nohttp'
 	apply plugin: 'io.spring.javaformat'

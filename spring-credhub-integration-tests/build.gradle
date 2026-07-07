@@ -18,7 +18,6 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
 	id 'org.springframework.boot'
-	id 'eclipse'
 }
 
 description = 'Spring CredHub Integration Tests'

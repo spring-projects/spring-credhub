@@ -16,7 +16,6 @@
 
 plugins {
 	id 'org.springframework.boot' version '3.0.0'
-	id 'eclipse'
 }
 
 description = 'Spring CredHub Demo'

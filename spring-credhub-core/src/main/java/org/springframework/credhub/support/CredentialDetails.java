@@ -68,7 +68,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 	}
 
 	/**
-	 * Get the the CredHub-generated unique ID of the credential.
+	 * Get the CredHub-generated unique ID of the credential.
 	 * @return the credential ID
 	 */
 	public @Nullable String getId() {

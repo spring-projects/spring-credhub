@@ -38,6 +38,8 @@ configure(allprojects) {
 	group = 'org.springframework.credhub'
 
 	checkstyle {
+		// Pinned to match the checkstyle version required by spring-javaformat-checkstyle
+		// (see the io.spring.javaformat version below); re-check this when that plugin is upgraded.
 		toolVersion = "9.3"
 		configDirectory.set(rootProject.file("src/checkstyle"))
 	}

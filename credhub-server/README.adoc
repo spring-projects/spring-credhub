@@ -10,8 +10,28 @@ From the root of this directory, start the servers using Docker Compose:
 $ docker-compose up
 ----
 
+Add `-d` to run the containers in the background (`docker-compose up -d`) so you can keep using the same terminal.
+
 After both servers have started successfully, UAA will be available at `http://localhost:8080/uaa` and CredHub will be available at `https://localhost:9000`.
 
+You can confirm both servers are ready with:
+
+[source,bash]
+----
+$ curl http://localhost:8080/uaa/.well-known/openid-configuration
+$ curl -k https://localhost:9000/info
+----
+
+(`-k` is needed for the CredHub check because it uses a self-signed certificate.)
+
+When finished, stop and remove the containers with:
+
+[source,bash]
+----
+$ docker-compose down
+----
+
+NOTE: The `pcfseceng/uaa` and `ampersand8/credhub` images are only published for `linux/amd64`. On Apple Silicon (arm64) hosts, Docker will emit a platform-mismatch warning and run them under emulation via Rosetta/QEMU — this is expected and safe to ignore, though the containers may take longer to start.
 
 To generate the test jwt signing keys, ensure the `openssl` and https://carvel.dev/ytt/[`ytt`] tools are installed, then run the setup script:
 
@@ -19,3 +39,5 @@ To generate the test jwt signing keys, ensure the `openssl` and https://carvel.d
 ----
 $ ./setup-uaa.sh
 ----
+
+Run this before starting the containers, since `docker-compose.yml` mounts the generated `uaa.yml` into the UAA container. This repository already includes a generated `uaa.yml` and `config/` keypair, so you only need to re-run this script if you want to regenerate the signing keys.

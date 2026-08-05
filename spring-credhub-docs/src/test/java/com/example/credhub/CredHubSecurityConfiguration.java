@@ -27,7 +27,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 public class CredHubSecurityConfiguration {
 
 	@Bean
-	public AuthorizedClientServiceOAuth2AuthorizedClientManager reactiveClientManager(
+	public AuthorizedClientServiceOAuth2AuthorizedClientManager clientManager(
 			ClientRegistrationRepository clientRegistrationRepository,
 			OAuth2AuthorizedClientService authorizedClientService) {
 		AuthorizedClientServiceOAuth2AuthorizedClientManager clientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(

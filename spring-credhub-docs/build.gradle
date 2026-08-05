@@ -44,6 +44,12 @@ test {
 	enabled = false
 }
 
+def dependencyVersion(String group, String name) {
+	configurations.compileClasspath.resolvedConfiguration.resolvedArtifacts
+			.find { it.moduleVersion.id.group == group && it.moduleVersion.id.name == name }
+			?.moduleVersion?.id?.version
+}
+
 tasks.register('prepareAsciidocBuild', Sync) {
 	// Copy doc sources
 	from "src/docs/asciidoc"
@@ -70,7 +76,9 @@ asciidoctor {
 	logDocuments = true
 	options doctype: 'book', eruby: 'erubis'
 	attributes 'revnumber': project.version,
-			'spring-version': project.version,
+			'spring-version': dependencyVersion('org.springframework', 'spring-web'),
+			'spring-boot-version': dependencyVersion('org.springframework.boot', 'spring-boot-autoconfigure'),
+			'spring-security-version': dependencyVersion('org.springframework.security', 'spring-security-oauth2-client'),
 			'branch-or-tag': project.version.endsWith('SNAPSHOT') ? 'main' : "v${project.version}",
 			'icons': 'font',
 			'idprefix': '',

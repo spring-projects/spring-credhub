@@ -1,14 +1,16 @@
 :examples-dir: ../../src/test/java/com/example/credhub/
 :credhub-api-mtls: {credhub-api-home}version/main/#_mutual_tls
 :credhub-api-oauth: {credhub-api-home}version/main/#_uaa_oauth2
-:spring-boot-oauth: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-security-oauth2
-:spring-security-apidocs-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/api/org/springframework/security/oauth2/client/
-:spring-security-ref-home: https://docs.spring.io/spring-security/site/docs/{spring-security-version}/reference/html5/
+:spring-boot-oauth: https://docs.spring.io/spring-boot/{spring-boot-version}/reference/web/spring-security.html#web.security.oauth2.client
+:spring-boot-external-config: https://docs.spring.io/spring-boot/{spring-boot-version}/reference/features/external-config.html#features.external-config.files
+:spring-security-apidocs-home: https://docs.spring.io/spring-security/reference/{spring-security-version}/api/java/org/springframework/security/oauth2/client/
+:spring-security-ref-home: https://docs.spring.io/spring-security/reference/{spring-security-version}/servlet/oauth2/login/core.html
+:spring-security-reactive-ref-home: https://docs.spring.io/spring-security/reference/{spring-security-version}/reactive/oauth2/login/core.html
 
 [[boot-configuration]]
 == Spring Boot Configuration
 
-When using the Spring CredHub starter dependency, Spring CredHub can be configured with https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-application-property-files[Spring Boot application properties].
+When using the Spring CredHub starter dependency, Spring CredHub can be configured with {spring-boot-external-config}[Spring Boot application properties].
 With the proper configuration properties, Spring CredHub will auto-configure a connection to a CredHub server.
 
 === Mutual TLS Authentication
@@ -63,7 +65,7 @@ Spring CredHub requires beans of the following types, provided by Spring Securit
 | {spring-security-apidocs-home}web/AuthenticatedPrincipalOAuth2AuthorizedClientRepository.html[`AuthenticatedPrincipalOAuth2AuthorizedClientRepository`]
 
 | {spring-security-apidocs-home}OAuth2AuthorizedClientManager.html[`OAuth2AuthorizedClientManager`]
-| {spring-security-apidocs-home}web\DefaultOAuth2AuthorizedClientManager.html[`DefaultOAuth2AuthorizedClientManager`]
+| {spring-security-apidocs-home}web/DefaultOAuth2AuthorizedClientManager.html[`DefaultOAuth2AuthorizedClientManager`]
 |===
 
 The auto-configured `DefaultOAuth2AuthorizedClientManager` assumes the application is running in a servlet container and has an active `HttpServletRequest`.
@@ -103,5 +105,5 @@ An application might need to provide an alternate implementation of the `Reactiv
 include::{examples-dir}CredHubReactiveSecurityConfiguration.java[]
 ----
 
-Refer to the {spring-security-ref-home}#oauth2login-override-boot-autoconfig[Spring Security documentation] for more information and examples of configuring other beans.
+Refer to the {spring-security-reactive-ref-home}#webflux-oauth2-login-override-boot-autoconfig[Spring Security documentation] for more information and examples of configuring other beans.
 

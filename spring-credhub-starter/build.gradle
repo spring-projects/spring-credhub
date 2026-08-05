@@ -25,20 +25,16 @@ description = 'Spring CredHub Starter'
 dependencies {
 	implementation platform(SpringBootPlugin.BOM_COORDINATES)
 	annotationProcessor platform(SpringBootPlugin.BOM_COORDINATES)
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	api(project(':spring-credhub-core'))
 	api("org.springframework.boot:spring-boot-autoconfigure")
-
-	reactiveImplementation("org.springframework.boot:spring-boot-starter-webflux")
-
-	securityImplementation("org.springframework.boot:spring-boot-security-oauth2-client")
-
-	httpclientImplementation("org.apache.httpcomponents.client5:httpclient5") {
-		exclude(group: 'commons-logging', module: 'commons-logging')
-	}
-
-	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
+	compileOnly("org.springframework.boot:spring-boot-starter-webflux")
+	compileOnly("org.springframework.boot:spring-boot-security-oauth2-client")
+	compileOnly("org.apache.httpcomponents.client5:httpclient5")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc")
+	testImplementation("org.springframework.boot:spring-boot-security-oauth2-client")
 	testImplementation("org.assertj:assertj-core")
+	testRuntimeOnly("org.apache.httpcomponents.client5:httpclient5")
 }

@@ -25,25 +25,18 @@ description = 'Spring CredHub Core'
 dependencies {
 	implementation platform(SpringBootPlugin.BOM_COORDINATES)
 	api("org.jspecify:jspecify")
-	api("org.springframework:spring-core")
-	api("org.springframework:spring-beans")
-	api("org.springframework:spring-context")
+	implementation("org.springframework:spring-core")
 	api("org.springframework:spring-web")
 	api("tools.jackson.core:jackson-databind")
 	api("org.springframework.security:spring-security-oauth2-client") {
 		exclude module: "spring-security-web"
 	}
-
-	reactiveImplementation("org.springframework:spring-webflux")
-	reactiveImplementation("io.projectreactor.netty:reactor-netty")
-
-	securityImplementation("org.springframework.security:spring-security-config")
-
-	httpclientImplementation("org.apache.httpcomponents.client5:httpclient5") {
-		exclude(group: 'commons-logging', module: 'commons-logging')
-	}
-
-	testImplementation("org.springframework:spring-test")
+	compileOnly("org.springframework:spring-webflux")
+	compileOnly("io.projectreactor.netty:reactor-netty")
+	compileOnly("org.apache.httpcomponents.client5:httpclient5")
+	testImplementation("org.springframework:spring-webflux")
+	testRuntimeOnly("io.projectreactor.netty:reactor-netty")
+	testImplementation("org.apache.httpcomponents.client5:httpclient5")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testImplementation("org.junit.jupiter:junit-jupiter-params")

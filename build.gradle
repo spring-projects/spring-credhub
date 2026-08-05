@@ -117,28 +117,6 @@ subprojects {
 			languageVersion = JavaLanguageVersion.of(17)
 		}
 	}
-	
-	// Configure optional feature configurations
-	// These provide optional dependencies that are included at compile time
-	// This replaces the deprecated registerFeature with main source set approach
-	configurations {
-		reactiveImplementation
-		securityImplementation
-		httpclientImplementation
-
-		compileClasspath.extendsFrom(reactiveImplementation)
-		compileClasspath.extendsFrom(securityImplementation)
-		compileClasspath.extendsFrom(httpclientImplementation)
-		runtimeClasspath.extendsFrom(reactiveImplementation)
-		runtimeClasspath.extendsFrom(securityImplementation)
-		runtimeClasspath.extendsFrom(httpclientImplementation)
-		testCompileClasspath.extendsFrom(reactiveImplementation)
-		testCompileClasspath.extendsFrom(securityImplementation)
-		testCompileClasspath.extendsFrom(httpclientImplementation)
-		testRuntimeClasspath.extendsFrom(reactiveImplementation)
-		testRuntimeClasspath.extendsFrom(securityImplementation)
-		testRuntimeClasspath.extendsFrom(httpclientImplementation)
-	}
 
 	dependencies {
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")

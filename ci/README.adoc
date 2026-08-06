@@ -14,3 +14,15 @@ Deploy the pipelines
 $ ./set-pipelines.sh
 ----
 
+When a branch is decommissioned (e.g. after its support window ends), `set-pipelines.sh`
+will no longer reference it, but `fly sync`/`set-pipeline` does not remove the pipeline
+instance for you. Remove it explicitly:
+
+[source]
+----
+$ fly -t spring-credhub destroy-pipeline --pipeline spring-credhub/branch:<branch>
+$ fly -t spring-credhub destroy-pipeline --pipeline spring-credhub-pr/branch:<branch>
+----
+
+Replace `<branch>` with the decommissioned branch name (e.g. `4.0.x`).
+

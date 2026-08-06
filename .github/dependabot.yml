@@ -4,6 +4,32 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    target-branch: "4.1.x"
+
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: "4.1.x"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 15
+    labels:
+      - "dependency-upgrade"
+    commit-message:
+      prefix: "(4.1.x)"
+    ignore:
+      - dependency-name: "org.springframework.boot"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "org.springframework.boot:spring-boot-dependencies"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
     target-branch: "4.0.x"
 
   - package-ecosystem: gradle

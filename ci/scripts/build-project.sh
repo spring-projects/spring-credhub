@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-readonly DOCKERHUB_MIRROR_REGISTRY="${DOCKERHUB_MIRROR_REGISTRY:?must be set}"
+export DOCKERHUB_MIRROR_REGISTRY="${DOCKERHUB_MIRROR_REGISTRY:?must be set}"
+readonly DOCKERHUB_MIRROR_REGISTRY
 readonly DOCKERHUB_MIRROR_REGISTRY_USERNAME="${DOCKERHUB_MIRROR_REGISTRY_USERNAME:?must be set}"
 readonly DOCKERHUB_MIRROR_REGISTRY_PASSWORD="${DOCKERHUB_MIRROR_REGISTRY_PASSWORD:?must be set}"
 
@@ -12,7 +13,7 @@ repository=$(pwd)/distribution-repository
 
 start_docker() {
   pushd credhub-server >/dev/null
-    echo "{\"registry-mirrors\": [\"https://$DOCKERHUB_MIRROR_REGISTRY\"]}" > /etc/docker/daemon.json
+    echo "{\"registry-mirrors\": [\"https://$DOCKERHUB_MIRROR_REGISTRY\"], \"storage-driver\": \"vfs\"}" > /etc/docker/daemon.json
     service cgroupfs-mount start
     service docker start
 

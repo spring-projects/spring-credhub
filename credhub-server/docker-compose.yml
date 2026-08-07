@@ -1,6 +1,6 @@
 services:
   uaa:
-    image: pcfseceng/uaa
+    image: ${DOCKERHUB_MIRROR_REGISTRY}/pcfseceng/uaa
     volumes:
       - ./uaa.yml:/uaa/uaa.yml
     ports:
@@ -8,7 +8,7 @@ services:
     restart: always
 
   credhub:
-    image: ampersand8/credhub
+    image: ${DOCKERHUB_MIRROR_REGISTRY}/ampersand8/credhub
     ports:
       - "9000:9000"
     links:

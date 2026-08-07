@@ -28,9 +28,7 @@ dependencies {
 	implementation("org.springframework:spring-core")
 	api("org.springframework:spring-web")
 	api("tools.jackson.core:jackson-databind")
-	api("org.springframework.security:spring-security-oauth2-client") {
-		exclude module: "spring-security-web"
-	}
+	api("org.springframework.security:spring-security-oauth2-client")
 	compileOnly("org.springframework:spring-webflux")
 	compileOnly("io.projectreactor.netty:reactor-netty")
 	compileOnly("org.apache.httpcomponents.client5:httpclient5")

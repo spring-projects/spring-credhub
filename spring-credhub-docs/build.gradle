@@ -74,6 +74,9 @@ asciidoctor {
 		}
 	}
 	logDocuments = true
+	jvm {
+		jvmArgs '--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED', '--add-opens', 'java.base/java.io=ALL-UNNAMED'
+	}
 	options doctype: 'book', eruby: 'erubis'
 	attributes 'revnumber': project.version,
 			'spring-version': dependencyVersion('org.springframework', 'spring-web'),

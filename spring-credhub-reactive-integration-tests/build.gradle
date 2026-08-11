@@ -30,12 +30,20 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-security-oauth2-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
+	// BlockHound is installed by a JUnit Platform TestExecutionListener registered via
+	// ServiceLoader; it is not managed by the Spring Boot BOM, so the version is declared here
+	testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.17.RELEASE")
 }
 
 test {
 	onlyIf {
 		project.hasProperty("integrationTests")
 	}
+
+	// BlockHound redefines native blocking methods, which JDK 13+ disallows by default
+	jvmArgs += [
+			"-XX:+AllowRedefinitionToAddDeleteMethods"
+	]
 }
 
 bootJar {

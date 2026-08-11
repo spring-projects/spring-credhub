@@ -129,9 +129,10 @@ subprojects {
 		scanForTestClasses = true
 		group = "verification"
 
-		// add jvm arg to resolve BlockHound issues, see https://github.com/reactor/BlockHound/issues/33
+		// -Xshare:off avoids the "Sharing is only supported for boot loader classes" warning
+		// caused by Mockito's inline mock maker appending its agent to the bootstrap classpath
 		jvmArgs += [
-				"-XX:+AllowRedefinitionToAddDeleteMethods"
+				"-Xshare:off"
 		]
 
 		testLogging {

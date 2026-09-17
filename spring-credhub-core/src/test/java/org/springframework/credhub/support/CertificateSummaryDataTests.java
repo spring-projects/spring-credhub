@@ -18,6 +18,7 @@ package org.springframework.credhub.support;
 
 import org.junit.jupiter.api.Test;
 
+import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.certificate.CertificateSummaryData;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,6 +62,24 @@ class CertificateSummaryDataTests extends JsonParsingUnitTestsBase {
 		CertificateSummaryData certificates = parseResponse(json, CertificateSummaryData.class);
 
 		assertThat(certificates.getCertificates()).isEmpty();
+	}
+
+	@Test
+	void equalsAndHashCodeWithEqualContent() {
+		CertificateSummaryData one = new CertificateSummaryData(new CertificateSummary("id", "/example-certificate"));
+		CertificateSummaryData two = new CertificateSummaryData(new CertificateSummary("id", "/example-certificate"));
+
+		assertThat(one).isEqualTo(two);
+		assertThat(one).hasSameHashCodeAs(two);
+	}
+
+	@Test
+	void notEqualsWithDifferentContent() {
+		CertificateSummaryData one = new CertificateSummaryData(new CertificateSummary("id", "/example-certificate"));
+		CertificateSummaryData two = new CertificateSummaryData(
+				new CertificateSummary("other-id", "/other-certificate"));
+
+		assertThat(one).isNotEqualTo(two);
 	}
 
 }

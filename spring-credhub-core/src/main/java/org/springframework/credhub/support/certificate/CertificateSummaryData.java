@@ -65,9 +65,6 @@ public class CertificateSummaryData {
 		if (!(o instanceof CertificateSummaryData)) {
 			return false;
 		}
-		if (!super.equals(o)) {
-			return false;
-		}
 
 		CertificateSummaryData that = (CertificateSummaryData) o;
 

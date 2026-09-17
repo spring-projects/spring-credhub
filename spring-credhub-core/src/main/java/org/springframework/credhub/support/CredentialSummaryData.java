@@ -66,9 +66,6 @@ public class CredentialSummaryData {
 		if (!(o instanceof CredentialSummaryData)) {
 			return false;
 		}
-		if (!super.equals(o)) {
-			return false;
-		}
 
 		CredentialSummaryData that = (CredentialSummaryData) o;
 

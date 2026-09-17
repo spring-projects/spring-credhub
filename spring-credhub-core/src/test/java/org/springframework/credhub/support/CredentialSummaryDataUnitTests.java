@@ -74,4 +74,25 @@ class CredentialSummaryDataUnitTests extends JsonParsingUnitTestsBase {
 		assertThat(response.getCredentials()).hasSize(0);
 	}
 
+	@Test
+	void equalsAndHashCodeWithEqualContent() {
+		CredentialSummary credential = new CredentialSummary(new SimpleCredentialName("example", "credential"));
+
+		CredentialSummaryData one = new CredentialSummaryData(credential);
+		CredentialSummaryData two = new CredentialSummaryData(credential);
+
+		assertThat(one).isEqualTo(two);
+		assertThat(one).hasSameHashCodeAs(two);
+	}
+
+	@Test
+	void notEqualsWithDifferentContent() {
+		CredentialSummaryData one = new CredentialSummaryData(
+				new CredentialSummary(new SimpleCredentialName("example", "credential")));
+		CredentialSummaryData two = new CredentialSummaryData(
+				new CredentialSummary(new SimpleCredentialName("other", "credential")));
+
+		assertThat(one).isNotEqualTo(two);
+	}
+
 }

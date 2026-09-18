@@ -19,6 +19,7 @@ package org.springframework.credhub.support;
 import java.util.Arrays;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -41,6 +42,7 @@ public class CredentialName {
 	 * by the "/" character.
 	 * @param name the credential name; must not be {@literal null}
 	 */
+	@JsonCreator
 	CredentialName(String name) {
 		Assert.notNull(name, "name must not be null");
 

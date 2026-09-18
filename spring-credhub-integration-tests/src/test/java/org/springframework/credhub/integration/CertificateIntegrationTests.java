@@ -198,6 +198,32 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
+	void deleteCertificateVersion() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		String credentialVersion0Id = certificate.getId();
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+		String certificateId = byName.getId();
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(certificateId, true);
+		String credentialVersion1Id = regenerated.getId();
+
+		List<CertificateCredentialDetails> versions = this.certificates.getVersions(certificateId);
+		assertThat(versions).hasSize(2);
+
+		CertificateCredentialDetails deleted = this.certificates.deleteVersion(certificateId, credentialVersion0Id);
+		assertThat(deleted.getId()).isEqualTo(credentialVersion0Id);
+
+		versions = this.certificates.getVersions(certificateId);
+		assertThat(versions).hasSize(1);
+		assertThat(versions).extracting("id").containsExactly(credentialVersion1Id);
+	}
+
+	@Test
 	void bulkRegenerateCertificates() {
 		CredentialDetails<CertificateCredential> rootCertificate = this.credentials
 			.generate(CertificateParametersRequest.builder()

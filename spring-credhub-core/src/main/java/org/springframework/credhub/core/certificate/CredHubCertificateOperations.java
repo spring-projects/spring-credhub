@@ -109,4 +109,18 @@ public interface CredHubCertificateOperations {
 	 */
 	List<CertificateCredentialDetails> updateTransitionalVersion(String id, String versionId);
 
+	/**
+	 * Delete a specific version of a certificate.
+	 * @param id the CredHub-generated ID of the certificate credential; must not be
+	 * {@literal null} and must be an ID returned by {@link #getAll()} or
+	 * {@link #getByName(CredentialName)}
+	 * @param versionId the CredHub-generated ID of the version of the certificate
+	 * credential to delete; must not be {@literal null}
+	 * @return the details of the deleted certificate version
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_delete_a_version_of_a_certificate">CredHub
+	 * API docs: Delete a Version of a Certificate</a>
+	 */
+	CertificateCredentialDetails deleteVersion(String id, String versionId);
+
 }

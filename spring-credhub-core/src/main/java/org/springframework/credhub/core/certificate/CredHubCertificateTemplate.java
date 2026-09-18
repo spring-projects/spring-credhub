@@ -51,6 +51,8 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	static final String VERSIONS_URL_PATH = BASE_URL_PATH + "/{id}/versions";
 
+	static final String VERSION_URL_PATH = VERSIONS_URL_PATH + "/{versionId}";
+
 	static final String BULK_REGENERATE_URL_PATH = "/api/v1/bulk-regenerate";
 
 	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
@@ -175,6 +177,24 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 			ResponseEntity<CertificateCredentialDetails> response = restOperations.exchange(VERSIONS_URL_PATH,
 					HttpMethod.POST, new HttpEntity<>(request), ref, id);
+
+			ExceptionUtils.throwExceptionOnError(response);
+
+			return response.getBody();
+		});
+	}
+
+	@Override
+	public CertificateCredentialDetails deleteVersion(final String id, final String versionId) {
+		Assert.notNull(id, "credential ID must not be null");
+		Assert.notNull(versionId, "version ID must not be null");
+
+		final ParameterizedTypeReference<CertificateCredentialDetails> ref = new ParameterizedTypeReference<CertificateCredentialDetails>() {
+		};
+
+		return this.credHubOperations.doWithRest((restOperations) -> {
+			ResponseEntity<CertificateCredentialDetails> response = restOperations.exchange(VERSION_URL_PATH,
+					HttpMethod.DELETE, null, ref, id, versionId);
 
 			ExceptionUtils.throwExceptionOnError(response);
 

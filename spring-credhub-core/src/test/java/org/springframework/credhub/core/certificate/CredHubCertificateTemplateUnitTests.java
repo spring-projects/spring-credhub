@@ -190,6 +190,23 @@ class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
+	void deleteVersion() {
+		CertificateCredentialDetails expectedCertificate = new CertificateCredentialDetails("id2", NAME,
+				CredentialType.CERTIFICATE, false, new CertificateCredential("cert2", "authority2", "key2"));
+
+		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.VERSION_URL_PATH), eq(HttpMethod.DELETE),
+				isNull(), isA(ParameterizedTypeReference.class), eq("id1"), eq("id2")))
+			.willReturn(new ResponseEntity<>(expectedCertificate, HttpStatus.OK));
+
+		CertificateCredentialDetails response = this.credHubTemplate.deleteVersion("id1", "id2");
+
+		assertThat(response).isNotNull();
+		assertThat(response.getId()).isEqualTo("id2");
+		assertThat(response.getValue().getCertificate()).isEqualTo("cert2");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
 	void updateTransitionalVersion() {
 		List<CertificateCredentialDetails> expectedCertificates = Arrays.asList(
 				new CertificateCredentialDetails("id1", NAME, CredentialType.CERTIFICATE, false,

@@ -133,12 +133,39 @@ class ReactiveCredHubCertificateTemplateUnitTests {
 		}).verifyComplete();
 	}
 
+	@Test
+	void deleteVersion() {
+		String responseBody = """
+				{
+					"type": "certificate",
+					"transitional": false,
+					"id": "id2",
+					"name": "/example/certificate",
+					"value": { "certificate": "cert2", "ca": "authority2", "private_key": "key2" }
+				}
+				""";
+
+		given(this.exchangeFunction.exchange(argThat(isDeleteRequestTo("/api/v1/certificates/id1/versions/id2"))))
+			.willReturn(Mono.just(ClientResponse.create(HttpStatus.OK, EXCHANGE_STRATEGIES)
+				.header("Content-Type", "application/json")
+				.body(responseBody)
+				.build()));
+
+		StepVerifier.create(this.credHubTemplate.deleteVersion("id1", "id2"))
+			.assertNext((response) -> assertThat(response.getId()).isEqualTo("id2"))
+			.verifyComplete();
+	}
+
 	private static ArgumentMatcher<ClientRequest> isGetRequestTo(String path) {
 		return (request) -> request.method() == HttpMethod.GET && request.url().getPath().equals(path);
 	}
 
 	private static ArgumentMatcher<ClientRequest> isPostRequestTo(String path) {
 		return (request) -> request.method() == HttpMethod.POST && request.url().getPath().equals(path);
+	}
+
+	private static ArgumentMatcher<ClientRequest> isDeleteRequestTo(String path) {
+		return (request) -> request.method() == HttpMethod.DELETE && request.url().getPath().equals(path);
 	}
 
 }

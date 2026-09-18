@@ -52,6 +52,8 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 
 	private static final String VERSIONS_URL_PATH = BASE_URL_PATH + "/{id}/versions";
 
+	private static final String VERSION_URL_PATH = VERSIONS_URL_PATH + "/{versionId}";
+
 	private static final String BULK_REGENERATE_URL_PATH = "/api/v1/bulk-regenerate";
 
 	private static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
@@ -162,6 +164,18 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
 			.uri(VERSIONS_URL_PATH, id)
 			.bodyValue(request)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(CertificateCredentialDetails.class));
+	}
+
+	@Override
+	public Mono<CertificateCredentialDetails> deleteVersion(final String id, final String versionId) {
+		Assert.notNull(id, "credential ID must not be null");
+		Assert.notNull(versionId, "version ID must not be null");
+
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.delete()
+			.uri(VERSION_URL_PATH, id, versionId)
 			.retrieve()
 			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 			.bodyToMono(CertificateCredentialDetails.class));

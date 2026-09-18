@@ -46,6 +46,7 @@ import org.springframework.web.client.RestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -141,6 +142,27 @@ class CredHubCertificateTemplateUnitTests {
 		assertThat(response).isNotNull();
 		assertThat(response)
 			.isEqualTo(expectedResponse.get(CredHubCertificateTemplate.REGENERATED_CREDENTIALS_RESPONSE_FIELD));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void getVersions() {
+		List<CertificateCredentialDetails> expectedCertificates = Arrays.asList(
+				new CertificateCredentialDetails("id1", NAME, CredentialType.CERTIFICATE, false,
+						new CertificateCredential("cert1", "authority1", "key1")),
+				new CertificateCredentialDetails("id2", NAME, CredentialType.CERTIFICATE, true,
+						new CertificateCredential("cert2", "authority2", "key2")));
+
+		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.VERSIONS_URL_PATH), eq(HttpMethod.GET), isNull(),
+				isA(ParameterizedTypeReference.class), eq("id1")))
+			.willReturn(new ResponseEntity<>(expectedCertificates, HttpStatus.OK));
+
+		List<CertificateCredentialDetails> response = this.credHubTemplate.getVersions("id1");
+
+		assertThat(response).hasSize(2);
+		assertThat(response).extracting("id").contains("id1", "id2");
+		assertThat(response).extracting("transitional").contains(false, true);
+		assertThat(response).extracting("value.certificate").contains("cert1", "cert2");
 	}
 
 	@Test

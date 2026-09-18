@@ -64,6 +64,18 @@ public interface CredHubCertificateOperations {
 	List<CredentialName> regenerate(CredentialName certificateName);
 
 	/**
+	 * Retrieve all versions of a certificate.
+	 * @param id the CredHub-generated ID of the certificate credential; must not be
+	 * {@literal null} and must be an ID returned by {@link #getAll()} or
+	 * {@link #getByName(CredentialName)}
+	 * @return the details of all versions of the certificate credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_all_versions_of_a_certificate">CredHub
+	 * API docs: Get All Versions of a Certificate</a>
+	 */
+	List<CertificateCredentialDetails> getVersions(String id);
+
+	/**
 	 * Make the specified version of a certificate the {@literal transitional} version.
 	 * @param id the CredHub-generated ID of the certificate credential; must not be
 	 * {@literal null} and must be an ID returned by {@link #getAll()} or

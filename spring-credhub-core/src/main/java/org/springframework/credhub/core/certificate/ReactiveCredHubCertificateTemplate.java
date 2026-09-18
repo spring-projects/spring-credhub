@@ -49,6 +49,8 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 
 	private static final String UPDATE_TRANSITIONAL_URL_PATH = BASE_URL_PATH + "/{id}/update_transitional_version";
 
+	private static final String VERSIONS_URL_PATH = BASE_URL_PATH + "/{id}/versions";
+
 	private static final String BULK_REGENERATE_URL_PATH = "/api/v1/bulk-regenerate";
 
 	private static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
@@ -129,6 +131,17 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 			.bodyToFlux(ref)
 			.flatMap((body) -> Flux.fromIterable(body.get(REGENERATED_CREDENTIALS_RESPONSE_FIELD))));
+	}
+
+	@Override
+	public Flux<CertificateCredentialDetails> getVersions(final String id) {
+		Assert.notNull(id, "credential ID must not be null");
+
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
+			.uri(VERSIONS_URL_PATH, id)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToFlux(CertificateCredentialDetails.class));
 	}
 
 	public Flux<CertificateCredentialDetails> updateTransitionalVersion(final String id, final String versionId) {

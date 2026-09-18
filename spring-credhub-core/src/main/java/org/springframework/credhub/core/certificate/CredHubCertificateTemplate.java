@@ -48,6 +48,8 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	static final String UPDATE_TRANSITIONAL_URL_PATH = BASE_URL_PATH + "/{id}/update_transitional_version";
 
+	static final String VERSIONS_URL_PATH = BASE_URL_PATH + "/{id}/versions";
+
 	static final String BULK_REGENERATE_URL_PATH = "/api/v1/bulk-regenerate";
 
 	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
@@ -132,6 +134,23 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 			ExceptionUtils.throwExceptionOnError(response);
 
 			return response.getBody().get(REGENERATED_CREDENTIALS_RESPONSE_FIELD);
+		});
+	}
+
+	@Override
+	public List<CertificateCredentialDetails> getVersions(final String id) {
+		Assert.notNull(id, "credential ID must not be null");
+
+		final ParameterizedTypeReference<List<CertificateCredentialDetails>> ref = new ParameterizedTypeReference<List<CertificateCredentialDetails>>() {
+		};
+
+		return this.credHubOperations.doWithRest((restOperations) -> {
+			ResponseEntity<List<CertificateCredentialDetails>> response = restOperations.exchange(VERSIONS_URL_PATH,
+					HttpMethod.GET, null, ref, id);
+
+			ExceptionUtils.throwExceptionOnError(response);
+
+			return response.getBody();
 		});
 	}
 

@@ -187,6 +187,34 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 	}
 
 	@Test
+	void getCertificateVersions() {
+		AtomicReference<String> credentialVersion0Id = new AtomicReference<>();
+		AtomicReference<String> credentialVersion1Id = new AtomicReference<>();
+		AtomicReference<String> certificateId = new AtomicReference<>();
+
+		StepVerifier
+			.create(this.credentials.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build(), CertificateCredential.class))
+			.assertNext((response) -> credentialVersion0Id.set(response.getId()))
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.getByName(TEST_CERT_NAME))
+			.assertNext((response) -> certificateId.set(response.getId()))
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.regenerate(certificateId.get(), true))
+			.assertNext((response) -> credentialVersion1Id.set(response.getId()))
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.getVersions(certificateId.get()))
+			.assertNext((response) -> assertThat(response.getId()).isEqualTo(credentialVersion1Id.get()))
+			.assertNext((response) -> assertThat(response.getId()).isEqualTo(credentialVersion0Id.get()))
+			.verifyComplete();
+	}
+
+	@Test
 	void bulkRegenerateCertificates() {
 		AtomicReference<CertificateCredential> rootCertificate = new AtomicReference<>();
 		AtomicReference<String> signedCertificateId = new AtomicReference<>();

@@ -59,6 +59,7 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.get()
 			.uri(PERMISSIONS_ID_URL_PATH, id)
 			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 			.bodyToMono(CredentialPermission.class));
 	}
 

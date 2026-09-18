@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jspecify.annotations.Nullable;
 
@@ -81,24 +80,6 @@ public final class Permission {
 	 */
 	public @Nullable List<Operation> getOperations() {
 		return this.operations;
-	}
-
-	/**
-	 * Get the set of operations that the actor will be allowed to perform on the
-	 * credential.
-	 * @return the operations
-	 */
-	@JsonGetter("operations")
-	private List<String> getOperationsAsString() {
-		if (this.operations == null) {
-			return null;
-		}
-
-		List<String> operationValues = new ArrayList<>(this.operations.size());
-		for (Operation operation : this.operations) {
-			operationValues.add(operation.operation());
-		}
-		return operationValues;
 	}
 
 	/**

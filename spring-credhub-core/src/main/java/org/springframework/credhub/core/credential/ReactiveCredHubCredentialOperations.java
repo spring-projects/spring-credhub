@@ -79,11 +79,17 @@ public interface ReactiveCredHubCredentialOperations {
 
 	/**
 	 * Retrieve a credential using its name, as passed to a write request. Only the
-	 * current credential value will be returned.
+	 * current credential value will be returned. CredHub can return more than one current
+	 * version for some credential types (for example, a certificate with both a
+	 * {@literal current} and a {@literal transitional} version); in that case, only the
+	 * first version in the response is returned here.
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param credentialType the type of credential expected to be returned
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
+	 * @see <a href=
+	 * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/backends/credhub/src/main/kotlin/org/cloudfoundry/credhub/credentials/DefaultCredentialsHandler.kt#L190-L201">CredHub's
+	 * {@code getCurrentCredentialVersions}, which can return multiple active versions</a>
 	 */
 	<T> Mono<CredentialDetails<T>> getByName(CredentialName name, Class<T> credentialType);
 

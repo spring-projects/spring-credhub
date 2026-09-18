@@ -46,6 +46,13 @@ class ExceptionUtilsUnitTests {
 	}
 
 	@Test
+	void throwExceptionOnErrorDoesNothingForCreated() {
+		ResponseEntity<String> response = ResponseEntity.status(HttpStatus.CREATED).body("success");
+
+		ExceptionUtils.throwExceptionOnError(response);
+	}
+
+	@Test
 	void buildErrorPreservesStatusCodeAndResponseBody() {
 		ClientResponse clientResponse = ClientResponse.create(HttpStatus.FORBIDDEN)
 			.body("{\"error\":\"access denied\"}")

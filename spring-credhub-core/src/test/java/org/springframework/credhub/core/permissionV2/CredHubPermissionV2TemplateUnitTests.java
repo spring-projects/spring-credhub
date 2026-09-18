@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.SimpleCredentialName;
@@ -36,6 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -74,6 +76,19 @@ class CredHubPermissionV2TemplateUnitTests {
 	}
 
 	@Test
+	void getPermissionsHandlesErrorStatus() {
+		String permissionId = "uuid";
+
+		given(this.restTemplate.getForEntity(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH,
+				CredentialPermission.class, permissionId))
+			.willReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+		assertThatExceptionOfType(CredHubException.class)
+			.isThrownBy(() -> this.credHubTemplate.getPermissions(permissionId))
+			.withMessageContaining(HttpStatus.NOT_FOUND.toString());
+	}
+
+	@Test
 	void getPermissionsByPathAndActor() {
 		String clientId = "client-id";
 
@@ -92,6 +107,20 @@ class CredHubPermissionV2TemplateUnitTests {
 		assertThat(response.getPermission().getActor().getAuthType()).isEqualTo(ActorType.OAUTH_CLIENT);
 		assertThat(response.getPermission().getActor().getPrimaryIdentifier()).isEqualTo(clientId);
 		assertThat(response.getPermission().getOperations()).contains(Operation.READ, Operation.WRITE);
+	}
+
+	@Test
+	void getPermissionsByPathAndActorHandlesErrorStatus() {
+		String clientId = "client-id";
+
+		String actor = ActorType.OAUTH_CLIENT + ":" + clientId;
+		given(this.restTemplate.getForEntity(CredHubPermissionV2Template.PERMISSIONS_PATH_ACTOR_URL_QUERY,
+				CredentialPermission.class, PATH.getName(), actor))
+			.willReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+		assertThatExceptionOfType(CredHubException.class)
+			.isThrownBy(() -> this.credHubTemplate.getPermissionsByPathAndActor(PATH, Actor.client(clientId)))
+			.withMessageContaining(HttpStatus.NOT_FOUND.toString());
 	}
 
 	@Test
@@ -117,6 +146,25 @@ class CredHubPermissionV2TemplateUnitTests {
 	}
 
 	@Test
+	void addPermissionsHandlesErrorStatus() {
+		Permission permission = Permission.builder()
+			.app("app-id")
+			.operation(Operation.READ)
+			.operation(Operation.WRITE)
+			.build();
+
+		CredentialPermission expectedRequest = new CredentialPermission(PATH, permission);
+
+		given(this.restTemplate.exchange(CredHubPermissionV2Template.PERMISSIONS_URL_PATH, HttpMethod.POST,
+				new HttpEntity<>(expectedRequest), CredentialPermission.class))
+			.willReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+		assertThatExceptionOfType(CredHubException.class)
+			.isThrownBy(() -> this.credHubTemplate.addPermissions(PATH, permission))
+			.withMessageContaining(HttpStatus.NOT_FOUND.toString());
+	}
+
+	@Test
 	void updatePermissions() {
 		String permissionId = "uuid";
 
@@ -138,6 +186,27 @@ class CredHubPermissionV2TemplateUnitTests {
 		assertThat(response.getPath()).isEqualTo(PATH.getName());
 		assertThat(response.getPermission().getActor().getAuthType()).isEqualTo(ActorType.APP);
 		assertThat(response.getPermission().getOperations()).contains(Operation.READ, Operation.WRITE);
+	}
+
+	@Test
+	void updatePermissionsHandlesErrorStatus() {
+		String permissionId = "uuid";
+
+		Permission permission = Permission.builder()
+			.app("app-id")
+			.operation(Operation.READ)
+			.operation(Operation.WRITE)
+			.build();
+
+		CredentialPermission expectedRequest = new CredentialPermission(PATH, permission);
+
+		given(this.restTemplate.exchange(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH, HttpMethod.PUT,
+				new HttpEntity<>(expectedRequest), CredentialPermission.class, permissionId))
+			.willReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+		assertThatExceptionOfType(CredHubException.class)
+			.isThrownBy(() -> this.credHubTemplate.updatePermissions(permissionId, PATH, permission))
+			.withMessageContaining(HttpStatus.NOT_FOUND.toString());
 	}
 
 	@Test

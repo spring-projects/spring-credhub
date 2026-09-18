@@ -17,6 +17,7 @@
 package org.springframework.credhub.core.permissionV2;
 
 import org.springframework.credhub.core.CredHubOperations;
+import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.permissions.Actor;
@@ -58,6 +59,7 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 		return this.credHubOperations.doWithRest((restOperations) -> {
 			ResponseEntity<CredentialPermission> response = restOperations.getForEntity(PERMISSIONS_ID_URL_PATH,
 					CredentialPermission.class, id);
+			ExceptionUtils.throwExceptionOnError(response);
 			return response.getBody();
 		});
 	}
@@ -70,6 +72,7 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 		return this.credHubOperations.doWithRest((restOperations) -> {
 			ResponseEntity<CredentialPermission> response = restOperations.getForEntity(
 					PERMISSIONS_PATH_ACTOR_URL_QUERY, CredentialPermission.class, path.getName(), actor.getIdentity());
+			ExceptionUtils.throwExceptionOnError(response);
 			return response.getBody();
 		});
 	}
@@ -84,6 +87,7 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 		return this.credHubOperations.doWithRest((restOperations) -> {
 			ResponseEntity<CredentialPermission> response = restOperations.exchange(PERMISSIONS_URL_PATH,
 					HttpMethod.POST, new HttpEntity<>(credentialPermission), CredentialPermission.class);
+			ExceptionUtils.throwExceptionOnError(response);
 			return response.getBody();
 		});
 	}
@@ -100,6 +104,7 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 		return this.credHubOperations.doWithRest((restOperations) -> {
 			ResponseEntity<CredentialPermission> response = restOperations.exchange(PERMISSIONS_ID_URL_PATH,
 					HttpMethod.PUT, new HttpEntity<>(credentialPermission), CredentialPermission.class, id);
+			ExceptionUtils.throwExceptionOnError(response);
 			return response.getBody();
 		});
 	}

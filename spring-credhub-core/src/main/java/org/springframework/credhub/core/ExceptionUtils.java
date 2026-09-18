@@ -18,7 +18,6 @@ package org.springframework.credhub.core;
 
 import reactor.core.publisher.Mono;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -40,7 +39,7 @@ public final class ExceptionUtils {
 	 * @param response a {@link ResponseEntity} returned from {@link RestTemplate}
 	 */
 	public static void throwExceptionOnError(ResponseEntity<?> response) {
-		if (!response.getStatusCode().equals(HttpStatus.OK)) {
+		if (!response.getStatusCode().is2xxSuccessful()) {
 			throw new CredHubException(response.getStatusCode());
 		}
 	}

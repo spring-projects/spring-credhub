@@ -41,7 +41,6 @@ public interface CredHubPermissionV2Operations {
 	 * @param path the path of the credentials; must not be {@literal null}
 	 * @param actor the actor of the credentials; must not be {@literal null}
 	 * @return the details if the specified permission
-	 * @since API 2.1
 	 */
 	CredentialPermission getPermissionsByPathAndActor(CredentialName path, Actor actor);
 

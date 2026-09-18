@@ -16,6 +16,11 @@
 
 package org.springframework.credhub.core.permissionV2;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -206,6 +211,45 @@ class CredHubPermissionV2TemplateUnitTests {
 
 		assertThatExceptionOfType(CredHubException.class)
 			.isThrownBy(() -> this.credHubTemplate.updatePermissions(permissionId, PATH, permission))
+			.withMessageContaining(HttpStatus.NOT_FOUND.toString());
+	}
+
+	@Test
+	void patchPermissions() {
+		String permissionId = "uuid";
+		List<Operation> operations = Arrays.asList(Operation.READ, Operation.WRITE);
+
+		CredentialPermission expectedResponse = new CredentialPermission(PATH,
+				Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE).build());
+
+		Map<String, List<Operation>> request = new HashMap<>();
+		request.put(CredHubPermissionV2Template.OPERATIONS_REQUEST_FIELD, operations);
+
+		given(this.restTemplate.exchange(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH, HttpMethod.PATCH,
+				new HttpEntity<>(request), CredentialPermission.class, permissionId))
+			.willReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
+
+		CredentialPermission response = this.credHubTemplate.patchPermissions(permissionId, operations);
+
+		assertThat(response).isNotNull();
+		assertThat(response.getPath()).isEqualTo(PATH.getName());
+		assertThat(response.getPermission().getOperations()).contains(Operation.READ, Operation.WRITE);
+	}
+
+	@Test
+	void patchPermissionsHandlesErrorStatus() {
+		String permissionId = "uuid";
+		List<Operation> operations = Arrays.asList(Operation.READ, Operation.WRITE);
+
+		Map<String, List<Operation>> request = new HashMap<>();
+		request.put(CredHubPermissionV2Template.OPERATIONS_REQUEST_FIELD, operations);
+
+		given(this.restTemplate.exchange(CredHubPermissionV2Template.PERMISSIONS_ID_URL_PATH, HttpMethod.PATCH,
+				new HttpEntity<>(request), CredentialPermission.class, permissionId))
+			.willReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+		assertThatExceptionOfType(CredHubException.class)
+			.isThrownBy(() -> this.credHubTemplate.patchPermissions(permissionId, operations))
 			.withMessageContaining(HttpStatus.NOT_FOUND.toString());
 	}
 

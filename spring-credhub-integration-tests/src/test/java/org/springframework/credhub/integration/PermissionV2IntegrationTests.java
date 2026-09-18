@@ -117,6 +117,30 @@ class PermissionV2IntegrationTests extends CredHubIntegrationTests {
 		this.permissions.deletePermission(permissionId);
 	}
 
+	@Test
+	void patchPermissions() {
+		this.credentials.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build());
+
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
+
+		CredentialPermission added = this.permissions.addPermissions(CREDENTIAL_NAME, clientPermission);
+		String permissionId = added.getId();
+
+		CredentialPermission patched = this.permissions.patchPermissions(permissionId,
+				List.of(Operation.READ_ACL, Operation.WRITE_ACL));
+		assertThat(patched.getId()).isEqualTo(permissionId);
+		assertThat(patched.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
+		assertPermissions(patched, ActorType.OAUTH_CLIENT, "client1", Operation.READ_ACL, Operation.WRITE_ACL);
+
+		CredentialPermission retrieved = this.permissions.getPermissions(permissionId);
+		assertPermissions(retrieved, ActorType.OAUTH_CLIENT, "client1", Operation.READ_ACL, Operation.WRITE_ACL);
+
+		this.permissions.deletePermission(permissionId);
+	}
+
 	private void assertPermissions(CredentialPermission credentialPermission, ActorType actorType, String actorId,
 			Operation... operations) {
 		Actor actor = credentialPermission.getPermission().getActor();

@@ -16,11 +16,16 @@
 
 package org.springframework.credhub.core.permissionV2;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -40,6 +45,8 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 	static final String PERMISSIONS_ID_URL_PATH = PERMISSIONS_URL_PATH + "/{id}";
 
 	static final String PERMISSIONS_PATH_ACTOR_URL_QUERY = PERMISSIONS_URL_PATH + "?path={path}&actor={actor}";
+
+	static final String OPERATIONS_REQUEST_FIELD = "operations";
 
 	private final CredHubOperations credHubOperations;
 
@@ -104,6 +111,22 @@ public class CredHubPermissionV2Template implements CredHubPermissionV2Operation
 		return this.credHubOperations.doWithRest((restOperations) -> {
 			ResponseEntity<CredentialPermission> response = restOperations.exchange(PERMISSIONS_ID_URL_PATH,
 					HttpMethod.PUT, new HttpEntity<>(credentialPermission), CredentialPermission.class, id);
+			ExceptionUtils.throwExceptionOnError(response);
+			return response.getBody();
+		});
+	}
+
+	@Override
+	public CredentialPermission patchPermissions(final String id, final List<Operation> operations) {
+		Assert.notNull(id, "credential ID must not be null");
+		Assert.notNull(operations, "operations must not be null");
+
+		final Map<String, List<Operation>> request = new HashMap<>(1);
+		request.put(OPERATIONS_REQUEST_FIELD, operations);
+
+		return this.credHubOperations.doWithRest((restOperations) -> {
+			ResponseEntity<CredentialPermission> response = restOperations.exchange(PERMISSIONS_ID_URL_PATH,
+					HttpMethod.PATCH, new HttpEntity<>(request), CredentialPermission.class, id);
 			ExceptionUtils.throwExceptionOnError(response);
 			return response.getBody();
 		});

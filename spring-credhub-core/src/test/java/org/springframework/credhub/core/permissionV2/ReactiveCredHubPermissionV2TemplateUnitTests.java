@@ -16,6 +16,9 @@
 
 package org.springframework.credhub.core.permissionV2;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,8 +108,44 @@ class ReactiveCredHubPermissionV2TemplateUnitTests {
 			.verify();
 	}
 
+	@Test
+	void patchPermissions() {
+		String permissionId = "uuid";
+		List<Operation> operations = Arrays.asList(Operation.READ, Operation.WRITE);
+
+		CredentialPermission expectedResponse = new CredentialPermission(PATH,
+				Permission.builder().app("app-id").operation(Operation.READ).operation(Operation.WRITE).build());
+
+		given(this.exchangeFunction.exchange(argThat(isPatchRequestTo("/api/v2/permissions/" + permissionId))))
+			.willReturn(Mono.just(ClientResponse.create(HttpStatus.OK, EXCHANGE_STRATEGIES)
+				.header("Content-Type", "application/json")
+				.body(JsonTestUtils.toJson(expectedResponse))
+				.build()));
+
+		StepVerifier.create(this.credHubTemplate.patchPermissions(permissionId, operations))
+			.assertNext((response) -> assertThat(response.getPath()).isEqualTo(PATH.getName()))
+			.verifyComplete();
+	}
+
+	@Test
+	void patchPermissionsHandlesErrorStatus() {
+		String permissionId = "uuid";
+		List<Operation> operations = Arrays.asList(Operation.READ, Operation.WRITE);
+
+		given(this.exchangeFunction.exchange(argThat(isPatchRequestTo("/api/v2/permissions/" + permissionId))))
+			.willReturn(Mono.just(ClientResponse.create(HttpStatus.NOT_FOUND, EXCHANGE_STRATEGIES).build()));
+
+		StepVerifier.create(this.credHubTemplate.patchPermissions(permissionId, operations))
+			.expectError(CredHubException.class)
+			.verify();
+	}
+
 	private static ArgumentMatcher<ClientRequest> isGetRequestTo(String path) {
 		return (request) -> request.method() == HttpMethod.GET && request.url().getPath().equals(path);
+	}
+
+	private static ArgumentMatcher<ClientRequest> isPatchRequestTo(String path) {
+		return (request) -> request.method() == HttpMethod.PATCH && request.url().getPath().equals(path);
 	}
 
 }

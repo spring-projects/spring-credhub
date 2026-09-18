@@ -16,6 +16,10 @@
 
 package org.springframework.credhub.core.permissionV2;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import reactor.core.publisher.Mono;
 
 import org.springframework.credhub.core.ExceptionUtils;
@@ -23,6 +27,7 @@ import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.credhub.support.permissions.Permission;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.util.Assert;
@@ -40,6 +45,8 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 	private static final String PERMISSIONS_ID_URL_PATH = PERMISSIONS_URL_PATH + "/{id}";
 
 	static final String PERMISSIONS_PATH_ACTOR_URL_QUERY = PERMISSIONS_URL_PATH + "?path={path}&actor={actor}";
+
+	private static final String OPERATIONS_REQUEST_FIELD = "operations";
 
 	private final ReactiveCredHubOperations credHubOperations;
 
@@ -102,6 +109,22 @@ public class ReactiveCredHubPermissionV2Template implements ReactiveCredHubPermi
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.put()
 			.uri(PERMISSIONS_ID_URL_PATH, id)
 			.bodyValue(credentialPermission)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(CredentialPermission.class));
+	}
+
+	@Override
+	public Mono<CredentialPermission> patchPermissions(final String id, final List<Operation> operations) {
+		Assert.notNull(id, "credential ID must not be null");
+		Assert.notNull(operations, "operations must not be null");
+
+		final Map<String, List<Operation>> request = new HashMap<>(1);
+		request.put(OPERATIONS_REQUEST_FIELD, operations);
+
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.patch()
+			.uri(PERMISSIONS_ID_URL_PATH, id)
+			.bodyValue(request)
 			.retrieve()
 			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 			.bodyToMono(CredentialPermission.class));

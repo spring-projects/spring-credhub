@@ -16,11 +16,14 @@
 
 package org.springframework.credhub.core.permissionV2;
 
+import java.util.List;
+
 import reactor.core.publisher.Mono;
 
 import org.springframework.credhub.support.CredentialName;
 import org.springframework.credhub.support.CredentialPermission;
 import org.springframework.credhub.support.permissions.Actor;
+import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.credhub.support.permissions.Permission;
 
 /**
@@ -62,6 +65,21 @@ public interface ReactiveCredHubPermissionV2Operations {
 	 * @return the details if the added permission
 	 */
 	Mono<CredentialPermission> updatePermissions(String id, CredentialName path, Permission permission);
+
+	/**
+	 * Partially update a permission, replacing only its operations, leaving its path and
+	 * actor unchanged. Distinct from
+	 * {@link #updatePermissions(String, CredentialName, Permission)}, which replaces the
+	 * full permission.
+	 * @param id the CredHub-assigned ID of the permission; must not be {@literal null}
+	 * @param operations the operations to replace the permission's operations with; must
+	 * not be {@literal null}
+	 * @return the details of the updated permission
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_update_a_v2_permission_operation">CredHub
+	 * API docs: Update a V2 Permission Operation</a>
+	 */
+	Mono<CredentialPermission> patchPermissions(String id, List<Operation> operations);
 
 	/**
 	 * Delete a permission.

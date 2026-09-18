@@ -155,6 +155,45 @@ class ReactivePermissionV2IntegrationTests extends ReactiveCredHubIntegrationTes
 		StepVerifier.create(this.permissions.deletePermission(permissionId.get())).expectComplete().verify();
 	}
 
+	@Test
+	void patchPermissions() {
+		assumeTrue(serverApiIsV2());
+
+		AtomicReference<String> permissionId = new AtomicReference<>();
+
+		StepVerifier
+			.create(this.credentials
+				.write(ValueCredentialRequest.builder().name(CREDENTIAL_NAME).value(CREDENTIAL_VALUE).build()))
+			.assertNext((response) -> assertThat(response.getId()).isNotNull())
+			.verifyComplete();
+
+		Permission clientPermission = Permission.builder()
+			.client("client1")
+			.operations(Operation.READ, Operation.WRITE, Operation.DELETE)
+			.build();
+
+		StepVerifier.create(this.permissions.addPermissions(CREDENTIAL_NAME, clientPermission))
+			.assertNext((response) -> permissionId.set(response.getId()))
+			.verifyComplete();
+
+		StepVerifier
+			.create(this.permissions.patchPermissions(permissionId.get(),
+					List.of(Operation.READ_ACL, Operation.WRITE_ACL)))
+			.assertNext((response) -> {
+				assertThat(response.getId()).isEqualTo(permissionId.get());
+				assertThat(response.getPath()).isEqualTo(CREDENTIAL_NAME.getName());
+				assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ_ACL, Operation.WRITE_ACL);
+			})
+			.verifyComplete();
+
+		StepVerifier.create(this.permissions.getPermissions(permissionId.get()))
+			.assertNext((response) -> assertPermissions(response, ActorType.OAUTH_CLIENT, "client1", Operation.READ_ACL,
+					Operation.WRITE_ACL))
+			.verifyComplete();
+
+		StepVerifier.create(this.permissions.deletePermission(permissionId.get())).expectComplete().verify();
+	}
+
 	private void assertPermissions(CredentialPermission credentialPermission, ActorType actorType, String actorId,
 			Operation... operations) {
 		Actor actor = credentialPermission.getPermission().getActor();

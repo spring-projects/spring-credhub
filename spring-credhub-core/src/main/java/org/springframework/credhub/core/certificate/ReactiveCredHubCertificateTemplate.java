@@ -27,6 +27,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
 import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.certificate.CertificateSummaryData;
@@ -56,6 +57,10 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 	private static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 
 	private static final String VERSION_REQUEST_FIELD = "version";
+
+	private static final String VALUE_REQUEST_FIELD = "value";
+
+	private static final String VERSION_TRANSITIONAL_REQUEST_FIELD = "transitional";
 
 	private static final String SIGNED_BY_REQUEST_FIELD = "signed_by";
 
@@ -142,6 +147,24 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 			.retrieve()
 			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
 			.bodyToFlux(CertificateCredentialDetails.class));
+	}
+
+	@Override
+	public Mono<CertificateCredentialDetails> addVersion(final String id, final CertificateCredential value,
+			final boolean transitional) {
+		Assert.notNull(id, "credential ID must not be null");
+		Assert.notNull(value, "certificate value must not be null");
+
+		Map<String, Object> request = new HashMap<>(2);
+		request.put(VALUE_REQUEST_FIELD, value);
+		request.put(VERSION_TRANSITIONAL_REQUEST_FIELD, transitional);
+
+		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
+			.uri(VERSIONS_URL_PATH, id)
+			.bodyValue(request)
+			.retrieve()
+			.onStatus(HttpStatusCode::isError, ExceptionUtils::buildError)
+			.bodyToMono(CertificateCredentialDetails.class));
 	}
 
 	public Flux<CertificateCredentialDetails> updateTransitionalVersion(final String id, final String versionId) {

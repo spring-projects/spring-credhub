@@ -20,6 +20,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
 import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 import org.springframework.credhub.support.certificate.CertificateSummary;
 
@@ -75,6 +76,27 @@ public interface ReactiveCredHubCertificateOperations {
 	 * API docs: Get All Versions of a Certificate</a>
 	 */
 	Flux<CertificateCredentialDetails> getVersions(String id);
+
+	/**
+	 * Add a new version of a certificate, importing an existing certificate value rather
+	 * than generating one.
+	 * @param id the CredHub-generated ID of the certificate credential; must not be
+	 * {@literal null} and must be an ID returned by {@link #getAll()} or
+	 * {@link #getByName(CredentialName)}
+	 * @param value the certificate value to import as a new version; must not be
+	 * {@literal null}. CredHub validates the value's consistency: the certificate must be
+	 * signed by the given certificate authority, match the given private key, and the
+	 * certificate authority itself must be a valid X.509 certificate authority (i.e. have
+	 * the CA basic constraint set) — a self-signed certificate that isn't itself a CA
+	 * will be rejected
+	 * @param transitional {@code true} to mark the new version transitional;
+	 * {@code false} otherwise
+	 * @return the details of the newly added certificate version
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_create_a_version_of_a_certificate">CredHub
+	 * API docs: Create a Version of a Certificate</a>
+	 */
+	Mono<CertificateCredentialDetails> addVersion(String id, CertificateCredential value, boolean transitional);
 
 	/**
 	 * Make the specified version of a certificate the {@literal transitional} version.

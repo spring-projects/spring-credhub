@@ -27,6 +27,7 @@ import reactor.test.StepVerifier;
 import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.credhub.core.ReactiveCredHubTemplate;
+import org.springframework.credhub.support.certificate.CertificateCredential;
 import org.springframework.credhub.support.utils.JsonUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -105,8 +106,39 @@ class ReactiveCredHubCertificateTemplateUnitTests {
 		}).verifyComplete();
 	}
 
+	@Test
+	void addVersion() {
+		CertificateCredential value = new CertificateCredential("cert1", "authority1", "key1");
+
+		String responseBody = """
+				{
+					"type": "certificate",
+					"transitional": true,
+					"id": "id1",
+					"name": "/example/certificate",
+					"value": { "certificate": "cert1", "ca": "authority1", "private_key": "key1" }
+				}
+				""";
+
+		given(this.exchangeFunction.exchange(argThat(isPostRequestTo("/api/v1/certificates/id1/versions"))))
+			.willReturn(Mono.just(ClientResponse.create(HttpStatus.OK, EXCHANGE_STRATEGIES)
+				.header("Content-Type", "application/json")
+				.body(responseBody)
+				.build()));
+
+		StepVerifier.create(this.credHubTemplate.addVersion("id1", value, true)).assertNext((response) -> {
+			assertThat(response.getId()).isEqualTo("id1");
+			assertThat(response.isTransitional()).isTrue();
+			assertThat(response.getValue().getCertificate()).isEqualTo("cert1");
+		}).verifyComplete();
+	}
+
 	private static ArgumentMatcher<ClientRequest> isGetRequestTo(String path) {
 		return (request) -> request.method() == HttpMethod.GET && request.url().getPath().equals(path);
+	}
+
+	private static ArgumentMatcher<ClientRequest> isPostRequestTo(String path) {
+		return (request) -> request.method() == HttpMethod.POST && request.url().getPath().equals(path);
 	}
 
 }

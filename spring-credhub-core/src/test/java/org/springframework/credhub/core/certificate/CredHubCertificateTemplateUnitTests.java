@@ -167,6 +167,29 @@ class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
+	void addVersion() {
+		CertificateCredential value = new CertificateCredential("cert1", "authority1", "key1");
+		CertificateCredentialDetails expectedCertificate = new CertificateCredentialDetails("id1", NAME,
+				CredentialType.CERTIFICATE, true, value);
+
+		Map<String, Object> request = new HashMap<>();
+		request.put(CredHubCertificateTemplate.VALUE_REQUEST_FIELD, value);
+		request.put(CredHubCertificateTemplate.VERSION_TRANSITIONAL_REQUEST_FIELD, true);
+
+		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.VERSIONS_URL_PATH), eq(HttpMethod.POST),
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id1")))
+			.willReturn(new ResponseEntity<>(expectedCertificate, HttpStatus.OK));
+
+		CertificateCredentialDetails response = this.credHubTemplate.addVersion("id1", value, true);
+
+		assertThat(response).isNotNull();
+		assertThat(response.getId()).isEqualTo("id1");
+		assertThat(response.isTransitional()).isTrue();
+		assertThat(response.getValue().getCertificate()).isEqualTo("cert1");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
 	void updateTransitionalVersion() {
 		List<CertificateCredentialDetails> expectedCertificates = Arrays.asList(
 				new CertificateCredentialDetails("id1", NAME, CredentialType.CERTIFICATE, false,

@@ -215,6 +215,46 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 	}
 
 	@Test
+	void addCertificateVersion() {
+		AtomicReference<CertificateCredential> certificate = new AtomicReference<>();
+		AtomicReference<String> credentialVersion0Id = new AtomicReference<>();
+		AtomicReference<String> certificateId = new AtomicReference<>();
+
+		StepVerifier.create(this.credentials.generate(CertificateParametersRequest.builder()
+			.name(TEST_CERT_NAME)
+			.parameters(CertificateParameters.builder()
+				.commonName("example.com")
+				.certificateAuthority(true)
+				.selfSign(true)
+				.build())
+			.build(), CertificateCredential.class)).assertNext((response) -> {
+				certificate.set(response.getValue());
+				credentialVersion0Id.set(response.getId());
+			}).verifyComplete();
+
+		StepVerifier.create(this.certificates.getByName(TEST_CERT_NAME))
+			.assertNext((response) -> certificateId.set(response.getId()))
+			.verifyComplete();
+
+		AtomicReference<String> addedVersionId = new AtomicReference<>();
+
+		StepVerifier.create(this.certificates.addVersion(certificateId.get(), certificate.get(), true))
+			.assertNext((response) -> {
+				assertThat(response.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+				assertThat(response.isTransitional()).isTrue();
+				assertThat(response.getValue().getCertificate()).isEqualTo(certificate.get().getCertificate());
+
+				addedVersionId.set(response.getId());
+			})
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.getVersions(certificateId.get()))
+			.assertNext((response) -> assertThat(response.getId()).isEqualTo(addedVersionId.get()))
+			.assertNext((response) -> assertThat(response.getId()).isEqualTo(credentialVersion0Id.get()))
+			.verifyComplete();
+	}
+
+	@Test
 	void bulkRegenerateCertificates() {
 		AtomicReference<CertificateCredential> rootCertificate = new AtomicReference<>();
 		AtomicReference<String> signedCertificateId = new AtomicReference<>();

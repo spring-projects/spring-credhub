@@ -24,6 +24,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.ExceptionUtils;
 import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
 import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
 import org.springframework.credhub.support.certificate.CertificateSummary;
 import org.springframework.credhub.support.certificate.CertificateSummaryData;
@@ -55,6 +56,10 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 
 	static final String VERSION_REQUEST_FIELD = "version";
+
+	static final String VALUE_REQUEST_FIELD = "value";
+
+	static final String VERSION_TRANSITIONAL_REQUEST_FIELD = "transitional";
 
 	static final String SIGNED_BY_REQUEST_FIELD = "signed_by";
 
@@ -147,6 +152,29 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		return this.credHubOperations.doWithRest((restOperations) -> {
 			ResponseEntity<List<CertificateCredentialDetails>> response = restOperations.exchange(VERSIONS_URL_PATH,
 					HttpMethod.GET, null, ref, id);
+
+			ExceptionUtils.throwExceptionOnError(response);
+
+			return response.getBody();
+		});
+	}
+
+	@Override
+	public CertificateCredentialDetails addVersion(final String id, final CertificateCredential value,
+			final boolean transitional) {
+		Assert.notNull(id, "credential ID must not be null");
+		Assert.notNull(value, "certificate value must not be null");
+
+		final ParameterizedTypeReference<CertificateCredentialDetails> ref = new ParameterizedTypeReference<CertificateCredentialDetails>() {
+		};
+
+		return this.credHubOperations.doWithRest((restOperations) -> {
+			Map<String, Object> request = new HashMap<>(2);
+			request.put(VALUE_REQUEST_FIELD, value);
+			request.put(VERSION_TRANSITIONAL_REQUEST_FIELD, transitional);
+
+			ResponseEntity<CertificateCredentialDetails> response = restOperations.exchange(VERSIONS_URL_PATH,
+					HttpMethod.POST, new HttpEntity<>(request), ref, id);
 
 			ExceptionUtils.throwExceptionOnError(response);
 

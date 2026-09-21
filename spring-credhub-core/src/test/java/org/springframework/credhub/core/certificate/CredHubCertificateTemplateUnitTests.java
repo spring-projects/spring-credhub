@@ -121,7 +121,7 @@ class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
-	void regenerateWithMetadata() {
+	void regenerateWithAllParameters() {
 		CertificateCredentialDetails expectedCertificate = new CertificateCredentialDetails("id", NAME,
 				CredentialType.CERTIFICATE, true, new CertificateCredential("cert", "authority", "key"));
 
@@ -129,13 +129,16 @@ class CredHubCertificateTemplateUnitTests {
 
 		Map<String, Object> request = new HashMap<>();
 		request.put(CredHubCertificateTemplate.TRANSITIONAL_REQUEST_FIELD, true);
+		request.put(CredHubCertificateTemplate.ALLOW_TRANSITIONAL_PARENT_TO_SIGN_REQUEST_FIELD, true);
+		request.put(CredHubCertificateTemplate.KEY_LENGTH_REQUEST_FIELD, 2048);
+		request.put(CredHubCertificateTemplate.DURATION_REQUEST_FIELD, 365);
 		request.put(CredHubCertificateTemplate.METADATA_REQUEST_FIELD, metadata);
 
 		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.REGENERATE_URL_PATH), eq(HttpMethod.POST),
 				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id")))
 			.willReturn(new ResponseEntity<>(expectedCertificate, HttpStatus.OK));
 
-		CertificateCredentialDetails response = this.credHubTemplate.regenerate("id", true, metadata);
+		CertificateCredentialDetails response = this.credHubTemplate.regenerate("id", true, true, 2048, 365, metadata);
 
 		assertThat(response).isNotNull();
 		assertThat(response.getId()).isEqualTo("id");

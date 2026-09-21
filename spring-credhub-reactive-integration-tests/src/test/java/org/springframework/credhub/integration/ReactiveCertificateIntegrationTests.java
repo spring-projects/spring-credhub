@@ -126,7 +126,7 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 	}
 
 	@Test
-	void regenerateCertificateWithMetadata() {
+	void regenerateCertificateWithAllParameters() {
 		assumeTrue(serverApiIsV2());
 
 		AtomicReference<String> certificateId = new AtomicReference<>();
@@ -147,7 +147,7 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 
 		CertificateCredentialDetails regenerated;
 		try {
-			regenerated = this.certificates.regenerate(certificateId.get(), true, metadata).block();
+			regenerated = this.certificates.regenerate(certificateId.get(), true, false, 2048, 365, metadata).block();
 		}
 		catch (CredHubException ex) {
 			assumeMetadataSupported(ex);

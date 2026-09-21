@@ -136,7 +136,7 @@ class ReactiveCredHubCertificateTemplateUnitTests {
 	}
 
 	@Test
-	void regenerateWithMetadata() {
+	void regenerateWithAllParameters() {
 		Map<String, Object> metadata = Map.of("key", "metadata-value");
 
 		String responseBody = """
@@ -156,11 +156,13 @@ class ReactiveCredHubCertificateTemplateUnitTests {
 				.body(responseBody)
 				.build()));
 
-		StepVerifier.create(this.credHubTemplate.regenerate("id", true, metadata)).assertNext((response) -> {
-			assertThat(response.getId()).isEqualTo("id");
-			assertThat(response.isTransitional()).isTrue();
-			assertThat(response.getMetadata()).containsEntry("key", "metadata-value");
-		}).verifyComplete();
+		StepVerifier.create(this.credHubTemplate.regenerate("id", true, true, 2048, 365, metadata))
+			.assertNext((response) -> {
+				assertThat(response.getId()).isEqualTo("id");
+				assertThat(response.isTransitional()).isTrue();
+				assertThat(response.getMetadata()).containsEntry("key", "metadata-value");
+			})
+			.verifyComplete();
 	}
 
 	@Test

@@ -57,6 +57,12 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 
+	static final String ALLOW_TRANSITIONAL_PARENT_TO_SIGN_REQUEST_FIELD = "allow_transitional_parent_to_sign";
+
+	static final String KEY_LENGTH_REQUEST_FIELD = "key_length";
+
+	static final String DURATION_REQUEST_FIELD = "duration";
+
 	static final String METADATA_REQUEST_FIELD = "metadata";
 
 	static final String VERSION_REQUEST_FIELD = "version";
@@ -108,11 +114,12 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	@Override
 	public CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional) {
-		return regenerate(id, setAsTransitional, null);
+		return regenerate(id, setAsTransitional, false, null, null, null);
 	}
 
 	@Override
 	public CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional,
+			final boolean allowTransitionalParentToSign, Integer keyLength, Integer duration,
 			Map<String, Object> metadata) {
 		Assert.notNull(id, "credential ID must not be null");
 
@@ -120,8 +127,17 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 		};
 
 		return this.credHubOperations.doWithRest((restOperations) -> {
-			Map<String, Object> request = new HashMap<>(2);
+			Map<String, Object> request = new HashMap<>();
 			request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
+			if (allowTransitionalParentToSign) {
+				request.put(ALLOW_TRANSITIONAL_PARENT_TO_SIGN_REQUEST_FIELD, true);
+			}
+			if (keyLength != null) {
+				request.put(KEY_LENGTH_REQUEST_FIELD, keyLength);
+			}
+			if (duration != null) {
+				request.put(DURATION_REQUEST_FIELD, duration);
+			}
 			if (metadata != null) {
 				request.put(METADATA_REQUEST_FIELD, metadata);
 			}

@@ -57,22 +57,30 @@ public interface CredHubCertificateOperations {
 	CertificateCredentialDetails regenerate(String id, boolean setAsTransitional);
 
 	/**
-	 * Regenerate a certificate, storing additional metadata alongside the new version.
-	 * Metadata is only supported by CredHub server 2.6.0 and later; earlier server
-	 * versions reject this field as an unrecognized request parameter.
+	 * Regenerate a certificate, with full control over the regeneration parameters
+	 * CredHub supports. Metadata is only supported by CredHub server 2.6.0 and later;
+	 * earlier server versions reject this field as an unrecognized request parameter.
 	 * @param id the CredHub-generated ID of the certificate credential; must not be
 	 * {@literal null} and must be an ID returned by {@link #getAll()} or
 	 * {@link #getByName(CredentialName)}
 	 * @param setAsTransitional {@code true} to mark the certificate version transitional;
 	 * {@code false} otherwise
-	 * @param metadata additional metadata to store with the certificate
+	 * @param allowTransitionalParentToSign {@code true} to allow a transitional version
+	 * of the parent CA to sign this certificate if the transitional version is the latest
+	 * version; {@code false} otherwise
+	 * @param keyLength the length of the new key, or {@literal null} to use the same
+	 * length as the previous version
+	 * @param duration the validity duration in days of the new version, or
+	 * {@literal null} to use the same duration as the previous version
+	 * @param metadata additional metadata to store with the certificate, or
+	 * {@literal null} to store no metadata
 	 * @return the details of the certificate credential
 	 * @see <a href=
-	 * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/components/credentials/src/main/kotlin/org/cloudfoundry/credhub/requests/CertificateRegenerateRequest.kt">CredHub's
-	 * metadata field on the certificate regenerate request (not yet reflected in the
-	 * published API docs' request-fields table for this endpoint)</a>
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_regenerate_a_certificate">CredHub
+	 * API docs: Regenerate a Certificate</a>
 	 */
-	CertificateCredentialDetails regenerate(String id, boolean setAsTransitional, Map<String, Object> metadata);
+	CertificateCredentialDetails regenerate(String id, boolean setAsTransitional, boolean allowTransitionalParentToSign,
+			Integer keyLength, Integer duration, Map<String, Object> metadata);
 
 	/**
 	 * Regenerate all certificates in CredHub that were signed by the specified

@@ -110,7 +110,7 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
-	void regenerateCertificateWithMetadata() {
+	void regenerateCertificateWithAllParameters() {
 		CredentialDetails<CertificateCredential> certificate = this.credentials
 			.generate(CertificateParametersRequest.builder()
 				.name(TEST_CERT_NAME)
@@ -124,7 +124,7 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 
 		CertificateCredentialDetails regenerated;
 		try {
-			regenerated = this.certificates.regenerate(byName.getId(), true, metadata);
+			regenerated = this.certificates.regenerate(byName.getId(), true, false, 2048, 365, metadata);
 		}
 		catch (CredHubException ex) {
 			assumeMetadataSupported(ex);

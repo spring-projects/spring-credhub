@@ -57,6 +57,8 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 
+	static final String METADATA_REQUEST_FIELD = "metadata";
+
 	static final String VERSION_REQUEST_FIELD = "version";
 
 	static final String VALUE_REQUEST_FIELD = "value";
@@ -106,14 +108,23 @@ public class CredHubCertificateTemplate implements CredHubCertificateOperations 
 
 	@Override
 	public CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional) {
+		return regenerate(id, setAsTransitional, null);
+	}
+
+	@Override
+	public CertificateCredentialDetails regenerate(final String id, final boolean setAsTransitional,
+			Map<String, Object> metadata) {
 		Assert.notNull(id, "credential ID must not be null");
 
 		final ParameterizedTypeReference<CertificateCredentialDetails> ref = new ParameterizedTypeReference<CertificateCredentialDetails>() {
 		};
 
 		return this.credHubOperations.doWithRest((restOperations) -> {
-			Map<String, Boolean> request = new HashMap<>(1);
+			Map<String, Object> request = new HashMap<>(2);
 			request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
+			if (metadata != null) {
+				request.put(METADATA_REQUEST_FIELD, metadata);
+			}
 
 			ResponseEntity<CertificateCredentialDetails> response = restOperations.exchange(REGENERATE_URL_PATH,
 					HttpMethod.POST, new HttpEntity<Object>(request), ref, id);

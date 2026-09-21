@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support;
 
+import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +44,9 @@ public class CredHubRequest<T> {
 
 	/** The credential details. */
 	protected @Nullable T details;
+
+	/** Additional metadata for the credential. */
+	protected @Nullable Map<String, Object> metadata;
 
 	/**
 	 * Create a {@link CredHubRequest}.
@@ -91,6 +95,23 @@ public class CredHubRequest<T> {
 		this.details = details;
 	}
 
+	/**
+	 * Get the additional metadata for the credential. Only supported by CredHub server
+	 * 2.6.0 and later; earlier server versions reject this field as an unrecognized
+	 * request parameter.
+	 * @return the credential metadata
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_json_credential">CredHub's
+	 * metadata field on set requests</a>
+	 */
+	public @Nullable Map<String, Object> getMetadata() {
+		return this.metadata;
+	}
+
+	void setMetadata(Map<String, Object> metadata) {
+		this.metadata = metadata;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -114,19 +135,22 @@ public class CredHubRequest<T> {
 		if ((this.mode != null) ? !this.mode.equals(that.mode) : (that.mode != null)) {
 			return false;
 		}
+		if ((this.metadata != null) ? !this.metadata.equals(that.metadata) : (that.metadata != null)) {
+			return false;
+		}
 
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.name, this.credentialType, this.details, this.mode);
+		return Objects.hash(this.name, this.credentialType, this.details, this.mode, this.metadata);
 	}
 
 	@Override
 	public String toString() {
 		return "CredHubRequest{" + "name=" + this.name + ", credentialType=" + this.credentialType + ", details="
-				+ this.details + '}';
+				+ this.details + ", metadata=" + this.metadata + '}';
 	}
 
 	/**
@@ -184,6 +208,25 @@ public class CredHubRequest<T> {
 		 */
 		public B mode(WriteMode mode) {
 			this.targetObj.setMode(mode);
+			return this.thisObj;
+		}
+
+		/**
+		 * Sets additional metadata to store alongside the credential. CredHub returns
+		 * this value unchanged in subsequent read responses for the credential. Only
+		 * supported by CredHub server 2.6.0 and later; earlier server versions reject
+		 * this field as an unrecognized request parameter.
+		 * @param metadata the metadata to store with the credential
+		 * @return the builder
+		 * @see <a href=
+		 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_json_credential">CredHub's
+		 * metadata field on set requests</a>
+		 * @see <a href=
+		 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_generate_a_password_credential">CredHub's
+		 * metadata field on generate requests</a>
+		 */
+		public B metadata(Map<String, Object> metadata) {
+			this.targetObj.setMetadata(metadata);
 			return this.thisObj;
 		}
 

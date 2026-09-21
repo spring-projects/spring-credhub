@@ -60,6 +60,8 @@ public class ReactiveCredHubCredentialTemplate implements ReactiveCredHubCredent
 
 	private static final String NAME_REQUEST_FIELD = "name";
 
+	private static final String METADATA_REQUEST_FIELD = "metadata";
+
 	private final ReactiveCredHubOperations credHubOperations;
 
 	/**
@@ -104,14 +106,23 @@ public class ReactiveCredHubCredentialTemplate implements ReactiveCredHubCredent
 
 	@Override
 	public <T> Mono<CredentialDetails<T>> regenerate(final CredentialName name, Class<T> credentialType) {
+		return regenerate(name, credentialType, null);
+	}
+
+	@Override
+	public <T> Mono<CredentialDetails<T>> regenerate(final CredentialName name, Class<T> credentialType,
+			Map<String, Object> metadata) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
 		final ParameterizedTypeReference<CredentialDetails<T>> ref = new ParameterizedTypeReference<CredentialDetails<T>>() {
 		};
 
-		Map<String, Object> request = new HashMap<>(1);
+		Map<String, Object> request = new HashMap<>(2);
 		request.put(NAME_REQUEST_FIELD, name.getName());
+		if (metadata != null) {
+			request.put(METADATA_REQUEST_FIELD, metadata);
+		}
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
 			.uri(REGENERATE_URL_PATH)

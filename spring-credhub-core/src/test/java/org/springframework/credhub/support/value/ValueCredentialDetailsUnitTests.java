@@ -32,11 +32,24 @@ class ValueCredentialDetailsUnitTests extends JsonParsingUnitTestsBase {
 			"value": "somevalue"
 			""";
 
+	private static final String VALUE_CREDENTIALS_WITH_METADATA = """
+			"type": "value",
+			"value": "somevalue",
+			"metadata": {"key": "metadata-value"}
+			""";
+
 	@Test
 	void deserializeDetails() {
 		CredentialDetails<ValueCredential> data = parseDetails(VALUE_CREDENTIALS);
 
 		assertDetails(data);
+	}
+
+	@Test
+	void deserializeDetailsWithMetadata() {
+		CredentialDetails<ValueCredential> data = parseDetails(VALUE_CREDENTIALS_WITH_METADATA);
+
+		assertThat(data.getMetadata()).containsEntry("key", "metadata-value");
 	}
 
 	@Test

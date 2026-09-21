@@ -17,6 +17,7 @@
 package org.springframework.credhub.core.credential;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialName;
@@ -63,6 +64,23 @@ public interface CredHubCredentialOperations {
 	 * @return the details of the regenerated credential
 	 */
 	<T> CredentialDetails<T> regenerate(CredentialName name, Class<T> credentialType);
+
+	/**
+	 * Regenerate a credential in CredHub, storing additional metadata alongside the new
+	 * version. Only credentials that were previously generated can be re-generated.
+	 * Metadata is only supported by CredHub server 2.6.0 and later; earlier server
+	 * versions reject this field as an unrecognized request parameter.
+	 * @param <T> the credential implementation type
+	 * @param name the name of the credential; must not be {@literal null}
+	 * @param credentialType the type of the credential to be regenerated; must not be
+	 * {@literal null}
+	 * @param metadata additional metadata to store with the credential
+	 * @return the details of the regenerated credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_regenerate_a_credential">CredHub's
+	 * metadata field on the regenerate request</a>
+	 */
+	<T> CredentialDetails<T> regenerate(CredentialName name, Class<T> credentialType, Map<String, Object> metadata);
 
 	/**
 	 * Retrieve a credential using its ID, as returned in a write request.

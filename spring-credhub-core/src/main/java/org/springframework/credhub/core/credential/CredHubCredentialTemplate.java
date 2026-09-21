@@ -60,6 +60,8 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 
 	static final String NAME_REQUEST_FIELD = "name";
 
+	static final String METADATA_REQUEST_FIELD = "metadata";
+
 	private final CredHubOperations credHubOperations;
 
 	/**
@@ -107,6 +109,12 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 
 	@Override
 	public <T> CredentialDetails<T> regenerate(final CredentialName name, Class<T> credentialType) {
+		return regenerate(name, credentialType, null);
+	}
+
+	@Override
+	public <T> CredentialDetails<T> regenerate(final CredentialName name, Class<T> credentialType,
+			Map<String, Object> metadata) {
 		Assert.notNull(name, "credential name must not be null");
 		Assert.notNull(credentialType, "credential type must not be null");
 
@@ -114,8 +122,11 @@ public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 		};
 
 		return this.credHubOperations.doWithRest((restOperations) -> {
-			Map<String, Object> request = new HashMap<>(1);
+			Map<String, Object> request = new HashMap<>(2);
 			request.put(NAME_REQUEST_FIELD, name.getName());
+			if (metadata != null) {
+				request.put(METADATA_REQUEST_FIELD, metadata);
+			}
 
 			ResponseEntity<CredentialDetails<T>> response = restOperations.exchange(REGENERATE_URL_PATH,
 					HttpMethod.POST, new HttpEntity<>(request), ref);

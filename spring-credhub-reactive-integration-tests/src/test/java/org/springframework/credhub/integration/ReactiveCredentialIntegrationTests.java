@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
+import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.credential.ReactiveCredHubCredentialOperations;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.CredentialType;
@@ -38,6 +39,7 @@ import org.springframework.credhub.support.value.ValueCredential;
 import org.springframework.credhub.support.value.ValueCredentialRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrationTests {
@@ -118,6 +120,46 @@ class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrationTests
 				.asString()
 				.contains(CREDENTIAL_NAME.getName()))
 			.verifyComplete();
+	}
+
+	@Test
+	void writeCredentialWithMetadata() {
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		CredentialDetails<ValueCredential> written;
+		try {
+			written = this.credentials
+				.write(ValueCredentialRequest.builder()
+					.name(CREDENTIAL_NAME)
+					.value(CREDENTIAL_VALUE)
+					.metadata(metadata)
+					.build())
+				.block();
+		}
+		catch (CredHubException ex) {
+			assumeMetadataSupported(ex);
+			throw ex;
+		}
+		assertThat(written.getMetadata()).isEqualTo(metadata);
+
+		StepVerifier.create(this.credentials.getById(written.getId(), ValueCredential.class))
+			.assertNext((response) -> assertThat(response.getMetadata()).isEqualTo(metadata))
+			.verifyComplete();
+
+		StepVerifier.create(this.credentials.getByName(CREDENTIAL_NAME, ValueCredential.class))
+			.assertNext((response) -> assertThat(response.getMetadata()).isEqualTo(metadata))
+			.verifyComplete();
+	}
+
+	/**
+	 * Some CredHub server versions predate the {@code metadata} field and reject it as an
+	 * unrecognized request parameter. Skip metadata-specific tests against such servers
+	 * rather than failing them.
+	 * @param ex the exception thrown by an attempt to use credential metadata
+	 */
+	private void assumeMetadataSupported(CredHubException ex) {
+		boolean metadataUnsupported = ex.getResponseBodyAsString().contains("unrecognized parameter 'metadata'");
+		assumeFalse(metadataUnsupported, "CredHub server does not support credential metadata");
 	}
 
 	@Test
@@ -272,6 +314,34 @@ class ReactiveCredentialIntegrationTests extends ReactiveCredHubIntegrationTests
 				assertThat(response.getValue().getPasswordHash())
 					.isNotEqualTo(generated.get().getValue().getPasswordHash());
 			})
+			.verifyComplete();
+	}
+
+	@Test
+	void generateCredentialWithMetadata() {
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		CredentialDetails<UserCredential> generated;
+		try {
+			generated = this.credentials
+				.generate(UserParametersRequest.builder()
+					.name(CREDENTIAL_NAME)
+					.username("test-user")
+					.parameters(this.passwordParameters.build())
+					.metadata(metadata)
+					.build(), UserCredential.class)
+				.block();
+		}
+		catch (CredHubException ex) {
+			assumeMetadataSupported(ex);
+			throw ex;
+		}
+		assertThat(generated.getMetadata()).isEqualTo(metadata);
+
+		Map<String, Object> updatedMetadata = Map.of("key", "updated-metadata-value");
+
+		StepVerifier.create(this.credentials.regenerate(CREDENTIAL_NAME, UserCredential.class, updatedMetadata))
+			.assertNext((response) -> assertThat(response.getMetadata()).isEqualTo(updatedMetadata))
 			.verifyComplete();
 	}
 

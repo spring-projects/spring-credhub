@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support;
 
+import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,6 +45,8 @@ public class CredentialDetails<T> extends CredentialSummary {
 	@JsonTypeInfo(use = Id.NAME, include = As.EXTERNAL_PROPERTY, property = "type")
 	private final @Nullable T value;
 
+	private final @Nullable Map<String, Object> metadata;
+
 	/**
 	 * Create a {@link CredentialDetails}.
 	 */
@@ -51,6 +54,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 		this.id = null;
 		this.credentialType = null;
 		this.value = null;
+		this.metadata = null;
 	}
 
 	/**
@@ -63,9 +67,25 @@ public class CredentialDetails<T> extends CredentialSummary {
 	 * @param value the client-provided value for the credential created
 	 */
 	public CredentialDetails(String id, CredentialName name, CredentialType credentialType, T value) {
+		this(id, name, credentialType, null, value);
+	}
+
+	/**
+	 * Create a {@link CredentialDetails} from the provided parameters. Intended for
+	 * internal use. Clients will get {@link CredentialDetails} objects populated from
+	 * CredHub responses.
+	 * @param id the CredHub-generated unique ID of the credential
+	 * @param name the client-provided name of the credential
+	 * @param credentialType the {@link CredentialType} of the credential
+	 * @param metadata the additional metadata stored with the credential
+	 * @param value the client-provided value for the credential created
+	 */
+	public CredentialDetails(String id, CredentialName name, CredentialType credentialType,
+			Map<String, Object> metadata, T value) {
 		super(name);
 		this.id = id;
 		this.credentialType = credentialType;
+		this.metadata = metadata;
 		this.value = value;
 	}
 
@@ -93,6 +113,18 @@ public class CredentialDetails<T> extends CredentialSummary {
 		return this.value;
 	}
 
+	/**
+	 * Get the additional metadata stored with the credential. Only supported by CredHub
+	 * server 2.6.0 and later; earlier server versions never populate this value.
+	 * @return the credential metadata
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_find_a_credential_by_id_type_value">CredHub's
+	 * metadata field on credential responses</a>
+	 */
+	public @Nullable Map<String, Object> getMetadata() {
+		return this.metadata;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -118,14 +150,14 @@ public class CredentialDetails<T> extends CredentialSummary {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.id, this.name, this.credentialType, this.value, this.versionCreatedAt);
+		return Objects.hash(this.id, this.name, this.credentialType, this.value, this.versionCreatedAt, this.metadata);
 	}
 
 	@Override
 	public String toString() {
 		return "CredentialDetails{" + "id='" + this.id + '\'' + ", name=" + this.name + ", credentialType="
 				+ this.credentialType + ", value=" + this.value + ", versionCreatedAt='" + this.versionCreatedAt + '\''
-				+ '}';
+				+ ", metadata=" + this.metadata + '}';
 	}
 
 }

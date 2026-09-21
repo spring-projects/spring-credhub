@@ -17,11 +17,13 @@
 package org.springframework.credhub.integration;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.credhub.core.CredHubException;
 import org.springframework.credhub.core.certificate.CredHubCertificateOperations;
 import org.springframework.credhub.core.credential.CredHubCredentialOperations;
 import org.springframework.credhub.support.CredentialDetails;
@@ -35,6 +37,7 @@ import org.springframework.credhub.support.certificate.CertificateParametersRequ
 import org.springframework.credhub.support.certificate.CertificateSummary;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 class CertificateIntegrationTests extends CredHubIntegrationTests {
 
@@ -104,6 +107,42 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 		assertThat(regenerated.getValue().getCertificateAuthority())
 			.isNotEqualTo(certificate.getValue().getCertificateAuthority());
 		assertThat(regenerated.getValue().getPrivateKey()).isNotEqualTo(certificate.getValue().getPrivateKey());
+	}
+
+	@Test
+	void regenerateCertificateWithMetadata() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		CertificateCredentialDetails regenerated;
+		try {
+			regenerated = this.certificates.regenerate(byName.getId(), true, metadata);
+		}
+		catch (CredHubException ex) {
+			assumeMetadataSupported(ex);
+			throw ex;
+		}
+		assertThat(regenerated.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(regenerated.getMetadata()).isEqualTo(metadata);
+	}
+
+	/**
+	 * Some CredHub server versions predate the {@code metadata} field and reject it as an
+	 * unrecognized request parameter. Skip metadata-specific tests against such servers
+	 * rather than failing them.
+	 * @param ex the exception thrown by an attempt to use credential metadata
+	 */
+	private void assumeMetadataSupported(CredHubException ex) {
+		boolean metadataUnsupported = ex.getResponseBodyAsString().contains("unrecognized parameter 'metadata'");
+		assumeFalse(metadataUnsupported, "CredHub server does not support credential metadata");
 	}
 
 	@Test

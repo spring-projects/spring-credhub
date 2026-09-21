@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.core.certificate;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -130,6 +132,34 @@ class ReactiveCredHubCertificateTemplateUnitTests {
 			assertThat(response.getId()).isEqualTo("id1");
 			assertThat(response.isTransitional()).isTrue();
 			assertThat(response.getValue().getCertificate()).isEqualTo("cert1");
+		}).verifyComplete();
+	}
+
+	@Test
+	void regenerateWithMetadata() {
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		String responseBody = """
+				{
+					"type": "certificate",
+					"transitional": true,
+					"id": "id",
+					"name": "/example/certificate",
+					"metadata": {"key": "metadata-value"},
+					"value": { "certificate": "cert", "ca": "authority", "private_key": "key" }
+				}
+				""";
+
+		given(this.exchangeFunction.exchange(argThat(isPostRequestTo("/api/v1/certificates/id/regenerate"))))
+			.willReturn(Mono.just(ClientResponse.create(HttpStatus.OK, EXCHANGE_STRATEGIES)
+				.header("Content-Type", "application/json")
+				.body(responseBody)
+				.build()));
+
+		StepVerifier.create(this.credHubTemplate.regenerate("id", true, metadata)).assertNext((response) -> {
+			assertThat(response.getId()).isEqualTo("id");
+			assertThat(response.isTransitional()).isTrue();
+			assertThat(response.getMetadata()).containsEntry("key", "metadata-value");
 		}).verifyComplete();
 	}
 

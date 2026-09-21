@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.core.certificate;
 
+import java.util.Map;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -55,6 +57,24 @@ public interface ReactiveCredHubCertificateOperations {
 	 * @return the details of the certificate credential
 	 */
 	Mono<CertificateCredentialDetails> regenerate(String id, boolean setAsTransitional);
+
+	/**
+	 * Regenerate a certificate, storing additional metadata alongside the new version.
+	 * Metadata is only supported by CredHub server 2.6.0 and later; earlier server
+	 * versions reject this field as an unrecognized request parameter.
+	 * @param id the CredHub-generated ID of the certificate credential; must not be
+	 * {@literal null} and must be an ID returned by {@link #getAll()} or
+	 * {@link #getByName(CredentialName)}
+	 * @param setAsTransitional {@code true} to mark the certificate version transitional;
+	 * {@code false} otherwise
+	 * @param metadata additional metadata to store with the certificate
+	 * @return the details of the certificate credential
+	 * @see <a href=
+	 * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/components/credentials/src/main/kotlin/org/cloudfoundry/credhub/requests/CertificateRegenerateRequest.kt">CredHub's
+	 * metadata field on the certificate regenerate request (not yet reflected in the
+	 * published API docs' request-fields table for this endpoint)</a>
+	 */
+	Mono<CertificateCredentialDetails> regenerate(String id, boolean setAsTransitional, Map<String, Object> metadata);
 
 	/**
 	 * Regenerate all certificates in CredHub that were signed by the specified

@@ -58,6 +58,8 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 
 	private static final String TRANSITIONAL_REQUEST_FIELD = "set_as_transitional";
 
+	private static final String METADATA_REQUEST_FIELD = "metadata";
+
 	private static final String VERSION_REQUEST_FIELD = "version";
 
 	private static final String VALUE_REQUEST_FIELD = "value";
@@ -105,13 +107,22 @@ public class ReactiveCredHubCertificateTemplate implements ReactiveCredHubCertif
 
 	@Override
 	public Mono<CertificateCredentialDetails> regenerate(final String id, final boolean setAsTransitional) {
+		return regenerate(id, setAsTransitional, null);
+	}
+
+	@Override
+	public Mono<CertificateCredentialDetails> regenerate(final String id, final boolean setAsTransitional,
+			Map<String, Object> metadata) {
 		Assert.notNull(id, "credential ID must not be null");
 
 		final ParameterizedTypeReference<CertificateCredentialDetails> ref = new ParameterizedTypeReference<CertificateCredentialDetails>() {
 		};
 
-		Map<String, Boolean> request = new HashMap<>(1);
+		Map<String, Object> request = new HashMap<>(2);
 		request.put(TRANSITIONAL_REQUEST_FIELD, setAsTransitional);
+		if (metadata != null) {
+			request.put(METADATA_REQUEST_FIELD, metadata);
+		}
 
 		return this.credHubOperations.doWithWebClient((webClient) -> webClient.post()
 			.uri(REGENERATE_URL_PATH, id)

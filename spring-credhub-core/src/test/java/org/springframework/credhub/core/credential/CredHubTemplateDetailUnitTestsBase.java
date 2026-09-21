@@ -127,6 +127,32 @@ abstract class CredHubTemplateDetailUnitTestsBase<T, P> extends CredHubCredentia
 		}
 	}
 
+	void verifyRegenerateWithMetadata(ResponseEntity<CredentialDetails<T>> expectedResponse) {
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		Map<String, Object> request = new HashMap<>() {
+			{
+				put(CredHubCredentialTemplate.NAME_REQUEST_FIELD, NAME.getName());
+				put(CredHubCredentialTemplate.METADATA_REQUEST_FIELD, metadata);
+			}
+		};
+
+		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.REGENERATE_URL_PATH), eq(HttpMethod.POST),
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class)))
+			.willReturn(expectedResponse);
+
+		if (!expectedResponse.getStatusCode().equals(HttpStatus.OK)) {
+			assertThatExceptionOfType(CredHubException.class)
+				.isThrownBy(() -> this.credHubTemplate.regenerate(NAME, getType(), metadata))
+				.withMessageContaining(expectedResponse.getStatusCode().toString());
+		}
+		else {
+			CredentialDetails<T> response = this.credHubTemplate.regenerate(NAME, getType(), metadata);
+
+			assertDetailsResponseContainsExpectedCredential(expectedResponse, response);
+		}
+	}
+
 	void verifyGetById(ResponseEntity<CredentialDetails<T>> expectedResponse) {
 		given(this.restTemplate.exchange(eq(CredHubCredentialTemplate.ID_URL_PATH), eq(HttpMethod.GET), isNull(),
 				isA(ParameterizedTypeReference.class), eq(CREDENTIAL_ID)))

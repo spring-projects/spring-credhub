@@ -78,6 +78,12 @@ class CredHubTemplateDetailPasswordUnitTests
 
 	@ParameterizedTest
 	@ArgumentsSource(DetailResponseArgumentsProvider.class)
+	void regenerateWithMetadata(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
+		verifyRegenerateWithMetadata(expectedResponse);
+	}
+
+	@ParameterizedTest
+	@ArgumentsSource(DetailResponseArgumentsProvider.class)
 	void getById(ResponseEntity<CredentialDetails<PasswordCredential>> expectedResponse) {
 		verifyGetById(expectedResponse);
 	}

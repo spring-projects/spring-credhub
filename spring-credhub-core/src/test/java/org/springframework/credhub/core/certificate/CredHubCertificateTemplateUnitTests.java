@@ -121,6 +121,29 @@ class CredHubCertificateTemplateUnitTests {
 
 	@Test
 	@SuppressWarnings("unchecked")
+	void regenerateWithMetadata() {
+		CertificateCredentialDetails expectedCertificate = new CertificateCredentialDetails("id", NAME,
+				CredentialType.CERTIFICATE, true, new CertificateCredential("cert", "authority", "key"));
+
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		Map<String, Object> request = new HashMap<>();
+		request.put(CredHubCertificateTemplate.TRANSITIONAL_REQUEST_FIELD, true);
+		request.put(CredHubCertificateTemplate.METADATA_REQUEST_FIELD, metadata);
+
+		given(this.restTemplate.exchange(eq(CredHubCertificateTemplate.REGENERATE_URL_PATH), eq(HttpMethod.POST),
+				eq(new HttpEntity<>(request)), isA(ParameterizedTypeReference.class), eq("id")))
+			.willReturn(new ResponseEntity<>(expectedCertificate, HttpStatus.OK));
+
+		CertificateCredentialDetails response = this.credHubTemplate.regenerate("id", true, metadata);
+
+		assertThat(response).isNotNull();
+		assertThat(response.getId()).isEqualTo("id");
+		assertThat(response.isTransitional()).isTrue();
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
 	void bulkRegenerate() {
 		Map<String, List<CredentialName>> expectedResponse = Collections.singletonMap(
 				CredHubCertificateTemplate.REGENERATED_CREDENTIALS_RESPONSE_FIELD,

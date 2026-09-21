@@ -16,6 +16,8 @@
 
 package org.springframework.credhub.support.value;
 
+import java.util.Map;
+
 import com.jayway.jsonpath.DocumentContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +59,18 @@ class ValueCredentialRequestUnitTests extends CredHubRequestUnitTestsBase {
 		JsonPathAssert.assertThat(json).hasPath("$.value").isEqualTo("somevalue");
 
 		assertNoPermissions(json);
+	}
+
+	@Test
+	void serializeWithMetadata() {
+		this.requestBuilder = ValueCredentialRequest.builder()
+			.name(new SimpleCredentialName("example", "credential"))
+			.value("somevalue")
+			.metadata(Map.of("key", "metadata-value"));
+
+		DocumentContext json = toJsonPath(this.requestBuilder);
+
+		JsonPathAssert.assertThat(json).hasPath("$.metadata.key").isEqualTo("metadata-value");
 	}
 
 }

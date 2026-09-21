@@ -132,6 +132,12 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 		}
 		assertThat(regenerated.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
 		assertThat(regenerated.getMetadata()).isEqualTo(metadata);
+		assertThat(regenerated.getExpiryDate()).isNotNull();
+		assertThat(regenerated.isSelfSigned()).isTrue();
+		assertThat(regenerated.getGenerated()).isTrue();
+		assertThat(regenerated.getKeyLength()).isEqualTo(2048);
+		assertThat(regenerated.getDurationUsed()).isEqualTo(365);
+		assertThat(regenerated.isDurationOverridden()).isFalse();
 	}
 
 	/**

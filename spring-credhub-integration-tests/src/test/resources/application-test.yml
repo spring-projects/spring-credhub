@@ -2,7 +2,7 @@ spring:
   credhub:
     url: ${CREDHUB_SERVER:https://localhost:9000}
     ca-cert-files:
-      - ${CREDHUB_CA_CERT:../credhub-server/server-ca-cert.pem}
+      - ${CREDHUB_CA_CERT:../credhub-server/credhub-v2-certs/server_ca_cert.pem}
     oauth2:
       registration-id: credhub-test
   security:

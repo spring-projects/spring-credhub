@@ -8,9 +8,25 @@ services:
     restart: always
 
   credhub:
-    image: ${DOCKERHUB_MIRROR_REGISTRY}/ampersand8/credhub
+    image: ${DOCKERHUB_MIRROR_REGISTRY}/pcfseceng/credhub
     ports:
       - "9000:9000"
+    links:
+      - uaa:uaa
+    depends_on:
+      - uaa
+    volumes:
+      - ./credhub-v2-certs:/etc/server_certs
+    environment:
+      UAA_URL: http://uaa:8080/uaa
+      TRUST_STORE_PASSWORD: changeme
+      KEY_STORE_PASSWORD: changeme
+      ENCRYPTION_PASSWORD: changeme
+
+  credhub-v1:
+    image: ${DOCKERHUB_MIRROR_REGISTRY}/ampersand8/credhub
+    ports:
+      - "9001:9000"
     links:
       - uaa:uaa
     depends_on:

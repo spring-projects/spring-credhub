@@ -83,6 +83,11 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
 		assertThat(byName.getName()).isEqualTo(TEST_CERT_NAME.getName());
 		assertThat(byName.getId()).isNotNull();
+		assertThat(byName.getSignedBy()).isNotNull();
+		assertThat(byName.getSigns()).isNotNull();
+		assertThat(byName.getVersions()).hasSize(1);
+		assertThat(byName.getVersions().get(0).getId()).isEqualTo(certificate.getId());
+		assertThat(byName.getVersions().get(0).isSelfSigned()).isTrue();
 
 		List<CertificateSummary> allCertificates = this.certificates.getAll();
 		assertThat(allCertificates).isNotEmpty();

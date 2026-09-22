@@ -69,6 +69,8 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 	void generateCertificate() {
 		assumeTrue(serverApiIsV2());
 
+		AtomicReference<String> certificateId = new AtomicReference<>();
+
 		StepVerifier.create(this.credentials.generate(CertificateParametersRequest.builder()
 			.name(TEST_CERT_NAME)
 			.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
@@ -79,11 +81,17 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 				assertThat(response.getValue().getCertificate()).isNotNull();
 				assertThat(response.getValue().getCertificateAuthority()).isNotNull();
 				assertThat(response.getValue().getPrivateKey()).isNotNull();
+				certificateId.set(response.getId());
 			}).verifyComplete();
 
 		StepVerifier.create(this.certificates.getByName(TEST_CERT_NAME)).assertNext((response) -> {
 			assertThat(response.getName()).isEqualTo(TEST_CERT_NAME.getName());
 			assertThat(response.getId()).isNotNull();
+			assertThat(response.getSignedBy()).isNotNull();
+			assertThat(response.getSigns()).isNotNull();
+			assertThat(response.getVersions()).hasSize(1);
+			assertThat(response.getVersions().get(0).getId()).isEqualTo(certificateId.get());
+			assertThat(response.getVersions().get(0).isSelfSigned()).isTrue();
 		}).verifyComplete();
 
 		StepVerifier.create(this.certificates.getAll())

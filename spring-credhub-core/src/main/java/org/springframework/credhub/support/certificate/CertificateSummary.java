@@ -16,6 +16,7 @@
 
 package org.springframework.credhub.support.certificate;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.jspecify.annotations.Nullable;
@@ -33,10 +34,19 @@ public class CertificateSummary {
 
 	private final @Nullable String name;
 
+	private final @Nullable List<CertificateVersionSummary> versions;
+
+	private final @Nullable String signedBy;
+
+	private final @Nullable List<String> signs;
+
 	@SuppressWarnings("unused")
 	private CertificateSummary() {
 		this.id = null;
 		this.name = null;
+		this.versions = null;
+		this.signedBy = null;
+		this.signs = null;
 	}
 
 	/**
@@ -49,6 +59,9 @@ public class CertificateSummary {
 	public CertificateSummary(String id, String name) {
 		this.id = id;
 		this.name = name;
+		this.versions = null;
+		this.signedBy = null;
+		this.signs = null;
 	}
 
 	/**
@@ -67,6 +80,41 @@ public class CertificateSummary {
 		return this.name;
 	}
 
+	/**
+	 * Get the summaries of all versions of the certificate credential.
+	 * @return the version summaries, or {@literal null} if not reported by the server
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_all_certificates">CredHub
+	 * API docs: Get All Certificates</a>
+	 */
+	public @Nullable List<CertificateVersionSummary> getVersions() {
+		return this.versions;
+	}
+
+	/**
+	 * Get the name of the certificate authority that signed this certificate, if any.
+	 * @return the signing certificate authority's name, or {@literal null} if not
+	 * reported by the server
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_all_certificates">CredHub
+	 * API docs: Get All Certificates</a>
+	 */
+	public @Nullable String getSignedBy() {
+		return this.signedBy;
+	}
+
+	/**
+	 * Get the names of the certificates signed by this certificate authority.
+	 * @return the names of the signed certificates, or {@literal null} if not reported by
+	 * the server
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_all_certificates">CredHub
+	 * API docs: Get All Certificates</a>
+	 */
+	public @Nullable List<String> getSigns() {
+		return this.signs;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -76,17 +124,20 @@ public class CertificateSummary {
 			return false;
 		}
 		CertificateSummary that = (CertificateSummary) o;
-		return Objects.equals(this.id, that.id) && Objects.equals(this.name, that.name);
+		return Objects.equals(this.id, that.id) && Objects.equals(this.name, that.name)
+				&& Objects.equals(this.versions, that.versions) && Objects.equals(this.signedBy, that.signedBy)
+				&& Objects.equals(this.signs, that.signs);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.id, this.name);
+		return Objects.hash(this.id, this.name, this.versions, this.signedBy, this.signs);
 	}
 
 	@Override
 	public String toString() {
-		return "CertificateSummary{" + "id='" + this.id + '\'' + ", name='" + this.name + '\'' + '}';
+		return "CertificateSummary{" + "id='" + this.id + '\'' + ", name='" + this.name + '\'' + ", versions="
+				+ this.versions + ", signedBy='" + this.signedBy + '\'' + ", signs=" + this.signs + '}';
 	}
 
 }

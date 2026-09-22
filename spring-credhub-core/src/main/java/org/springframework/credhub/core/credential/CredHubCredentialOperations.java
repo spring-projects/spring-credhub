@@ -96,8 +96,12 @@ public interface CredHubCredentialOperations {
 	 * Retrieve a credential using its name, as passed to a write request. Only the
 	 * current credential value will be returned. CredHub can return more than one current
 	 * version for some credential types (for example, a certificate with both a
-	 * {@literal current} and a {@literal transitional} version); in that case, only the
-	 * first version in the response is returned here.
+	 * {@literal current} and a {@literal transitional} version). In that case, only the
+	 * first version in the response is returned here, specifically, the
+	 * {@literal current}, non-transitional version, not the {@literal transitional} one.
+	 * This ordering isn't a documented CredHub API contract, just an observed
+	 * implementation detail of the server-side query this endpoint uses, so it could
+	 * change without notice in a future CredHub release.
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @param credentialType the type of credential expected to be returned
 	 * @param <T> the credential implementation type

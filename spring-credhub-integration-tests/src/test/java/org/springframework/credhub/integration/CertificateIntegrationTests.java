@@ -115,6 +115,31 @@ class CertificateIntegrationTests extends CredHubIntegrationTests {
 	}
 
 	@Test
+	void getByNameReturnsOnlyOneVersionWhenMultipleAreActive() {
+		CredentialDetails<CertificateCredential> original = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(byName.getId(), true);
+
+		CertificateSummary afterRegenerate = this.certificates.getByName(TEST_CERT_NAME);
+		assertThat(afterRegenerate.getVersions()).as("both the original and transitional versions should be active")
+			.hasSize(2);
+
+		// The untyped CredHubCredentialOperations#getByName() only ever returns one
+		// version when more than one is active; tested against a live server,
+		// that's the original/current version, not the transitional one.
+		CredentialDetails<CertificateCredential> retrieved = this.credentials.getByName(TEST_CERT_NAME,
+				CertificateCredential.class);
+		assertThat(retrieved.getValue().getCertificate()).isEqualTo(original.getValue().getCertificate())
+			.isNotEqualTo(regenerated.getValue().getCertificate());
+	}
+
+	@Test
 	void regenerateCertificateWithAllParameters() {
 		CredentialDetails<CertificateCredential> certificate = this.credentials
 			.generate(CertificateParametersRequest.builder()

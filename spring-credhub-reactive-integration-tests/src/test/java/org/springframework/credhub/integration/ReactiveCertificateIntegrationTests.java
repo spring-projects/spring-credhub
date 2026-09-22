@@ -134,6 +134,46 @@ class ReactiveCertificateIntegrationTests extends ReactiveCredHubIntegrationTest
 	}
 
 	@Test
+	void getByNameReturnsOnlyOneVersionWhenMultipleAreActive() {
+		assumeTrue(serverApiIsV2());
+
+		AtomicReference<String> originalCertificate = new AtomicReference<>();
+		AtomicReference<String> certificateId = new AtomicReference<>();
+		AtomicReference<String> regeneratedCertificate = new AtomicReference<>();
+
+		StepVerifier
+			.create(this.credentials.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build(), CertificateCredential.class))
+			.assertNext((response) -> originalCertificate.set(response.getValue().getCertificate()))
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.getByName(TEST_CERT_NAME))
+			.assertNext((response) -> certificateId.set(response.getId()))
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.regenerate(certificateId.get(), true))
+			.assertNext((response) -> regeneratedCertificate.set(response.getValue().getCertificate()))
+			.verifyComplete();
+
+		StepVerifier.create(this.certificates.getByName(TEST_CERT_NAME))
+			.assertNext((response) -> assertThat(response.getVersions())
+				.as("both the original and transitional versions should be active")
+				.hasSize(2))
+			.verifyComplete();
+
+		// The untyped ReactiveCredHubCredentialOperations#getByName() only ever returns
+		// one version when more than one is active; tested against a live server,
+		// that's the original/current version, not the transitional one.
+		StepVerifier.create(this.credentials.getByName(TEST_CERT_NAME, CertificateCredential.class))
+			.assertNext(
+					(response) -> assertThat(response.getValue().getCertificate()).isEqualTo(originalCertificate.get())
+						.isNotEqualTo(regeneratedCertificate.get()))
+			.verifyComplete();
+	}
+
+	@Test
 	void regenerateCertificateWithAllParameters() {
 		assumeTrue(serverApiIsV2());
 

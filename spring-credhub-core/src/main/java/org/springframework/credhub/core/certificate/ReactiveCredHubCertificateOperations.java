@@ -135,6 +135,9 @@ public interface ReactiveCredHubCertificateOperations {
 	 * credential that should be marked {@literal transitional}, or {@literal null} to
 	 * indicate that no version is {@literal transitional}
 	 * @return the details of the certificate credential, including all versions
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_update_transitional_version">CredHub
+	 * API docs: Update Transitional Version</a>
 	 */
 	Flux<CertificateCredentialDetails> updateTransitionalVersion(String id, String versionId);
 

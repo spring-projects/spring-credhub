@@ -16,6 +16,8 @@
 
 package com.example.credhub;
 
+import java.util.Map;
+
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.support.CredentialDetails;
 import org.springframework.credhub.support.SimpleCredentialName;
@@ -47,7 +49,11 @@ public class CredHubService {
 			.build();
 
 		CredentialDetails<PasswordCredential> password = this.credHubOperations.credentials()
-			.generate(PasswordParametersRequest.builder().name(this.credentialName).parameters(parameters).build());
+			.generate(PasswordParametersRequest.builder()
+				.name(this.credentialName)
+				.parameters(parameters)
+				.metadata(Map.of("description", "example metadata"))
+				.build());
 
 		return password.getValue().getPassword();
 	}

@@ -75,6 +75,7 @@ The following table shows the mapping between the CredHub API and the appropriat
 
 A `ReactiveCredHubOperations` Spring bean is created using Spring Boot auto-configuration when application properties are properly configured and the Spring WebFlux library is on the classpath.
 Application classes can autowire an instance of this bean to interact with a CredHub server.
+Request builders such as `PasswordParametersRequest` also accept an optional `metadata` map to store alongside a credential, as shown below; metadata requires CredHub server 2.6.0 or later.
 
 [source,java,%autofit]
 ----

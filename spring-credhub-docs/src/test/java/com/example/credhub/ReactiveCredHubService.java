@@ -16,6 +16,8 @@
 
 package com.example.credhub;
 
+import java.util.Map;
+
 import reactor.core.publisher.Mono;
 
 import org.springframework.credhub.core.ReactiveCredHubOperations;
@@ -48,8 +50,11 @@ public class ReactiveCredHubService {
 			.build();
 
 		return this.credHubOperations.credentials()
-			.generate(PasswordParametersRequest.builder().name(this.credentialName).parameters(parameters).build(),
-					PasswordCredential.class)
+			.generate(PasswordParametersRequest.builder()
+				.name(this.credentialName)
+				.parameters(parameters)
+				.metadata(Map.of("description", "example metadata"))
+				.build(), PasswordCredential.class)
 			.map((password) -> password.getValue().getPassword());
 	}
 

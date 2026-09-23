@@ -30,6 +30,9 @@ public interface ReactiveCredHubInfoOperations {
 	/**
 	 * Retrieve the version information from the CredHub server.
 	 * @return the server version information
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_version">CredHub API
+	 * docs: Get Version</a>
 	 */
 	Mono<VersionInfo> version();
 

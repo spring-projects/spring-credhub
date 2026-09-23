@@ -48,7 +48,8 @@ public interface ReactiveCredHubOperations {
 	ReactiveCredHubPermissionOperations permissions();
 
 	/**
-	 * Get the operations for adding, retrieving, and deleting credential permissions.
+	 * Get the operations for adding, retrieving, and deleting credential permissions
+	 * using the CredHub v2 permissions API.
 	 * @return the permissions operations
 	 */
 	ReactiveCredHubPermissionV2Operations permissionsV2();
@@ -75,8 +76,10 @@ public interface ReactiveCredHubOperations {
 	 * Allow interaction with the configured {@link WebClient} not provided by other
 	 * methods.
 	 * @param callback wrapper for the callback method
-	 * @param <V> the publisher type
-	 * @param <T> the credential implementation type
+	 * @param <V> the type emitted by the returned publisher, typically a
+	 * {@link org.springframework.credhub.support.CredentialDetails} wrapping a CredHub
+	 * credential
+	 * @param <T> the publisher type returned by the callback
 	 * @return the return value from the callback method
 	 */
 	<V, T extends Publisher<V>> T doWithWebClient(Function<WebClient, ? extends T> callback);

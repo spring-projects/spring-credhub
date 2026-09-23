@@ -27,6 +27,9 @@ import org.springframework.util.Assert;
  * CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_json_credential">CredHub
+ * API docs: Set a JSON Credential</a>
  */
 public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 

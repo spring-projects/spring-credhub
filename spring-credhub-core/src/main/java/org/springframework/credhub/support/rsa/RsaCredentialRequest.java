@@ -25,6 +25,9 @@ import org.springframework.util.Assert;
  * CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_rsa_credential">CredHub
+ * API docs: Set an RSA Credential</a>
  */
 public class RsaCredentialRequest extends CredentialRequest<RsaCredential> {
 

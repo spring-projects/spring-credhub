@@ -25,6 +25,9 @@ import org.springframework.util.Assert;
  * CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_value_credential">CredHub
+ * API docs: Set a Value Credential</a>
  */
 public class ValueCredentialRequest extends CredentialRequest<ValueCredential> {
 

@@ -24,6 +24,9 @@ import org.springframework.util.Assert;
  * The details of a request to generate a new {@link SshCredential} in CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_generate_a_ssh_credential">CredHub
+ * API docs: Generate an SSH Credential</a>
  */
 public class SshParametersRequest extends ParametersRequest<SshParameters> {
 

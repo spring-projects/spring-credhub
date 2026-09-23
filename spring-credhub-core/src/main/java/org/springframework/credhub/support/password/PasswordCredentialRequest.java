@@ -25,6 +25,9 @@ import org.springframework.util.Assert;
  * {@link PasswordCredential} in CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_password_credential">CredHub
+ * API docs: Set a Password Credential</a>
  */
 public class PasswordCredentialRequest extends CredentialRequest<PasswordCredential> {
 

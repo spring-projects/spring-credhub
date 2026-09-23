@@ -27,6 +27,9 @@ import org.springframework.util.Assert;
  * The details of a request to generate a new {@link UserCredential} in CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_generate_a_user_credential">CredHub
+ * API docs: Generate a User Credential</a>
  */
 public class UserParametersRequest extends ParametersRequest<PasswordParameters> {
 

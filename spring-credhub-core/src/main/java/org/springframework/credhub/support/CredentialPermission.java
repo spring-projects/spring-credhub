@@ -55,7 +55,7 @@ public class CredentialPermission {
 	 * internal use. Clients will get {@link CredentialPermission} objects populated from
 	 * CredHub responses.
 	 * @param path the path of the credential(s) that the permission will apply to
-	 * @param permission a collection of {@link Permission}s
+	 * @param permission a {@link Permission}
 	 */
 	public CredentialPermission(CredentialName path, Permission permission) {
 		this.path = path;
@@ -80,8 +80,8 @@ public class CredentialPermission {
 	}
 
 	/**
-	 * Get the collection of {@link Permission}s.
-	 * @return the collection of {@link Permission}s
+	 * Get the {@link Permission}.
+	 * @return the {@link Permission}
 	 */
 	public @Nullable Permission getPermission() {
 		return this.permission;

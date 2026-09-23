@@ -15,7 +15,7 @@
  */
 
 /**
- * Java representations of CredHub JSON credential permissions.
+ * Java representations of CredHub credential permissions.
  */
 @NullMarked
 package org.springframework.credhub.support.permissions;

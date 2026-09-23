@@ -36,6 +36,9 @@ public interface CredHubPermissionV2Operations {
 	 * Get a permission.
 	 * @param id the CredHub-assigned ID of the permission; must not be {@literal null}
 	 * @return the details if the specified permission
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_a_v2_permission_by_uuid">CredHub
+	 * API docs: Get a V2 Permission by UUID</a>
 	 */
 	CredentialPermission getPermissions(String id);
 
@@ -44,23 +47,32 @@ public interface CredHubPermissionV2Operations {
 	 * @param path the path of the credentials; must not be {@literal null}
 	 * @param actor the actor of the credentials; must not be {@literal null}
 	 * @return the details if the specified permission
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_a_v2_permission_by_actor_and_path">CredHub
+	 * API docs: Get a V2 Permission by Actor and Path</a>
 	 */
 	CredentialPermission getPermissionsByPathAndActor(CredentialName path, Actor actor);
 
 	/**
-	 * Add permissions to an credential path.
+	 * Add permissions to a credential path.
 	 * @param path the path of the credentials; must not be {@literal null}
 	 * @param permission a permission to add
 	 * @return the details if the added permission
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_create_a_v2_permission">CredHub
+	 * API docs: Create a V2 Permission</a>
 	 */
 	CredentialPermission addPermissions(CredentialName path, Permission permission);
 
 	/**
-	 * Add permissions to an existing credential.
+	 * Replace an existing permission, including its path and actor.
 	 * @param id the CredHub-assigned ID of the permission; must not be {@literal null}
 	 * @param path the path of the credentials; must not be {@literal null}
 	 * @param permission a permission to add
 	 * @return the details if the added permission
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_update_a_v2_permission">CredHub
+	 * API docs: Update a V2 Permission</a>
 	 */
 	CredentialPermission updatePermissions(String id, CredentialName path, Permission permission);
 
@@ -89,6 +101,9 @@ public interface CredHubPermissionV2Operations {
 	/**
 	 * Delete a permission.
 	 * @param id the CredHub-assigned ID of the permission; must not be {@literal null}
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_delete_a_v2_permission">CredHub
+	 * API docs: Delete a V2 Permission</a>
 	 */
 	void deletePermission(String id);
 

@@ -17,9 +17,16 @@
 package org.springframework.credhub.support.info;
 
 /**
- * Version information about a CredHub server.
+ * Version information about a CredHub server, as reported by the server's
+ * {@code /version} endpoint. This reflects the server's own release version number, not
+ * CredHub's URL-path API versioning ({@code /api/v1/...} vs {@code /api/v2/...}) — for
+ * example, a server whose reported version is {@code 2.6.0} still serves many
+ * {@code /api/v1/...} endpoints.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_version">CredHub API
+ * docs: Get Version</a>
  */
 public class VersionInfo {
 
@@ -49,36 +56,36 @@ public class VersionInfo {
 	}
 
 	/**
-	 * Determine if the CredHub server implements the v1 API.
-	 * @return {@code true} if the server implements the CredHub v1 API; {@code false}
-	 * otherwise
+	 * Determine if the CredHub server's reported release version is 1.x.
+	 * @return {@code true} if the server's reported release version starts with
+	 * {@code 1.}; {@code false} otherwise
 	 */
 	public boolean isVersion1() {
 		return this.version.startsWith("1.");
 	}
 
 	/**
-	 * Determine if the CredHub server implements the v2 API.
-	 * @return {@code true} if the server implements the CredHub v2 API; {@code false}
-	 * otherwise
+	 * Determine if the CredHub server's reported release version is 2.x.
+	 * @return {@code true} if the server's reported release version starts with
+	 * {@code 2.}; {@code false} otherwise
 	 */
 	public boolean isVersion2() {
 		return this.version.startsWith("2.");
 	}
 
 	/**
-	 * Determine if the CredHub server implements the v2.0 API.
-	 * @return {@code true} if the server implements the CredHub v2.0 API; {@code false}
-	 * otherwise
+	 * Determine if the CredHub server's reported release version is 2.0.x.
+	 * @return {@code true} if the server's reported release version starts with
+	 * {@code 2.0}; {@code false} otherwise
 	 */
 	public boolean isVersion2_0() {
 		return this.version.startsWith("2.0");
 	}
 
 	/**
-	 * Determine if the CredHub server implements the v2.1 API.
-	 * @return {@code true} if the server implements the CredHub v2.1 API; {@code false}
-	 * otherwise
+	 * Determine if the CredHub server's reported release version is 2.1.x.
+	 * @return {@code true} if the server's reported release version starts with
+	 * {@code 2.1}; {@code false} otherwise
 	 */
 	public boolean isVersion2_1() {
 		return this.version.startsWith("2.1");

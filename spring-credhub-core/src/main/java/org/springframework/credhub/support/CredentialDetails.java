@@ -133,6 +133,9 @@ public class CredentialDetails<T> extends CredentialSummary {
 		if (!(o instanceof CredentialDetails)) {
 			return false;
 		}
+		if (!super.equals(o)) {
+			return false;
+		}
 
 		CredentialDetails<?> that = (CredentialDetails<?>) o;
 
@@ -145,7 +148,7 @@ public class CredentialDetails<T> extends CredentialSummary {
 		if ((this.value != null) ? !this.value.equals(that.value) : (that.value != null)) {
 			return false;
 		}
-		return true;
+		return (this.metadata != null) ? this.metadata.equals(that.metadata) : (that.metadata == null);
 	}
 
 	@Override

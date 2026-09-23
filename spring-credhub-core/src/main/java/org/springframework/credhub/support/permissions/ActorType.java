@@ -21,6 +21,9 @@ package org.springframework.credhub.support.permissions;
  * credentials.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/docs/authorization-and-permissions.md">CredHub
+ * Authorization &amp; Permissions: Supported Actors</a>
  */
 public enum ActorType {
 

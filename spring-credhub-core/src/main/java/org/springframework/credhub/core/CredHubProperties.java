@@ -92,7 +92,7 @@ public class CredHubProperties {
 		}
 
 		/**
-		 * Set the OAuth2 client registration ID used to authentiate with CredHub.
+		 * Set the OAuth2 client registration ID used to authenticate with CredHub.
 		 * @param registrationId the OAuth2 client registration ID
 		 */
 		public void setRegistrationId(String registrationId) {

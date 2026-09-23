@@ -42,6 +42,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * {@literal null}
 	 * @param <T> the credential implementation type
 	 * @return the details of the written credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_set_a_json_credential">CredHub
+	 * API docs: Set a JSON Credential</a>
 	 */
 	<T> Mono<CredentialDetails<T>> write(CredentialRequest<T> credentialRequest);
 
@@ -55,6 +58,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * @param <T> the credential implementation type
 	 * @param <P> the credential parameter implementation type
 	 * @return the details of the generated credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_generate_a_password_credential">CredHub
+	 * API docs: Generate a Password Credential</a>
 	 */
 	<T, P> Mono<CredentialDetails<T>> generate(ParametersRequest<P> parametersRequest, Class<T> credentialType);
 
@@ -66,6 +72,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * {@literal null}
 	 * @param <T> the credential implementation type
 	 * @return the details of the regenerated credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_regenerate_a_credential">CredHub
+	 * API docs: Regenerate a Credential</a>
 	 */
 	<T> Mono<CredentialDetails<T>> regenerate(CredentialName name, Class<T> credentialType);
 
@@ -94,6 +103,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * {@literal null}
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_find_a_credential_by_id_type_value">CredHub
+	 * API docs: Find a Credential by ID</a>
 	 */
 	<T> Mono<CredentialDetails<T>> getById(String id, Class<T> credentialType);
 
@@ -112,8 +124,8 @@ public interface ReactiveCredHubCredentialOperations {
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential
 	 * @see <a href=
-	 * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/backends/credhub/src/main/kotlin/org/cloudfoundry/credhub/credentials/DefaultCredentialsHandler.kt#L190-L201">CredHub's
-	 * {@code getCurrentCredentialVersions}, which can return multiple active versions</a>
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_a_credential_by_name">CredHub
+	 * API docs: Get a Credential by Name</a>
 	 */
 	<T> Mono<CredentialDetails<T>> getByName(CredentialName name, Class<T> credentialType);
 
@@ -125,6 +137,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * @param credentialType the type of credential expected to be returned
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential, including history
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_a_credential_by_name">CredHub
+	 * API docs: Get a Credential by Name</a>
 	 */
 	<T> Flux<CredentialDetails<T>> getByNameWithHistory(CredentialName name, Class<T> credentialType);
 
@@ -137,6 +152,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * @param credentialType the type of credential expected to be returned
 	 * @param <T> the credential implementation type
 	 * @return the details of the retrieved credential, including history
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_a_credential_by_name">CredHub
+	 * API docs: Get a Credential by Name</a>
 	 */
 	<T> Flux<CredentialDetails<T>> getByNameWithHistory(CredentialName name, int versions, Class<T> credentialType);
 
@@ -144,6 +162,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * Find a credential using a full or partial name.
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return a summary of the credential search results
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_find_a_credential_by_name_like">CredHub
+	 * API docs: Find a Credential by Name-Like</a>
 	 */
 	Flux<CredentialSummary> findByName(CredentialName name);
 
@@ -151,6 +172,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * Find a credential using a path.
 	 * @param path the path to the credential; must not be {@literal null}
 	 * @return a summary of the credential search results
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_find_a_credential_by_path">CredHub
+	 * API docs: Find a Credential by Path</a>
 	 */
 	Flux<CredentialSummary> findByPath(String path);
 
@@ -158,6 +182,9 @@ public interface ReactiveCredHubCredentialOperations {
 	 * Delete a credential by its full name.
 	 * @param name the name of the credential; must not be {@literal null}
 	 * @return an empty {@code Mono}
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_delete_a_credential">CredHub
+	 * API docs: Delete a Credential</a>
 	 */
 	Mono<Void> deleteByName(CredentialName name);
 

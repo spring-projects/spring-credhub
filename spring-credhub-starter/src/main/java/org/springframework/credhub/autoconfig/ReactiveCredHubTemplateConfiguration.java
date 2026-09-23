@@ -28,7 +28,6 @@ import org.springframework.credhub.autoconfig.ReactiveCredHubTemplateConfigurati
 import org.springframework.credhub.autoconfig.ReactiveCredHubTemplateConfiguration.ReactiveCredHubTemplateOAuth2Configuration;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubProperties;
-import org.springframework.credhub.core.CredHubTemplate;
 import org.springframework.credhub.core.ReactiveCredHubOperations;
 import org.springframework.credhub.core.ReactiveCredHubTemplate;
 import org.springframework.credhub.support.ClientOptions;
@@ -56,7 +55,7 @@ public class ReactiveCredHubTemplateConfiguration {
 		 * interact with CredHub.
 		 * @param credHubProperties {@link CredHubProperties} for CredHub
 		 * @param clientOptions client connection options
-		 * @return the {@link CredHubTemplate} bean
+		 * @return the {@link ReactiveCredHubOperations} bean
 		 */
 		@Bean
 		@ConditionalOnMissingBean
@@ -81,7 +80,7 @@ public class ReactiveCredHubTemplateConfiguration {
 		 * @param clientOptions client connection options
 		 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 		 * @param authorizedClientRepository a repository of OAuth2 authorized clients
-		 * @return the {@link CredHubTemplate} bean
+		 * @return the {@link ReactiveCredHubOperations} bean
 		 */
 		@Bean
 		@ConditionalOnMissingBean
@@ -107,7 +106,7 @@ public class ReactiveCredHubTemplateConfiguration {
 		 * @param credHubProperties {@link CredHubProperties} for CredHub
 		 * @param clientOptions client connection options
 		 * @param clientManager an OAuth2 authorization client manager
-		 * @return the {@link CredHubTemplate} bean
+		 * @return the {@link ReactiveCredHubOperations} bean
 		 */
 		@Bean
 		@ConditionalOnMissingBean

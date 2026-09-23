@@ -68,9 +68,6 @@ public class CredentialDetailsData<T> {
 		if (!(o instanceof CredentialDetailsData)) {
 			return false;
 		}
-		if (!super.equals(o)) {
-			return false;
-		}
 
 		CredentialDetailsData<?> that = (CredentialDetailsData<?>) o;
 
@@ -84,7 +81,7 @@ public class CredentialDetailsData<T> {
 
 	@Override
 	public String toString() {
-		return "CredentialDetailData{" + "data=" + this.data + '}';
+		return "CredentialDetailsData{" + "data=" + this.data + '}';
 	}
 
 }

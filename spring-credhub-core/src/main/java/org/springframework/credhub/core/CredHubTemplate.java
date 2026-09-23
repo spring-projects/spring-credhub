@@ -136,7 +136,7 @@ public class CredHubTemplate implements CredHubOperations {
 
 	/**
 	 * Get the operations for adding, retrieving, and deleting permissions from a
-	 * credential.
+	 * credential using the CredHub v2 permissions API.
 	 * @return the permissions operations
 	 */
 	@Override
@@ -175,7 +175,9 @@ public class CredHubTemplate implements CredHubOperations {
 	 * Allow interaction with the configured {@link RestTemplate} not provided by other
 	 * methods.
 	 * @param callback wrapper for the callback method
-	 * @param <T> the credential implementation type
+	 * @param <T> the type returned by the callback, typically a
+	 * {@link org.springframework.credhub.support.CredentialDetails} wrapping a CredHub
+	 * credential
 	 * @return the return value from the callback method
 	 */
 	@Override

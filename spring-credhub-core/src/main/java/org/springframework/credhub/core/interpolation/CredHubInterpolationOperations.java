@@ -83,6 +83,9 @@ public interface CredHubInterpolationOperations {
 	 * applications running on Cloud Foundry
 	 * @return the serviceData structure with CredHub references replaced by stored
 	 * credential values
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_interpolate_a_json_object">CredHub
+	 * API docs: Interpolate a JSON Object</a>
 	 */
 	ServicesData interpolateServiceData(ServicesData serviceData);
 

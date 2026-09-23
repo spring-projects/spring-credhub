@@ -130,9 +130,9 @@ public class CredHubTemplateFactory {
 	}
 
 	/**
-	 * Create a {@link ClientHttpRequestFactory}.
+	 * Create a {@link ClientHttpConnector}.
 	 * @param clientOptions options for creating the client connection
-	 * @return the {@link ClientHttpRequestFactory} instance.
+	 * @return the {@link ClientHttpConnector} instance.
 	 */
 	private ClientHttpConnector clientHttpConnector(ClientOptions clientOptions) {
 		return ClientHttpConnectorFactory.create(clientOptions);

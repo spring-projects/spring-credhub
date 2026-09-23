@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.credhub.support.StringCredential;
 
 /**
- * A password credential consists of a single string value.
+ * A value credential consists of a single string value.
  *
  * @author Scott Frederick
  */
@@ -29,7 +29,7 @@ public class ValueCredential extends StringCredential {
 
 	/**
 	 * Create a {@link ValueCredential} containing the specified string value.
-	 * @param value the value
+	 * @param value the value; must not be {@literal null}
 	 */
 	public ValueCredential(String value) {
 		super(value);

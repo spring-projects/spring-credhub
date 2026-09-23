@@ -37,6 +37,9 @@ public interface ReactiveCredHubCertificateOperations {
 	/**
 	 * Retrieve all certificates from CredHub.
 	 * @return a collection of certificates
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_all_certificates">CredHub
+	 * API docs: Get All Certificates</a>
 	 */
 	Flux<CertificateSummary> getAll();
 
@@ -44,6 +47,9 @@ public interface ReactiveCredHubCertificateOperations {
 	 * Retrieve a certificate using its name.
 	 * @param name the name of the certificate credential; must not be {@literal null}
 	 * @return the details of the retrieved certificate credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_get_a_certificate_by_name">CredHub
+	 * API docs: Get a Certificate By Name</a>
 	 */
 	Mono<CertificateSummary> getByName(CredentialName name);
 
@@ -55,6 +61,9 @@ public interface ReactiveCredHubCertificateOperations {
 	 * @param setAsTransitional {@code true} to mark the certificate version transitional;
 	 * {@code false} otherwise
 	 * @return the details of the certificate credential
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_regenerate_a_certificate">CredHub
+	 * API docs: Regenerate a Certificate</a>
 	 */
 	Mono<CertificateCredentialDetails> regenerate(String id, boolean setAsTransitional);
 
@@ -90,6 +99,9 @@ public interface ReactiveCredHubCertificateOperations {
 	 * @param certificateName the name of the signing certificate credential; must not be
 	 * {@literal null}
 	 * @return the names of all regenerated certificate credentials
+	 * @see <a href=
+	 * "https://docs.cloudfoundry.org/api/credhub/version/main/#_bulk_regenerate_credentials">CredHub
+	 * API docs: Bulk Regenerate Credentials</a>
 	 */
 	Flux<CredentialName> regenerate(CredentialName certificateName);
 

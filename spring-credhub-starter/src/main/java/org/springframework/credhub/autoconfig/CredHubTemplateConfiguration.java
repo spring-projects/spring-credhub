@@ -107,7 +107,7 @@ public class CredHubTemplateConfiguration {
 		 * @param clientOptions client connection options
 		 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 		 * @param clientManager an OAuth2 authorization client manager
-		 * @return the {@link CredHubTemplate} bean
+		 * @return the {@link CredHubOperations} bean
 		 */
 		@Bean
 		@ConditionalOnMissingBean

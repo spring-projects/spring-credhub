@@ -140,7 +140,7 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 
 	/**
 	 * Get the operations for adding, retrieving, and deleting permissions from a
-	 * credential.
+	 * credential using the CredHub v2 permissions API.
 	 * @return the permissions operations
 	 */
 	@Override
@@ -179,7 +179,10 @@ public class ReactiveCredHubTemplate implements ReactiveCredHubOperations {
 	 * Allow interaction with the configured {@link WebClient} not provided by other
 	 * methods.
 	 * @param callback wrapper for the callback method
-	 * @param <T> the credential implementation type
+	 * @param <V> the type emitted by the returned publisher, typically a
+	 * {@link org.springframework.credhub.support.CredentialDetails} wrapping a CredHub
+	 * credential
+	 * @param <T> the publisher type returned by the callback
 	 * @return the return value from the callback method
 	 */
 	@Override

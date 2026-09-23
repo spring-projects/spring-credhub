@@ -28,6 +28,9 @@ import org.springframework.util.Assert;
  * Identifies an entity that is authorized to perform operations on a CredHub credential.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/docs/authorization-and-permissions.md">CredHub
+ * Authorization &amp; Permissions: Supported Actors</a>
  */
 public final class Actor {
 

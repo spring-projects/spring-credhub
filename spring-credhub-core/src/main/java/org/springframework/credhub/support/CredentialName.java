@@ -31,6 +31,9 @@ import org.springframework.util.StringUtils;
  * constructed of segments separated by the "/" character, like Unix paths.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://docs.cloudfoundry.org/api/credhub/version/main/#_credential_naming_and_paths">CredHub
+ * API docs: Credential Naming and Paths</a>
  */
 public class CredentialName {
 

@@ -60,7 +60,7 @@ public class ClientOptions {
 
 	/**
 	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
-	 * @return the connection timeout; can be {@literal null if not explicitly set}
+	 * @return the connection timeout; can be {@literal null} if not explicitly set
 	 */
 	public @Nullable Duration getConnectionTimeout() {
 		return this.connectionTimeout;
@@ -68,7 +68,7 @@ public class ClientOptions {
 
 	/**
 	 * Get the connection timeout in {@link TimeUnit#MILLISECONDS}.
-	 * @return the connection timeout; can be {@literal null if not explicitly set}
+	 * @return the connection timeout; can be {@literal null} if not explicitly set
 	 */
 	public @Nullable Integer getConnectionTimeoutMillis() {
 		return (this.connectionTimeout == null) ? null : Math.toIntExact(this.connectionTimeout.toMillis());
@@ -84,7 +84,7 @@ public class ClientOptions {
 
 	/**
 	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
-	 * @return the read timeout; can be {@literal null if not explicitly set}
+	 * @return the read timeout; can be {@literal null} if not explicitly set
 	 */
 	public @Nullable Duration getReadTimeout() {
 		return this.readTimeout;
@@ -92,7 +92,7 @@ public class ClientOptions {
 
 	/**
 	 * Get the read timeout in {@link TimeUnit#MILLISECONDS}.
-	 * @return the read timeout; can be {@literal null if not explicitly set}
+	 * @return the read timeout; can be {@literal null} if not explicitly set
 	 */
 	public @Nullable Integer getReadTimeoutMillis() {
 		return (this.readTimeout == null) ? null : Math.toIntExact(this.readTimeout.toMillis());

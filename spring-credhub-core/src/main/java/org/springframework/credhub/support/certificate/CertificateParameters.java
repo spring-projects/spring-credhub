@@ -89,7 +89,7 @@ public final class CertificateParameters extends KeyParameters {
 	 * @param state the parameter value; must not be {@literal null}
 	 * @param country the parameter value; must not be {@literal null}
 	 * @param duration the parameter value
-	 * @param certificateAuthorityCredential the parameter value; must not be
+	 * @param certificateAuthorityCredential the parameter value
 	 * @param certificateAuthority the parameter value
 	 * @param selfSign the parameter value
 	 * @param keyUsage one or more parameter values

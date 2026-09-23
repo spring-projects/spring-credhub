@@ -28,6 +28,9 @@ import org.springframework.credhub.support.value.ValueCredential;
  * The types of credentials that can be written to CredHub.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/docs/credential-types.md">CredHub
+ * Credential Types</a>
  */
 public enum CredentialType {
 

@@ -36,6 +36,9 @@ import org.springframework.util.Assert;
  * {@link CredentialRequest}.
  *
  * @author Scott Frederick
+ * @see <a href=
+ * "https://github.com/cloudfoundry/credhub/blob/eb8337a87ab8bd663f2fa4ab46f9ba65e7fdc908/docs/authorization-and-permissions.md">CredHub
+ * Authorization &amp; Permissions: Sample ACL</a>
  */
 public final class Permission {
 

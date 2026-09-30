@@ -42,8 +42,9 @@ set_pipelines() {
 	set_pipeline spring-credhub pipeline.yml 4.1.x
 	set_pipeline spring-credhub pipeline.yml 4.0.x
 
-  set_pipeline spring-credhub-pr pr-pipeline.yml 4.1.x
-  set_pipeline spring-credhub-pr pr-pipeline.yml 4.0.x
+  # PR checks now run as GitHub workflows, so the Concourse PR pipelines are no longer set.
+  # set_pipeline spring-credhub-pr pr-pipeline.yml 4.1.x
+  # set_pipeline spring-credhub-pr pr-pipeline.yml 4.0.x
 }
 
 main() {

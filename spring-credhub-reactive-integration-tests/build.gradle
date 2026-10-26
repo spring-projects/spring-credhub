@@ -32,7 +32,7 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 	// BlockHound is installed by a JUnit Platform TestExecutionListener registered via
 	// ServiceLoader; it is not managed by the Spring Boot BOM, so the version is declared here
-	testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.17.RELEASE")
+	testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.18.RELEASE")
 }
 
 test {

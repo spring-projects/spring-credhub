@@ -4,9 +4,9 @@ name: Documentation
 
 on:
   push:
-    branches: [ 4.1.* ]
+    branches: [ 4.2.* ]
   pull_request:
-    branches: [ 4.1.* ]
+    branches: [ 4.2.* ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

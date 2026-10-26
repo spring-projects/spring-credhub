@@ -14,14 +14,26 @@
  * limitations under the License.
  */
 
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
-	id 'org.springframework.boot' version '4.0.7'
+	id 'java'
+	id 'org.springframework.boot' version '4.0.9'
 }
 
 description = 'Spring CredHub Demo'
 
+repositories {
+	mavenCentral()
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.release = 17
+}
+
 dependencies {
-	implementation("org.springframework.credhub:spring-credhub-starter:4.0.1")
+	implementation(platform(SpringBootPlugin.BOM_COORDINATES))
+	implementation("org.springframework.credhub:spring-credhub-starter:4.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")

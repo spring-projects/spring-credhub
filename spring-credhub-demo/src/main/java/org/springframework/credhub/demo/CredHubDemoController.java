@@ -16,7 +16,6 @@
 
 package org.springframework.credhub.demo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +38,7 @@ import org.springframework.credhub.support.permissions.Operation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @RestController
 public class CredHubDemoController {
@@ -194,7 +194,7 @@ public class CredHubDemoController {
 		}
 	}
 
-	private ServicesData buildServicesData(String credHubReferenceName) throws IOException {
+	private ServicesData buildServicesData(String credHubReferenceName) {
 		String vcapServices = """
 				{
 					"service-offering": [
@@ -212,7 +212,7 @@ public class CredHubDemoController {
 				}
 				""".formatted(credHubReferenceName);
 
-		ObjectMapper mapper = new ObjectMapper();
+		JsonMapper mapper = JsonMapper.builder().build();
 		return mapper.readValue(vcapServices, ServicesData.class);
 	}
 

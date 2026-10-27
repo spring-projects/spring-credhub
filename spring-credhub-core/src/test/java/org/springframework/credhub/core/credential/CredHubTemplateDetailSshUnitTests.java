@@ -105,7 +105,7 @@ class CredHubTemplateDetailSshUnitTests extends CredHubTemplateDetailUnitTestsBa
 		@Override
 		public Stream<? extends Arguments> provideArguments(ParameterDeclarations parameters,
 				ExtensionContext context) {
-			return buildDetailArguments(CredentialType.CERTIFICATE, CREDENTIAL);
+			return buildDetailArguments(CredentialType.SSH, CREDENTIAL);
 		}
 
 	}
@@ -115,7 +115,7 @@ class CredHubTemplateDetailSshUnitTests extends CredHubTemplateDetailUnitTestsBa
 		@Override
 		public Stream<? extends Arguments> provideArguments(ParameterDeclarations parameters,
 				ExtensionContext context) {
-			return buildDataArguments(CredentialType.CERTIFICATE, CREDENTIAL);
+			return buildDataArguments(CredentialType.SSH, CREDENTIAL);
 		}
 
 	}

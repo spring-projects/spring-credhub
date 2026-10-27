@@ -1,0 +1,334 @@
+/*
+ * Copyright 2016-2026 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.springframework.credhub.integration;
+
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.credhub.core.CredHubException;
+import org.springframework.credhub.core.certificate.CredHubCertificateOperations;
+import org.springframework.credhub.core.credential.CredHubCredentialOperations;
+import org.springframework.credhub.support.CredentialDetails;
+import org.springframework.credhub.support.CredentialName;
+import org.springframework.credhub.support.CredentialType;
+import org.springframework.credhub.support.SimpleCredentialName;
+import org.springframework.credhub.support.certificate.CertificateCredential;
+import org.springframework.credhub.support.certificate.CertificateCredentialDetails;
+import org.springframework.credhub.support.certificate.CertificateParameters;
+import org.springframework.credhub.support.certificate.CertificateParametersRequest;
+import org.springframework.credhub.support.certificate.CertificateSummary;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+
+class CredHubClientCertificateIntegrationTests extends CredHubClientIntegrationTests {
+
+	private static final SimpleCredentialName TEST_CERT_NAME = new SimpleCredentialName("spring-credhub",
+			"integration-test", "test-certificate");
+
+	private static final SimpleCredentialName ROOT_CERT_NAME = new SimpleCredentialName("spring-credhub",
+			"integration-test", "root-certificate");
+
+	private CredHubCredentialOperations credentials;
+
+	private CredHubCertificateOperations certificates;
+
+	@BeforeEach
+	void setUp() {
+		this.credentials = this.client.credentials();
+		this.certificates = this.client.certificates();
+
+		deleteCredentialIfExists(TEST_CERT_NAME);
+		deleteCredentialIfExists(ROOT_CERT_NAME);
+	}
+
+	@AfterEach
+	void tearDown() {
+		deleteCredentialIfExists(TEST_CERT_NAME);
+		deleteCredentialIfExists(ROOT_CERT_NAME);
+	}
+
+	@Test
+	void generateCertificate() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(certificate.getCredentialType()).isEqualTo(CredentialType.CERTIFICATE);
+		assertThat(certificate.getId()).isNotNull();
+		assertThat(certificate.getValue().getCertificate()).isNotNull();
+		assertThat(certificate.getValue().getCertificateAuthority()).isNotNull();
+		assertThat(certificate.getValue().getPrivateKey()).isNotNull();
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+		assertThat(byName.getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(byName.getId()).isNotNull();
+		assertThat(byName.getSignedBy()).isNotNull();
+		assertThat(byName.getSigns()).isNotNull();
+		assertThat(byName.getVersions()).hasSize(1);
+		assertThat(byName.getVersions().get(0).getId()).isEqualTo(certificate.getId());
+		assertThat(byName.getVersions().get(0).isSelfSigned()).isTrue();
+
+		List<CertificateSummary> allCertificates = this.certificates.getAll();
+		assertThat(allCertificates).isNotEmpty();
+		assertThat(allCertificates).extracting("name").contains(TEST_CERT_NAME.getName());
+	}
+
+	@Test
+	void regenerateCertificate() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(byName.getId(), true);
+		assertThat(regenerated.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(regenerated.isTransitional()).isTrue();
+		assertThat(regenerated.getValue().getCertificate()).isNotEqualTo(certificate.getValue().getCertificate());
+		assertThat(regenerated.getValue().getCertificateAuthority())
+			.isNotEqualTo(certificate.getValue().getCertificateAuthority());
+		assertThat(regenerated.getValue().getPrivateKey()).isNotEqualTo(certificate.getValue().getPrivateKey());
+	}
+
+	@Test
+	void getByNameReturnsOnlyOneVersionWhenMultipleAreActive() {
+		CredentialDetails<CertificateCredential> original = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(byName.getId(), true);
+
+		CertificateSummary afterRegenerate = this.certificates.getByName(TEST_CERT_NAME);
+		assertThat(afterRegenerate.getVersions()).as("both the original and transitional versions should be active")
+			.hasSize(2);
+
+		// The untyped CredHubCredentialOperations#getByName() only ever returns one
+		// version when more than one is active; tested against a live server,
+		// that's the original/current version, not the transitional one.
+		CredentialDetails<CertificateCredential> retrieved = this.credentials.getByName(TEST_CERT_NAME,
+				CertificateCredential.class);
+		assertThat(retrieved.getValue().getCertificate()).isEqualTo(original.getValue().getCertificate())
+			.isNotEqualTo(regenerated.getValue().getCertificate());
+	}
+
+	@Test
+	void regenerateCertificateWithAllParameters() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+
+		Map<String, Object> metadata = Map.of("key", "metadata-value");
+
+		CertificateCredentialDetails regenerated;
+		try {
+			regenerated = this.certificates.regenerate(byName.getId(), true, false, 2048, 365, metadata);
+		}
+		catch (CredHubException ex) {
+			assumeMetadataSupported(ex);
+			throw ex;
+		}
+		assertThat(regenerated.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(regenerated.getMetadata()).isEqualTo(metadata);
+		assertThat(regenerated.getExpiryDate()).isNotNull();
+		assertThat(regenerated.isSelfSigned()).isTrue();
+		assertThat(regenerated.getGenerated()).isTrue();
+		assertThat(regenerated.getKeyLength()).isEqualTo(2048);
+		assertThat(regenerated.getDurationUsed()).isEqualTo(365);
+		assertThat(regenerated.isDurationOverridden()).isFalse();
+	}
+
+	/**
+	 * Some CredHub server versions predate the {@code metadata} field and reject it as an
+	 * unrecognized request parameter. Skip metadata-specific tests against such servers
+	 * rather than failing them.
+	 * @param ex the exception thrown by an attempt to use credential metadata
+	 */
+	private void assumeMetadataSupported(CredHubException ex) {
+		boolean metadataUnsupported = ex.getResponseBodyAsString().contains("unrecognized parameter 'metadata'");
+		assumeFalse(metadataUnsupported, "CredHub server does not support credential metadata");
+	}
+
+	@Test
+	void rotateCertificate() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		assertThat(certificate.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+
+		String credentialVersion0Id = certificate.getId();
+
+		List<CredentialDetails<CertificateCredential>> allVersions = this.credentials
+			.getByNameWithHistory(TEST_CERT_NAME, CertificateCredential.class);
+		assertThat(allVersions).hasSize(1);
+		assertThat(allVersions.get(0).getId()).isEqualTo(credentialVersion0Id);
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+		String certificateId = byName.getId();
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(certificateId, true);
+		assertThat(regenerated.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(regenerated.getValue().getCertificate()).isNotEqualTo(certificate.getValue().getCertificate());
+		assertThat(regenerated.getValue().getCertificateAuthority())
+			.isNotEqualTo(certificate.getValue().getCertificateAuthority());
+		assertThat(regenerated.getValue().getPrivateKey()).isNotEqualTo(certificate.getValue().getPrivateKey());
+
+		String credentialVersion1Id = regenerated.getId();
+
+		allVersions = this.credentials.getByNameWithHistory(TEST_CERT_NAME, CertificateCredential.class);
+		assertThat(allVersions).hasSize(2);
+		assertThat(allVersions).extracting("id").contains(credentialVersion1Id, credentialVersion0Id);
+
+		List<CertificateCredentialDetails> updatedCertificate = this.certificates
+			.updateTransitionalVersion(certificateId, credentialVersion0Id);
+		assertThat(updatedCertificate).hasSize(2);
+		assertThat(updatedCertificate).extracting("id").contains(credentialVersion1Id, credentialVersion0Id);
+		assertThat(updatedCertificate).extracting("transitional").contains(false, true);
+
+		updatedCertificate = this.certificates.updateTransitionalVersion(certificateId, null);
+		assertThat(updatedCertificate).hasSize(1);
+		assertThat(updatedCertificate).extracting("id").contains(credentialVersion1Id);
+		assertThat(updatedCertificate).extracting("transitional").contains(false);
+	}
+
+	@Test
+	void getCertificateVersions() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+		String certificateId = byName.getId();
+
+		String credentialVersion0Id = certificate.getId();
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(certificateId, true);
+		String credentialVersion1Id = regenerated.getId();
+
+		List<CertificateCredentialDetails> versions = this.certificates.getVersions(certificateId);
+		assertThat(versions).hasSize(2);
+		assertThat(versions).extracting("id").contains(credentialVersion0Id, credentialVersion1Id);
+		assertThat(versions).extracting("transitional").contains(false, true);
+	}
+
+	@Test
+	void addCertificateVersion() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder()
+					.commonName("example.com")
+					.certificateAuthority(true)
+					.selfSign(true)
+					.build())
+				.build());
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+		String certificateId = byName.getId();
+
+		CertificateCredentialDetails added = this.certificates.addVersion(certificateId, certificate.getValue(), true);
+		assertThat(added.getName().getName()).isEqualTo(TEST_CERT_NAME.getName());
+		assertThat(added.isTransitional()).isTrue();
+		assertThat(added.getValue().getCertificate()).isEqualTo(certificate.getValue().getCertificate());
+
+		List<CertificateCredentialDetails> versions = this.certificates.getVersions(certificateId);
+		assertThat(versions).hasSize(2);
+		assertThat(versions).extracting("id").contains(certificate.getId(), added.getId());
+	}
+
+	@Test
+	void deleteCertificateVersion() {
+		CredentialDetails<CertificateCredential> certificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder().commonName("example.com").selfSign(true).build())
+				.build());
+		String credentialVersion0Id = certificate.getId();
+
+		CertificateSummary byName = this.certificates.getByName(TEST_CERT_NAME);
+		String certificateId = byName.getId();
+
+		CertificateCredentialDetails regenerated = this.certificates.regenerate(certificateId, true);
+		String credentialVersion1Id = regenerated.getId();
+
+		List<CertificateCredentialDetails> versions = this.certificates.getVersions(certificateId);
+		assertThat(versions).hasSize(2);
+
+		CertificateCredentialDetails deleted = this.certificates.deleteVersion(certificateId, credentialVersion0Id);
+		assertThat(deleted.getId()).isEqualTo(credentialVersion0Id);
+
+		versions = this.certificates.getVersions(certificateId);
+		assertThat(versions).hasSize(1);
+		assertThat(versions).extracting("id").containsExactly(credentialVersion1Id);
+	}
+
+	@Test
+	void bulkRegenerateCertificates() {
+		CredentialDetails<CertificateCredential> rootCertificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(ROOT_CERT_NAME)
+				.parameters(CertificateParameters.builder()
+					.commonName("example.com")
+					.certificateAuthority(true)
+					.selfSign(true)
+					.build())
+				.build());
+
+		CredentialDetails<CertificateCredential> signedCertificate = this.credentials
+			.generate(CertificateParametersRequest.builder()
+				.name(TEST_CERT_NAME)
+				.parameters(CertificateParameters.builder()
+					.commonName("example.com")
+					.certificateAuthorityCredential(ROOT_CERT_NAME)
+					.build())
+				.build());
+		assertThat(signedCertificate.getValue().getCertificateAuthority())
+			.isEqualTo(rootCertificate.getValue().getCertificate());
+
+		List<CredentialDetails<CertificateCredential>> allVersions = this.credentials
+			.getByNameWithHistory(TEST_CERT_NAME, CertificateCredential.class);
+		assertThat(allVersions).hasSize(1);
+		assertThat(allVersions.get(0).getId()).isEqualTo(signedCertificate.getId());
+
+		List<CredentialName> regeneratedNames = this.certificates.regenerate(ROOT_CERT_NAME);
+		assertThat(regeneratedNames).hasSize(1);
+		assertThat(regeneratedNames).contains(TEST_CERT_NAME);
+	}
+
+}

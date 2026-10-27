@@ -35,6 +35,7 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
+@SuppressWarnings("removal")
 class CredHubInfoTemplateUnitTests {
 
 	@Mock

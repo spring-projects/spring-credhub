@@ -30,6 +30,7 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("removal")
 public class CredHubInterpolationTemplate implements CredHubInterpolationOperations {
 
 	static final String INTERPOLATE_URL_PATH = "/api/v1/interpolate";

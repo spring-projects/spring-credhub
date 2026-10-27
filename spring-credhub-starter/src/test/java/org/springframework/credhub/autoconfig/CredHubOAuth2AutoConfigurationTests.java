@@ -24,7 +24,6 @@ import org.springframework.boot.test.context.assertj.ApplicationContextAssertPro
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.test.context.runner.ReactiveWebApplicationContextRunner;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -104,36 +103,31 @@ class CredHubOAuth2AutoConfigurationTests {
 			.run(this::assertOAuth2ContextNotConfigured);
 	}
 
-	private void assertServletOAuth2ContextConfigured(
-			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+	private void assertServletOAuth2ContextConfigured(ApplicationContextAssertProvider<?, ?> context) {
 
 		assertThat(context).hasBean("credHubClientRegistrationRepository");
 		assertThat(context).hasBean("credHubAuthorizedClientRepository");
 	}
 
-	private void assertServletOAuth2ContextNotConfigured(
-			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+	private void assertServletOAuth2ContextNotConfigured(ApplicationContextAssertProvider<?, ?> context) {
 
 		assertThat(context).doesNotHaveBean("credHubClientRegistrationRepository");
 		assertThat(context).doesNotHaveBean("credHubAuthorizedClientRepository");
 	}
 
-	private void assertReactiveOAuth2ContextConfigured(
-			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+	private void assertReactiveOAuth2ContextConfigured(ApplicationContextAssertProvider<?, ?> context) {
 
 		assertThat(context).hasBean("credHubReactiveClientRegistrationRepository");
 		assertThat(context).hasBean("credHubReactiveAuthorizedClientManager");
 	}
 
-	private void assertReactiveOAuth2ContextNotConfigured(
-			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+	private void assertReactiveOAuth2ContextNotConfigured(ApplicationContextAssertProvider<?, ?> context) {
 
 		assertThat(context).doesNotHaveBean("credHubReactiveClientRegistrationRepository");
 		assertThat(context).doesNotHaveBean("credHubReactiveAuthorizedClientManager");
 	}
 
-	private void assertOAuth2ContextNotConfigured(
-			ApplicationContextAssertProvider<? extends ApplicationContext> context) {
+	private void assertOAuth2ContextNotConfigured(ApplicationContextAssertProvider<?, ?> context) {
 
 		assertServletOAuth2ContextNotConfigured(context);
 		assertReactiveOAuth2ContextNotConfigured(context);

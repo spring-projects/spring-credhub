@@ -56,6 +56,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
  * @author Scott Frederick
  * @author Daniel Lavoie
  */
+@SuppressWarnings("removal")
 final class CredHubRestTemplateFactory {
 
 	private CredHubRestTemplateFactory() {

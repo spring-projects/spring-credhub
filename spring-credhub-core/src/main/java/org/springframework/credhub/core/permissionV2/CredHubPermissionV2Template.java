@@ -38,6 +38,7 @@ import org.springframework.util.Assert;
  * @author Scott Frederick
  * @author Alberto C. Ríos
  */
+@SuppressWarnings("removal")
 public class CredHubPermissionV2Template implements CredHubPermissionV2Operations {
 
 	static final String PERMISSIONS_URL_PATH = "/api/v2/permissions";

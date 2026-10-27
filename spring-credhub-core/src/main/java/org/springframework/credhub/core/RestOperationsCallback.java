@@ -24,6 +24,7 @@ import org.springframework.web.client.RestOperations;
  * @param <T> the type of CredHub credential
  * @author Mark Paluch
  */
+@SuppressWarnings("removal")
 public interface RestOperationsCallback<T> {
 
 	/**

@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("removal")
 class CredHubRestTemplateFactoryUnitTests {
 
 	@Mock

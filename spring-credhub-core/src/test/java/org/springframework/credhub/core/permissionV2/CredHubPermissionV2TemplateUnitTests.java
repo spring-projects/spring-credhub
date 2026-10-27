@@ -47,6 +47,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("removal")
 class CredHubPermissionV2TemplateUnitTests {
 
 	private static final SimpleCredentialName PATH = new SimpleCredentialName("example", "credential", "*");

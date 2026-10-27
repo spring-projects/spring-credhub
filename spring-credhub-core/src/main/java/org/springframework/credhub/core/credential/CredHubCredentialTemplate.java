@@ -40,6 +40,7 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("removal")
 public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 
 	static final String BASE_URL_PATH = "/api/v1/data";

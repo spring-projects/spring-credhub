@@ -50,6 +50,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("removal")
 class CredHubCertificateTemplateUnitTests {
 
 	private static final SimpleCredentialName NAME = new SimpleCredentialName("example", "certificate");

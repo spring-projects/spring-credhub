@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("removal")
 public class CredHubInfoTemplate implements CredHubInfoOperations {
 
 	static final String VERSION_URL_PATH = "/version";

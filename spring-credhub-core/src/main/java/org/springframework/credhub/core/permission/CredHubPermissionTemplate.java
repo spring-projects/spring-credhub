@@ -33,6 +33,7 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("removal")
 public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 
 	static final String PERMISSIONS_URL_PATH = "/api/v1/permissions";

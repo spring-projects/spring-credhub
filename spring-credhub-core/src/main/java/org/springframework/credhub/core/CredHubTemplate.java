@@ -41,6 +41,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("removal")
 public class CredHubTemplate implements CredHubOperations {
 
 	private final RestTemplate restTemplate;

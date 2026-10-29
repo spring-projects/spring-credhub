@@ -27,6 +27,7 @@ import org.springframework.credhub.support.password.PasswordParametersRequest;
 import org.springframework.stereotype.Component;
 
 @Component
+@SuppressWarnings("deprecation")
 public class CredHubService {
 
 	private final CredHubOperations credHubOperations;

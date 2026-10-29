@@ -37,7 +37,10 @@ import org.springframework.util.Assert;
  *
  * @author Scott Frederick
  * @author Alberto C. Ríos
+ * @deprecated since 4.2.0 in favor of
+ * {@link org.springframework.credhub.core.CredHubClient#permissionsV2()}
  */
+@Deprecated(since = "4.2.0")
 @SuppressWarnings("removal")
 public class CredHubPermissionV2Template implements CredHubPermissionV2Operations {
 

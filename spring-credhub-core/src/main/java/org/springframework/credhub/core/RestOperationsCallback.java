@@ -23,7 +23,9 @@ import org.springframework.web.client.RestOperations;
  *
  * @param <T> the type of CredHub credential
  * @author Mark Paluch
+ * @deprecated since 4.2.0 in favor of {@link CredHubClient#restClient()}
  */
+@Deprecated(since = "4.2.0")
 @SuppressWarnings("removal")
 public interface RestOperationsCallback<T> {
 

@@ -25,7 +25,10 @@ import org.springframework.http.ResponseEntity;
  * Implements the interaction with CredHub retrieve server information.
  *
  * @author Scott Frederick
+ * @deprecated since 4.2.0 in favor of
+ * {@link org.springframework.credhub.core.CredHubClient#info()}
  */
+@Deprecated(since = "4.2.0")
 @SuppressWarnings("removal")
 public class CredHubInfoTemplate implements CredHubInfoOperations {
 

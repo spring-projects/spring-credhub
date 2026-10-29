@@ -23,9 +23,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.credhub.autoconfig.CredHubTemplateConfiguration.CredHubTemplateBaseConfiguration;
-import org.springframework.credhub.autoconfig.CredHubTemplateConfiguration.CredHubTemplateOAuth2ClientConfiguration;
-import org.springframework.credhub.autoconfig.CredHubTemplateConfiguration.CredHubTemplateOAuth2Configuration;
 import org.springframework.credhub.configuration.CredHubTemplateFactory;
 import org.springframework.credhub.core.CredHubOperations;
 import org.springframework.credhub.core.CredHubProperties;
@@ -40,9 +37,12 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
  *
  * @author Daniel Lavoie
  * @author Scott Frederick
+ * @deprecated since 4.2.0 in favor of {@link CredHubClientAutoConfiguration}
  */
-@Import({ CredHubTemplateBaseConfiguration.class, CredHubTemplateOAuth2Configuration.class,
-		CredHubTemplateOAuth2ClientConfiguration.class })
+@Deprecated(since = "4.2.0")
+@Import({ CredHubTemplateConfiguration.CredHubTemplateBaseConfiguration.class,
+		CredHubTemplateConfiguration.CredHubTemplateOAuth2Configuration.class,
+		CredHubTemplateConfiguration.CredHubTemplateOAuth2ClientConfiguration.class })
 public class CredHubTemplateConfiguration {
 
 	@Configuration(proxyBeanMethods = false)

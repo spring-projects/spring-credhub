@@ -39,7 +39,10 @@ import org.springframework.util.Assert;
  * Implements the interactions with CredHub to save, retrieve, and delete credentials.
  *
  * @author Scott Frederick
+ * @deprecated since 4.2.0 in favor of
+ * {@link org.springframework.credhub.core.CredHubClient#credentials()}
  */
+@Deprecated(since = "4.2.0")
 @SuppressWarnings("removal")
 public class CredHubCredentialTemplate implements CredHubCredentialOperations {
 

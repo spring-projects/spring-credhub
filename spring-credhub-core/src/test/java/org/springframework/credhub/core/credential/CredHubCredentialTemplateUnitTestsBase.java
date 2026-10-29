@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-@SuppressWarnings("removal")
+@SuppressWarnings({ "removal", "deprecation" })
 abstract class CredHubCredentialTemplateUnitTestsBase {
 
 	protected static final SimpleCredentialName NAME = new SimpleCredentialName("example", "credential");

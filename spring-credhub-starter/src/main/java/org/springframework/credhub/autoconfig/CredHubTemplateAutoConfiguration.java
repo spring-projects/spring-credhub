@@ -30,6 +30,7 @@ import org.springframework.credhub.core.CredHubTemplate;
  *
  * @author Scott Frederick
  */
+@SuppressWarnings("deprecation")
 @AutoConfiguration(after = { CredHubAutoConfiguration.class, CredHubOAuth2AutoConfiguration.class,
 		OAuth2ClientAutoConfiguration.class, ReactiveOAuth2ClientAutoConfiguration.class })
 @ConditionalOnBean(CredHubProperties.class)

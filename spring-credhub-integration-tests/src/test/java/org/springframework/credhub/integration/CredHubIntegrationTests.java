@@ -25,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = { TestApplication.class })
 @ActiveProfiles("test")
+@SuppressWarnings("deprecation")
 abstract class CredHubIntegrationTests {
 
 	@Autowired

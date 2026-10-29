@@ -52,6 +52,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+@SuppressWarnings("deprecation")
 class CredHubClientAutoConfigurationTests {
 
 	private static final String[] OAUTH2_PROPERTIES = { "spring.credhub.url=https://localhost",

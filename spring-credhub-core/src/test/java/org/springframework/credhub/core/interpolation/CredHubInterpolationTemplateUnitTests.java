@@ -42,7 +42,7 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
-@SuppressWarnings("removal")
+@SuppressWarnings({ "removal", "deprecation" })
 class CredHubInterpolationTemplateUnitTests {
 
 	@Mock

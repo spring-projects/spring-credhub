@@ -44,7 +44,10 @@ public class CredHubTemplateFactory {
 	 * @param credHubProperties connection properties
 	 * @param clientOptions connection options
 	 * @return a {@code CredHubTemplate}
+	 * @deprecated since 4.2.0 in favor of
+	 * {@link org.springframework.credhub.core.CredHubClient#builder()}
 	 */
+	@Deprecated(since = "4.2.0")
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions) {
 		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions));
 	}
@@ -57,7 +60,10 @@ public class CredHubTemplateFactory {
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param authorizedClientRepository a repository of authorized OAuth2 clients
 	 * @return a {@code CredHubTemplate}
+	 * @deprecated since 4.2.0 in favor of
+	 * {@link org.springframework.credhub.core.CredHubClient#builder()}
 	 */
+	@Deprecated(since = "4.2.0")
 	public CredHubTemplate credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions,
 			ClientRegistrationRepository clientRegistrationRepository,
 			OAuth2AuthorizedClientRepository authorizedClientRepository) {
@@ -73,7 +79,10 @@ public class CredHubTemplateFactory {
 	 * @param clientRegistrationRepository a repository of OAuth2 client registrations
 	 * @param clientManager an OAuth2 authorization client manager
 	 * @return a {@code CredHubTemplate}
+	 * @deprecated since 4.2.0 in favor of
+	 * {@link org.springframework.credhub.core.CredHubClient#builder()}
 	 */
+	@Deprecated(since = "4.2.0")
 	public CredHubOperations credHubTemplate(CredHubProperties credHubProperties, ClientOptions clientOptions,
 			ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientManager clientManager) {
 		return new CredHubTemplate(credHubProperties, clientHttpRequestFactory(clientOptions),

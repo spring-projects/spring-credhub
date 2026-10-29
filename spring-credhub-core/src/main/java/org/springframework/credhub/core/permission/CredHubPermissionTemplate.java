@@ -32,7 +32,10 @@ import org.springframework.util.Assert;
  * Implements the main interaction with CredHub to add, retrieve, and delete permissions.
  *
  * @author Scott Frederick
+ * @deprecated since 4.2.0 in favor of
+ * {@link org.springframework.credhub.core.CredHubClient#permissions()}
  */
+@Deprecated(since = "4.2.0")
 @SuppressWarnings("removal")
 public class CredHubPermissionTemplate implements CredHubPermissionOperations {
 

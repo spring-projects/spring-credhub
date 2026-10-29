@@ -52,6 +52,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("deprecation")
 class CredHubTemplateAutoConfigurationTests {
 
 	private static final FilteredClassLoader SPRING_SECURITY_FILTERED_CLASS_LOADER = new FilteredClassLoader(

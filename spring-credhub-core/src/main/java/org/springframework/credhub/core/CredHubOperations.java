@@ -28,7 +28,9 @@ import org.springframework.web.client.RestTemplate;
  * Specifies the main interaction with CredHub.
  *
  * @author Scott Frederick
+ * @deprecated since 4.2.0 in favor of {@link CredHubClient}
  */
+@Deprecated(since = "4.2.0")
 public interface CredHubOperations {
 
 	/**

@@ -7,10 +7,148 @@
 :apidocs-info: {apidocs-home}?org/springframework/credhub/core/info/CredHubInfoOperations.html
 
 [[operations]]
-== Introduction to CredHubOperations
+== Introduction to CredHubClient
 
-The interface `org.springframework.credhub.core.CredHubOperations` and the implementation `org.springframework.credhub.core.CredHubTemplate` are the central classes in Spring CredHub.
-`CredHubOperations` provides access to additional operations interfaces that model the full CredHub API:
+The class `org.springframework.credhub.core.CredHubClient` is the central class in Spring CredHub for applications that use blocking calls.
+It is built on Spring's `RestClient` and provides access to additional operations interfaces that model the full CredHub API:
+
+[source,java,%autofit]
+----
+/**
+ * Get the operations for saving, retrieving, and deleting credentials.
+ */
+CredHubCredentialOperations credentials();
+
+/**
+ * Get the operations for adding, retrieving, and deleting credential permissions.
+ */
+CredHubPermissionOperations permissions();
+
+/**
+ * Get the operations for adding, retrieving, updating, and deleting credential
+ * permissions using the CredHub v2 permissions API.
+ */
+CredHubPermissionV2Operations permissionsV2();
+
+/**
+ * Get the operations for managing certificates and their versions.
+ */
+CredHubCertificateOperations certificates();
+
+/**
+ * Get the operations for interpolating service binding credentials.
+ */
+CredHubInterpolationOperations interpolation();
+
+/**
+ * Get the operations for retrieving information about the CredHub server.
+ */
+CredHubInfoOperations info();
+
+/**
+ * Get the underlying RestClient, already configured for the CredHub server.
+ */
+RestClient restClient();
+----
+
+NOTE: `CredHubClient` replaces `CredHubOperations` and `CredHubTemplate`, which are deprecated as of version 4.2.0 because Spring Framework deprecates `RestTemplate`.
+The operations interfaces are the same ones that `CredHubOperations` returns, so code that depends on an interface such as `CredHubCredentialOperations` works with either.
+See <<credhub-operations-deprecated>> for the differences.
+
+=== Mapping to CredHub API
+
+Each method of the `Operations` interfaces maps directly to one endpoint of the CredHub HTTP API.
+The following table shows the mapping between the CredHub API and the appropriate Spring CredHub `Operations` interface.
+
+[cols="2"]
+|===
+| {credhub-api-credentials}[CredHub Credentials API]
+| {apidocs-credentials}[CredHubCredentialOperations]
+
+| {credhub-api-permissions}[CredHub Permissions API] (v1)
+| {apidocs-permissions}[CredHubPermissionOperations]
+
+| {credhub-api-permissionsV2}[CredHub Permissions API] (v2)
+| {apidocs-permissionsV2}[CredHubPermissionV2Operations]
+
+| {credhub-api-certificates}[CredHub Certificates API]
+| {apidocs-certificates}[CredHubCertificateOperations]
+
+| {credhub-api-interpolation}[CredHub Interpolation API]
+| {apidocs-interpolation}[CredHubInterpolationOperations]
+
+| {credhub-api-info}[CredHub Information API]
+| {apidocs-info}[CredHubInfoOperations]
+|===
+
+=== CredHubClient Auto-configuration
+
+A `CredHubClient` Spring bean is created using Spring Boot auto-configuration when the application properties are properly configured and the servlet API is on the application classpath.
+An application can define its own `CredHubClient` bean, which replaces the auto-configured one.
+Application classes can autowire an instance of this bean to interact with a CredHub server.
+Request builders such as `PasswordParametersRequest` also accept an optional `metadata` map to store alongside a credential, as shown below; metadata requires CredHub server 2.6.0 or later.
+
+[source,java,%autofit]
+----
+include::{examples-dir}CredHubClientService.java[]
+----
+
+See <<boot-configuration>> for the application properties, and how the client authenticates with OAuth2.
+
+=== Creating a CredHubClient
+
+An application that does not use the auto-configuration can create a `CredHubClient` with its builder.
+The following example creates a client that authenticates with OAuth2 and uses a specific HTTP client:
+
+[source,java,%autofit]
+----
+include::{examples-dir}CredHubClientConfiguration.java[]
+----
+
+The builder supports the following settings:
+
+[%header,cols="1,3"]
+|===
+| Method
+| Description
+
+| `baseUrl`
+| The base URL of the CredHub server. Required.
+
+| `requestFactory`
+| The `ClientHttpRequestFactory` that creates connections, for example to trust a custom certificate authority. See <<http-clients>>.
+
+| `requestInterceptor`
+| An interceptor applied to every request. It can be added more than once, and is typically used to authenticate.
+
+| `oauth2`
+| Authenticates requests with OAuth2 using the `client_credentials` grant. The registration ID selects a client registration, and the access tokens come from an `OAuth2AuthorizedClientRepository`, an `OAuth2AuthorizedClientService`, or an `OAuth2AuthorizedClientManager`.
+
+| `restClientCustomizer`
+| Customizes the underlying `RestClient.Builder` after the CredHub defaults are applied.
+|===
+
+The `OAuth2AuthorizedClientRepository` that Spring Security provides for servlet applications needs an active `HttpServletRequest` on the thread that makes the call.
+The `OAuth2AuthorizedClientService` variant does not, so it can be used from any thread, such as application start-up code or a background task.
+
+=== Error Handling
+
+An error response from CredHub is translated to a `CredHubException` for every operation.
+Any response with a status other than `2xx` is an error, including a redirect from a proxy in front of CredHub.
+The exception provides the status code, the reason phrase, the response headers, and the response body.
+
+=== Using the RestClient Directly
+
+The `restClient()` method returns the `RestClient` that the operations use.
+It already has the base URL, the JSON `Accept` and `Content-Type` headers, the message converters, authentication, and the error handling described above, so it can make a request to an endpoint that the operations interfaces do not cover.
+
+[[credhub-operations-deprecated]]
+== Introduction to CredHubOperations (deprecated)
+
+WARNING: `CredHubOperations` and `CredHubTemplate` are deprecated as of version 4.2.0 in favor of <<operations,`CredHubClient`>>.
+
+The interface `org.springframework.credhub.core.CredHubOperations` and the implementation `org.springframework.credhub.core.CredHubTemplate` are based on `RestTemplate`.
+`CredHubOperations` provides access to the same operations interfaces as `CredHubClient`:
 
 [source,java,%autofit]
 ----
@@ -45,35 +183,9 @@ CredHubInterpolationOperations interpolation();
 CredHubInfoOperations info();
 ----
 
-=== Mapping to CredHub API
-
-Each method of the `Operations` interfaces maps directly to one endpoint of the CredHub HTTP API.
-The following table shows the mapping between the CredHub API and the appropriate Spring CredHub `Operations` interface.
-
-[cols="2"]
-|===
-| {credhub-api-credentials}[CredHub Credentials API]
-| {apidocs-credentials}[CredHubCredentialOperations]
-
-| {credhub-api-permissions}[CredHub Permissions API] (v1)
-| {apidocs-permissions}[CredHubPermissionOperations]
-
-| {credhub-api-permissionsV2}[CredHub Permissions API] (v2)
-| {apidocs-permissionsV2}[CredHubPermissionV2Operations]
-
-| {credhub-api-certificates}[CredHub Certificates API]
-| {apidocs-certificates}[CredHubCertificateOperations]
-
-| {credhub-api-interpolation}[CredHub Interpolation API]
-| {apidocs-interpolation}[CredHubInterpolationOperations]
-
-| {credhub-api-info}[CredHub Information API]
-| {apidocs-info}[CredHubInfoOperations]
-|===
-
 === CredHubOperations Auto-configuration
 
-A `CredHubOperations` Spring bean is created using Spring Boot auto-configuration when application properties are properly configured.
+A `CredHubOperations` Spring bean is created using Spring Boot auto-configuration when application properties are properly configured and the servlet API is on the application classpath.
 Application classes can autowire an instance of this bean to interact with a CredHub server.
 Request builders such as `PasswordParametersRequest` also accept an optional `metadata` map to store alongside a credential, as shown below; metadata requires CredHub server 2.6.0 or later.
 
@@ -81,3 +193,13 @@ Request builders such as `PasswordParametersRequest` also accept an optional `me
 ----
 include::{examples-dir}CredHubService.java[]
 ----
+
+=== Migrating to CredHubClient
+
+The following differences apply when moving from `CredHubOperations` to `CredHubClient`:
+
+* The operations interfaces returned by `credentials()`, `permissions()`, `permissionsV2()`, `certificates()`, `interpolation()`, and `info()` are the same.
+* `CredHubClient` is created with a builder, instead of the `CredHubTemplate` constructors.
+* The `doWithRest` callback is replaced by `restClient()`, which returns a `RestClient` that already translates errors to `CredHubException`.
+* Any response with a status other than `2xx` is a `CredHubException` for every operation, including the operations that return no value.
+* With auto-configuration and OAuth2, the client keeps its access tokens in an in-memory `OAuth2AuthorizedClientService`, which does not need an active `HttpServletRequest`, unless the application defines an `OAuth2AuthorizedClientManager` bean.

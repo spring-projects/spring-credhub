@@ -7,6 +7,8 @@
 Spring CredHub supports CredHub server version 1.x and 2.x.
 This library is intended to provide full coverage of the CredHub API - all operations on all credential types.
 
+Spring CredHub provides `CredHubClient` for applications that use blocking calls, and `ReactiveCredHubOperations` for reactive applications.
+
 Spring CredHub has been optimized to work with Spring Boot applications.
 To include Spring CredHub in a Spring Boot application, add some dependencies to the project build file.
 

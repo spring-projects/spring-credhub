@@ -33,7 +33,11 @@ CredHub provides an {credhub-api-home}[HTTP API] to securely store, generate, re
 toc::[]
 
 include::getting-started.adoc[]
+
 include::boot-configuration.adoc[]
+
 include::operations.adoc[]
+
 include::reactive-operations.adoc[]
+
 include::http-clients.adoc[]

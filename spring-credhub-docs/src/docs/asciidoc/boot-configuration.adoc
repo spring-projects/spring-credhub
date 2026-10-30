@@ -12,6 +12,7 @@
 
 When using the Spring CredHub starter dependency, Spring CredHub can be configured with {spring-boot-external-config}[Spring Boot application properties].
 With the proper configuration properties, Spring CredHub will auto-configure a connection to a CredHub server.
+The same properties configure the `CredHubClient` and the deprecated `CredHubOperations`.
 
 === Mutual TLS Authentication
 
@@ -77,6 +78,13 @@ include::{examples-dir}CredHubSecurityConfiguration.java[]
 ----
 
 Refer to the {spring-security-ref-home}#oauth2login-override-boot-autoconfig[Spring Security documentation] for more information and examples of configuring other beans.
+
+====== CredHubClient
+
+`CredHubClient` uses the `ClientRegistrationRepository` from the table above, and is not created when the application has no such bean.
+It does not use the `OAuth2AuthorizedClientRepository` or the `DefaultOAuth2AuthorizedClientManager`, which only the deprecated `CredHubOperations` uses.
+When the application defines an `OAuth2AuthorizedClientManager` bean, the client uses it.
+Otherwise the client keeps its access tokens in an in-memory `OAuth2AuthorizedClientService`, which does not need an active `HttpServletRequest`, so it can be used from any thread.
 
 ===== Reactive Applications
 

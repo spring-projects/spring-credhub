@@ -12,6 +12,9 @@ $ docker-compose up
 
 Add `-d` to run the containers in the background (`docker-compose up -d`) so you can keep using the same terminal.
 
+The images are pulled from Docker Hub by default.
+To pull them through a registry mirror instead, set the `DOCKERHUB_MIRROR_REGISTRY` environment variable to the mirror's host and path, as the CI build does.
+
 This starts three containers: `uaa`, `credhub` (the default CredHub server, backed by the actively-maintained `pcfseceng/credhub` image, currently CredHub 2.6.0+), and `credhub-v1` (the older, frozen `ampersand8/credhub` image, kept around solely to test pre-2.0 behavior — see below). After they've started successfully, UAA will be available at `http://localhost:8080/uaa`, the default CredHub server at `https://localhost:9000`, and the legacy v1 server at `https://localhost:9001`.
 
 You can confirm they're ready with:

@@ -1,5 +1,5 @@
 = Spring CredHub
-Scott Frederick;
+Scott Frederick; Roy Clarkson
 :revdate: {localdate}
 :doctype: book
 :icons: font

@@ -54,6 +54,13 @@ public class PasswordCredentialRequest extends CredentialRequest<PasswordCredent
 	public static class PasswordCredentialRequestBuilder extends
 			CredHubRequestBuilder<PasswordCredential, PasswordCredentialRequest, PasswordCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link PasswordCredentialRequest#builder()}.
+		 */
+		public PasswordCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected PasswordCredentialRequest createTarget() {
 			return new PasswordCredentialRequest();

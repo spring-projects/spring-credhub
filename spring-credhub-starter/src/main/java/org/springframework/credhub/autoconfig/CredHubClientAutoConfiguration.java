@@ -67,6 +67,12 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 		CredHubClientOAuth2ClientManagerConfiguration.class })
 public class CredHubClientAutoConfiguration {
 
+	/**
+	 * Create the auto-configuration.
+	 */
+	public CredHubClientAutoConfiguration() {
+	}
+
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnClass(name = "jakarta.servlet.http.HttpServletRequest")
 	@ConditionalOnProperty(prefix = "spring.credhub.oauth2", name = "registration-id", havingValue = "false",

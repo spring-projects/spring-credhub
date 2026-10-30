@@ -40,6 +40,12 @@ import org.springframework.security.oauth2.client.web.server.ServerOAuth2Authori
 public class CredHubTemplateFactory {
 
 	/**
+	 * Create a new factory.
+	 */
+	public CredHubTemplateFactory() {
+	}
+
+	/**
 	 * Create a {@link CredHubTemplate} for interaction with a CredHub server.
 	 * @param credHubProperties connection properties
 	 * @param clientOptions connection options

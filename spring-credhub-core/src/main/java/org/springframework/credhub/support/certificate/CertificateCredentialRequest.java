@@ -54,6 +54,13 @@ public class CertificateCredentialRequest extends CredentialRequest<CertificateC
 	public static class CertificateCredentialRequestBuilder extends
 			CredHubRequestBuilder<CertificateCredential, CertificateCredentialRequest, CertificateCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link CertificateCredentialRequest#builder()}.
+		 */
+		public CertificateCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected CertificateCredentialRequest createTarget() {
 			return new CertificateCredentialRequest();

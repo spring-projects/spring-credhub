@@ -276,6 +276,13 @@ public final class CertificateParameters extends KeyParameters {
 		private ExtendedKeyUsage @Nullable [] extendedKeyUsage;
 
 		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link CertificateParameters#builder()}.
+		 */
+		public CertificateParametersBuilder() {
+		}
+
+		/**
 		 * Set the length of the key for the generated certificate.
 		 * @param keyLength the parameter value; must not be {@literal null}
 		 * @return the builder

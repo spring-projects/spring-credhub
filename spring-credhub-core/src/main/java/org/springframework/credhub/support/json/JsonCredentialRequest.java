@@ -56,6 +56,13 @@ public class JsonCredentialRequest extends CredentialRequest<JsonCredential> {
 	public static class JsonCredentialRequestBuilder
 			extends CredHubRequestBuilder<JsonCredential, JsonCredentialRequest, JsonCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link JsonCredentialRequest#builder()}.
+		 */
+		public JsonCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected JsonCredentialRequest createTarget() {
 			return new JsonCredentialRequest();

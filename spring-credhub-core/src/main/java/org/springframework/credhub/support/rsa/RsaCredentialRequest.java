@@ -54,6 +54,13 @@ public class RsaCredentialRequest extends CredentialRequest<RsaCredential> {
 	public static class RsaCredentialRequestBuilder
 			extends CredHubRequestBuilder<RsaCredential, RsaCredentialRequest, RsaCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link RsaCredentialRequest#builder()}.
+		 */
+		public RsaCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected RsaCredentialRequest createTarget() {
 			return new RsaCredentialRequest();

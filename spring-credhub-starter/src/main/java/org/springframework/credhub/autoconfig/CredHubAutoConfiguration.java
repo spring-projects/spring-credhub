@@ -37,6 +37,12 @@ import org.springframework.credhub.support.ClientOptions;
 public class CredHubAutoConfiguration {
 
 	/**
+	 * Create the auto-configuration.
+	 */
+	public CredHubAutoConfiguration() {
+	}
+
+	/**
 	 * Create a {@link CredHubProperties} bean and populate it from properties.
 	 * @return a {@link CredHubProperties} bean
 	 */

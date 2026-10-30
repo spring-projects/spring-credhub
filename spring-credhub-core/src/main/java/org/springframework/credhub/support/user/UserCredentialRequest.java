@@ -54,6 +54,13 @@ public class UserCredentialRequest extends CredentialRequest<UserCredential> {
 	public static class UserCredentialRequestBuilder
 			extends CredHubRequestBuilder<UserCredential, UserCredentialRequest, UserCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link UserCredentialRequest#builder()}.
+		 */
+		public UserCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected UserCredentialRequest createTarget() {
 			return new UserCredentialRequest();

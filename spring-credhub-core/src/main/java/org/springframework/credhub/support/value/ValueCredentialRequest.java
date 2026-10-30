@@ -54,6 +54,13 @@ public class ValueCredentialRequest extends CredentialRequest<ValueCredential> {
 	public static class ValueCredentialRequestBuilder
 			extends CredHubRequestBuilder<ValueCredential, ValueCredentialRequest, ValueCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link ValueCredentialRequest#builder()}.
+		 */
+		public ValueCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected ValueCredentialRequest createTarget() {
 			return new ValueCredentialRequest();

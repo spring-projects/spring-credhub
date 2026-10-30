@@ -53,6 +53,13 @@ public class RsaParametersRequest extends ParametersRequest<RsaParameters> {
 	public static class RsaParametersRequestBuilder
 			extends CredHubRequestBuilder<RsaParameters, RsaParametersRequest, RsaParametersRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link RsaParametersRequest#builder()}.
+		 */
+		public RsaParametersRequestBuilder() {
+		}
+
 		@Override
 		protected RsaParametersRequest createTarget() {
 			return new RsaParametersRequest();

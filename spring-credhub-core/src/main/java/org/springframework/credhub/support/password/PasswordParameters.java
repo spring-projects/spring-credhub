@@ -134,6 +134,13 @@ public class PasswordParameters {
 		private @Nullable Boolean includeSpecial = null;
 
 		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link PasswordParameters#builder()}.
+		 */
+		public PasswordParametersBuilder() {
+		}
+
+		/**
 		 * Set the value of the password length parameter.
 		 * @param length the parameter value
 		 * @return the builder

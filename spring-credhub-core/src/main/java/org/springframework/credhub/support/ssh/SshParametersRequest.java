@@ -53,6 +53,13 @@ public class SshParametersRequest extends ParametersRequest<SshParameters> {
 	public static class SshParametersRequestBuilder
 			extends CredHubRequestBuilder<SshParameters, SshParametersRequest, SshParametersRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link SshParametersRequest#builder()}.
+		 */
+		public SshParametersRequestBuilder() {
+		}
+
 		@Override
 		protected SshParametersRequest createTarget() {
 			return new SshParametersRequest();

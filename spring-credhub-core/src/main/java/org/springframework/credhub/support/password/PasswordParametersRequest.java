@@ -53,6 +53,13 @@ public class PasswordParametersRequest extends ParametersRequest<PasswordParamet
 	public static class PasswordParametersRequestBuilder extends
 			CredHubRequestBuilder<PasswordParameters, PasswordParametersRequest, PasswordParametersRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link PasswordParametersRequest#builder()}.
+		 */
+		public PasswordParametersRequestBuilder() {
+		}
+
 		@Override
 		protected PasswordParametersRequest createTarget() {
 			return new PasswordParametersRequest();

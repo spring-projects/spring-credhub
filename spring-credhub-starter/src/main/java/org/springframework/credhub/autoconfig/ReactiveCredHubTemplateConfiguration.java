@@ -44,6 +44,12 @@ import org.springframework.security.oauth2.client.web.server.ServerOAuth2Authori
 		ReactiveCredHubTemplateOAuth2ClientConfiguration.class })
 public class ReactiveCredHubTemplateConfiguration {
 
+	/**
+	 * Create the configuration.
+	 */
+	public ReactiveCredHubTemplateConfiguration() {
+	}
+
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClient")
 	@ConditionalOnProperty(prefix = "spring.credhub.oauth2", name = "registration-id", havingValue = "false",

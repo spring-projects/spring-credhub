@@ -53,6 +53,13 @@ public class CertificateParametersRequest extends ParametersRequest<CertificateP
 	public static class CertificateParametersRequestBuilder extends
 			CredHubRequestBuilder<CertificateParameters, CertificateParametersRequest, CertificateParametersRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link CertificateParametersRequest#builder()}.
+		 */
+		public CertificateParametersRequestBuilder() {
+		}
+
 		@Override
 		protected CertificateParametersRequest createTarget() {
 			return new CertificateParametersRequest();

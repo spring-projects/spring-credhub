@@ -37,4 +37,10 @@ import org.springframework.credhub.core.CredHubTemplate;
 @Import({ CredHubTemplateConfiguration.class, ReactiveCredHubTemplateConfiguration.class })
 public class CredHubTemplateAutoConfiguration {
 
+	/**
+	 * Create the auto-configuration.
+	 */
+	public CredHubTemplateAutoConfiguration() {
+	}
+
 }

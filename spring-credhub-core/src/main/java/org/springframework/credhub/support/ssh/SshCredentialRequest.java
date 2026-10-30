@@ -54,6 +54,13 @@ public class SshCredentialRequest extends CredentialRequest<SshCredential> {
 	public static class SshCredentialRequestBuilder
 			extends CredHubRequestBuilder<SshCredential, SshCredentialRequest, SshCredentialRequestBuilder> {
 
+		/**
+		 * Create a new builder. Instances are normally obtained from
+		 * {@link SshCredentialRequest#builder()}.
+		 */
+		public SshCredentialRequestBuilder() {
+		}
+
 		@Override
 		protected SshCredentialRequest createTarget() {
 			return new SshCredentialRequest();
